@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fff; }
+    .doc { box-sizing: border-box; max-width: 8.5in; margin: 0 auto; background: inherit; padding: 48px clamp(24px, 5vw, 0.75in) 96px; }
+    .doc-frame { width: 100%; border-collapse: collapse; }
+    .doc-frame td { padding: 0; }
+    .running-hdr, .running-ftr, .hdr-space, .ftr-space { display: none; }
+    h1, h2, h3 { text-wrap: balance; }
+    p, li { text-wrap: pretty; }
+    @page { size: letter; margin: 0; }
+    @media print {
+      html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      html, body { margin: 0; padding: 0; }
+      .doc { max-width: none !important; margin: 0 !important; padding: 0 0.75in !important; box-shadow: none !important; border: none !important; }
+      #dc-root, .sc-host { height: auto !important; }
+      .hdr-space, .ftr-space { display: table-cell; height: 0.75in !important; }
+      .running-ftr { display: flex !important; justify-content: space-between; align-items: baseline; position: fixed !important; left: 0; right: 0; margin: 0 !important; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
+      .running-ftr { bottom: 0; padding: 0 0.75in 0.35in !important; }
+      h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+      figure, pre, blockquote, img, svg, tr, .tip, .cta-box { break-inside: avoid; }
+      .section-hdr { break-after: avoid; }
+      p, li { orphans: 3; widows: 3; }
+      .screen-only { display: none !important; }
+    }
+  </style>
+</helmet>
+
+<main class="doc">
+  <div class="running-ftr">
+    <span style="font-family: 'Source Sans 3', sans-serif; color: #999;">d.avebrown</span>
+    <span style="font-family: 'Source Sans 3', sans-serif; color: #999;">instagram.com/d.avebrown</span>
+  </div>
+  <table class="doc-frame" role="presentation">
+    <thead><tr><td class="hdr-space"></td></tr></thead>
+    <tbody><tr><td>
+
+      <h1 style="font-family: 'Lora', serif; font-size: 38px; font-weight: 700; color: #1a1a2e; line-height: 1.12; margin: 0;">Your AI Is Lying to You</h1>
+      <p style="font-family: 'Source Sans 3', sans-serif; font-size: 18px; font-weight: 600; color: #7e22ce; margin: 14px 0 6px; letter-spacing: 0.01em;">13 techniques to make it stop.</p>
+      <p style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #9a9492; margin: 0; letter-spacing: 0.02em;">by d.avebrown</p>
+      <div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px;"></div>
+
+      <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.7; margin: 0 0 6px;">These models are word predictors — fancy ones, but at their core, they're guessing the next token based on patterns in their training data. And they've been trained to be helpful at all costs. To agree. To sound confident.</p>
+      <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.7; margin: 0 0 6px;">Which is great until they don't know the answer. Then they make one up. Smoothly. Convincingly. Completely wrong.</p>
+      <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.7; margin: 0 0 40px;">Here are 13 field-tested techniques to catch it, prevent it, and get dramatically better outputs from any AI model.</p>
+
+
+      <sc-if value="{{ showVideoRecap }}" hint-placeholder-val="{{ true }}">
+        <div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce;">
+          <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 4px;">From the Video</p>
+          <p style="font-family: 'Lora', serif; font-size: 16px; color: #9a9492; margin: 0; font-style: italic;">The three fundamentals</p>
+        </div>
+
+        <div class="tip" style="margin-bottom: 28px;">
+          <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">01</span> — Tell It Not to Lie</h3>
+          <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Sounds almost too simple. But these models are trained to follow instructions — and most people never think to give this one. A single line in your prompt changes the entire dynamic. Think of it like telling a contractor to double-check their measurements: they were always capable of it, you just had to ask. Because these models are optimized to please, they default to confident answers even when they shouldn't. Giving an explicit constraint flips that default — and it works every time.</p>
+          <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+            <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"Only give me answers you can back up with real sources. If you're not sure, say so."</p>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="tip" style="margin-bottom: 28px;">
+          <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">02</span> — Tell It to Search, Not Guess</h3>
+          <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">If your question involves niche topics or anything that happened recently, the model probably doesn't know. Don't let it wing it. Force it to look things up instead of generating from memory. Drug interactions updated this year, local regulations, current stock prices, recent court rulings — all of this sits past the model's training cutoff. Even tools with built-in web access will default to memory unless you explicitly tell them not to. The instruction is the unlock.</p>
+          <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+            <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"Search for the latest information on [topic]. Do not answer from memory."</p>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="tip" style="margin-bottom: 28px;">
+          <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">03</span> — Break the Echo Chamber</h3>
+          <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Long chat sessions make your AI dumber. The deeper you go in one conversation, the more it agrees with itself — and with you. The mechanism: the model anchors to its own prior outputs and your earlier messages, drifting toward confirmation with every exchange. A fresh context window has none of that history — no prior commitments, no accumulated bias. Copy your best output, open a new chat, and direct it to tear the work apart. This works for plans, emails, business proposals — anything that benefits from a fresh set of eyes.</p>
+          <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+            <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+              <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"A junior engineer wrote this. Tear it apart."</p>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+
+      <div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce;">
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 4px;">Bonus Techniques</p>
+        <p style="font-family: 'Lora', serif; font-size: 16px; color: #9a9492; margin: 0; font-style: italic;">Ten more ways to keep your AI honest</p>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">04</span> — Tell It the Stakes</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Models calibrate caution based on context. Higher stakes = more hedging, more "verify this" flags, fewer confident guesses. Without any stakes framing, the model defaults to confident and fast. Tell it the output matters and it shifts into careful mode. Try: "This will be published under my name," or "A lawyer will review this for accuracy," or "Patients will follow this advice." You're not tricking it — you're surfacing care it was always capable of delivering.</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"This information will be used to make a real business decision." or "A doctor will act on this."</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">05</span> — Run the Confidence Check</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Ask it to rate its own certainty on each claim. Watch how fast it starts hedging. The claims it's least confident about are exactly the ones you need to verify independently. Sometimes just asking for a confidence rating causes the model to catch and correct its own errors in real time — before you even see them. Treat anything below 7/10 as a mandatory manual check. You can also follow up with: "Explain why you're less confident on those items" — that reasoning often points you directly to what's shaky.</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"On a scale of 1–10, how confident are you in each of these claims?"</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">06</span> — Give It Permission to Say "I Don't Know"</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Models hallucinate partly because they think silence equals failure. They'd rather be confidently wrong than admit uncertainty. This is a training artifact — during development, responses that produced "something helpful" were rewarded over non-answers. The model learned to always generate output, even when it shouldn't. Your prompt overrides that default. Once you explicitly give it permission to say "I don't know," the output quality jumps. Bonus technique: add "List everything you're uncertain about in this response" to surface hidden guesses you'd otherwise miss.</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"If you don't know, just say 'I don't know' — that's the correct answer here."</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">07</span> — Separate Tasks from Questions</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Don't combine research and writing in one prompt. "Write a bio and include her career history" asks the model to fact-find and generate simultaneously. Hallucinations love hiding inside creation tasks — the writing fluency masks the factual slippage. The two-step workflow: Step 1, ask for facts only ("List the key career milestones for [person] — nothing else"). Step 2, review and verify those facts yourself. Step 3, paste them back and say "Using only what I've given you, write the bio." This applies to case studies, grant proposals, technical summaries — any writing that requires the facts to be right.</p>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">08</span> — Interrogate the Output</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Instead of fact-checking every line yourself, make the model do it. Ask it to poke holes in its own reasoning. It's surprisingly good at this — you just have to trigger it. Models in generation mode produce content; in critic mode they catch errors. Those are genuinely different postures, and the switch happens from a single prompt. Other versions: "List the three most likely errors in what you just told me," or "What assumptions did you make that I should double-check?" Especially powerful for technical content, legal analysis, or anything involving statistics or numbers.</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"What would have to be true for this to be wrong?"</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">09</span> — Use Two Models, Not One</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Run the same question through Claude and ChatGPT. Where they agree, you're probably fine. Where they disagree is your uncertainty zone — don't trust either answer there without checking a primary source. Perplexity is also worth adding to the mix: it cites sources by default, so you can follow the links and verify claims yourself. Another variation: run the same prompt twice in the same model with slightly different phrasing. If the answers conflict with each other, you've found an unstable claim neither version can actually back up. Disagreement is your signal to dig — not your final answer.</p>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">10</span> — Anchor It to Primary Sources</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Paste in the actual document, data, or article. This turns the model from a guesser into a reader — and readers don't hallucinate. The more real context you feed it, the less it needs to invent. Works for: financial reports, research papers, contracts, product specs, meeting transcripts, legal filings. Modern models can handle 100,000 words or more of pasted content. You can even paste multiple conflicting sources and ask the model to identify where they disagree — letting it do the synthesis work without making up any of the facts.</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"Answer only from what I've given you. Do not bring in outside information."</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">11</span> — Name the Expert</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">"Answer as an expert" activates broad, generic knowledge. A specific role activates careful, precise reasoning. The more detailed the persona you assign, the less room there is for slop. A specific persona implies specific standards, methodologies, and thresholds for uncertainty. "As a patent attorney specializing in biotech IP" is a behavioral specification — not just a title. Real experts say "I'd need to review the original study first" rather than winging it. The right persona gets you that same discipline. Try: "As an ICU nurse reviewing discharge instructions," or "As a CPA preparing this for an IRS audit."</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"Answer as a forensic accountant who's testified in federal court."</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">12</span> — Break the Sycophancy Loop</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">Without an explicit trigger to push back, the model will validate whatever framing you brought in. It's designed to agree with you. You have to deliberately force it to argue the other side. Sycophancy gets worse the more emotionally invested you seem — the model reads those cues and softens its criticism accordingly. Counter it by presenting ideas neutrally, or explicitly say: "I have no attachment to this — tell me what's actually wrong with it." Other versions that work: "What would a smart, well-informed skeptic say?" or "Give me the steelman case against my position."</p>
+        <sc-if value="{{ showPromptBoxes }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left: 3px solid #7e22ce; background: #faf5ff; padding: 10px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;">
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Try this</p>
+            <p style="font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: #2d2a27; line-height: 1.55; margin: 0; font-style: italic;">"Assume I'm wrong about my core assumption. What's the argument against it?"</p>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="tip" style="margin-bottom: 28px;">
+        <h3 style="font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: #2d2a27; margin: 0 0 8px; line-height: 1.3;"><span style="color: #7e22ce;">13</span> — Version Your Prompts</h3>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.65; margin: 0;">If you're running the same type of query regularly, write your anti-hallucination instructions once and reuse them every time. Don't rely on the model being in a good mood. Build a prompt template with your safeguards baked in. Consistency beats hope. A basic research template: "Search for current information only. Rate your confidence 1–10 on each claim. Say 'I don't know' where uncertain. Do not bring in anything from memory — only from sources." Store it in your notes app, as a saved ChatGPT prompt, or as a system prompt via the API. One hour of setup eliminates the same mistake every single time.</p>
+      </div>
+
+
+      <div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0;"></div>
+
+      <div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center;">
+        <p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px;">Want more AI tips that actually work?</p>
+        <p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px;">Follow me on Instagram for weekly breakdowns.</p>
+        <a href="https://www.instagram.com/d.avebrown" style="font-family: 'Source Sans 3', sans-serif; font-size: 18px; font-weight: 700; color: #7e22ce; text-decoration: none;">@d.avebrown</a>
+      </div>
+
+    </td></tr></tbody>
+    <tfoot><tr><td class="ftr-space"></td></tr></tfoot>
+  </table>
+</main>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showVideoRecap&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;},
+  &quot;showPromptBoxes&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}
+}">
+
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showVideoRecap: this.props.showVideoRecap ?? true,
+      showPromptBoxes: this.props.showPromptBoxes ?? true,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

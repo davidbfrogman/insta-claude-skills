@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									The Claude Plugins Guide
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									Five plugins and skills that turn Claude from a chat window into something that actually does the work.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									Using Claude without plugins is like hiring a genius and making them work through a mail slot. Technically they can help. But you're making it unnecessarily sad.
+								</p>
+								<p class="body-text">
+									Claude by itself can write, think, summarize, plan, and analyze. But without plugins and skills, it only knows what you paste in. It only works with what you drag over. It cannot see your actual work unless you feed it piece by piece like you're feeding a very expensive office raccoon.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									That is the real gap. Most people are not using Claude wrong. They are using Claude <em>disconnected</em>. Here are five plugins and skills worth knowing about — and what they actually feel like in plain English.
+								</p>
+
+								<!-- ── Skills vs Plugins ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Before We Start</p>
+									<p class="section-subtitle">Skills vs. plugins — what's the difference?</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Skills: Individual Superpowers</h3>
+									<p class="body-text">
+										Skills are specialized instructions or workflows that make Claude better at a specific job. Think of them like handing Claude a recipe. One skill might teach it how to write better conversion copy. Another how to plan a new software feature. Another how to audit a marketing funnel.
+									</p>
+									<p class="body-text">
+										They shape <em>how Claude thinks</em> about a task. They do not require external connections. They just make Claude sharper in a particular domain.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Plugins: The Avengers Team</h3>
+									<p class="body-text">
+										Plugins are bigger. They give Claude access to tools, systems, data, or outside services. A plugin might connect Claude to your calendar, your codebase, the live web, a media generator, or your company's documents. Not just instructions — connections.
+									</p>
+									<p class="body-text">
+										Skills teach Claude how to do something better. Plugins give Claude the tools and access to actually go do the work. Skills are superpowers. Plugins are the team.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Official Plugin Marketplace</p>
+										<p class="example-content">claude.com/plugins
+
+This is the official place to browse and install Claude plugins.
+Filter by <strong style="font-style: normal;">cowork</strong> to surface plugins built specifically around professional and knowledge work — the ones most relevant to the kind of tasks covered in this guide.</p>
+									</div>
+								</div>
+
+								<!-- ── The Five ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Five</p>
+									<p class="section-subtitle">Plugins and skills worth adding today</p>
+								</div>
+
+								<!-- 01 Productivity -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Productivity Plugins</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: busy professionals, managers, founders, operators</p>
+									<p class="body-text">
+										This is the easiest one to understand. Claude alone is like a brilliant assistant sitting in an empty room. It can think, write, plan, and summarize — but it has no access to the messy reality of your actual work.
+									</p>
+									<p class="body-text">
+										A productivity plugin changes that. It connects Claude to the things already running your day: calendar events, emails, Slack threads, tasks, meeting notes, documents. Instead of you manually pasting everything in, Claude can help make sense of the actual chaos directly.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">Claude alone is a genius with no inbox.
+A productivity plugin gives it the keys to the office.
+
+Instead of "a thing I ask questions,"
+Claude becomes your work operating system.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>What it can help with:</strong> planning your day, summarizing what actually matters, tracking tasks and deadlines, pulling together weekly updates, turning scattered messages into something that resembles a plan.</p>
+								</div>
+
+								<!-- 02 Brand Voice -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Brand Voice Plugin</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: marketers, founders, content creators, sales teams</p>
+									<p class="body-text">
+										This is one of the most practical plugins for anyone creating content at scale. The Brand Voice plugin teaches Claude your tone, style, messaging, approved phrases, and writing preferences — so the output sounds like your actual brand instead of generic AI sludge.
+									</p>
+									<p class="body-text">
+										Tired of AI writing that sounds like a LinkedIn productivity goblin got trapped inside a Canva template? This is the fix. Instead of every email starting with "We're thrilled to announce an exciting new solution," Claude can write the way you actually talk. Or at least much closer. Which, for most marketing teams, is already a small miracle.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">A normal prompt is like telling someone: "Just sound like us."
+Which is adorable.
+
+A brand voice plugin is like handing them the actual style guide,
+past campaigns, customer language, and the company's personality.
+Which is useful.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>What it can help with:</strong> social posts, email drafts, landing page copy, consistent team tone, and eliminating the "ChatGPT wrote this in a panic" feeling.</p>
+									<div class="example-box" style="margin-top: 12px">
+										<p class="example-label">Install</p>
+										<p class="example-content">claude plugin install brand-voice@knowledge-work-plugins</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px; font-size: 13px; color: #9a9492">Source: github.com/anthropics/knowledge-work-plugins</p>
+								</div>
+
+								<!-- 03 Engineering -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Engineering Plugins</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: software teams, engineers, technical founders</p>
+									<p class="body-text">
+										Engineering plugins are where Claude moves from "code helper with confidence" to something that actually resembles a junior engineer with a real process. Not just autocomplete. A workflow.
+									</p>
+									<p class="body-text">
+										A regular coding prompt is like asking someone to fix a car with a flashlight. An engineering plugin gives them the garage, the tools, the repair manual, and the inspection checklist. The most popular example is <strong>feature-dev</strong> — a structured seven-phase workflow that walks through discovery, codebase exploration, design, implementation, testing, review, and documentation. 89,000+ verified installs and counting.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">Instead of just "make code appear,"
+Claude works through the actual development flow like a real teammate.
+
+Not a teammate who messages you "quick question" and vanishes for three hours.
+A good one.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>What it can help with:</strong> exploring a codebase, planning new features, writing implementation steps, generating tests, reviewing changes, and updating documentation — all as part of one structured flow rather than a series of disconnected prompts.</p>
+									<div class="example-box" style="margin-top: 12px">
+										<p class="example-label">Install</p>
+										<p class="example-content">npx skills install feature-dev</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px; font-size: 13px; color: #9a9492">Source: github.com/wondelai/skills — skills.wondel.ai</p>
+								</div>
+
+								<!-- 04 Web Data -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Web Data Plugins</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: AI builders, researchers, growth teams, analysts</p>
+									<p class="body-text">
+										Claude's training data has a cutoff. Search snippets are shallow. And here's the thing: most business questions are not "think harder" questions. They're "go check" questions. What are competitors charging? What changed on this website? What do customers keep complaining about in reviews?
+									</p>
+									<p class="body-text">
+										Web data plugins give Claude eyes on the actual internet. Not vibes. Not guesses. Fresh information. Two worth knowing about:
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">Claude without web tools is reading yesterday's newspaper.
+Web data plugins let it walk outside, check the shelves,
+read the reviews, and bring back a spreadsheet.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>Nimble</strong> — Best for AI engineers building workflows that depend on fresh external data. Handles live web search, page extraction, crawling, JavaScript rendering, and structured outputs. Useful for pricing research, product listings, competitor monitoring, inventory checks, and market signals.</p>
+									<p class="body-text"><strong>Firecrawl</strong> — Best for crawling full websites and turning them into clean, usable content. Handles recursive site crawling, URL discovery, and exporting pages as structured markdown. Useful for documentation ingestion, knowledge base building, site mapping, and search index creation.</p>
+								</div>
+
+								<!-- 05 Marketing Skills -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Marketing Skills</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: marketers, creators, startup founders, growth teams</p>
+									<p class="body-text">
+										Good marketing is not just writing cuter sentences. It's understanding the customer, finding the friction, making the offer clear, and knowing what to test next. Most AI prompts get the first part. Marketing skills get all four.
+									</p>
+									<p class="body-text">
+										Instead of Claude being your caption vending machine, a marketing skill turns it into something closer to a slightly unhinged growth strategist who never sleeps and has strong opinions about your landing page hero section. Which is sometimes annoying. But mostly useful.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">A prompt says: "Can you write me a marketing email?"
+A marketing skill says: "Here is the playbook from a full growth team. Use it."
+
+That's a completely different starting point.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>What it can help with:</strong> landing pages, SEO briefs, conversion copy, customer messaging, funnel audits, analytics review, positioning, growth experiments, and turning rough ideas into actual campaigns.</p>
+									<p class="body-text" style="margin-top: 10px; font-size: 13px; color: #9a9492">Source: github.com/coreyhaines31/marketingskills — 3,500+ stars — marketing-skills.com</p>
+								</div>
+
+								<!-- Bonus -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Bonus</p>
+									<p class="section-subtitle">When Claude stops being just the writer and starts pulling in the art department</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Creative Media Plugins</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Best for: creators, social teams, marketers, video editors</p>
+									<p class="body-text">
+										Once Claude can help generate images, video, motion effects, and consistent characters — it stops being just a writing tool and starts becoming a tiny content studio. Claude writes the idea. A creative media plugin starts turning that idea into actual assets.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">Claude alone is the scriptwriter.
+A creative media plugin brings in the art department,
+camera crew, editor, and post-production team.
+
+Scriptwriter. Designer. Editor. Post-production goblin.
+All in one workflow.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>Higgsfield MCP</strong> is the standout example: 30+ AI models for image generation, video creation, motion effects, lip sync, and consistent character tools. Content creators report building social media assets 10x faster than traditional production workflows. 15,000+ installs. Official partner integration.</p>
+								</div>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										If Claude still feels useful but not quite game-changing, the issue probably is not your prompts. It might be that you gave the genius a chair but forgot to give them keys to the building.
+									</p>
+									<p class="body-text">
+										Skills make Claude better at a specific job. Plugins give Claude access to the tools, data, and systems where the job actually happens. Both are worth having. Neither takes long to set up.
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more practical AI guides?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/d.avebrown"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@d.avebrown</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+	</body>
+</html>

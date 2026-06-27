@@ -1,0 +1,55 @@
+{
+	"name": "ti.t3",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">=20.19.1"
+	},
+	"scripts": {
+		"build:2-migrate": "./scripts/build-migrate-db.sh",
+		"build:3-build": "next build --no-lint",
+		"build": "yarn build:2-migrate && yarn build:3-build",
+		"check": "next lint && tsc --noEmit",
+		"db:generate": "prisma migrate dev",
+		"db:migrate": "prisma migrate deploy",
+		"db:push": "prisma db push",
+		"db:studio": "prisma studio",
+		"leads": "yarn ts-node -r tsconfig-paths/register leads/lead-enrichment-engine/pipeline-coordinator.ts",
+		"copy-prisma": "cp -R ../node_modules/.prisma ./node_modules",
+		"db-seed": "yarn ts-node -r tsconfig-paths/register prisma/seed.ts",
+		"db-seed-sw": "yarn ts-node -r tsconfig-paths/register prisma/seed-star-wars.ts",
+		"db-seed-cb": "yarn ts-node -r tsconfig-paths/register prisma/commercial-bid-seed.ts",
+		"db-rebuild-dev": "yarn prisma migrate reset && yarn db-seed",
+		"db-reset": "yarn prisma migrate reset",
+		"dev": "next dev --turbopack | pino-pretty -c --colorizeObjects=true",
+		"format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+		"format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+		"postinstall": "prisma generate",
+		"lint": "next lint",
+		"lint:fix": "next lint --fix",
+		"preview": "next build && next start",
+		"start": "next start",
+		"typecheck": "tsc --noEmit"
+	},
+	"prisma": {
+		"seed": "ts-node --transpile-only -r tsconfig-paths/register  prisma/seed.ts"
+	},
+	"prettier": {
+		"trailingComma": "es5",
+		"semi": true,
+		"singleQuote": true,
+		"useTabs": true,
+		"quoteProps": "consistent",
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"printWidth": 150,
+		"tabWidth": 4
+	},
+	"dependencies": {},
+	"devDependencies": {},
+	"ct3aMetadata": {
+		"initVersion": "7.39.3"
+	},
+	"packageManager": "yarn@4.13.0"
+}

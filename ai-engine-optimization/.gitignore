@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+# Generated reports (output files, not source)
+report-*.md
+report-*.json
+
+# Distribution zip (rebuilt from source via build-dist.sh)
+*.zip

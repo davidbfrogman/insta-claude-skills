@@ -1,0 +1,591 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Working Harder Won't Get You a Bigger Raise. Leverage Will.
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									The raise pool is already set. This is how you make your name expensive to ignore when it gets divided up.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									Most people think the raise process works like this. You work hard. Your manager notices. The company rewards you fairly. Everyone claps. HR releases a dove.
+								</p>
+								<p class="body-text">
+									Unfortunately, no.
+								</p>
+								<p class="body-text">
+									A lot of people misunderstand compensation. They think raises are handed out like merit badges — everyone performs, leadership carefully reviews the scoreboard, and the hardest workers get rewarded. That is not really how it works.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									Most companies set their compensation budgets ahead of time. Your team gets a raise pool. Your manager, director, or VP then has to decide how to split that pool across the team. So the real question is not <em>"did I do good work?"</em> The real question is: <em>"when leadership is dividing up a fixed pile of money, why would they fight for me to get a bigger piece?"</em> That is where leverage comes in.
+								</p>
+
+								<!-- ── The Raise Pie ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Before We Start</p>
+									<p class="section-subtitle">The raise pie is already cut before you walk in</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">The pie is fixed. You're competing for a slice.</h3>
+									<p class="body-text">
+										By the time you sit down for your annual review, the overall compensation budget has almost certainly been decided. You are not negotiating with an infinite wallet. You are competing for allocation against everyone else on your team.
+									</p>
+									<p class="body-text">
+										And your manager is not just rewarding effort. They are managing risk. Who is critical? Who would be painful to lose? Who keeps the important systems running? Who makes the team faster? Who is close to revenue? Who would be expensive or annoying to replace? Those are the questions actually being asked when the money gets split.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The Real Question</p>
+										<p class="example-content">Not: "Did you work hard this year?"
+
+But: "When we divide up a fixed pile of money,
+why should your slice get bigger and someone else's get smaller?"
+
+Your job is to make that answer obvious.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px">
+										Here is the thesis for the whole thing: <strong>the people who get outsized raises are not always the ones working the hardest. They are the ones with the strongest position when the raise pool gets divided.</strong> Your goal is not just to be good. Good employees are everywhere. Your goal is to be hard to ignore — the person leadership quietly worries about losing.
+									</p>
+								</div>
+
+								<!-- ── Performance is the floor ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Blunt Truth</p>
+									<p class="section-subtitle">"Just doing a good job" is the floor, not the differentiator</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Performance gets you into the room. It does not win the room.</h3>
+									<p class="body-text">
+										Performance matters. But performance is the floor. Doing your job well gets you into the conversation. It does not guarantee you win the conversation.
+									</p>
+									<p class="body-text">
+										A person who does great work but has low visibility, weak relationships, no ownership, and no obvious connection to business outcomes is easy to underpay. A person who does great work <em>and</em> owns something important, is trusted by leadership, reduces risk, and would create a real problem if they left — that person has leverage. Same quality of work. Completely different raise.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The Definition Worth Memorizing</p>
+										<p class="example-content">Leverage is the gap between how much value
+the company gets from you and how painful
+it would be to replace you.
+
+It's whatever makes leadership say:
+"We really do not want to lose this person."</p>
+									</div>
+								</div>
+
+								<!-- ── The Five Types ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Five</p>
+									<p class="section-subtitle">The five types of leverage that actually move comp</p>
+								</div>
+
+								<!-- 01 Revenue -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Revenue Leverage</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">The simplest and most powerful one</p>
+									<p class="body-text">
+										The closer your work sits to revenue, retention, expansion, cost savings, or risk reduction, the easier it is for leadership to justify paying you more. This does not mean everyone needs to be in sales. It means you need to connect your work to business outcomes.
+									</p>
+									<p class="body-text">
+										You helped close customers. You improved onboarding. You reduced churn. You made the sales demo better. You fixed something that was quietly costing the company money. You sped up a customer-facing process. If your work lives three layers away from the money, your one job is to build a bridge back to it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">"I improved the reporting dashboard."
+
+vs.
+
+"I improved the reporting dashboard the sales team
+uses to spot expansion opportunities."
+
+Same work. The second one has a dollar sign attached.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>The question to ask yourself:</strong> how does my work help the company make money, keep money, save money, or avoid losing money? If you can answer that in one sentence, you are already ahead of most of your team.</p>
+								</div>
+
+								<!-- 02 Ownership -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Ownership Leverage</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Become the person people come to when it breaks</p>
+									<p class="body-text">
+										You create leverage when you become the clear owner of something important. Not "I help with this." Not "I attend the meetings." Not "I'm on the team." But: <em>"when this thing breaks, people come to me."</em>
+									</p>
+									<p class="body-text">
+										That could be a system, a customer segment, a process, an internal tool, a reporting workflow, a vendor relationship, a launch motion, or a compliance requirement. The catch is that it has to <em>matter</em>. Owning the company lunch survey is not leverage. Owning the billing integration, the renewal process, the onboarding workflow, or the deployment pipeline is leverage.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">You don't want to be irreplaceable in a toxic,
+hostage-taking, "only I know the password" way.
+
+You want to be valuable in an obvious way.
+
+The goal is friction when you're gone. Not chaos.
+Just enough that leadership feels it.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>What this looks like:</strong> own something visible, painful, and valuable — customer onboarding, the sales handoff, the forecasting process, support escalation, lead routing. Something where your absence creates a real gap.</p>
+								</div>
+
+								<!-- 03 Scarcity -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Scarcity Leverage</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">The harder you are to replace, the more you get paid</p>
+									<p class="body-text">
+										Companies pay more when replacement is hard. That is why executives get large comp packages — not because they are magical creatures born under a Deloitte moon, but because the perceived risk and business impact of the role is high. The same principle applies all the way down the org chart.
+									</p>
+									<p class="body-text">
+										Scarcity can come from technical expertise, customer relationships, institutional knowledge, industry experience, cross-functional trust, a strong external network, credentials, the ability to operate in ambiguity, or the ability to translate between technical and business teams.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">The more replaceable your contribution feels,
+the less leverage you have.
+
+The more specific, trusted, and business-critical
+it becomes, the more leverage you create.
+
+The path isn't "get better." It's "get more specific."</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px">This is the encouraging part: you are not being told to become a generically better human. You are being told to become more <em>specific</em>. Specific is a path. "Better" is a vibe.</p>
+								</div>
+
+								<!-- 04 Visibility -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Visibility Leverage</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">Your raise is often discussed when you're not in the room</p>
+									<p class="body-text">
+										A lot of people wait until their review to explain what they did. That is too late. By then, opinions have already formed. Leverage is built throughout the year by making sure the right people already know what you own, what you improved, what risk you reduced, and what money you helped make or save.
+									</p>
+									<p class="body-text">
+										This is not about bragging in a gross LinkedIn way. It is about giving clear, regular updates that connect your work to business outcomes — so that when your name comes up in a room you are not in, the case for you is already built.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why You Should Care</p>
+										<p class="example-content">Your raise is not just a conversation
+between you and your manager.
+
+It's a conversation your manager has about you
+when you are not in the room.
+
+If your impact is invisible, your raise will be average.</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px"><strong>Being valuable is good. Being visibly valuable is better.</strong> The work and the story about the work are two different jobs, and most people only do the first one.</p>
+								</div>
+
+								<!-- 05 Optionality -->
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Optionality Leverage</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">The uncomfortable one — and the real one</p>
+									<p class="body-text">
+										You have more leverage when the company believes you have options. This does not mean threatening to quit — that usually backfires and reads as a tantrum. It means having a strong enough reputation, network, skill set, and market position that leadership simply understands you are not trapped.
+									</p>
+									<p class="body-text">
+										You build it quietly: maintain relationships outside your company, take the occasional recruiter call, build a public body of work, keep your resume current, develop skills that are valuable beyond your current employer, and stay aware of market compensation.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The Quiet Truth</p>
+										<p class="example-content">Companies are more likely to underpay people
+they believe have nowhere else to go.
+
+You don't have to say a word about it.
+You just have to not be cornered.</p>
+									</div>
+								</div>
+
+								<!-- ── 10 Tactics ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Playbook</p>
+									<p class="section-subtitle">10 ways to build leverage before next review season</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">1.</span> Get closer to revenue</h3>
+									<p class="body-text">Move toward the work that touches sales, retention, expansion, billing, pricing, or delivery. Even if your role is not revenue-generating, find the parts of your job that brush up against money — and describe them that way.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">2.</span> Own a business-critical system or process</h3>
+									<p class="body-text">Customer onboarding. Internal reporting. The sales handoff. The billing workflow. The deployment pipeline. The renewal process. Become the named owner of something visible, painful, and valuable.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">3.</span> Become the translator between teams</h3>
+									<p class="body-text">Most companies are full of smart people who cannot understand each other. The person who can sit between executives, customers, engineers, sales, and finance and make things move becomes the connective tissue. Remove that person and everyone else slows down. That is leverage.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">4.</span> Build executive visibility before review season</h3>
+									<p class="body-text">Do not wait for the review to explain your year. Make sure the right people already know what you own, what you improved, and what would be worse without you. Opinions form early. Get into the story before it's written.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">5.</span> Document your wins in business language</h3>
+									<p class="body-text">People are bad at remembering your contributions. Help them. Keep a simple brag document — but write it in outcomes, not tasks.</p>
+									<div class="example-box">
+										<p class="example-label">Same Work, Two Versions</p>
+										<p class="example-content">Bad:  "Updated onboarding workflow."
+
+Better: "Rebuilt the sales-to-CS handoff so new customers
+get to value faster and stopped flooding support
+with the same repeated questions."
+
+The task matters less than the business effect.</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">6.</span> Make your manager's job easier</h3>
+									<p class="body-text">Your manager is overwhelmed, under-informed, and being asked to defend decisions to people above them. If you want them to fight for your raise, make it easy to explain why. Send clean summaries. Hand them the metrics. Build their argument for them. <strong>Your manager cannot fight for a raise they cannot explain.</strong></p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">7.</span> Become associated with speed</h3>
+									<p class="body-text">Not reckless speed. Useful speed. The person who unblocks decisions, simplifies processes, and gets teams unstuck creates leverage — because most companies are drowning in delay. When your reputation becomes "when this person is involved, things actually move," that is worth money.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">8.</span> Reduce visible risk</h3>
+									<p class="body-text">Revenue gets the attention, but preventing expensive mistakes is leverage too — compliance, security, customer escalations, financial reporting, key-person dependency. The trick is to make invisible risk visible. Nobody celebrates the fire that did not happen unless you explain what you prevented.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">9.</span> Build external options</h3>
+									<p class="body-text">Keep relationships alive outside your company. Take the occasional recruiter call. Build a public body of work. Keep your skills marketable. You are not threatening anyone — you are simply making sure leadership never assumes you are cornered.</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">10.</span> Solve problems above your level</h3>
+									<p class="body-text">Don't just do your assigned tasks. Find the problems your manager, director, or VP is actually worried about — why implementations drag, why customers churn, why this project is always late, why leadership doesn't trust the data — and help solve those.</p>
+									<div class="example-box">
+										<p class="example-label">Why This One Works</p>
+										<p class="example-content">When you solve problems above your level,
+you start looking like someone who should be
+paid above your level.
+
+That's not a coincidence. That's the whole move.</p>
+									</div>
+								</div>
+
+								<!-- ── Not manipulation ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">One Important Caveat</p>
+									<p class="section-subtitle">Leverage is not manipulation</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">This is economics, not politics.</h3>
+									<p class="body-text">
+										This is not about being political in the gross way. It is not about pretending to be busier than you are. It is not about holding the company hostage because only you know how the spreadsheet works. That stuff gets you a reputation, not a raise.
+									</p>
+									<p class="body-text">
+										It is about understanding that compensation is an economic decision, not an emotional reward for effort. Companies pay more when they believe losing you would hurt. So your real job is to make your impact <em>visible</em>, <em>valuable</em>, and <em>hard to casually replace</em>.
+									</p>
+								</div>
+
+								<!-- ── Punchlines ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Worth Repeating</p>
+									<p class="section-subtitle">Lines to tattoo on the inside of your eyelids</p>
+								</div>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 0">
+										<p class="example-content">"Hard work gets you considered. Leverage gets you fought for."
+
+"The raise pool is not a trophy case. It's a knife fight in business casual."
+
+"You don't control the size of the pie. You control how obvious it is that you deserve a bigger slice."
+
+"The company does not pay you more because your calendar looked painful."
+
+"The goal is not to be irreplaceable. The goal is to be expensive to replace."
+
+"You want your name to come up when leadership asks: who can we absolutely not afford to lose?"</p>
+									</div>
+								</div>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										Raises are not just rewards for effort. They are allocation decisions inside a fixed budget. If you want a bigger one, good performance is not enough — you need leverage. That means owning important work, connecting your impact to money, becoming harder to replace, making your value visible, and giving leadership a reason to worry about losing you.
+									</p>
+									<p class="body-text">
+										You do not get a bigger raise because you quietly suffered harder than everyone else. You get a bigger raise because, when leadership divides up the pie, your name feels expensive to ignore.
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides that say the quiet part out loud?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/d.avebrown"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@d.avebrown</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+	</body>
+</html>

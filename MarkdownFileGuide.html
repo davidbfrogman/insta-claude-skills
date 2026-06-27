@@ -1,0 +1,744 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									The Markdown File Guide
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									How to write structured documents that humans and computers can both read.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									Markdown is a plain-text document format that is easy for humans to write and easy for computers, websites,
+									documentation tools, and AI assistants to understand.
+								</p>
+								<p class="body-text">
+									The point is not to "learn a technical file format." The point is: Markdown lets you create clean, portable,
+									structured documents that any tool can read without getting confused by formatting junk.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									Here is everything you need to know — from basic syntax to advanced techniques for working with AI tools, version
+									control, and documentation pipelines.
+								</p>
+
+								<sc-if value="{{ showFoundations }}" hint-placeholder-val="{{ true }}">
+									<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+										<p class="section-label">Foundations</p>
+										<p class="section-subtitle">Three core concepts to understand first</p>
+									</div>
+
+									<div class="tip">
+										<h3 class="tip-title"><span class="tip-num">01</span> — What Is Markdown?</h3>
+										<p class="body-text">
+											Markdown files usually end in <code>.md</code>. They are plain text files with simple formatting symbols.
+											Instead of using a visual editor like Google Docs or Word, Markdown uses lightweight syntax to show
+											structure.
+										</p>
+										<p class="body-text">
+											The <code>#</code> means title. The <code>##</code> means section heading. Blank lines separate ideas. The
+											document has hierarchy. That sounds basic, but it matters a lot when you are asking an AI to understand a
+											document, summarize research, or follow instructions — because the structure is explicit and readable by
+											both people and machines.
+										</p>
+										<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+											<div class="example-box">
+												<p class="example-label">Example</p>
+												<p class="example-content">
+													# Document Title ## Background This is the context for what this document is about. ## Goal What
+													this document is trying to accomplish. ## Notes Anything important the reader should keep in mind.
+												</p>
+											</div>
+										</sc-if>
+									</div>
+
+									<div class="tip">
+										<h3 class="tip-title"><span class="tip-num">02</span> — What Is a CLAUDE.md File?</h3>
+										<p class="body-text">
+											A <code>CLAUDE.md</code> file is an instruction or context file for Claude. Think of it like a
+											read-me-first note for a folder. When Claude opens a project directory, it reads this file first to
+											understand what the project is, what files matter, and what it should know before helping.
+										</p>
+										<p class="body-text">
+											A good <code>CLAUDE.md</code> includes: a project summary, a description of the audience or purpose, a
+											list of important files and what they contain, the tone or style to use, any constraints or approved
+											content, and specific instructions for how Claude should behave in that folder. It gives Claude a map of
+											the room before it starts rearranging furniture.
+										</p>
+										<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+											<div class="example-box">
+												<p class="example-label">Example</p>
+												<p class="example-content">
+													# Project Context This folder contains materials for [project name]. ## Important Files -
+													`research.md`: background research and source notes - `draft.md`: current working draft ##
+													Instructions Refer to research notes before drafting. Keep tone consistent with existing drafts.
+												</p>
+											</div>
+										</sc-if>
+									</div>
+
+									<div class="tip">
+										<h3 class="tip-title"><span class="tip-num">03</span> — How to Start a Markdown Document</h3>
+										<p class="body-text">
+											The opening of a Markdown file sets the context for everything that follows. AI tools often use the title,
+											headings, and first few paragraphs to understand what kind of document they are looking at — so a strong
+											opening matters.
+										</p>
+										<p class="body-text">
+											A vague title like
+											<em>"Notes — Stuff from last week"</em> tells nobody anything. A specific title like
+											<em>"Q3 Planning Session Notes — October 14: Decisions, Action Items, and Open Questions"</em>
+											tells both the reader and any AI tool exactly what the document is before reading a single line. Invest a
+											few extra words in the title and opening paragraph — it pays off every time the document is opened.
+										</p>
+										<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+											<div class="example-box">
+												<p class="example-label">Pattern</p>
+												<p class="example-content">
+													# [Specific Title] One sentence describing what this document is and why it exists. ## Background
+													## Goal ## Notes
+												</p>
+											</div>
+										</sc-if>
+									</div>
+								</sc-if>
+
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Syntax &amp; Structure</p>
+									<p class="section-subtitle">Everything you need to write effective Markdown</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Markdown Is Portable</h3>
+									<p class="body-text">
+										Markdown is not locked inside one app. A
+										<code>.md</code> file can be opened in a code editor, Notion, GitHub, Obsidian, many CMS systems,
+										documentation tools, and AI assistants. That makes it useful for any content that may need to move between
+										tools over time. You write the file once and it works almost everywhere, without conversion headaches or
+										format lock-in.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Markdown Keeps Formatting Clean</h3>
+									<p class="body-text">
+										Markdown does not carry hidden formatting like Word or Google Docs sometimes do. That means fewer weird font
+										issues, spacing problems, broken bullets, mystery styles, and copy-paste disasters. When you send Markdown
+										content into an AI tool or share it across platforms, it arrives as clean text — no invisible baggage
+										attached.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">06</span> — Headings Create Structure</h3>
+									<p class="body-text">
+										Headings are one of the most important parts of Markdown. They create visible hierarchy that both people and
+										AI tools can navigate.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content"># Document Title ## Main Section ### Subsection</p>
+										</div>
+									</sc-if>
+									<p class="body-text" style="margin-top: 10px">
+										Use headings to separate distinct parts of a document: Background, Goals, Key Points, Open Questions, Next
+										Steps. This structure helps people skim quickly and helps AI understand what each section is supposed to do.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">07</span> — Bullets Are Great for Lists and Ideas</h3>
+									<p class="body-text">
+										Markdown makes unordered lists simple. Prefix each line with a hyphen, asterisk, or plus sign. This is useful
+										for brainstorms, reference lists, feature sets, research findings, and outlines. AI tools tend to handle
+										structured bullets much better than giant unbroken paragraphs — bullets communicate clearly that each item is
+										distinct.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">- Item one - Item two - Item three</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">08</span> — Numbered Lists Are Useful for Processes</h3>
+									<p class="body-text">
+										Use numbered lists when order matters — workflows, step-by-step instructions, checklists, and standard
+										operating procedures. The number signals to both the reader and the AI that sequence is significant. Numbered
+										lists are also easier for AI to reference specifically: "In step 3, you said..." is clearer than "In that
+										paragraph you mentioned..."
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">1. First step 2. Second step 3. Third step</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">09</span> — Markdown Supports Links Cleanly</h3>
+									<p class="body-text">
+										Links in Markdown use a readable format that keeps documents scannable. This is helpful when collecting
+										references in a research document, a resource list, or a project brief. It keeps documents readable instead of
+										cluttering them with raw URLs.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												[Link text](https://example.com) ## Reference Links - [Research paper](https://example.com) - [Source
+												document](https://example.com)
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">10</span> — Emphasis: Bold and Italic</h3>
+									<p class="body-text">
+										Markdown supports bold and italic text. Use emphasis sparingly — Markdown works best when structure does most
+										of the work. A good rule: if everything is emphasized, nothing is. Reserve bold for genuinely critical points
+										and italic for titles, technical terms, or light clarification.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">**bold text** *italic text*</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">11</span> — Markdown Is Great for Reusable Instructions</h3>
+									<p class="body-text">
+										Markdown is excellent for storing instructions and templates because it keeps them organized, readable, and
+										easy to copy. A prompt or workflow stored as a Markdown file is far more useful than one buried in a chat
+										thread or email — you can find it, update it, and reuse it consistently.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Example</p>
+											<p class="example-content">
+												# Document Review Instructions ## Role You are a careful editor reviewing a draft for accuracy and
+												clarity. ## Task Review the attached draft and identify any factual errors or unclear sections. ##
+												Rules - Focus on accuracy first, style second - Flag any claims that need a source - Do not rewrite —
+												only annotate
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">12</span> — Markdown Works Well with Version Control</h3>
+									<p class="body-text">
+										Because Markdown is plain text, tools like Git can show exactly what changed between versions — which lines
+										were added, removed, or modified, and by whom. This is much more precise than tracking changes in Word or
+										comparing Google Doc history. It is particularly valuable for living documents like technical specifications,
+										policy documents, research notes, or any file that gets updated regularly by multiple people.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">13</span> — Markdown Reduces Ambiguity for AI</h3>
+									<p class="body-text">
+										AI tools perform better when their input is clear and structured. Markdown helps because it creates obvious
+										sections, hierarchy, and labels. A wall of unformatted text leaves the AI guessing what each part is. A
+										structured Markdown document tells it exactly what the audience is, what the goal is, and what constraints
+										apply — before it generates a single word.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Structured beats unstructured</p>
+											<p class="example-content">
+												# Request ## Audience Internal team members ## Goal Explain the new onboarding process ## Tone
+												Professional and clear ## Key Points - The new process starts on [date] - All team members need to
+												complete training by [date]
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Going Further</p>
+									<p class="section-subtitle">Ten additional techniques worth knowing</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">14</span> — Code Blocks for Technical Content</h3>
+									<p class="body-text">
+										Markdown supports code blocks for displaying technical content exactly as written, without reformatting.
+										Inline code uses single backticks. Fenced code blocks use triple backticks and can optionally specify the
+										language for syntax highlighting. This is essential for documentation, command references, configuration
+										snippets, and any content where exact formatting is part of the meaning.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												Inline: `code here` Fenced block: ```javascript function example() { return true; } ```
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">15</span> — Blockquotes for Callouts and Citations</h3>
+									<p class="body-text">
+										Blockquotes use the <code>&gt;</code> character and work well for quoting source material, highlighting key
+										insights, or distinguishing referenced text from your own writing. They are especially useful in research
+										notes and reference documents where the source of an idea matters.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												&gt; "The purpose of writing is to communicate, not to impress." &gt; — Source or attribution
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">16</span> — Tables for Structured Data</h3>
+									<p class="body-text">
+										Markdown supports simple tables using pipes and dashes. Tables are useful for comparing options, tracking
+										status across multiple items, or any information that has a clear row-and-column structure. Keep them simple —
+										wide or deeply nested tables become hard to read in raw Markdown, even if they render cleanly.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												| Column 1 | Column 2 | Column 3 | |----------|----------|----------| | Data | Data | Data | | Data |
+												Data | Data |
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">17</span> — Nested Lists for Hierarchy</h3>
+									<p class="body-text">
+										Lists can be nested by indenting with spaces or tabs to show parent-child relationships. This is useful for
+										outlines, documentation with categories and subcategories, or project structures. Use nesting sparingly — more
+										than two or three levels deep becomes hard to read and is usually a sign the content should be reorganized
+										rather than indented further.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												- Main item - Sub-item - Sub-item - Sub-sub-item - Main item
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">18</span> — YAML Front Matter for Metadata</h3>
+									<p class="body-text">
+										Many Markdown tools support YAML front matter: a block of metadata at the very top of the file, wrapped in
+										triple dashes. Front matter is useful for tracking document status, tagging files for search or filtering, and
+										storing metadata that tools can read programmatically. Not every Markdown app supports it, but it is widely
+										used in documentation systems, static site generators, and note-taking apps like Obsidian.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												--- title: Document Title author: Your Name date: 2025-01-01 tags: [reference, documentation] status:
+												draft --- # Document Title
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">19</span> — Converting Markdown to Other Formats</h3>
+									<p class="body-text">
+										Because Markdown is plain text, it converts cleanly to other formats using tools like Pandoc. You can export
+										to HTML for web publishing, PDF for sharing or printing, DOCX for Word-compatible documents, or even slides
+										for presentations. This makes Markdown a useful source format: write once, export to whatever format the
+										situation requires. Many documentation platforms like MkDocs and Jekyll also convert Markdown automatically as
+										part of their build process.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Pandoc command</p>
+											<p class="example-content">pandoc input.md -o output.pdf
+pandoc input.md -o output.docx
+pandoc input.md -o output.html</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">20</span> — Markdown Editors and Tools</h3>
+									<p class="body-text">
+										You do not need a special app to write Markdown — any text editor works. But the right tool makes it easier.
+										Popular options include VS Code (free, with Markdown preview and extensions), Obsidian (note-taking built
+										around Markdown files), Typora (minimal editor with live preview), iA Writer (clean writing environment), and
+										Notion (visual tool that imports and exports Markdown). GitHub also renders Markdown automatically in
+										repositories, making it a good place to store and share documentation.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">21</span> — Task Lists and Checkboxes</h3>
+									<p class="body-text">
+										GitHub-flavored Markdown and many Markdown apps support interactive task lists using brackets. These render as
+										clickable checkboxes in tools that support them, including GitHub, Obsidian, and Notion. Task lists are
+										especially useful for project checklists, review processes, step-by-step procedures, and action items from
+										meetings.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												- [x] Completed task - [ ] Incomplete task - [ ] Another item to do
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">22</span> — File Naming Conventions</h3>
+									<p class="body-text">
+										Good file naming makes a collection of Markdown files much easier to navigate and maintain. A folder of 20
+										well-named files is easy to understand at a glance. A folder of 20 files named <code>notes.md</code>,
+										<code>doc1.md</code>, and <code>final_FINAL2.md</code> is not. Consistency matters more than any specific
+										convention — pick one approach and use it everywhere.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Conventions</p>
+											<p class="example-content">
+												Use lowercase: meeting-notes.md Use hyphens: project-brief.md Include dates when relevant:
+												2025-01-15-kickoff.md Be descriptive: onboarding-checklist.md
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">23</span> — HTML Comments for Hidden Notes</h3>
+									<p class="body-text">
+										Standard Markdown does not have a native comment syntax, but HTML comments work inside Markdown files.
+										Comments are invisible in rendered output but visible in the raw file. This is useful for leaving notes to
+										collaborators, temporarily hiding sections without deleting them, tracking document status inline, or leaving
+										instructions for AI tools that you do not want to appear in the final output.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Syntax</p>
+											<p class="example-content">
+												&lt;!-- This note is hidden in the rendered output --&gt; &lt;!-- TODO: verify this section before
+												publishing --&gt; &lt;!-- AI: do not include this section in your summary --&gt;
+											</p>
+										</div>
+									</sc-if>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">24</span> — Converting PDFs to Markdown</h3>
+									<p class="body-text">
+										You can convert existing PDFs into Markdown using two tools: <code>poppler</code> (which extracts text from PDFs
+										while preserving layout) and <code>pandoc</code> (which converts that text into clean Markdown). Works best on
+										text-based PDFs — scanned image PDFs require OCR software first. The output may need light cleanup, but it gets
+										you a workable, editable file far faster than retyping.
+									</p>
+									<sc-if value="{{ showExamples }}" hint-placeholder-val="{{ true }}">
+										<div class="example-box">
+											<p class="example-label">Step 1 — Install the tools (Mac)</p>
+											<p class="example-content">brew install poppler
+brew install pandoc</p>
+										</div>
+										<div class="example-box" style="margin-top: 10px">
+											<p class="example-label">Step 2 — Convert</p>
+											<p class="example-content">pdftotext -layout input.pdf - | pandoc -t markdown -o output.md</p>
+										</div>
+									</sc-if>
+									<p class="body-text" style="margin-top: 10px">
+										<code>pdftotext -layout</code> preserves the original column and spacing structure of the PDF.
+										Piping it into <code>pandoc</code> then converts that plain text into structured Markdown.
+										Once converted, the file is fully editable, searchable, and ready to feed into AI tools — far more
+										useful than a locked PDF.
+									</p>
+								</div>
+
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more practical AI guides?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/d.avebrown"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@d.avebrown</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+	</body>
+</html>

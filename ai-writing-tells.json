@@ -1,0 +1,620 @@
+{
+  "ai_writing_tells": {
+    "metadata": {
+      "version": "4.0",
+      "purpose": "Reference for detecting and avoiding AI-sounding prose",
+      "total_patterns": 60,
+      "core_principle": "Most of these techniques are legitimate writing tools. The 'tell' is OVERUSE, lack of intent, and mechanical consistency — not the presence of any single element.",
+      "sources": [
+        "r/WritingWithAI megathread",
+        "Wikipedia: Signs of AI Writing",
+        "Originality.ai",
+        "community AI-ism collections 2025",
+        "user-supplied detection list 2026"
+      ]
+    },
+
+    "punctuation": {
+      "em_dashes": {
+        "severity": 5,
+        "description": " em dashes for breaks, asides, and emphasis — used where humans would use commas, colons, or parentheses",
+        "examples": [
+          "The sky — dark and brooding — seemed to mirror his mood — perfectly.",
+          "It's not just excessive, it's exhausting — and frankly tiresome."
+        ],
+        "fix": "Simply remove all em dashes.  There shouldn't be any em dashes in the whole text.",
+        "prompt_instruction": "Remove all em dashes.  I don't want a single em dash in the whole text."
+      },
+      "ellipses_for_drama": {
+        "severity": 3,
+        "description": "Ellipses used for false dramatic pauses",
+        "examples": ["And then... silence...", "She waited... and waited..."],
+        "fix": "Use periods. Reserve ellipses for genuinely interrupted speech/thought.",
+        "prompt_instruction": "Avoid ellipses except for genuine interruptions."
+      },
+      "smart_quotes": {
+        "severity": 1,
+        "description": "Curly quotes appearing automatically in digital text",
+        "note": "Minor — also a default typography behavior, not exclusively an AI tell."
+      },
+      "single_character_ellipsis": {
+        "severity": 1,
+        "description": "Using the single Unicode ellipsis character (…) rather than three periods (...)",
+        "prompt_instruction": "If using ellipses, use three periods (...) rather than the single ellipsis glyph."
+      }
+    },
+
+    "vocabulary": {
+      "delve_cluster": {
+        "severity": 5,
+        "description": "Academic/exploratory verbs used reflexively",
+        "words": [
+          "delve",
+          "explore",
+          "unravel",
+          "harness",
+          "leverage",
+          "embark",
+          "navigate",
+          "foster"
+        ],
+        "examples": [
+          "Let's delve into this topic",
+          "embark on a journey through",
+          "foster a sense of community"
+        ],
+        "prompt_instruction": "Never use: delve, embark, unravel, harness (as verb), navigate the complexities, foster."
+      },
+      "transition_addiction": {
+        "severity": 4,
+        "description": "Formal transition words at paragraph/sentence starts",
+        "words": [
+          "moreover",
+          "furthermore",
+          "additionally",
+          "conversely",
+          "subsequently",
+          "notably",
+          "indeed",
+          "albeit",
+          "certainly",
+          "overall"
+        ],
+        "examples": [
+          "Moreover, the situation deteriorated.",
+          "Indeed, this is certainly true.",
+          "Overall, this represents..."
+        ],
+        "prompt_instruction": "Avoid moreover, furthermore, additionally, indeed, albeit, certainly, overall. Use natural flow instead."
+      },
+      "emphatic_qualifiers": {
+        "severity": 4,
+        "description": "Vague intensity words that amplify without specificity",
+        "words": [
+          "crucial",
+          "pivotal",
+          "transformative",
+          "intricate",
+          "myriad",
+          "profound",
+          "meticulous",
+          "groundbreaking",
+          "underscore",
+          "enhance"
+        ],
+        "examples": [
+          "a pivotal role in",
+          "a testament to",
+          "unlock the potential of",
+          "underscores the importance of"
+        ],
+        "prompt_instruction": "Avoid crucial/pivotal/profound/myriad/underscore/enhance and phrases like 'a testament to' or 'unlock the potential'."
+      },
+      "flattering_adjectives": {
+        "severity": 4,
+        "description": "Reflexive use of grandiose, praising adjectives regardless of whether the subject warrants it",
+        "words": [
+          "fascinating",
+          "majestic",
+          "captivating",
+          "remarkable",
+          "stunning",
+          "rich",
+          "vibrant",
+          "wonderful"
+        ],
+        "examples": [
+          "a fascinating intersection of history and culture",
+          "a captivating performance that left audiences in awe",
+          "Wonderful! Let's get started."
+        ],
+        "prompt_instruction": "Avoid reflexive praise words (fascinating, majestic, captivating, remarkable, vibrant, wonderful) unless the description is specific and earned."
+      },
+      "formal_synonym_swap": {
+        "severity": 3,
+        "description": "Choosing fancier words over simple ones",
+        "examples": {
+          "utilize": "use",
+          "facilitate": "help",
+          "endeavor": "try"
+        },
+        "prompt_instruction": "Use simple words: use not utilize, help not facilitate, try not endeavor."
+      },
+      "metaphor_cliches": {
+        "severity": 4,
+        "description": "Stock metaphorical phrases for description",
+        "examples": [
+          "a symphony of colors",
+          "a tapestry of emotions",
+          "a delicate balance",
+          "nestled in",
+          "the ever-evolving landscape of",
+          "in the realm of",
+          "continues to redefine the landscape"
+        ],
+        "prompt_instruction": "No 'symphony of', 'tapestry of', 'delicate balance', 'nestled in', 'ever-evolving landscape', 'realm of', 'redefine the landscape'."
+      },
+      "unmotivated_metaphors": {
+        "severity": 5,
+        "description": "Random, nonsensical comparisons inserted for 'creativity'",
+        "examples": [
+          "She walked across the floor like an angry octopus after a bad haircut",
+          "His voice was like sandpaper on silk"
+        ],
+        "prompt_instruction": "Only use a metaphor if it genuinely clarifies meaning — otherwise cut it."
+      },
+      "redundant_adjective_pairs": {
+        "severity": 3,
+        "description": "Doubled-up adjectives that say the same thing twice",
+        "examples": ["dark and brooding", "loud and brash", "quick and agile"],
+        "prompt_instruction": "Use one precise adjective instead of paired near-synonyms."
+      },
+      "ai_self_reference_leakage": {
+        "severity": 5,
+        "description": "Direct artifacts of the model's identity or training leaking into output (most extreme tell, usually only in unedited dumps)",
+        "examples": [
+          "As a large language model...",
+          "my training data...",
+          "I don't have personal opinions, but..."
+        ],
+        "prompt_instruction": "Never reference being an AI, training data, or model limitations in the output itself."
+      },
+      "banned_filler_phrases": {
+        "severity": 5,
+        "description": "Reflexive conversational openers and connectors that signal AI generation regardless of context",
+        "words_and_phrases": [
+          "here's the thing",
+          "but here's",
+          "what if I told you",
+          "wonderful",
+          "shift (as a noun meaning 'change', e.g. 'a shift in...')"
+        ],
+        "examples": [
+          "Here's the thing: most people get this wrong.",
+          "But here's where it gets interesting.",
+          "What if I told you that everything you know about X is wrong?",
+          "This represents a shift in how we think about productivity."
+        ],
+        "prompt_instruction": "Never use 'here's the thing', 'but here's', 'what if I told you', 'wonderful' as an opener, or the word 'shift' as a noun for change."
+      }
+    },
+
+    "sentence_and_phrase_patterns": {
+      "not_x_but_y": {
+        "severity": 4,
+        "description": "Negative parallelism / contrast construction used reflexively, even without em dashes — affects syntax globally. Includes the simple 'false negative' setup where a point is framed by first stating what something is NOT before stating what it IS.",
+        "examples": [
+          "It's not just a storm, but a tempest.",
+          "Not merely tired, but exhausted.",
+          "This isn't a product launch. It's a paradigm shift.",
+          "This isn't just about efficiency. It's about transformation.",
+          "It's not about working harder, it's about working smarter.",
+          "This isn't a bug, it's a feature."
+        ],
+        "prompt_instruction": "Avoid 'not X, but/it's Y' constructions, including 'it's not about X, it's about Y'. Make one direct statement."
+      },
+      "reversal_framing": {
+        "severity": 5,
+        "description": "Antithesis / reversal framing: setting up a commonly-held belief in one sentence, then immediately contrasting it with 'the truth' or 'the reality' in a parallel-structured follow-up sentence",
+        "examples": [
+          "Most people think success comes from working more hours. The truth is it comes from working on the right things.",
+          "Everyone focuses on the pitch. The real leverage is in the follow-up.",
+          "Most founders obsess over the product. The best ones obsess over distribution."
+        ],
+        "prompt_instruction": "Avoid setting up a 'most people think / everyone focuses on X' strawman immediately followed by a parallel-structured 'the truth/reality/real leverage is Y' reversal. State your point directly without the contrast scaffold."
+      },
+      "anaphora": {
+        "severity": 5,
+        "description": "Repetitive parallel phrasing: a string of short sentences or clauses that all share the same opening word or structure, stacked for rhythm",
+        "examples": [
+          "Higher pay. Higher visibility. Higher stakes.",
+          "More reach. More revenue. More risk.",
+          "He didn't ask for help. He didn't ask for feedback. He didn't ask for anything."
+        ],
+        "prompt_instruction": "Don't stack multiple sentences or fragments that share the same opening word or grammatical structure for rhythmic effect. Vary sentence construction."
+      },
+      "asyndeton": {
+        "severity": 5,
+        "description": "Lists of short fragments with conjunctions deliberately stripped out, separated by periods instead of commas/and",
+        "examples": [
+          "No edits. No switches. No tweaks.",
+          "No excuses. No shortcuts. No do-overs.",
+          "Faster. Cleaner. Simpler."
+        ],
+        "prompt_instruction": "Don't write lists as fragmented, conjunction-free one or two-word sentences separated by periods. Use a normal sentence with commas and 'and' if a list is needed, or skip the list."
+      },
+      "mechanism_contrast": {
+        "severity": 4,
+        "description": "Comparing two approaches/mechanisms using vague abstract-superiority language rather than concrete numbers or specifics",
+        "examples": [
+          "The math compounds in ways that acquisition can't.",
+          "Organic growth scales in ways paid ads never will.",
+          "This approach works in ways the old model simply can't."
+        ],
+        "prompt_instruction": "Avoid vague mechanism-superiority claims like 'X works/compounds/scales in ways Y can't'. Either give the concrete reason or drop the comparison."
+      },
+      "clever_comparative_endings": {
+        "severity": 4,
+        "description": "Ending a paragraph or section with a punchy two-sentence contrast comparing worst/best, bad/great, etc., as a rhetorical button",
+        "examples": [
+          "The worst negotiators ask for permission. The best negotiators state their terms.",
+          "Bad managers react. Great managers anticipate.",
+          "Most people optimize for comfort. Winners optimize for growth."
+        ],
+        "prompt_instruction": "Don't close a section with a 'the worst X do Y, the best X do Z' or 'bad X does Y, great X does Z' contrast pair. End on a direct point, an action, or a specific detail instead."
+      },
+      "rhetorical_qa": {
+        "severity": 4,
+        "description": "Question immediately self-answered, including bare one or two-word rhetorical interjections used for effect",
+        "examples": [
+          "What did she feel? Everything and nothing.",
+          "The result? Chaos.",
+          "Why? Because it mattered.",
+          "The reality? It doesn't work.",
+          "Why does this matter? Because most people get it backwards.",
+          "And honestly? It's not even close."
+        ],
+        "prompt_instruction": "Don't pose a question and immediately answer it. Avoid bare rhetorical interjections like 'The reality?', 'Why does this matter?', or 'And honestly?' used as a sentence opener for effect. Pick one form and state it directly."
+      },
+      "observational_authority_claims": {
+        "severity": 4,
+        "description": "Vague, unverifiable claims of personal experience used to lend authority without specifics",
+        "examples": [
+          "I've seen this play out dozens of times.",
+          "I see this constantly with clients.",
+          "In my experience, this always happens."
+        ],
+        "prompt_instruction": "Avoid vague experience-based authority claims ('I've seen this play out', 'I see this constantly') unless backed by a specific, named example. Either give the specific instance or drop the claim."
+      },
+      "sentence_starting_with_most": {
+        "severity": 3,
+        "description": "Sentences that open with the word 'Most' to make a sweeping generalization, often setting up a reversal",
+        "examples": [
+          "Most people never ask for what they're worth.",
+          "Most founders make this mistake in year one."
+        ],
+        "prompt_instruction": "Avoid opening sentences with 'Most' as a sweeping-generalization setup."
+      },
+      "rule_of_three": {
+        "severity": 5,
+        "description": "Triplet structures for emphasis — lists, actions, adjectives, all in groups of three; AI defaults to this for any enumeration",
+        "examples": [
+          "He stopped, he stared, he listened.",
+          "She was smart, capable, and determined.",
+          "Innovative, transformative, and groundbreaking.",
+          "The good, the bad, and the ugly."
+        ],
+        "note": "Rule of three is a legitimate rhetorical device — the tell is using it EVERY time, mechanically, with 'consulting firm' adjectives.",
+        "prompt_instruction": "Vary list/clause lengths. Don't default to three items for every description, benefit list, or action sequence."
+      },
+      "dramatic_fragments": {
+        "severity": 3,
+        "description": "Short fragments stacked for false intensity",
+        "examples": [
+          "She waited. And waited. Nothing happened.",
+          "It was over. Finally. Completely.",
+          "Restricted. Intentional. Silent."
+        ],
+        "prompt_instruction": "Vary sentence length naturally; don't fragment sentences purely for drama."
+      },
+      "heavy_lifting_meta_phrase": {
+        "severity": 2,
+        "description": "Self-referential commentary on language choices",
+        "examples": ["That hyphen is doing a lot of heavy lifting."],
+        "prompt_instruction": "Avoid meta-commentary about word choice within the text itself."
+      },
+      "false_range_construction": {
+        "severity": 4,
+        "description": "Implies a spectrum or range exists between two poles when there isn't really a continuum being described",
+        "examples": [
+          "From intimate gatherings to global movements.",
+          "From casual hobbyists to seasoned professionals, everyone benefits.",
+          "Whether you're a beginner or an expert, this approach works."
+        ],
+        "prompt_instruction": "Avoid 'from X to Y' or 'whether A or B' framings used to imply universal applicability without specifics."
+      },
+      "weasel_attribution": {
+        "severity": 4,
+        "description": "Attributing claims to vague, unnamed authorities to sound credible without a real source",
+        "examples": [
+          "Critics argue that...",
+          "Experts agree...",
+          "Studies show...",
+          "Many believe..."
+        ],
+        "prompt_instruction": "Avoid attributing claims to unnamed 'experts', 'critics', or 'studies' unless a specific source is given."
+      },
+      "participial_editorializing": {
+        "severity": 3,
+        "description": "Sentences ending in an '-ing' clause that editorializes about significance, impact, or benefit rather than adding new information",
+        "examples": [
+          "Consumers benefit from the flexibility to use their preferred wallet, improving convenience.",
+          "The team shipped the update early, demonstrating their commitment to quality."
+        ],
+        "prompt_instruction": "Avoid ending sentences with '-ing' clauses that editorialize about significance ('improving X', 'highlighting Y', 'demonstrating Z') — state facts and let them speak for themselves."
+      },
+      "placeholder_example_names": {
+        "severity": 3,
+        "description": "When no real case study/data exists, AI invents a generic illustrative person — most famously 'Sarah Chen'",
+        "examples": [
+          "Consider Sarah Chen, a marketing manager who...",
+          "Take John, a small business owner..."
+        ],
+        "prompt_instruction": "Avoid generic invented example people (especially 'Sarah Chen'). Use real examples or skip the illustration."
+      }
+    },
+
+    "structure_and_formatting": {
+      "bullet_point_addiction": {
+        "severity": 4,
+        "description": "Bullet points in narrative or conversational contexts where prose belongs, or numbered lists for everything",
+        "prompt_instruction": "Never use bullet points or numbered lists in narrative, casual, or conversational writing. Write lists as sentences. Avoid unnecessary numbered lists generally."
+      },
+      "section_headers": {
+        "severity": 3,
+        "description": "Breaking short-form text into labeled sections with headers, often inconsistently or unnecessarily",
+        "examples": [
+          "### Understanding the Problem",
+          "## Unnecessary ## Section ## Breaks"
+        ],
+        "prompt_instruction": "Don't add section headers to short-form text. Use natural paragraph transitions."
+      },
+      "preamble_syndrome": {
+        "severity": 3,
+        "description": "Generic introductory throat-clearing before getting to content",
+        "examples": [
+          "Let's break it down.",
+          "Let's dive into this.",
+          "Let's dissect this topic."
+        ],
+        "prompt_instruction": "Start directly with substance. No 'let's break it down' / 'let's dive in'."
+      },
+      "concluding_summary": {
+        "severity": 3,
+        "description": "Mechanical wrap-up phrases at the end of sections that restate what was just said",
+        "examples": [
+          "In summary,",
+          "Ultimately,",
+          "To conclude,",
+          "Overall, this demonstrates..."
+        ],
+        "prompt_instruction": "End sections naturally — don't signpost the conclusion with stock phrases, and don't restate prior points."
+      },
+      "emphasis_overload": {
+        "severity": 5,
+        "description": "Excessive bold/italics/underline for emphasis, including any use in short-form or conversational text where it reads as AI formatting",
+        "examples": [
+          "This isn't just *important* — it's **revolutionary**.",
+          "**Overall verdict first**: Your routine is **extremely well thought-out**.",
+          "You need to act **now**."
+        ],
+        "prompt_instruction": "Avoid bold, italic, or underlined text entirely in short-form/conversational content. In longer content, use at most once per 500 words and let word choice carry emphasis."
+      },
+      "perfect_paragraph_uniformity": {
+        "severity": 3,
+        "description": "Every paragraph is roughly the same length, creating an unnaturally even rhythm",
+        "prompt_instruction": "Vary paragraph length deliberately — some short, some long, based on content rhythm."
+      },
+      "restructuring_during_edits": {
+        "severity": 3,
+        "description": "When asked for a small fix (spelling/grammar), AI rewrites or reorders whole sections instead of making a minimal edit",
+        "prompt_instruction": "For edit requests, change only what's necessary. Preserve original structure and phrasing wherever possible."
+      },
+      "emoji_overuse": {
+        "severity": 3,
+        "description": "Inserting emojis next to relevant nouns/concepts, especially in lists or casual content",
+        "examples": [
+          "ChatGPT is like a dog 🐶 with a bone 🦴",
+          "🚀 Growth strategies 📊"
+        ],
+        "prompt_instruction": "Don't decorate text with emojis unless explicitly requested and natural to the voice."
+      }
+    },
+
+    "tone_and_voice": {
+      "too_clean_academic_tone": {
+        "severity": 4,
+        "description": "Overly polished, impersonal prose with no quirks or personality",
+        "examples": [
+          "The implementation of this solution yields optimal results.",
+          "This represents a significant advancement in our understanding."
+        ],
+        "prompt_instruction": "Write with personality and natural imperfection — vary rhythm, allow informal phrasing."
+      },
+      "telling_not_showing": {
+        "severity": 4,
+        "description": "Explicitly stating emotional context instead of demonstrating it",
+        "examples": [
+          "which was surprising because he had expected this",
+          "She was angry, which showed in her expression"
+        ],
+        "prompt_instruction": "Show through action/dialogue. Don't append explanatory clauses about why something happened or what it meant."
+      },
+      "interpretive_commentary": {
+        "severity": 4,
+        "description": "Showing an action, then immediately explaining what it means — over-narrating subtext the reader would infer",
+        "examples": [
+          "She crossed her arms, a gesture more defensive than welcoming, her body language signaling distrust."
+        ],
+        "prompt_instruction": "Trust the reader. Show the gesture/action once and move on without interpreting it."
+      },
+      "lack_of_intent": {
+        "severity": 3,
+        "description": "Sentences that begin without a clear purpose, feeling generically 'filler'",
+        "prompt_instruction": "Every sentence should do specific work — convey information, advance plot, or reveal character. Cut sentences that don't."
+      },
+      "sycophantic_validation": {
+        "severity": 4,
+        "description": "Excessive affirming/encouraging framing regardless of whether the input actually merits it — telling the reader what they want to hear",
+        "examples": [
+          "Overall verdict first: your routine is extremely well thought-out and mostly solid.",
+          "Honestly, you hit the three pillars almost perfectly."
+        ],
+        "prompt_instruction": "Don't open with unwarranted praise or validation. Lead with substance, and let critique be proportional to reality."
+      },
+      "balanced_to_a_fault": {
+        "severity": 3,
+        "description": "Covering every angle equally, never picking a side or going on a tangent — comprehensive but bland",
+        "prompt_instruction": "Take a stance. Don't hedge every claim with an equal-and-opposite counterpoint."
+      },
+      "hedging_language": {
+        "severity": 3,
+        "description": "Softening statements to avoid commitment",
+        "examples": [
+          "It can be argued that...",
+          "One might say...",
+          "In many cases...",
+          "It's worth noting that..."
+        ],
+        "prompt_instruction": "State things directly. Avoid 'it can be argued', 'one might say', 'it's worth noting'."
+      }
+    },
+
+    "fiction_specific": {
+      "reflective_ending": {
+        "severity": 5,
+        "description": "Every scene/chapter ends with a character reflecting, with zero plot content — pure bookend",
+        "examples": [
+          "As he looked out at the cold night, he wondered what the future held."
+        ],
+        "prompt_instruction": "Don't end scenes with generic reflective musing. End on action, dialogue, or image instead."
+      },
+      "dialogue_tag_imbalance": {
+        "severity": 4,
+        "description": "Underuse of 'said/asked' (~20-30%) vs. natural human writing (~60-70%); overuse of whispered/yelled/sighed/breathed",
+        "prompt_instruction": "Use 'said' and 'asked' for the majority of dialogue tags. Reserve other verbs for when they add real information."
+      },
+      "tell_not_show_body_reactions": {
+        "severity": 4,
+        "description": "Stock internal physical reaction phrases",
+        "examples": [
+          "his stomach dropped",
+          "his breath hitched",
+          "her voice was barely above a whisper"
+        ],
+        "prompt_instruction": "Avoid stock physical-reaction shorthand. Find specific, character-appropriate reactions."
+      },
+      "weight_tension_metaphors": {
+        "severity": 3,
+        "description": "Tension/emotion described as a physical weight or pressure",
+        "examples": [
+          "tension that had settled between them like a physical weight"
+        ],
+        "prompt_instruction": "Avoid 'tension like a weight' and similar pressure-based emotional metaphors."
+      },
+      "single_detail_repetition": {
+        "severity": 3,
+        "description": "One detail repeated mechanically throughout a story, disconnected from emotional stakes",
+        "prompt_instruction": "If repeating a detail/motif, tie each repetition to a shift in meaning or emotion — don't repeat flatly."
+      },
+      "vague_holiday_or_setting_refs": {
+        "severity": 2,
+        "description": "Generic, unspecific references to 'a holiday', 'the city', 'the office' without grounding detail",
+        "prompt_instruction": "Specify concrete settings rather than vague placeholders."
+      },
+      "weather_kind_that": {
+        "severity": 2,
+        "description": "Overused 'the kind of [weather] that...' construction",
+        "prompt_instruction": "Describe weather directly and specifically, not via 'the kind that...' framing."
+      },
+      "generic_character_names": {
+        "severity": 2,
+        "description": "Recurring stock character names that appear across many AI-generated stories",
+        "examples": ["Dr. Aris Thorne"],
+        "prompt_instruction": "Avoid commonly-generated stock names; choose names grounded in the story's specific context."
+      },
+      "weak_foreshadowing": {
+        "severity": 3,
+        "description": "Either heavy-handed 'and then everything changed' foreshadowing, or none at all",
+        "prompt_instruction": "Plant foreshadowing through specific concrete details, not announcement-style narration."
+      },
+      "romance_cliches": {
+        "severity": 3,
+        "description": "Stock romantic gestures and descriptions",
+        "examples": [
+          "He pressed his forehead against hers.",
+          "lips swollen with kisses",
+          "blooming like a promise"
+        ],
+        "prompt_instruction": "Avoid generic romantic-gesture clichés; invent gestures specific to these characters."
+      },
+      "self_answering_dialogue": {
+        "severity": 3,
+        "description": "Character A states something, Character B immediately corrects with a barely-different version",
+        "prompt_instruction": "Avoid the 'no, actually it's X' dialogue correction pattern unless it serves a clear narrative purpose."
+      }
+    },
+
+    "editing_and_revision_habits": {
+      "weak_first_and_last_paragraphs": {
+        "severity": 3,
+        "description": "AI-generated openings and closings are typically the weakest parts of a piece",
+        "prompt_instruction": "After drafting, review first and last paragraphs critically — they often need to be cut or rewritten."
+      }
+    }
+  },
+
+  "master_prompt_instructions": {
+    "comprehensive": "Write naturally. Avoid: em dashes (max 1 per 500 words) and single-character ellipses; the words delve, moreover, furthermore, additionally, indeed, albeit, certainly, overall, crucial, pivotal, profound, myriad, underscore, enhance, foster, utilize, facilitate, endeavor, fascinating, majestic, captivating, remarkable, vibrant, wonderful; the phrases 'here's the thing', 'but here's', 'what if I told you', and the word 'shift' used as a noun for change; 'not X, but/it's Y' constructions, negative parallelisms, and 'it's not about X, it's about Y' false negatives; reversal framing ('most people think X, the truth is Y' / 'everyone focuses on A, the real leverage is B'); anaphora (stacked sentences sharing the same opening word/structure, e.g. 'Higher X. Higher Y. Higher Z.'); asyndeton (fragmented conjunction-free lists like 'No edits. No switches. No tweaks.'); vague mechanism-superiority claims ('the math compounds in ways X can't'); clever comparative endings ('the worst X do Y, the best X do Z'); rhetorical question-immediate-answer pairs and bare rhetorical interjections ('The reality?', 'And honestly?'); vague observational authority claims ('I've seen this play out', 'I see this constantly'); sentences starting with 'Most' as sweeping generalizations; mechanical rule-of-three groupings (especially triplet adjectives); false-range framings ('from X to Y', 'whether A or B'); vague attributions ('critics argue', 'studies show'); '-ing' clauses that editorialize about significance; invented generic examples (e.g., 'Sarah Chen'); bullet points, numbered lists, and section headers in narrative/conversational text; preamble phrases like 'let's dive in'; concluding/summary phrases like 'in summary' or 'overall'; bold, italic, or underlined text in short-form/conversational writing; emoji decoration; sycophantic opening validation; unwarranted hedging; metaphorical clichés (symphony of, tapestry of, ever-evolving landscape, redefine the landscape, nestled in); unmotivated random metaphors; redundant adjective pairs (dark and brooding); telling-after-showing; reflective scene-ending bookends; dialogue tag overuse beyond said/asked; stock physical reactions (stomach dropped, breath hitched); and tension-as-physical-weight metaphors. Vary paragraph lengths. When editing, change only what's necessary — don't restructure unprompted. Never reference being an AI or training data.",
+
+    "short": "Avoid em dashes, delve/moreover/furthermore, 'not X but Y', reversal framing ('most people think X, the truth is Y'), anaphora and asyndeton (stacked parallel fragments), rhetorical Q&A, rule of three, false ranges, vague 'experts say' / 'I've seen this' attributions, bullet points and bold/italic formatting in prose, preamble/conclusion phrases, sycophantic openers, metaphor clichés, 'here's the thing'/'shift'/'wonderful', and reflective scene-enders. Write with specific, concrete detail, varied rhythm, and a real point of view.",
+
+    "strict_checklist": [
+      "No em dashes (or max 1 per 500 words); no single-character ellipsis",
+      "No: delve, moreover, furthermore, additionally, indeed, albeit, overall, crucial, pivotal, myriad, underscore, enhance, foster, utilize, facilitate, fascinating, captivating, remarkable, wonderful",
+      "No 'here's the thing' / 'but here's' / 'what if I told you' / 'shift' (as a noun meaning change)",
+      "No 'not X, but/it's Y' or negative parallelism, including 'it's not about X, it's about Y'",
+      "No reversal framing ('most people think X. The truth is Y.' / 'everyone focuses on A. The real leverage is B.')",
+      "No anaphora — stacked sentences/fragments sharing the same opening word or structure",
+      "No asyndeton — fragmented, conjunction-free lists separated by periods ('No edits. No switches. No tweaks.')",
+      "No vague mechanism-superiority claims ('the math compounds in ways X can't')",
+      "No clever comparative endings ('the worst X do Y, the best X do Z')",
+      "No rhetorical question immediately self-answered, and no bare rhetorical interjections ('The reality?', 'And honestly?')",
+      "No vague observational authority claims ('I've seen this play out', 'I see this constantly')",
+      "No sentences starting with 'Most' as a sweeping generalization",
+      "No mechanical groups-of-three (especially triplet adjectives)",
+      "No 'from X to Y' / 'whether A or B' false-range framing",
+      "No vague attribution ('critics argue', 'studies show', 'many believe')",
+      "No '-ing' editorializing clauses tacked onto sentence ends",
+      "No invented generic example people (e.g. 'Sarah Chen')",
+      "No bullet points/numbered lists/headers in narrative or conversational text",
+      "No 'let's dive in / break it down' openers",
+      "No 'in summary / ultimately / overall / to conclude' closers",
+      "No sycophantic 'overall verdict first' validation openers",
+      "No unwarranted hedging ('it can be argued', 'it's worth noting')",
+      "No symphony/tapestry/landscape/realm metaphors",
+      "No random unmotivated similes",
+      "No redundant adjective pairs",
+      "No explanatory tags after showing emotion",
+      "No reflective musing as scene/chapter ending",
+      "Dialogue tags: mostly said/asked",
+      "No 'stomach dropped / breath hitched / tension like a weight'",
+      "No emoji decoration unless requested",
+      "No bold, italic, or underlined text unless explicitly requested",
+      "Vary paragraph lengths — avoid uniform rhythm",
+      "Take a stance — don't balance every point to a fault",
+      "Minimal edits only when asked to fix small things",
+      "Never reference being an AI, a model, or training data"
+    ]
+  }
+}
