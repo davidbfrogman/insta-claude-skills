@@ -1,0 +1,1376 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+
+					/* ── Resource entry ── */
+					.res {
+						margin-bottom: 18px;
+						padding-left: 16px;
+						border-left: 2px solid #ecd9fb;
+					}
+					.res-name {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 2px;
+					}
+					.res-name a {
+						color: #7e22ce;
+						text-decoration: none;
+					}
+					.res-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									How to Pivot Into a Forward-Deployed Product Manager Role
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									A field guide to the AI career path hiding in plain sight — and how to position yourself for it before the title
+									becomes crowded.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									A new product role keeps showing up across AI labs, enterprise SaaS companies, and implementation-heavy software
+									businesses: the Forward-Deployed Product Manager. It sounds like another invented title, and in some companies it
+									is. But underneath the buzzword is a real change in how software gets delivered — and a genuine opening for people
+									who know how to read it.
+								</p>
+								<p class="body-text">
+									For a decade, product management was mostly built around one-to-many SaaS: understand a market, define a roadmap,
+									ship features, measure adoption, reduce churn, repeat. That work still matters. But AI has made enterprise
+									software messy again. You can't hand a Fortune 500 company an AI platform and expect magic. Their data is
+									scattered across legacy systems. Their workflows are political. Their security team is skeptical. Their employees
+									don't trust the tool yet, and their executives want measurable results. The product may be powerful, but it isn't
+									yet packaged into a clean, repeatable workflow.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									That gap is where the forward-deployed model lives. OpenAI embeds forward-deployed engineers inside organizations
+									running complex frontier deployments. AWS announced a major investment in placing AI engineers directly with
+									customers. Scale AI describes its FDPMs as people embedded with enterprise customers, shaping production outcomes
+									and translating messy operational reality into product signal. The through-line is simple: engineering alone can't
+									close the last mile, so companies are putting product people in the field. This guide covers what the role
+									actually is, what transfers into it, and a concrete plan to pivot.
+								</p>
+
+								<!-- ── What it is ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Role</p>
+									<p class="section-subtitle">Product consulting for the AI deployment era</p>
+								</div>
+
+								<p class="body-text">
+									A Forward-Deployed Product Manager is a product person who works directly with strategic customers to make complex
+									software succeed in the real world — inside the customer's actual operating environment, not in a demo or a
+									roadmap review. That means understanding the customer's workflows, constraints, politics, systems, and definition
+									of success, then working with engineers, executives, and internal product leaders to turn that reality into
+									something that ships.
+								</p>
+
+								<p class="body-text">
+									The label comes from Palantir, which built its name deploying engineers directly inside customer environments to
+									make a powerful, complicated platform actually work against messy data and legacy systems. Those forward-deployed
+									engineers owned the <em>how</em>. The forward-deployed PM is the strategic counterpart who owns the
+									<em>what</em> and the <em>why</em> at the point of deployment — embedded with a handful of high-value accounts,
+									often working directly with their C-suite, accountable not for shipping a feature but for the business outcome the
+									platform is supposed to produce. Palantir, OpenAI, Scale AI, Glean, and Salesforce now hire against some version
+									of that description.
+								</p>
+
+								<p class="pull-quote">
+									A traditional PM asks, "What should we build for this market?" A forward-deployed PM asks, "What has to be true
+									for this customer to get real value in production?"
+								</p>
+
+								<p class="body-text">
+									That shift changes the whole job. In practice, the FDPM runs a loop: diagnose the real business problem underneath
+									the feature request; map the customer's operating environment — data sources, approval workflows, security
+									constraints, integrations; shape a deployable solution that might involve agents, automation, human-in-the-loop
+									review, or plain process redesign; then drive it toward production, unblocking deployment and managing
+									expectations along the way. The part that separates a strong FDPM from a custom-solution machine is the last step:
+									translating field learning back into product direction — spotting what keeps breaking, what customers repeatedly
+									need, and what should become reusable platform capability.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Product judgment, in one example</p>
+										<p class="example-content">
+											A weak FDPM reports: "The customer asked for a dashboard." A strong one reports: "Supervisors don't trust
+											the model's recommendations because they can't see why a case was prioritized. The real need is
+											explainability and exception review. A dashboard is part of it — but the product gap is confidence and
+											governance in the workflow."
+										</p>
+									</div>
+								</div>
+
+								<!-- ── vs traditional PM ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Difference</p>
+									<p class="section-subtitle">Same DNA as a PM, different center of gravity</p>
+								</div>
+
+								<p class="body-text">
+									A traditional PM and an FDPM share product judgment, prioritization, and customer empathy. What differs is where
+									the weight sits.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Traditional PM</th>
+											<th>Forward-Deployed PM</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Owns</td>
+											<td>A product, feature area, or platform capability</td>
+											<td>Outcomes for a few strategic customer deployments</td>
+										</tr>
+										<tr>
+											<td>World</td>
+											<td>Mostly internal</td>
+											<td>Heavily customer-facing</td>
+										</tr>
+										<tr>
+											<td>Horizon</td>
+											<td>Quarterly or annual roadmap</td>
+											<td>Deployment milestones</td>
+										</tr>
+										<tr>
+											<td>Measured by</td>
+											<td>Activation, retention, revenue, engagement</td>
+											<td>Time-to-value, production launch, adoption, executive trust, product signal</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									It's worth being clear-eyed about the risk. In some companies "Forward-Deployed PM" is really a product consulting
+									role: close to customers, far from the roadmap, responsible for outcomes without authority over the product. That
+									doesn't make it a bad job — it makes it a job you should understand before you take it. The best versions give you
+									real influence over product direction. The weaker ones hand you customer pressure without product power, and the
+									title alone won't tell you which one you're looking at. The interview questions later in this guide are how you
+									find out.
+								</p>
+
+								<!-- ── Why now ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Why Now</p>
+									<p class="section-subtitle">AI has a last-mile problem</p>
+								</div>
+
+								<p class="body-text">
+									Forward-deployed teams aren't new — Palantir built its reputation on embedding technical people with customers
+									years ago. What's new is how fast the model is spreading across AI companies and enterprise vendors, and the
+									reason is straightforward. The model is impressive. The demo is impressive. Production is where the wheels come
+									off. Enterprise AI needs data access, permissioning, evaluation, security and compliance review, workflow
+									redesign, training, and ongoing monitoring — plus a class of risks normal SaaS never had: hallucinations, prompt
+									injection, sensitive-data exposure, and unclear accountability.
+								</p>
+								<p class="body-text">
+									Engineering can build the system. Someone still has to decide which customer problem is worth solving, what
+									success means, where AI should and shouldn't be used, which requests are one-off noise versus a real product gap,
+									and how this deployment becomes repeatable for the next customer. That's the FDPM lane — and it's why the role is
+									being created faster than the market has settled on what to call it.
+								</p>
+								<p class="body-text">
+									The numbers behind the shift are blunt. Postings for customer-facing AI roles jumped more than 800% in 2025.
+									Gartner puts the share of AI projects that make it from prototype to production at roughly 41% — meaning most
+									stall in exactly the last-mile territory the FDPM exists to cover. And enterprise AI contracts now run into the
+									millions, so customers expect a partner accountable for time-to-value, not a login and a quickstart guide. In May
+									2026, ServiceNow and Accenture announced a joint forward-deployed engineering program aimed squarely at moving
+									clients from AI pilots to production at scale — the model going institutional.
+								</p>
+								<p class="body-text">
+									There's a deeper reason companies keep investing in it. The front line of a hard deployment is the highest-signal
+									product discovery a company has: you see exactly how the product breaks, where it grinds against legacy systems,
+									and which capabilities are actually needed rather than merely requested. Palantir built its whole strategy on
+									treating forward-deployed teams as the primary engine of what to build next. That feedback loop, more than any
+									single deployment, is the real asset.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Where the model is heading</p>
+										<p class="example-content">
+											The role is expanding from individuals into whole teams. Some companies now stand up "forward-deployed
+											everything" pods — engineers, PMs, and data scientists embedded with one customer as a single unit. At the
+											same time, AI agents are starting to make the deployment itself programmable: preparing customer-specific
+											data, monitoring deployment state, and flagging risks for their human counterparts. The high-touch model
+											is becoming more scalable without becoming any less embedded.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Fit ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Fit</p>
+									<p class="section-subtitle">Who thrives here — and who won't</p>
+								</div>
+
+								<p class="body-text">
+									This role rewards people who like messy, high-context, customer-facing work: talking to customers directly,
+									working through ambiguity, translating between executives and engineers, learning new industries quickly, and
+									driving outcomes rather than just writing documents. It draws well from product management, solutions and sales
+									engineering, technical customer success, implementation consulting, operations, analytics, and startup generalist
+									roles. The common thread isn't a title — it's the ability to sit inside a messy business problem and turn it into
+									a working solution.
+								</p>
+								<p class="body-text">
+									It's a poor fit if you want a calm, purely internal product job. If you dislike travel, customer escalation,
+									ambiguous ownership, and being accountable for outcomes you don't fully control, the daily reality will grind on
+									you. And if your real goal is long-term roadmap ownership — classic consumer, growth, or platform PM — be
+									intentional: some FDPM roles sharpen that muscle, others quietly pull your résumé toward implementation and
+									consulting. That can be fine. Just choose it on purpose.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">The honest note on travel</p>
+										<p class="example-content">
+											Forward-deployed often means being where the customer is — on-site weeks, executive workshops, deployment
+											war rooms. Not every posting is 80% travel; some are hybrid or low-travel. But assume the role can affect
+											your life more than a standard PM job. Early on it's one of the fastest learning environments in tech. It
+											is rarely the easiest lifestyle. That's part of the trade.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Skill stack ── -->
+								<p class="body-text">
+									None of this is free — the role concentrates the upside and the cost in the same place. Weigh them honestly before
+									you commit.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>The upside</th>
+											<th>The cost</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Impact and visibility — tied directly to revenue and the company's most important accounts</td>
+											<td>Pressure — when a multi-million-dollar deployment slips, it's your name on it</td>
+										</tr>
+										<tr>
+											<td>Accelerated learning — technical, product, and industry depth faster than almost any PM role</td>
+											<td>Burnout risk — real travel and long hours through critical deployment phases</td>
+										</tr>
+										<tr>
+											<td>Strategic influence — a direct line to the roadmap, backed by validated customer pain</td>
+											<td>Less autonomy — your work follows your customers' needs, not a blue-sky strategy</td>
+										</tr>
+										<tr>
+											<td>A powerful network — deep relationships with senior leaders at major companies</td>
+											<td>
+												Role ambiguity — the line between PM, consultant, and architect blurs, and you manage that constantly
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Skill Stack</p>
+									<p class="section-subtitle">Enough range to be credible with several audiences at once</p>
+								</div>
+
+								<p class="body-text">
+									You don't need to be the best engineer in the room or a McKinsey-grade consultant. You need enough range to be
+									trusted by customers, engineers, and executives in the same week. Six capabilities carry the role.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Product judgment</h3>
+									<p class="body-text">
+										The ability to tell a customer request from a customer problem, a workflow bottleneck from a product gap, a
+										real platform opportunity from a bad idea championed by an important stakeholder. Customers ask for features;
+										your job is the pain underneath the request. This is the heart of the role.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Technical translation</h3>
+									<p class="body-text">
+										Enough engineering fluency to be useful: APIs, databases, auth, integrations, cloud basics, latency,
+										permissions, and model limitations. For AI roles, add the application layer — prompting, RAG, embeddings and
+										vector search, tool calling, the difference between agents and workflows, evaluation, guardrails, and
+										human-in-the-loop review. You won't productionize every system, but you should be conversant enough to know
+										why one is blocked.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Enterprise deployment sense</h3>
+									<p class="body-text">
+										Enterprise software rarely fails because the feature is bad. It fails because the data is messy, the buyer
+										isn't the user, the security review takes three months, the workflow owner isn't aligned, or the executive
+										sponsor changed priorities. A good FDPM can diagnose whether the blocker is product, engineering, integration,
+										governance, or change management — and that diagnosis is most of the value.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Consultative discovery</h3>
+									<p class="body-text">
+										Operational discovery, not generic customer interviews. What decision are you trying to improve? Who makes it
+										today, and on what data? What happens if the AI is wrong, and who reviews the exceptions? What metric would
+										prove this worked, and what part of the workflow should stay human-owned? You're trying to understand how the
+										work actually happens.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Executive communication</h3>
+									<p class="body-text">
+										The same reality, translated for each audience. Executives want the risk and the plan; engineers want the
+										detail; legal wants the risk framing; security wants the controls. A strong FDPM can say, in one breath, that
+										the adoption risk is frontline distrust, that the fix is human review for 30 days measuring override rates,
+										and that the reusable platform gap is configurable confidence thresholds by workflow type.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">06</span> — AI risk and governance literacy</h3>
+									<p class="body-text">
+										Not as abstract ethics, but as operational product work: what data the model can access, what tools the agent
+										can call, what actions require human approval, how outputs are evaluated, and how failures are logged. You
+										don't need to become a lawyer or security engineer — you need to know the categories of risk and how they show
+										up in a product decision. The
+										<a
+											href="https://www.nist.gov/itl/ai-risk-management-framework"
+											style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>NIST AI Risk Management Framework</a
+										>
+										and the
+										<a href="https://genai.owasp.org/llm-top-10/" style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>OWASP Top 10 for LLM Applications</a
+										>
+										are the two references to internalize.
+									</p>
+								</div>
+
+								<!-- ── Positioning ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Positioning</p>
+									<p class="section-subtitle">Translate what you've already done into FDPM language</p>
+								</div>
+
+								<p class="body-text">
+									Most people pivoting into this role won't have the exact title on their résumé. That's fine — the work is to
+									reframe what you've already done. Whatever your background, the move is the same: lead with the outcome you owned,
+									show the product judgment behind it, and close the one gap your track record doesn't cover.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Coming from</th>
+											<th>Lead with</th>
+											<th>Watch for</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Product management</td>
+											<td>Enterprise discovery, complex launches, roadmap decisions from customer signal</td>
+											<td>Show you can operate close to the implementation, not just the roadmap</td>
+										</tr>
+										<tr>
+											<td>Customer success</td>
+											<td>Strategic accounts, executive relationships, adoption, voice-of-customer</td>
+											<td>Prove product judgment, not only relationship management</td>
+										</tr>
+										<tr>
+											<td>Solutions / sales engineering</td>
+											<td>Technical discovery, architecture conversations, proofs of concept</td>
+											<td>Show post-sale ownership and separating custom asks from platform gaps</td>
+										</tr>
+										<tr>
+											<td>Implementation consulting</td>
+											<td>Deployment ownership, process mapping, stakeholder and change management</td>
+											<td>Show you shape product decisions, not just take orders</td>
+										</tr>
+										<tr>
+											<td>Operations / analytics</td>
+											<td>Workflow improvement, process automation, business metrics, AI pilots</td>
+											<td>Quantify the problems you diagnosed and turned into better systems</td>
+										</tr>
+										<tr>
+											<td>Engineering</td>
+											<td>Customer-facing technical work, shipping under ambiguity, prototypes</td>
+											<td>Show you can decide what to build and why, not only build it</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									One rewrite habit does most of the work: trade responsibilities for outcomes. "Worked with customers to gather
+									requirements" becomes "Led discovery with enterprise operations leaders to map a manual intake workflow, define
+									success metrics, and translate findings into a prioritized plan adopted by engineering and customer stakeholders."
+									Every bullet should carry some mix of customer problem, technical constraint, product decision, and measurable
+									result.
+								</p>
+
+								<!-- ── Action plan ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Action Plan</p>
+									<p class="section-subtitle">A 90-day pivot you can start this week</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">1.</span> Pick your lane</h3>
+									<p class="body-text">
+										Don't chase "FDPM" in the abstract. Pick one or two flavors — AI-agent, enterprise SaaS, healthcare AI, data
+										platform, support automation — so your learning plan, résumé, and portfolio all point the same direction.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">2.</span> Reverse-engineer 20 job descriptions</h3>
+									<p class="body-text">
+										Search titles like Forward-Deployed Product Manager, AI Product Manager (Enterprise), Deployment Strategist,
+										Solutions Product Manager, and Forward-Deployed Engineer. Track the required technical skills, customer-facing
+										expectations, travel, AI skills, compliance needs, and repeated keywords. You're not just job hunting — you're
+										mapping the market.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">3.</span> Build one real AI deployment project</h3>
+									<p class="body-text">
+										You need proof you can work with AI beyond prompting. Build something small but real — a ticket-triage agent,
+										a policy Q&A bot with citations, a contract-review assistant with human approval. What matters is the judgment
+										around it: problem statement, data sources, human-in-the-loop points, evaluation approach, failure modes, and
+										what you'd do next. Don't say "I built a chatbot." Show you understand deployment.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">4.</span> Get closer to customers where you already work</h3>
+									<p class="body-text">
+										The fastest way to become FDPM-shaped is to move toward customer reality now. Volunteer for enterprise
+										discovery calls, implementation escalations, beta programs, or an internal AI workflow pilot. You're
+										collecting stories where you diagnosed a messy problem, aligned stakeholders, worked through a technical
+										constraint, shipped something, and measured whether it worked.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">5.</span> Turn those stories into a field-notes portfolio</h3>
+									<p class="body-text">
+										Write three to five short case studies, anonymized if needed: the business context, the problem, the users,
+										the workflow, the technical constraint, the product decision, the rollout, the risks, the result, and the
+										reusable product insight. This is your interview ammunition — it's what proves judgment when the title on your
+										résumé doesn't.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">6.</span> Practice the deployment-strategy case</h3>
+									<p class="body-text">
+										FDPM interviews often read like implementation cases:
+										<em
+											>"A healthcare provider wants an AI intake assistant. Data lives in three systems, legal is nervous,
+											nurses don't trust the recommendations. Walk us through your first 90 days."</em
+										>
+										A strong answer doesn't jump to features — it clarifies the business goal, maps stakeholders and the workflow,
+										assesses data readiness, defines success metrics and risks, scopes a pilot, designs human review, and builds a
+										feedback loop back to product.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">7.</span> Apply to adjacent roles, not just the exact title</h3>
+									<p class="body-text">
+										Because the title is still emerging, cast wider: AI Product Manager, Technical PM (Enterprise), Solutions
+										Product Manager, Deployment Strategist, Forward-Deployed Engineer if you're technical — and watch the boards
+										at Palantir, Glean, Salesforce, OpenAI, Scale AI, and a wave of newer AI startups where these roles cluster. A
+										typical path runs Success / Solutions / Ops → a technical or AI-workflow role → a customer-facing product role
+										→ Forward-Deployed PM → core AI PM, product leadership, or founder. The career value is the skill set, not the
+										label.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Sequence it like this</p>
+										<p class="example-content">
+											Weeks 1–2: pick your lane, study the job descriptions, start one deployment project. Weeks 3–8: get onto
+											real customer work where you are, and pair it with the AI-operations reading below. Weeks 9–12: package
+											three to five case studies, rehearse the deployment case, and start applying to the adjacent roles. Do the
+											learning while running something real — the reading proves literacy, the pilot proves judgment.
+										</p>
+									</div>
+								</div>
+
+								<!-- interview -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Interview</p>
+									<p class="section-subtitle">
+										Less &ldquo;design a product for X,&rdquo; more &ldquo;solve this messy customer situation&rdquo;
+									</p>
+								</div>
+
+								<p class="body-text">
+									An FDPM loop looks different from a standard PM loop. Expect a blend of product strategy, a real technical
+									deep-dive, and situational judgment — and expect the centerpiece to be an implementation case rather than a clean
+									feature-design prompt. The panel is checking three things at once: that you have the technical chops to hold a
+									room of senior engineers, the poise to sit across from a customer executive, and the product sense to tell a
+									one-off request from a platform pattern.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">A case you should be ready for</p>
+										<p class="example-content">
+											&ldquo;A Fortune 500 bank wants to use our AI platform to automate fraud detection. Their data lives in a
+											20-year-old mainframe, their security team is nervous, and the fraud analysts don&rsquo;t trust model
+											output. Walk me through your first 90 days.&rdquo;
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									The instinct that separates a strong answer here is counterintuitive: don&rsquo;t reach for the solution, reach
+									for the constraints. Before you draw the map, understand the terrain — the customer&rsquo;s technical limits,
+									their real definition of success, and who actually has to sign off. Clarify data readiness, scope a pilot, design
+									the human-review step, then commit to a metric. Interviewers read that first move — de-risking before designing —
+									as maturity, and it&rsquo;s the single clearest tell of someone who has done this work before.
+								</p>
+								<p class="body-text">
+									The technical portion is genuine, because the job won&rsquo;t let you hide from engineers. Be ready to talk system
+									design, APIs, data pipelines, and — for AI roles — where RAG, embeddings, and agents fit and where they
+									don&rsquo;t. If that&rsquo;s your soft spot, the fastest fix is to build one small thing against a real API before
+									you interview, not to read about it. Then frame your own history around customer outcomes: use plain STAR
+									structure to tell stories where you worked a difficult account, untangled a hard integration, or changed a roadmap
+									because of something you learned in the field. Those are the stories this loop is built to surface.
+								</p>
+
+								<!-- ── Resources ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Resources</p>
+									<p class="section-subtitle">What to read and build to close the AI-operations gap</p>
+								</div>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin-bottom: 10px"
+								>
+									AI product fundamentals
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://openai.github.io/openai-agents-python/">OpenAI Agents SDK docs</a>
+									</p>
+									<p class="res-desc">
+										The clearest primer on agentic application patterns — planning, tool use, and multi-step state.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://langchain-ai.github.io/langgraph/">LangGraph docs</a>
+									</p>
+									<p class="res-desc">
+										How long-running, stateful agents are orchestrated — the mental model for multi-agent workflows.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://python.langchain.com/docs/concepts/agents/">LangChain agent concepts</a>
+									</p>
+									<p class="res-desc">The base "model + tools + harness" pattern every agentic system builds on.</p>
+								</div>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									AI risk and governance
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI Risk Management Framework</a>
+									</p>
+									<p class="res-desc">The Govern–Map–Measure–Manage structure for handling AI risk to people and organizations.</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM &amp; GenAI Applications</a>
+									</p>
+									<p class="res-desc">
+										Prompt injection, sensitive-data disclosure, insecure output handling, excessive agency — the risks that
+										decide whether an AI project ships.
+									</p>
+								</div>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Enterprise and product craft
+								</p>
+								<p class="body-text">
+									Get credible on the plumbing — APIs, auth and SSO, role-based access, audit logs, data retention, and the
+									vocabulary of security review, SOC 2, and (where relevant) HIPAA or GDPR. Pair it with the consulting muscles
+									you'll use daily: discovery interviews, workflow mapping, PRDs and acceptance criteria, rollout planning, and
+									post-launch analysis. You don't need to become a backend engineer — you need to understand why a deployment is
+									blocked by data access, permissions, latency, or integration constraints.
+								</p>
+
+								<!-- learning stack -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Learning Stack</p>
+									<p class="section-subtitle">
+										Ten resources across the three skill pillars &mdash; build a stack, don&rsquo;t just pick one
+									</p>
+								</div>
+
+								<p class="body-text">
+									The references above tell you what to read to understand the role. These ten build the skills to get hired for it,
+									mapped to the pillars the role runs on: technical acumen, consultative problem-solving, and strategic
+									communication. They span price points and formats on purpose &mdash; the point is to assemble a stack, not to pick
+									a single course. A suggested sequence is at the end.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Technical acumen &mdash; AI and LLM depth
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://www.udemy.com/course/llm-engineering-master-ai-and-large-language-models/"
+											>Ed Donner &mdash; &ldquo;LLM Engineering: Master AI and Large Language Models&rdquo; (Udemy)</a
+										>
+									</p>
+									<p class="res-desc">
+										Eight hands-on projects across transformers, prompt engineering, RAG, fine-tuning with LoRA/QLoRA, and
+										multi-agent systems. Taught by a former AI-startup CEO and ex-JPMorgan MD, refreshed for 2026. The best
+										&ldquo;learn the whole stack by building&rdquo; option, and it&rsquo;s cheap &mdash; exactly the depth you
+										need to hold your own architecting RAG in a customer environment.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://interviewkickstart.com/courses/forward-deployed-engineering"
+											>Interview Kickstart &mdash; Applied GenAI / Forward Deployed Engineering track</a
+										>
+									</p>
+									<p class="res-desc">
+										The most role-specific program I found: an AI-engineering spine, an FDE spine, and interview prep, with live
+										projects like a CRM lead-qualifier agent and a grounded RAG assistant that answers only from its sources. The
+										planner&ndash;executor&ndash;critic module in LangGraph maps straight to the agents-in-the-deployment-loop
+										trend. Pricier and cohort-based &mdash; best when you want structure and interview prep bundled.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://www.classcentral.com/report/best-rag-courses/"
+											>Flowise AI RAG (no-code) &mdash; Elvis Saravia, via Class Central&rsquo;s RAG roundup</a
+										>
+									</p>
+									<p class="res-desc">
+										Build RAG systems by drag-and-drop instead of Python. The fastest way to get intuition for retrieval,
+										embeddings, and vector databases without a coding detour &mdash; a strong on-ramp before Donner&rsquo;s deeper
+										course.
+									</p>
+								</div>
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Technical acumen &mdash; APIs, systems, and cloud
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://maven.com/emmanuel/api-pm-fundamentals"
+											>Emmanuel Paraskakis &mdash; &ldquo;API Fundamentals for Product Managers&rdquo; (Maven)</a
+										>
+									</p>
+									<p class="res-desc">
+										A live cohort course on the essentials of talking to developers, gathering requirements, and launching an API
+										product, taught by someone with 15+ years leading API products. APIs and integrations are where FDPMs spend
+										their days; the follow-on
+										<a href="https://maven.com/emmanuel/api-pm-mastery" style="color: #7e22ce; text-decoration: none"
+											>&ldquo;API Product Mastery&rdquo;</a
+										>
+										adds REST/GraphQL/gRPC trade-offs and MCP readiness if you want to go deeper.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://productdive.com/technicalproductmanagementprogram/"
+											>ProductDive &mdash; Certified Technical Product Management</a
+										>
+									</p>
+									<p class="res-desc">
+										A seven-week program for managing APIs, systems, and technical products without becoming an engineer &mdash;
+										system-design fundamentals, workflow visualization, API management, with an optional AIPMM certification. Good
+										if you want a credential and a PM-framed treatment rather than an engineer&rsquo;s course.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://systemdr.substack.com/p/the-product-managers-guide-to-system"
+											>&ldquo;The Product Manager&rsquo;s Guide to System Design&rdquo; (book, systemdr)</a
+										>
+									</p>
+									<p class="res-desc">
+										Written for PMs, not engineers: trade-offs between speed, quality, and technical debt, anticipating scaling,
+										and leading architecture discussions without writing code. The cheapest, fastest way to stop being blindsided
+										by &ldquo;that&rsquo;ll take eight weeks&rdquo; and to reason about the legacy-integration problems FDPMs
+										constantly hit.
+									</p>
+								</div>
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Consultative problem-solving &mdash; enterprise discovery and qualification
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://meddic.academy/">MEDDIC Academy &mdash; MEDDPICC certification</a>
+									</p>
+									<p class="res-desc">
+										The official self-serve certification (from $297), widely cited as the best ROI for individuals who want
+										structured practice plus a verifiable credential; a free 12-minute intro lets you test first. MEDDIC is still
+										the dominant qualification framework for enterprise B2B. Since the FDPM owns time-to-value in C-suite deals,
+										thinking in Economic Buyer / Decision Criteria / Metrics / Champion terms is genuinely useful.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">&ldquo;The Challenger Sale&rdquo; and &ldquo;SPIN Selling&rdquo; (books)</p>
+									<p class="res-desc">
+										The role&rsquo;s core move &mdash; customers know their problems, not their needs &mdash; is
+										consultative-selling territory. Challenger&rsquo;s research across 6,000 reps found the best performers
+										reframe how buyers think about their problems. That&rsquo;s the skill of turning &ldquo;make our content
+										creation more efficient&rdquo; into a concrete technical solution; SPIN supplies the discovery-question
+										discipline underneath it.
+									</p>
+								</div>
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Strategic communication and product sense
+								</p>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://hellopm.co/free/"
+											>HelloPM &mdash; AI Product Management course (free, 9 masterclasses, 12+ hours)</a
+										>
+									</p>
+									<p class="res-desc">
+										Covers LLMs, RAG, evals, PRDs, analytics, and APIs, plus a tech-fundamentals module built for non-technical
+										PMs. Free, broad, and it ties the AI material back to core PM artifacts &mdash; exactly the translation layer
+										an FDPM lives in. Good for filling gaps cheaply.
+									</p>
+								</div>
+								<div class="res">
+									<p class="res-name">
+										<a href="https://www.sundeepteki.org/forward-deployed-engineer.html"
+											>Anthropic &mdash; production-deployment AI certification</a
+										>
+									</p>
+									<p class="res-desc">
+										Built around production deployment &mdash; agentic architecture, tool orchestration, enterprise reliability
+										&mdash; with a $99 exam across five domains that maps closely to what forward-deployed interviews evaluate at
+										labs like OpenAI, Palantir, and Anthropic. Verify the current details on Anthropic&rsquo;s site before
+										committing, since specifics change.
+									</p>
+								</div>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">How to sequence it</p>
+										<p class="example-content">
+											Don&rsquo;t try to do all ten. Start with the no-code RAG course and the system-design book to build
+											vocabulary fast. Then go deep with Donner&rsquo;s LLM course and one enterprise-selling resource, and keep
+											the free HelloPM course running alongside to stay PM-framed. Save the FDE-specific bundles &mdash;
+											Interview Kickstart and the Anthropic certification &mdash; for when you&rsquo;re actively interviewing,
+											since they include prep for the exact loops.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Due diligence ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Before You Accept</p>
+									<p class="section-subtitle">The questions that reveal whether the role has real product power</p>
+								</div>
+
+								<p class="body-text">
+									The title won't tell you the job, so make your interview a two-way diligence process. The answers to a handful of
+									questions separate a real product role from a delivery role wearing a strategic title:
+								</p>
+								<p class="body-text">
+									How does field feedback actually get into the roadmap, and who decides what becomes a platform feature? Do FDPMs
+									have dedicated engineering capacity for what they discover? What happens when a customer needs something the
+									product can't do yet? Are you measured on product impact, delivery milestones, revenue, or customer happiness? Can
+									an FDPM say no to a customer? Who owns the relationship — sales, success, deployment, or product? And how much
+									travel is really expected? Companies that respect the role answer these crisply. Companies using the title to
+									dress up a delivery job tend not to.
+								</p>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										The strongest reason to pursue this role isn't that the title is trendy — it's that the skill set is rare and
+										portable. If you can walk into a business, understand how it operates, find where AI creates value, manage the
+										risk, shape the workflow, coordinate the build, drive adoption, and measure impact, you'll be useful almost
+										anywhere: AI product leadership, product strategy, transformation, consulting, or founding something of your
+										own.
+									</p>
+									<p class="body-text">
+										The people who win the next phase of AI won't be the ones who can prompt a model. They'll be the ones who can
+										get AI into production where it changes how work actually gets done. That's the real forward-deployed
+										opportunity — and the mess is the job. If you can operate inside it now, you're ahead of most people still
+										waiting for AI products to become clean and plug-and-play. They probably won't.
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on the careers AI is quietly creating?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+
+		<!-- ── Export toolbar (screen only) ── -->
+		<div
+			class="screen-only md-toolbar"
+			style="
+				position: fixed;
+				top: 16px;
+				right: 16px;
+				display: flex;
+				gap: 8px;
+				z-index: 9999;
+				font-family: 'Source Sans 3', sans-serif;
+			"
+		>
+			<button type="button" id="md-copy" class="md-btn">Copy as Markdown</button>
+			<button type="button" id="md-download" class="md-btn">Download .md</button>
+		</div>
+		<style>
+			.md-btn {
+				font: 600 13px 'Source Sans 3', sans-serif;
+				color: #fff;
+				background: #7e22ce;
+				border: none;
+				border-radius: 6px;
+				padding: 8px 14px;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+			}
+			.md-btn:hover {
+				background: #6b1fae;
+			}
+			@media print {
+				.md-toolbar {
+					display: none !important;
+				}
+			}
+		</style>
+		<script>
+			(function () {
+				// ── Inline (text-level) → Markdown ──
+				function inline(node) {
+					let out = '';
+					node.childNodes.forEach(function (n) {
+						if (n.nodeType === 3) {
+							out += n.textContent.replace(/\s+/g, ' ');
+						} else if (n.nodeType === 1) {
+							var t = n.tagName.toLowerCase();
+							if (t === 'a') {
+								out += '[' + inline(n).trim() + '](' + n.getAttribute('href') + ')';
+							} else if (t === 'em' || t === 'i') {
+								out += '*' + inline(n).trim() + '*';
+							} else if (t === 'strong' || t === 'b') {
+								out += '**' + inline(n).trim() + '**';
+							} else if (t === 'br') {
+								out += '\n';
+							} else {
+								out += inline(n);
+							}
+						}
+					});
+					return out;
+				}
+
+				function tableMd(table) {
+					var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+					var lines = [];
+					var headerDone = false;
+					rows.forEach(function (tr) {
+						var cells = Array.prototype.slice.call(tr.children).map(function (c) {
+							return inline(c).trim().replace(/\|/g, '\\|') || ' ';
+						});
+						lines.push('| ' + cells.join(' | ') + ' |');
+						if (!headerDone) {
+							lines.push(
+								'| ' +
+									cells
+										.map(function () {
+											return '---';
+										})
+										.join(' | ') +
+									' |'
+							);
+							headerDone = true;
+						}
+					});
+					return lines.join('\n');
+				}
+
+				// ── Block-level walk → Markdown ──
+				function block(node, out) {
+					Array.prototype.slice.call(node.childNodes).forEach(function (el) {
+						if (el.nodeType !== 1) return;
+						var cls = el.classList;
+						var tag = el.tagName.toLowerCase();
+						if (cls.contains('running-ftr')) return;
+
+						if (cls.contains('section-hdr')) {
+							var label = el.querySelector('.section-label');
+							var sub = el.querySelector('.section-subtitle');
+							if (label) out.push('## ' + inline(label).trim());
+							if (sub) out.push('*' + inline(sub).trim() + '*');
+							return;
+						}
+						if (tag === 'h1') {
+							out.push('# ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('tip-title') || tag === 'h2' || tag === 'h3') {
+							out.push('### ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('pull-quote')) {
+							out.push('> ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('example-box')) {
+							var elabel = el.querySelector('.example-label');
+							var content = el.querySelector('.example-content');
+							var s = '';
+							if (elabel) s += '> **' + inline(elabel).trim() + '**\n>\n';
+							if (content) s += '> ' + inline(content).trim().replace(/\n/g, '\n> ');
+							out.push(s);
+							return;
+						}
+						if (cls.contains('res')) {
+							var name = el.querySelector('.res-name');
+							var desc = el.querySelector('.res-desc');
+							var r = '';
+							if (name) r += '**' + inline(name).trim() + '**  \n';
+							if (desc) r += inline(desc).trim();
+							out.push(r);
+							return;
+						}
+						if (tag === 'table') {
+							out.push(tableMd(el));
+							return;
+						}
+						if (tag === 'p') {
+							var txt = inline(el).trim();
+							if (!txt) return;
+							// Bold standalone sub-heads (font-weight:700 inline)
+							if (el.style && el.style.fontWeight === '700') out.push('#### ' + txt);
+							else out.push(txt);
+							return;
+						}
+						// Wrappers (tip, cta-box, dividers, etc.) → recurse
+						if (tag === 'div') {
+							block(el, out);
+							return;
+						}
+					});
+				}
+
+				function toMarkdown() {
+					var root = document.querySelector('.doc-frame tbody td');
+					if (!root) return '';
+					var out = [];
+					block(root, out);
+					return out
+						.filter(function (b) {
+							return b && b.trim();
+						})
+						.join('\n\n')
+						.replace(/\n{3,}/g, '\n\n')
+						.trim();
+				}
+
+				function flash(btn, msg) {
+					var orig = btn.textContent;
+					btn.textContent = msg;
+					setTimeout(function () {
+						btn.textContent = orig;
+					}, 1500);
+				}
+
+				document.getElementById('md-copy').addEventListener('click', function () {
+					var md = toMarkdown();
+					var btn = this;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(md).then(
+							function () {
+								flash(btn, 'Copied!');
+							},
+							function () {
+								flash(btn, 'Copy failed');
+							}
+						);
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = md;
+						document.body.appendChild(ta);
+						ta.select();
+						try {
+							document.execCommand('copy');
+							flash(btn, 'Copied!');
+						} catch (e) {
+							flash(btn, 'Copy failed');
+						}
+						document.body.removeChild(ta);
+					}
+				});
+
+				document.getElementById('md-download').addEventListener('click', function () {
+					var md = toMarkdown();
+					var blob = new Blob([md], { type: 'text/markdown' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'ForwardDeployedProductManager.md';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					flash(this, 'Downloaded!');
+				});
+			})();
+		</script>
+	</body>
+</html>

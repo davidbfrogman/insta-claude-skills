@@ -1,0 +1,695 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									The Hottest Job in AI Isn't Coding. It's Managing the Agents.
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									"Agent manager" will be a standard title in AI-first companies within 12 to 18 months. Here's how to pivot into it
+									before everyone else does.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									There's a guy at Salesforce named Zach Stauber. His job didn't exist a couple of years ago. He starts and ends his
+									day in dashboards — not writing code, not closing tickets himself, but watching a fleet of AI agents resolve
+									customer issues, draft emails, and escalate the hard stuff to humans. His title is <em>agent manager</em>, and a
+									recent
+									<a
+										href="https://hbr.org/2026/02/to-thrive-in-the-ai-era-companies-need-agent-managers"
+										style="color: #7e22ce; font-weight: 600; text-decoration: none"
+										>Harvard Business Review article</a
+									>
+									argues that his role is about to become one of the most important jobs in the entire economy.
+								</p>
+								<p class="body-text">
+									The pitch is simple. Companies like Salesforce, JPMorgan Chase, and Walmart are no longer just experimenting with
+									AI — they're putting autonomous agents into production. Salesforce's own platform now resolves nearly
+									<strong>74% of inbound support cases</strong> without a human touching them. But agents don't manage themselves.
+									They have to be trained, governed, measured, and coordinated with the humans they work alongside. Someone has to
+									own that. That someone is the agent manager.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									Here's the part that matters for you: HBR is explicit that
+									<strong>this is not primarily a technical role.</strong> The best agent managers came from customer service,
+									operations, and sales — people who already knew what "good" looked like and were curious enough to learn how to
+									steer an AI toward it. That means the door is open to a lot more people than you'd think. This guide breaks down
+									what the job actually is, what skills it takes, and the concrete steps — including the credentials worth getting —
+									to pivot into it now.
+								</p>
+
+								<!-- ── The Shift ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">What's Actually Happening</p>
+									<p class="section-subtitle">Agents stopped being tools and became teammates</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Agent managers are the new product managers.</h3>
+									<p class="body-text">
+										Just as product managers became indispensable during the software revolution, agent managers are becoming the
+										connective tissue between strategic intent and autonomous execution. The agents being deployed today aren't
+										scripts that automate a task — they're semi-autonomous "employees" that learn from feedback, collaborate with
+										other agents, and hand off to humans when a case gets too complex.
+									</p>
+									<p class="body-text">
+										One Salesforce sales-development team is the clearest proof. Before agents, reps could personally reach 12 to
+										15 prospects a day, so good leads went cold. After deploying an AI agent to handle the high-volume outreach
+										and follow-up, the team went from booking 150 meetings in 30 days to
+										<strong>350 meetings in a single week</strong> — generating $60M in annualized pipeline and 300+ new clients
+										in four months. The humans didn't get replaced; they got promoted into the high-value work agents can't do.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The Structural Bet</p>
+										<p class="example-content">
+											This is not a fad job that disappears next quarter. HBR compares it to DevOps and Site Reliability
+											Engineering: a durable operating function born from a permanent change in how work gets done. Those roles
+											didn't go away. Neither will this one.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── The Job ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Day Job</p>
+									<p class="section-subtitle">What an agent manager actually does all day</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">You coach machines the way a manager coaches people.</h3>
+									<p class="body-text">
+										Agent managers sit at the crossroads of customer experience, AI operations, and product management. Their
+										mandate is to translate functional expertise into measurable AI performance. In practice, the role looks like
+										this:
+									</p>
+									<p class="body-text">
+										<strong>Monitoring agent performance</strong> — quality, speed, escalation rates, and customer sentiment, all
+										day, in dashboards.<br />
+										<strong>Refining prompts and workflows</strong> to improve accuracy and tone — the equivalent of employee
+										training, but for an AI.<br />
+										<strong>Managing handoffs to humans</strong> and making sure escalation fires when it should.<br />
+										<strong>Running root-cause analysis</strong> on failed cases to drive continuous improvement.<br />
+										<strong>Quantifying impact</strong> through ROI analysis and executive reporting.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The Ownership Shift</p>
+										<p class="example-content">
+											In the old world, AI lived inside IT and data science. In the agentic world, the business unit owns its
+											agents — tone, escalation rules, and success metrics — the same way it owns its human team. If an agent
+											does the work, the business owns the result. That's where these new jobs are being created.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── The Six Capabilities ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Skill Set</p>
+									<p class="section-subtitle">The six capabilities that make an effective agent manager</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — AI operational literacy</h3>
+									<p class="body-text">
+										You don't need to train models, but you need to understand how agents operate, how prompts drive outcomes, and
+										how to diagnose a system failure when an agent goes sideways. This is the gap most career-changers have to
+										close — and it's the one the credentials below are built to fill.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Functional depth</h3>
+									<p class="body-text">
+										Deep knowledge of the actual business process the agent supports — customer service, finance, logistics,
+										sales. This is the part you almost certainly <em>already have</em> from your current career. It's your biggest
+										asset, not your liability.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Systems thinking</h3>
+									<p class="body-text">
+										The ability to see how agents interact across workflows, departments, and each other — what the field calls
+										"multi-agent orchestration." When one agent's output becomes another's input, you're the person who keeps the
+										whole chain coherent.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Change resilience</h3>
+									<p class="body-text">
+										Models shift, business needs shift, and the good agent managers refine their logic in weekly
+										"test-deploy-learn" cycles. HBR describes the way the role is learned as an apprenticeship — comfort with
+										constant iteration is the temperament that wins.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Prompt craftsmanship</h3>
+									<p class="body-text">
+										Designing and refining the language and logic that shape agent behavior. This is employee training for
+										machines: turning messy business rules into simple, adaptive instructions an AI can actually follow.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">06</span> — Designing work across machines and humans</h3>
+									<p class="body-text">
+										Knowing the limits of what a machine can do, building human escalation routes for everything else, and keeping
+										the human side of the team motivated inside a hybrid workflow. You're managing a team that's half software,
+										half people.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The One-Sentence Job Description</p>
+										<p class="example-content">
+											An effective agent manager is fluent in three languages at once: • business strategy • the operational
+											workings of AI • people management Most people speak one. The pivot is about adding the other two.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Who's positioned ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Good News</p>
+									<p class="section-subtitle">You may be better positioned than the engineers</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">The best agent managers didn't come from AI.</h3>
+									<p class="body-text">
+										HBR found the most effective agent managers emerged from roles already accountable for service quality,
+										customer outcomes, and operational judgment. They brought deep domain expertise and a lived understanding of
+										what good service looks like — and that mattered <em>more</em> than formal AI credentials. Zach Stauber, the
+										Salesforce agent manager, was trained in audio production and came up through service delivery and early
+										chatbot teams. He was picked for what his bosses called "earnest curiosity."
+									</p>
+									<p class="body-text">
+										The cautionary tale runs the other way too: organizations that handed agent management entirely to IT, or
+										hired purely on AI credentials, ended up with people who were technically competent but failed strategically.
+										The judgment is the hard part. The tooling is learnable.
+									</p>
+									<div class="example-box">
+										<p class="example-label">If This Sounds Like Your Background, Lean In</p>
+										<p class="example-content">
+											• Customer support / contact center leadership • Sales development or sales operations • Customer success
+											• Operations, process design, or QA • Project / program management • Conversational design or content
+											strategy You already own the "what good looks like" half. You just need the AI-operations half.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── The Playbook ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Pivot Playbook</p>
+									<p class="section-subtitle">Seven concrete moves to make starting now</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">1.</span> Reframe the experience you already have</h3>
+									<p class="body-text">
+										Stop describing yourself by your current title. Start describing yourself by the business process you
+										understand cold and the outcomes you've owned. That domain depth is the scarce ingredient — agent management
+										is being built on top of it, not instead of it.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">2.</span> Get hands-on with agents this week</h3>
+									<p class="body-text">
+										You can't manage what you've never built. Stand up a simple agent — a support responder, a research assistant,
+										a data-extraction workflow. Break it. Watch where it fails. That instinct for failure modes is exactly what
+										the role rewards, and it's the thing you can't fake in an interview.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">3.</span> Earn a credential that proves AI-operational literacy</h3>
+									<p class="body-text">
+										This is the fastest way to close the one real gap on your résumé. The standout right now is Anthropic's new
+										<strong>Claude Certified Architect</strong> — more on the specific courses in the next section. A credential
+										won't replace hands-on experience, but it signals you've done the structured work, and the early-mover timing
+										is real.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">4.</span> Learn multi-agent orchestration specifically</h3>
+									<p class="body-text">
+										"One agent doing one task" is table stakes. The leverage — and the job security — is in coordinating agents
+										that hand work to each other and to humans. Frameworks like LangGraph, CrewAI, and AG2 are where this is
+										taught; pick one and build something with two agents that talk to each other.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">5.</span> Start an agent pilot inside your current job</h3>
+									<p class="body-text">
+										The cleanest path in is often a sideways step where you already work. Find a repetitive, high-volume process
+										on your team, propose a small agent pilot, and volunteer to own it. Now you're not "trying to break into AI" —
+										you're the person who already runs the agents. That's the apprenticeship HBR describes, and you're getting
+										paid for it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Why This One Works</p>
+										<p class="example-content">
+											The role is learned by doing, not by certificate alone. Live operations, failure reviews, and weekly
+											test-deploy-learn cycles are the curriculum. The best place to get that curriculum is the job you already
+											have — before it's a competitive title.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">6.</span> Shift how you measure success — and talk about it</h3>
+									<p class="body-text">
+										Activity KPIs ("I made 60 calls a day") are obsolete in this world. The new metrics are outcomes that depend
+										on orchestration: how well you tuned the agent, how the whole human-plus-agent system performed. Practice
+										telling your story in those terms now. It's the language of the role.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">7.</span> Move while the title is still rare</h3>
+									<p class="body-text">
+										HBR's timeline: within 12 to 18 months, "agent manager" will be a standard title in AI-first enterprises.
+										Right now it barely exists, which means the people who establish themselves now define the role instead of
+										competing for it. Early is an advantage that doesn't come back.
+									</p>
+								</div>
+
+								<!-- ── Courses ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Credentials</p>
+									<p class="section-subtitle">Three programs that build the AI-operations half of the role</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Claude Certified Architect (Anthropic)</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">
+										The new gold-standard signal — and it's brand new
+									</p>
+									<p class="body-text">
+										Launched March 2026, the <strong>Claude Certified Architect, Foundations (CCA)</strong> is Anthropic's first
+										official technical credential. It's a proctored, 60-question, 120-minute exam ($99/attempt) that tests whether
+										you can architect a production agent system — agent loops, multi-agent orchestration, tool design, structured
+										output, and graceful failure handling — not whether you can write prompts. Nearly half the exam sits in
+										agentic architecture and configuration, the exact muscles an agent manager uses.
+									</p>
+									<p class="body-text">
+										The single most-tested idea is worth internalizing even if you never sit the exam:
+										<strong>programmatic enforcement beats prompt-based guidance.</strong> When a behavior has to be guaranteed,
+										you build it in code, not "add it to the prompt." The prep materials — 13 free self-paced courses on Anthropic
+										Academy, including <em>Building with the Claude API</em>, <em>Introduction to Model Context Protocol</em>, and
+										<em>Claude Code in Action</em> — are free, and they're the best structured on-ramp to AI operational literacy
+										available right now.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Anti-Patterns Worth Memorizing</p>
+										<p class="example-content">
+											• Don't use few-shot examples to enforce tool ordering → use programmatic prerequisites • Don't route on
+											the model's self-reported confidence → LLM confidence is poorly calibrated • Don't return empty results
+											when a subagent fails → return structured error context so it can recover • Don't give every agent every
+											tool → scope tools to each agent's role (4-5, not 18) These are exactly the production judgments the day
+											job is made of.
+										</p>
+									</div>
+									<p class="body-text" style="margin-top: 12px">
+										<strong>Start here:</strong>
+										<a href="https://www.anthropic.com/learn" style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>Anthropic Academy</a
+										>
+										(free courses) &nbsp;·&nbsp; community study guides at
+										<a href="https://www.claudecertifications.com" style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>claudecertifications.com</a
+										>
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">
+										<span class="tip-num">02</span> — IBM RAG &amp; Agentic AI Professional Certificate (Coursera)
+									</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">
+										The job-aligned, build-things-with-your-hands path
+									</p>
+									<p class="body-text">
+										If the CCA is the proof, this is the practice. IBM's program builds job-aligned GenAI skills and hands-on
+										experience in about three months — designing and chaining AI tools with LangChain, implementing function
+										calling, RAG, and vector stores for context-aware applications, and creating autonomous agents with
+										<strong>LangGraph, CrewAI, and AG2</strong>. That last part is the multi-agent orchestration skill the role
+										lives on, taught as a guided build rather than an exam.
+									</p>
+									<p class="body-text" style="margin-top: 4px">
+										<strong>Find it:</strong>
+										<a
+											href="https://www.coursera.org/professional-certificates/ibm-rag-and-agentic-ai"
+											style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>IBM RAG and Agentic AI on Coursera</a
+										>
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Build AI Agents with OpenAI Tools (Coursera)</h3>
+									<p class="body-text" style="font-style: italic; color: #7e22ce; margin-bottom: 6px">
+										Round out your toolkit across providers
+									</p>
+									<p class="body-text">
+										Good agent managers aren't religious about one vendor. This professional certificate teaches building
+										tool-using agents with the OpenAI Responses API, creating custom tools and integrating third-party APIs via
+										function calling, orchestrating multi-agent workflows with the OpenAI Agents SDK, and deploying production
+										agents with Streamlit and Flask. Pairing it with the Claude track gives you fluency across the two ecosystems
+										you'll actually encounter at work.
+									</p>
+									<p class="body-text" style="margin-top: 4px">
+										<strong>Find it:</strong>
+										<a
+											href="https://www.coursera.org/professional-certificates/build-ai-agents-with-openai-tools"
+											style="color: #7e22ce; font-weight: 600; text-decoration: none"
+											>Build AI Agents with OpenAI Tools on Coursera</a
+										>
+									</p>
+								</div>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 0">
+										<p class="example-label">How to Sequence Them</p>
+										<p class="example-content">
+											1. Anthropic Academy free courses → AI operational literacy 2. IBM RAG & Agentic AI → hands-on multi-agent
+											building 3. Sit the Claude Certified Architect → the credential signal 4. OpenAI Agents cert →
+											cross-provider fluency Do them while running a pilot at work, not instead of one. The certificate proves
+											the learning. The pilot proves the judgment.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── The Window ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Why Now</p>
+									<p class="section-subtitle">The first-mover window is open and it closes fast</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">This is the AWS-certifications moment, replayed at AI speed.</h3>
+									<p class="body-text">
+										AWS certs were "just vendor certs" in 2013. By 2016 they were required for cloud roles. The same structural
+										play is happening now — Anthropic has committed $100M to partner training in 2026, Accenture is training
+										30,000 people on Claude, and Cognizant has given 350,000 associates access. When adoption moves at that scale,
+										today's differentiator becomes tomorrow's baseline.
+									</p>
+									<p class="body-text">
+										The people who establish themselves as agent managers in 2026 will have two years of demonstrated experience
+										by the time the title is table stakes. That signal compounds in a way that starting in 2028 simply cannot
+										replicate. Technology alone doesn't create transformation — leadership does. This is a chance to be that
+										leadership before the field is crowded.
+									</p>
+								</div>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										Autonomous agents are moving into real production work, and someone has to train them, govern them, measure
+										them, and orchestrate them alongside humans. That someone is the agent manager — a durable new operating role
+										that HBR expects to be standard within 12 to 18 months. It rewards business judgment and domain depth more
+										than a CS degree, which means the door is wide open to people coming from support, sales, operations, and
+										customer success.
+									</p>
+									<p class="body-text">
+										The pivot is concrete: reframe the domain expertise you already have, get hands-on with agents, close the
+										AI-operations gap with the credentials above, and — ideally — start running an agent pilot inside your current
+										job. Do that now, while the title is still rare, and you don't compete for the role. You define it.
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on the careers AI is quietly creating?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+	</body>
+</html>

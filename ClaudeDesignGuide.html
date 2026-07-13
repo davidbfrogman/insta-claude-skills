@@ -1,0 +1,1889 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+
+					/* ── Resource entry ── */
+					.res {
+						margin-bottom: 18px;
+						padding-left: 16px;
+						border-left: 2px solid #ecd9fb;
+					}
+					.res-name {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 2px;
+					}
+					.res-name a {
+						color: #7e22ce;
+						text-decoration: none;
+					}
+					.res-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					/* ── Appendix prompt library ── */
+					.apx-cat {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 700;
+						color: #1a1a2e;
+						margin: 34px 0 18px;
+						padding-bottom: 8px;
+						border-bottom: 2px solid #ecd9fb;
+						display: flex;
+						align-items: baseline;
+						justify-content: space-between;
+					}
+					.apx-cat span {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						color: #b58fe0;
+						letter-spacing: 0.08em;
+						font-variant-numeric: tabular-nums;
+					}
+					.apx-item {
+						margin: 0 0 22px;
+						break-inside: avoid;
+					}
+					.apx-title {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 5px;
+						line-height: 1.3;
+					}
+					.apx-num {
+						color: #7e22ce;
+						font-variant-numeric: tabular-nums;
+						margin-right: 8px;
+					}
+					.apx-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.55;
+						margin: 0;
+					}
+					.apx-prompt {
+						background: #faf5ff;
+						border-left: 3px solid #7e22ce;
+						border-radius: 0 4px 4px 0;
+						padding: 9px 15px;
+						margin-top: 9px;
+					}
+					.apx-prompt-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 10px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.09em;
+						margin: 0 0 3px;
+					}
+					.apx-prompt-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 13.5px;
+						color: #2d2a27;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Claude Design
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									A practical guide to prototyping, visual exploration, and motion graphics — using words instead of a
+									blank canvas.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									Most design work dies before it gets interesting. Designers ration exploration because there is never
+									time to prototype ten directions, so teams settle for two or three and hope one of them was right.
+									Founders and PMs with a clear picture in their head but no design training stall out in Canva, fighting
+									templates that almost match what they want and never quite get there.
+								</p>
+								<p class="body-text">
+									Claude Design changes the starting point. Instead of opening a blank canvas, you describe what you want,
+									and Claude builds a working design next to the chat. You refine it in plain English, comment directly on
+									pieces of the canvas, make edits by hand, and export the result when it's ready. Anthropic describes it as
+									a way to create polished visual work — designs, prototypes, slides, one-pagers — with conversational
+									refinement, inline comments, direct edits, design-system-aware output, sharing across an organization, and
+									exports to Canva, PDF, PPTX, standalone HTML, or a Claude Code handoff.
+								</p>
+								<p class="body-text" style="margin-bottom: 40px">
+									That's the feature list. This guide is about what you can actually do with it — not just "make a deck" or
+									"make a landing page," but using Claude Design as an exploration engine: a way to test visual directions
+									quickly, build prototypes, make internal tools tangible, generate campaign assets, and produce animated
+									motion graphics you can capture as video with a simple screen recording.
+								</p>
+
+								<!-- ── What it's for ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Concept</p>
+									<p class="section-subtitle">Best when you need a visual artifact, fast</p>
+								</div>
+
+								<p class="body-text">
+									Claude Design earns its keep when you need something visual in front of people quickly — a landing page, a
+									sales deck, a dashboard, a pricing page, an onboarding flow, a proposal, a research brief, an infographic,
+									a board one-pager, or a clickable prototype. Anthropic's launch materials point at the same range:
+									realistic prototypes, wireframes and mockups, design explorations, pitch decks, marketing collateral, and
+									code-powered prototypes.
+								</p>
+								<p class="body-text">
+									The important part is that it isn't only generating a static image. It builds layouts, interactive
+									prototypes, and HTML-style experiences you can export or hand off. That makes it genuinely useful for the
+									people who usually get stuck: anyone who needs to communicate an idea before engineering or design time is
+									available to make it real. You reach for it when you want to turn a rough idea into something people can
+									react to, put three directions on the table before committing to one, mock up a feature before writing a
+									ticket, or turn messy notes into a first draft a designer, marketer, or founder can refine.
+								</p>
+
+								<p class="pull-quote">
+									The old workflow starts with a tool. Claude Design starts with intent — and that one change is what makes
+									it feel less like design software and more like creative direction.
+								</p>
+
+								<p class="body-text">
+									It's worth sitting with that shift, because it's where most people go wrong. The old routine is a tool: open
+									Figma or Canva, pick a template, move boxes, hunt for icons, tweak colors, rewrite copy, get frustrated,
+									start over. Claude Design flips the order. You describe the goal, the audience, the content, and the
+									structure, and Claude turns that into a draft. Your job becomes creative direction rather than manual
+									layout. You're not asking the model to "be creative" in some vague sense — you're handing it constraints and
+									then using the canvas as a fast feedback loop.
+								</p>
+
+								<!-- ── Prompting ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Workflow</p>
+									<p class="section-subtitle">Give it a job it can actually do</p>
+								</div>
+
+								<p class="body-text">
+									A vague prompt gets a vague result. "Make me a pricing page" leaves Claude guessing at everything that
+									matters. The fix is to say what you actually have in mind — who it's for, what goes on it, and how it should
+									feel.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Thin prompt vs. a real brief</p>
+										<p class="example-content">
+											Weak: "Make me a pricing page."
+
+											Strong: "Build a pricing page for a B2B API company. Audience: technical founders and engineering
+											leaders. Three plans — Starter, Growth, Enterprise — with a monthly/annual toggle above the cards. Add
+											a 12-row feature comparison table underneath. Enterprise uses a Contact Sales CTA. Keep the style
+											clean, technical, and premium, and use our existing design system."
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									Nearly every good prompt carries four ingredients: the <strong>goal</strong> (what are we making?), the
+									<strong>audience</strong> (who is it for?), the <strong>structure</strong> (what appears on the canvas?),
+									and the <strong>style</strong> (what should it feel like?). Strung together, they read like a brief you'd
+									hand a designer:
+									<em
+										>"Create [asset] for [audience]. The goal is [goal]. Include [sections and content]. Use [style or
+										design system]. Make it [interactive / responsive / export-ready] where it helps."</em
+									>
+								</p>
+
+								<p class="body-text">
+									The other half of the craft is restraint. The biggest mistake is cramming an entire project into one giant
+									prompt. Claude Design works better in layers — get the structure and content right first, then add
+									interactivity, then polish hierarchy, then clean up for accessibility and responsiveness. Build a dashboard,
+									then make the nav collapsible and the rows open a detail drawer, then tighten the KPI cards and thin out the
+									table, then ask Claude to review its own work for contrast and mobile behavior. Anthropic's own guidance
+									lands in the same place: start simple, layer in complexity, be specific in feedback, think about
+									responsiveness early, ask for variations, and ask Claude to critique the design.
+								</p>
+
+								<!-- ── Chat vs comments vs edits ── -->
+								<p class="body-text">
+									You also have three ways to steer, and they aren't interchangeable. Chat is for structural moves. Inline
+									comments are for targeted, component-level tweaks. Direct edits on the canvas are for the quick visual
+									adjustments — dragging, resizing, aligning — that are faster to do by hand than to describe.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Use</th>
+											<th>When</th>
+											<th>Sounds like</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Chat</td>
+											<td>Structural changes, or anything needing broader context</td>
+											<td>"Replace the hero with a split-screen layout." "Turn this into a 5-slide deck." "Give me three visual directions."</td>
+										</tr>
+										<tr>
+											<td>Inline comments</td>
+											<td>Precise changes to one element</td>
+											<td>"Make this button larger." "Use the primary brand color here." "Turn this section into a dropdown."</td>
+										</tr>
+										<tr>
+											<td>Direct edits</td>
+											<td>Quick visual nudges</td>
+											<td>Drag, resize, align, reposition</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									One practical note from Anthropic's docs: inline comments can occasionally be flaky. If a comment isn't
+									getting picked up, paste the same feedback straight into chat and move on.
+								</p>
+
+								<!-- ── Design systems ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Design Systems</p>
+									<p class="section-subtitle">Stop making Claude reinvent your brand every time</p>
+								</div>
+
+								<p class="body-text">
+									A design system isn't magic. It's a reusable set of brand decisions — colors, type, spacing, buttons,
+									cards, forms, icons, layout rules — that tells Claude not to invent the brand from scratch on every request.
+									Without one, the model has to guess at a dozen things you already know: which blue, rounded corners or
+									square, serif headings or sans, flat cards or shadowed, dense dashboards or airy, what a primary CTA looks
+									like, what a warning state looks like. Give it those answers once and it can carry the same visual language
+									across landing pages, decks, dashboards, and reports.
+								</p>
+								<p class="body-text">
+									Anthropic says Claude Design can build a system during onboarding by reading a team's codebase and design
+									files, then apply the colors, type, and components automatically. You can also just hand it one at the top
+									of a project:
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">A design system, dropped in as a prompt</p>
+										<p class="example-content">
+											"Before you build this, use this design system. Primary #2563EB, secondary #111827, accent #F97316,
+											background #F9FAFB, body text #374151. Inter for body copy, a bold geometric sans for headings. Buttons
+											rounded 12px with strong contrast. Cards use subtle borders, soft shadows, and generous padding.
+											Overall feel: modern B2B SaaS — clear, trustworthy, slightly editorial."
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									Keep that block saved and paste it into new projects. It's also how you spend less. Design activity draws
+									from the same usage pool as chat, Claude Code, and Cowork, and complex projects with large codebases or many
+									iterations burn more of it. The way to avoid waste is to stop asking Claude to rebuild the world for small
+									changes: preserve what works ("keep the layout and components, only improve spacing and contrast"), scope
+									edits tightly ("only change the CTA section"), and avoid importing massive codebases, which can lag the
+									browser — Anthropic points to Claude Code's <em>/design-sync</em> for syncing a system instead. Ask for two
+									or three directions early, pick one, and refine that rather than wandering. And when the final edits are
+									purely visual, export to Canva, where teammates can keep tweaking without regenerating code each time.
+								</p>
+
+								<!-- ── Motion graphics ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Motion Graphics</p>
+									<p class="section-subtitle">The use case almost nobody reaches for</p>
+								</div>
+
+								<p class="body-text">
+									Most people file Claude Design under decks, mockups, and landing pages. But because it can build interactive,
+									code-powered prototypes — Anthropic mentions voice, video, shaders, 3D, and built-in AI, and one customer
+									specifically calls out complex interactivity and animations — you can also use it to make motion graphics:
+									animated explainers, product walkthroughs, kinetic text, animated diagrams, loading states, onboarding
+									flows, social-video backgrounds.
+								</p>
+								<p class="body-text">
+									The trick is to not ask Claude to export a finished video. That's slow, token-heavy, and frustrating.
+									Instead, ask it to build an animated <em>screen</em>, then record that screen with QuickTime, Loom, Screen
+									Studio, or OBS. You get a clean video without forcing the model to render one.
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">The animation loop, start to finish</p>
+										<p class="example-content">
+											1. "Create a 15-second animated motion graphic explaining how AI agents work. 16:9, dark editorial
+											background. Start with one glowing node labeled 'User Request,' then branch out three smaller nodes —
+											Research, Draft, Review — and end with them merging into a final output card. Smooth easing, subtle
+											glow, kinetic text, and make it loop cleanly."
+
+											2. Preview it on the canvas.
+
+											3. "Slow the opening by 30%, smooth the branch-out moment, and add a 1-second pause before the output
+											card appears."
+
+											4. "Keep all important text inside the center 80% of the frame so it survives a screen recording."
+
+											5. Record the canvas, then trim in any editor.
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									The prompts follow the same shape as everything else — say the length, the aspect ratio, whether it loops,
+									and what happens beat by beat. A few that work: kinetic typography for a single punchy line, sized 9:16 for a
+									Reel; a product feature reveal that slides a chat panel in and pops three insight cards one by one; an
+									explainer that snaps scattered brand elements into a clean system board; a before-and-after that reorganizes
+									messy generic design into a branded layout; a seamless looping background with the center left clear for
+									captions.
+								</p>
+								<p class="body-text">
+									A handful of habits keep these usable. Keep them short — ten to fifteen seconds covers most of them. Always
+									name the aspect ratio: 16:9 for YouTube, 9:16 for Reels, TikTok, and Shorts, 1:1 for square. Ask for "smooth
+									easing" rather than "fast animation." Use large text, because small type dies on mobile. Leave safe margins
+									for captions. And unless you have a real reason, don't request a video export — record the canvas instead.
+								</p>
+
+								<!-- ── Use cases ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">What to Build</p>
+									<p class="section-subtitle">A few directions worth stealing</p>
+								</div>
+
+								<p class="body-text">
+									The point of the examples below isn't the specific asset. It's the pattern: pick a thing you make by hand,
+									describe it precisely, and let the canvas do the layout.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Prototype a feature before you build it</h3>
+									<p class="body-text">
+										Instead of a long spec, build the flow. "Build an interactive prototype of an AI chat feature inside a
+										spreadsheet app — the chat panel opening, the user asking a question, Claude responding, and the result
+										dropping into a cell. Make each step clickable." A clickable flow settles arguments a document can't.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Generate three campaign directions at once</h3>
+									<p class="body-text">
+										"Create three distinct landing-page concepts for the same product: one enterprise and conservative, one
+										bold and startup-like, one editorial and premium. Same content, different layout, hierarchy, and tone." You
+										get real options to react to instead of arguing in the abstract.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Make internal tools real before engineering touches them</h3>
+									<p class="body-text">
+										Internal tools get deprioritized because they sound boring in a ticket. Show the workflow instead. "Build
+										an admin panel for a content moderation team — queue on the left, selected submission in the center, action
+										panel on the right, with approve, reject-with-reason, escalate, and keyboard shortcuts."
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Turn messy strategy into a one-pager</h3>
+									<p class="body-text">
+										One-pagers force clarity, which is exactly where Claude Design shines. "Create an executive one-pager for
+										our Q3 product strategy: a three-sentence narrative, four KPI cards, three strategic bets, three risks, and
+										a decision section at the bottom." Works the same for board and investor updates, export-ready as PDF.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Ship the follow-up after a call</h3>
+									<p class="body-text">
+										Sales teams lose hours building custom decks from scratch. Turn call notes into a follow-up. "Build a
+										5-slide follow-up after a discovery call: what we heard, their goals, our recommended approach, timeline and
+										cost range, next steps." Same idea for visual explainers, carousel templates, and reusable content formats.
+									</p>
+								</div>
+
+								<!-- ── Exports ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Getting It Out</p>
+									<p class="section-subtitle">Where each export format fits</p>
+								</div>
+
+								<p class="body-text">
+									Claude Design exports to ZIP, PDF, PPTX, Canva, standalone HTML, and a Claude Code handoff, with destinations
+									like Adobe, Gamma, Miro, Replit, Vercel, and Wix, and more on the way. Pick the format by what happens next.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Format</th>
+											<th>Use it for</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>PDF</td>
+											<td>Polished one-pagers, reports, proposals, briefs, board materials</td>
+										</tr>
+										<tr>
+											<td>PPTX</td>
+											<td>Decks that need to be presented or edited in PowerPoint</td>
+										</tr>
+										<tr>
+											<td>Canva</td>
+											<td>Anything a marketer or teammate will keep editing visually</td>
+										</tr>
+										<tr>
+											<td>Standalone HTML</td>
+											<td>Prototypes, landing pages, calculators, hosted demos</td>
+										</tr>
+										<tr>
+											<td>ZIP / Claude Code</td>
+											<td>The underlying files, or a design ready to become a real product surface</td>
+										</tr>
+										<tr>
+											<td>Screen recording</td>
+											<td>Animations and motion graphics</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- ── Mistakes ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Where People Trip</p>
+									<p class="section-subtitle">The mistakes that show up over and over</p>
+								</div>
+
+								<p class="body-text">
+									Almost every disappointing result traces back to one of a few habits. Asking for generic design — "make it
+									modern" — instead of describing a feeling the model can act on. Changing everything at once ("make it better")
+									instead of naming the one thing to fix. Skipping the audience, so a pricing page for indie developers comes
+									out looking like one built for enterprise procurement. Forgetting to say whether it needs to work on mobile.
+									Making Claude reinvent your brand on every request instead of handing it a system. And, with motion, trying to
+									export a finished video instead of building the animation and recording the screen.
+								</p>
+
+								<p class="pull-quote">
+									"Make it better" is not a brief. "Keep the layout, but strengthen the headline, narrow the subhead, and make
+									the CTA more prominent" is.
+								</p>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">Where to start</h3>
+									<p class="body-text">
+										Pick one visual artifact you make by hand every month — a board deck, a proposal, a landing page, a
+										research readout, a social carousel, a motion graphic. Open Claude Design and write a prompt with the goal,
+										audience, structure, and style. Ask for two or three variations, pick one, and refine in layers. Have Claude
+										critique its own work for hierarchy and contrast. Export to the right format and ship it.
+									</p>
+									<p class="body-text">
+										That's the real promise here. Not that Claude Design replaces designers, and not that every first draft is
+										finished. It's that teams get more shots on goal — more directions, more prototypes, more chances to see the
+										thing before arguing about the thing. For most teams, that alone is the upgrade.
+									</p>
+								</div>
+
+								<!-- ── Appendix ── -->
+								<div class="section-hdr" style="margin: 24px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Appendix</p>
+									<p class="section-subtitle">A 50-prompt starter library — patterns, not scripture</p>
+								</div>
+
+								<p class="body-text">
+									Treat these as patterns to adapt, not recipes to follow. Each entry pairs a note on what Claude produces
+									with a prompt you can lift straight into the chat. Once the shape clicks, nearly any visual work becomes
+									promptable:
+									<em>"Build [asset] for [audience] with [sections] in [style] using [design system]. Make it interactive,
+									responsive, or animated as needed."</em>
+								</p>
+
+								<h3 class="apx-cat">Marketing &amp; launch pages <span>01&ndash;10</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">01</span>New feature landing page</p>
+									<p class="apx-desc">
+										Claude builds a full landing page from a single prompt: hero, benefit cards, video placeholder, pricing
+										table, FAQ, footer signup. A task that usually costs a designer half a day takes about twenty minutes end
+										to end.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a landing page for [feature name]. Audience: [persona]. Include a hero with headline, subhead, and
+											primary CTA. Three benefit cards with icons. A demo video placeholder. A pricing table with three tiers.
+											An FAQ with six questions. Email signup in the footer. Use our design system.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">02</span>Investor one-pager</p>
+									<p class="apx-desc">
+										Claude generates the single page VCs actually read before a meeting: thesis, traction, team, roadmap,
+										contact. A4 portrait, clean typography, ready to export as PDF and send.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a single-page investor summary, A4 portrait. Logo top left. A 3-line company thesis. Four traction
+											metrics displayed as large numbers. Founder headshots with names and roles. A 12-month roadmap as a
+											horizontal timeline. Contact details bottom right.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">03</span>Waitlist page</p>
+									<p class="apx-desc">
+										Claude builds a minimal pre-launch page with one pitch sentence, one email field, and a counter showing how
+										many others are waiting. That's the entire page. Nothing else fits.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a minimalist waitlist page for [product name]. Full-bleed gradient background. Centered
+											one-sentence pitch. A single email field with a submit button. Below the form, a counter showing "X others
+											waiting." Subtle footer with social links.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">04</span>Pricing page with comparison table</p>
+									<p class="apx-desc">
+										Claude delivers the full pricing page layout in one go: three side-by-side plans, a middle "most popular"
+										badge, a monthly/annual toggle, and a feature checkmark grid. A fourth Enterprise column for "Contact
+										Sales" sits on the right.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a pricing page. Three plans side by side. Middle plan wears a 'Most popular' badge. Feature
+											checkmark grid with 12 rows below. Annual toggle switches monthly and yearly pricing. Fourth Enterprise
+											column with a 'Contact Sales' CTA. FAQ underneath with common billing questions.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">05</span>Competitor comparison page</p>
+									<p class="apx-desc">
+										Claude builds a "you versus them" page that shows up in search results when prospects compare tools. Hero,
+										feature table, customer quotes, and a clear CTA to start a trial.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a comparison page: [your product] vs [competitor]. Hero with a one-line positioning statement.
+											Feature comparison table with 15 rows, green checks for yours and gray marks for theirs. Three customer
+											quotes favoring your product. CTA to start a free trial.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">06</span>Product changelog page</p>
+									<p class="apx-desc">
+										Claude generates a clean changelog template that replaces ugly release notes: filter chips for Features,
+										Fixes, and Breaking changes, plus a search bar and a subscribe card. Customers can actually find what
+										changed.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a changelog page in a two-column layout. Left column lists version numbers and release dates. Right
+											column shows bulleted change notes per version. Filter chips at top: Features, Fixes, Breaking. Search bar
+											above the filters. Subscribe-to-updates card in the sidebar.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">07</span>Press kit page</p>
+									<p class="apx-desc">
+										Claude assembles the standard press kit layout: company description, logo variations with download buttons,
+										leadership headshots, product screenshots, and a press contact form. Saves your marketing team a week of
+										back-and-forth with agencies.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a press kit page. Company one-liner at the top. Logo variations with individual download buttons for
+											each format. Leadership headshots with short bios. Product screenshot gallery. Press contact form. Clean
+											corporate aesthetic.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">08</span>Newsletter signup landing page</p>
+									<p class="apx-desc">
+										Claude builds a dedicated landing page for your newsletter. Hook sentence, three bullet points on what
+										subscribers get, email field, social proof quotes, and an author bio. Paste the URL in your Twitter and
+										LinkedIn bios.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a newsletter landing page for [your newsletter name]. A hook sentence at the top. Three bullet points
+											covering what subscribers receive. Email signup field. Three social proof quotes from current subscribers.
+											Author bio with photo at the bottom.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">09</span>Webinar registration page</p>
+									<p class="apx-desc">
+										Claude produces the webinar page with speaker card, three "what you'll learn" bullets, a registration form,
+										and logos of past attendee companies. Copy and paste into your email tool.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a webinar registration page. Speaker photo and name in the hero. Date, time, and timezone
+											prominently displayed. Three "what you'll learn" bullets. Registration form capturing name, email, company,
+											and role. Logos of past attendee companies at the bottom.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">10</span>Customer case study page</p>
+									<p class="apx-desc">
+										Claude writes the full case study layout from a brief: hero with customer logo and pull quote,
+										challenge/solution/result sections, three headline metrics, and a CTA at the bottom. Perfect for your sales
+										team to send post-demo.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a case study page for [customer name]. Hero with their logo and a pull quote from their CEO.
+											Challenge, solution, and result sections. Three headline metrics displayed as large numbers. A closing
+											quote. CTA to book a demo.
+										</p>
+									</div>
+								</div>
+
+								<h3 class="apx-cat">Sales &amp; pitch decks <span>11&ndash;18</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">11</span>Seed-round pitch deck</p>
+									<p class="apx-desc">
+										Claude drafts a 10-slide seed deck following the standard founder playbook: cover, problem, solution,
+										market, product, model, traction, team, ask. Dark background, one idea per slide, export to PPTX.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 10-slide seed pitch deck. Slides: cover, problem, solution, market size, product (two slides),
+											business model, traction, team, ask. Minimal layout. One big idea per slide. Dark background with white
+											text. Export ready.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">12</span>Enterprise sales deck</p>
+									<p class="apx-desc">
+										Claude builds the 15-slide enterprise deck your AEs have been asking for: prospect logo on cover, their
+										challenge written for them specifically, your approach, product walkthrough, security, pricing,
+										implementation. Replicable across deals.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build an enterprise sales deck with 15 slides. Cover includes prospect's logo. Second slide describes their
+											challenge in their own language. Our approach. Product walkthrough across 4 screenshots. Security and
+											compliance slide. Similar customer logos. Pricing slide. Implementation timeline. Next steps.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">13</span>Customer proposal</p>
+									<p class="apx-desc">
+										Claude turns a scope conversation into a formatted 12-page client proposal: executive summary, scope,
+										deliverables, Gantt timeline, team bios, pricing, payment terms, signature block. Export to PDF and send.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 12-page customer proposal for [prospect]. Executive summary. Scope of work. Deliverables. Timeline
+											as a Gantt chart. Team bios with photos. Pricing breakdown. Payment terms. Signature block on the final
+											page.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">14</span>Post-discovery follow-up deck</p>
+									<p class="apx-desc">
+										Claude produces the 5-slide follow-up that closes deals faster than a long proposal: what we heard, your
+										goals, our approach, timeline and cost range, proposed next steps. Send within an hour of the call.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a 5-slide follow-up deck after a discovery call with [prospect]. Slide 1: what we heard in the call.
+											Slide 2: their stated goals. Slide 3: our recommended approach. Slide 4: timeline and cost range. Slide 5:
+											proposed next steps with specific dates.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">15</span>Product demo script with slides</p>
+									<p class="apx-desc">
+										Claude writes a demo walkthrough with speaker notes baked into each slide. Eight slides, one screenshot per
+										slide, a narrator script line, and a "customer win" callout. Your reps stop winging it.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create product demo slides for a 15-minute walkthrough. Eight slides total. Each slide shows one screen of
+											the product with a one-sentence narrator script and a "customer win" moment. Speaker notes column on the
+											right of each slide.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">16</span>ROI calculator mockup</p>
+									<p class="apx-desc">
+										Claude builds an interactive calculator your marketing team can drop on a landing page. Three inputs, live
+										outputs, and a button to download the full report. Works as a lead magnet the second it's live.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build an interactive ROI calculator page. Three input fields: team size, current tool cost, hours saved per
+											week. Live outputs: annual savings, ROI percentage, payback period in months. A button to download the full
+											report by entering email. Make it a working prototype.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">17</span>Executive one-pager for a board meeting</p>
+									<p class="apx-desc">
+										Claude produces the one-page summary your board actually reads: quarter-in-review narrative, a 2x2 grid of
+										KPI charts, risks in yellow, wins in green, and an "asks" section at the bottom.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a board meeting one-pager. Quarter summary as a 3-sentence narrative at the top. Four KPIs as small
+											charts in a 2x2 grid. Three risks called out in yellow. Three wins called out in green. Asks section at the
+											bottom covering what we need from the board.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">18</span>Quarterly business review deck</p>
+									<p class="apx-desc">
+										Claude builds the 15-slide QBR template that customer success teams can reuse for every enterprise account:
+										usage charts, success stories, support ticket analysis, next-quarter roadmap, renewal conversation setup.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 15-slide QBR deck for an enterprise customer. Cover with their logo. Year-to-date usage charts.
+											Three success stories with product screenshots. Support ticket analysis. Roadmap for next quarter. Renewal
+											and expansion conversation slide. Q&amp;A slide at the end.
+										</p>
+									</div>
+								</div>
+
+								<h3 class="apx-cat">Product, UX &amp; prototypes <span>19&ndash;30</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">19</span>Mobile onboarding flow</p>
+									<p class="apx-desc">
+										Claude produces a 4-screen onboarding sequence with progress dots across the top: welcome, permissions with
+										reasoning, account setup, and a first-run empty state. Handles the messy "first thirty seconds" most apps
+										forget about.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design a 4-screen mobile onboarding flow for [app]. Screen 1: welcome with value proposition. Screen 2:
+											permissions request with reasoning for each. Screen 3: account setup. Screen 4: first-run empty state with
+											a "try this" suggestion. Progress dots across the top. Make it interactive.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">20</span>SaaS dashboard</p>
+									<p class="apx-desc">
+										Claude draws the full dashboard layout in one shot: left nav, top bar, KPI cards, chart, data table,
+										activity feed. Light theme. Your PM can review the same afternoon you brief the project.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a SaaS dashboard. Left nav with 6 menu items. Top bar with search and user menu. Main area: four KPI
+											cards in a row, one line chart below, one data table at the bottom. Right sidebar with an activity feed.
+											Light theme. Make it clickable.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">21</span>Settings panel</p>
+									<p class="apx-desc">
+										Claude generates the multi-tab settings panel every app needs and no one wants to design: profile,
+										notifications, integrations, billing, security, advanced. Sectioned cards, toggles, dropdowns, and save
+										buttons per tab.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design a settings panel for a web app. Left menu with: Profile, Notifications, Integrations, Billing,
+											Security, Advanced. Main area shows the selected tab's content. Each tab has sectioned cards with toggles,
+											dropdowns, and save buttons.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">22</span>Empty state screens</p>
+									<p class="apx-desc">
+										Claude draws the four empty states your new app needs: no projects, no tasks, no teammates, no
+										notifications. Each gets an illustration placeholder, a helpful sentence, and one clear CTA. Users don't
+										drop off at zero.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design four empty state screens for a project management app: no projects yet, no tasks in a project, no
+											team members invited, no notifications. Each screen has an illustration placeholder, one helpful sentence of
+											context, and a single primary CTA.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">23</span>Three-step checkout flow</p>
+									<p class="apx-desc">
+										Claude builds the full checkout with cart review, shipping, and payment in three screens. Apple Pay and
+										Google Pay options on the payment step. Order summary sticks to the right throughout. Your conversion rate
+										thanks you.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design a 3-step checkout. Step 1: cart review with edit and remove actions. Step 2: shipping address with a
+											saved-addresses dropdown. Step 3: payment with Apple Pay, Google Pay, and credit card options. Order
+											summary sticks to the right on every step. Make it clickable.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">24</span>Admin panel for an ops team</p>
+									<p class="apx-desc">
+										Claude produces the internal tool your ops team has been begging for: submission queue on the left, preview
+										in the middle, action buttons on the right, keyboard shortcuts listed at the bottom. Ships same-day if you
+										hand off to Claude Code.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build an admin panel for content moderators. Submissions queue on the left. Selected submission preview in
+											the middle with full content and metadata. Right panel with approve, reject with reason, and escalate
+											buttons. Keyboard shortcuts listed at the bottom.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">25</span>Feature flag rollout UI</p>
+									<p class="apx-desc">
+										Claude designs the internal tool for managing feature flags: table with name, status, rollout percentage,
+										and audience. Row click opens a side drawer with a percentage slider and a rule builder. Saves your
+										engineers a week of internal UI work.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a UI for managing feature flags. Table of flags showing name, description, status, rollout
+											percentage, and audience. Row click opens a side drawer to edit. Drawer has a slider for rollout percentage
+											and a rule builder for targeting audiences.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">26</span>User profile page</p>
+									<p class="apx-desc">
+										Claude drafts a public profile with avatar, name, location, follow button, and three tabs: activity,
+										projects, about. Works for communities, developer tools, and consumer social alike.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design a public user profile page. Header with avatar, name, title, location, and a follow button. Three
+											tabs: Activity, Projects, About. Activity tab shows a chronological feed of posts. Projects tab shows a grid
+											of cards. About tab shows a long bio with sections.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">27</span>Interactive prototype of a new feature</p>
+									<p class="apx-desc">
+										Claude turns a static mockup into a working prototype you can share with users for testing. Click through it
+										end to end, no code, no dev cycle. Bring research forward by two weeks.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build an interactive prototype of an AI chat feature inside a spreadsheet app. Show the chat panel opening,
+											typing a question, getting a response, and inserting the result into a cell. Make every step clickable and
+											shareable as a URL.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">28</span>Design system documentation page</p>
+									<p class="apx-desc">
+										Claude generates the documentation site for your design system: left nav for Colors, Typography, Buttons,
+										Forms, Cards, Modals. Each page shows variants, code snippets, and usage guidelines. Developers stop asking
+										design the same question twelve times.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a design system documentation page. Left nav with: Colors, Typography, Buttons, Forms, Cards, Modals.
+											Each page shows the component variants, a code snippet, and usage guidelines. Search bar at the top.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">29</span>Responsive site across three breakpoints</p>
+									<p class="apx-desc">
+										Claude renders the same homepage at mobile, tablet, and desktop widths side by side. You compare all three
+										in the canvas at once. Faster than flipping between Figma frames.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Render our marketing homepage at three breakpoints: mobile (375px), tablet (768px), desktop (1440px). Same
+											content across all three, adjusted layouts per width. Display all three side by side on the canvas so I can
+											compare.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">30</span>Dark mode version of an existing screen</p>
+									<p class="apx-desc">
+										Claude takes any screen you've built and outputs a dark mode variant with WCAG AA contrast. Keeps your
+										spacing and structure, only the color tokens swap. Works on imports too, not just things you built in Claude
+										Design.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Take this dashboard and produce a dark mode version. Preserve all spacing and layout structure. Use our
+											existing dark mode tokens if they exist in the design system. Confirm contrast ratios hit WCAG AA on every
+											text element.
+										</p>
+									</div>
+								</div>
+
+								<h3 class="apx-cat">Internal tools <span>31&ndash;36</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">31</span>Internal wiki homepage</p>
+									<p class="apx-desc">
+										Claude builds the homepage for your company wiki: search bar hero, four category cards, recent updates feed,
+										quick links sidebar, company values footer. Actually gets used because it's actually usable.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create an internal company wiki homepage. Search bar in the hero. Four category cards: People, Policies,
+											Tools, Handbook. Recent updates feed below the cards. Quick links in a sidebar. Company values in the
+											footer.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">32</span>Meeting notes template</p>
+									<p class="apx-desc">
+										Claude generates the one-page meeting notes template your whole team uses: fields for title, date, attendees,
+										agenda, discussion, decisions, action items with owners and due dates, and a link to the next meeting.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a meeting notes template, one page. Fields: meeting title, date, attendees, agenda (bulleted),
+											discussion notes (long text), decisions (bulleted), action items (checkbox list with owner and due date),
+											next meeting date and link.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">33</span>Hiring pipeline tracker</p>
+									<p class="apx-desc">
+										Claude draws the kanban board your recruiters keep rebuilding in Notion: columns for each stage, candidate
+										cards with role and days-in-stage, filters at the top. Ask it to wire up drag-and-drop and you have a
+										working prototype.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a kanban board for hiring. Columns: Applied, Screening, Interview, Offer, Hired, Rejected. Each card
+											shows candidate name, role, recruiter, and days in current stage. Filter bar at top by role, department, and
+											source. Make cards draggable between columns.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">34</span>OKR tracking dashboard</p>
+									<p class="apx-desc">
+										Claude produces the OKR dashboard that replaces the spreadsheet no one updates: company objective at top,
+										four key results as progress bars, and click-to-expand initiative lists. Export to HTML and host it on your
+										intranet.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create an OKR tracking dashboard. Company objective at the top. Four key results below as progress bars with
+											current value and target. Clicking a key result expands a list of initiatives. Each has an updated-by stamp
+											and status.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">35</span>Content calendar</p>
+									<p class="apx-desc">
+										Claude draws the monthly content calendar with multi-item cells, color coding by channel, filter bar at the
+										top, and hover previews. Your editorial team finally has a single source of truth.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a content calendar in monthly view. Each day cell can hold multiple content items. Color-code items by
+											channel: blog, LinkedIn, email, YouTube. Filter bar at the top. Hovering a cell shows a preview card with
+											details.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">36</span>Internal tool access request form</p>
+									<p class="apx-desc">
+										Claude builds the form your IT team wishes they had: searchable dropdown for the tool, reason field, manager
+										approval email, duration, and a conditional PII question. Submitting creates a ticket number.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a form for employees to request access to internal tools. Fields: tool name (searchable dropdown),
+											reason for access, manager email for approval, duration needed. Conditional question appears if the tool
+											handles PII. On submit, show a confirmation with ticket number.
+										</p>
+									</div>
+								</div>
+
+								<h3 class="apx-cat">Content &amp; personal <span>37&ndash;43</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">37</span>Personal portfolio site</p>
+									<p class="apx-desc">
+										Claude builds a single-page portfolio with hero, six project cards, about section, testimonials, and contact
+										form. Export as standalone HTML and host on GitHub Pages for free.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a personal portfolio site, single page, long scroll. Hero: name, one-line bio, professional photo.
+											Selected work: six project cards with images and links. About me section. Three testimonial quotes. Contact
+											form at the bottom. Export as standalone HTML.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">38</span>One-page resume</p>
+									<p class="apx-desc">
+										Claude produces a clean one-page resume ready to export to PDF: name and contact, summary, five roles with
+										bullet points, skills, education. Printable and ATS-friendly. Done before your coffee is cold.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a one-page resume. Name and contact details in the header. Three-line summary. Experience: five roles
+											with 2-3 bullet points each. Skills section. Education at the bottom. Clean serif typography, black on white.
+											Printable and ATS-safe.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">39</span>Wedding RSVP page</p>
+									<p class="apx-desc">
+										Claude builds the RSVP page you'd normally pay a freelancer $400 for: "save the date" hero, attending radio,
+										meal choice dropdown, plus-one field, song request box. Export and send the link with the save-the-date.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a wedding RSVP page for [names]. Hero: "Save the Date" with date and venue. Attending or not-attending
+											radio buttons. Meal choice dropdown. Plus-one name field. Song request text area. Submit button reads "We'll
+											see you there."
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">40</span>Podcast show notes template</p>
+									<p class="apx-desc">
+										Claude generates the show notes template your podcast needs to look professional: episode title, guest bio,
+										timestamped chapters, "links mentioned" section, sponsor block, subscribe CTAs for Apple, Spotify, and RSS.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a podcast show notes template. Episode title, number, and date. Guest photo and bio. Timestamped
+											chapters as a list with clickable anchors. "Links mentioned" section. Sponsor ad block. Subscribe CTAs for
+											Apple Podcasts, Spotify, and RSS.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">41</span>Blog post layout template</p>
+									<p class="apx-desc">
+										Claude produces a reusable blog post template: title, subtitle, author byline, article body with room for
+										images and pull quotes, sticky table of contents on desktop, related posts, subscribe CTA. Save once, publish
+										forever.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a blog post layout template. Title, subtitle, and author byline with photo and date. Long-form article
+											body with space for images and pull quotes. Table of contents sticky on the left for desktop only. Related
+											posts grid at the bottom. Subscribe CTA placed mid-article.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">42</span>Course landing page</p>
+									<p class="apx-desc">
+										Claude builds the landing page for your online course: hero video, "what you'll learn" bullets, curriculum
+										accordion, instructor bio, testimonials, payment plan options, FAQ. Replaces Kajabi's template library in one
+										prompt.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a landing page for an online course on [topic]. Hero with video placeholder. "What you'll learn"
+											section with 8 bullets. Curriculum accordion with 6 modules. Instructor bio. Three student testimonials with
+											photos. Pricing section with payment plan options. FAQ. Enrollment CTA.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">43</span>Newsletter archive page</p>
+									<p class="apx-desc">
+										Claude draws the archive page Substack doesn't give you: grid of past issues with thumbnails, titles, dates,
+										excerpts, filter by topic tags, search bar, issue count, and a pinned subscribe CTA. Host it alongside your
+										newsletter.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a newsletter archive page. Grid of past issues with thumbnail, title, date, and 2-line excerpt each.
+											Filter bar with topic tags. Search bar. Total issue count in the header. Subscribe CTA pinned at the bottom
+											of the page.
+										</p>
+									</div>
+								</div>
+
+								<h3 class="apx-cat">Reports &amp; documents <span>44&ndash;50</span></h3>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">44</span>Annual report</p>
+									<p class="apx-desc">
+										Claude produces a 10-page annual report corporate-ready: cover with year, CEO letter, financial summary in
+										charts, milestone stories with photos, team section, outlook, financials table. Serif-heavy aesthetic, export
+										to PDF.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 10-page annual report for [company]. Cover with year. Letter from the CEO. Financial summary in
+											charts. Three milestone stories with photos. Team section. Looking ahead. Financials table. Corporate serif
+											aesthetic throughout.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">45</span>Data report with charts</p>
+									<p class="apx-desc">
+										Claude drafts the 20-page data report your analyst spent a week on last quarter: executive summary,
+										methodology, five results each with a chart and two paragraphs, conclusion, data table appendix.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 20-page data report on [topic]. Executive summary. Methodology. Five key results, each with a chart
+											and 2 paragraphs of analysis. Conclusion. Appendix with data tables. Minimal editorial style.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">46</span>Two-page research brief</p>
+									<p class="apx-desc">
+										Claude condenses a longer research paper into a 2-page brief. Page one: question, method, three stats. Page
+										two: implications, limitations, further reading. Academic but readable, designed for busy executives.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a 2-page research brief summarizing a longer paper. Page 1: research question, method, three key
+											results as large stats. Page 2: what it means, limitations, what to read next. Academic but readable style.
+											Clean typography.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">47</span>B2B whitepaper</p>
+									<p class="apx-desc">
+										Claude produces the 15-page B2B whitepaper your marketing team needs but keeps delaying. Cover, table of
+										contents, executive summary, industry context, problem analysis, solution framework, case study, conclusion
+										with CTA. Conservative aesthetic, gated asset ready.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 15-page B2B whitepaper on [topic]. Cover page. Table of contents. Executive summary. Industry
+											context with data. Problem section with analysis. Solution framework. Case study. Conclusion with a CTA.
+											Clean, dense, conservative design.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">48</span>Vertical infographic</p>
+									<p class="apx-desc">
+										Claude builds a single-image infographic ready for Instagram or Pinterest: title at top, five data points
+										with illustrations and big numbers, source citation, social handles. Export as standalone HTML or PNG.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Design a vertical infographic, 1080x2000px, on [topic]. Title at the top. Five data points, each with an
+											illustration and a large number. Source citation at the bottom. Social media handles below the citation.
+											Shareable format.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">49</span>Brand guidelines document</p>
+									<p class="apx-desc">
+										Claude drafts the 25-page brand guidelines PDF agencies charge $15,000 for: logo usage, color palette with
+										hex codes, typography samples, photography style, voice and tone, email signature template, business card
+										template.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Build a brand guidelines document, 25 pages. Logo usage do's and don'ts with examples. Color palette with
+											hex, RGB, and CMYK values. Typography samples for headings and body. Photography style with examples. Voice
+											and tone guidelines. Email signature template. Business card template.
+										</p>
+									</div>
+								</div>
+
+								<div class="apx-item">
+									<p class="apx-title"><span class="apx-num">50</span>User research results deck</p>
+									<p class="apx-desc">
+										Claude produces the 10-slide research readout your product team needs after every round. Cover, research
+										question, method, four themes with quotes, two pain points, three prioritized recommendations, next steps,
+										appendix with demographics.
+									</p>
+									<div class="apx-prompt">
+										<p class="apx-prompt-label">Prompt</p>
+										<p class="apx-prompt-text">
+											Create a 10-slide deck presenting user research results. Cover. Research question. Method (5 interviews, 3
+											usability tests). Four themes with representative quotes. Two pain points. Three recommendations with
+											priorities. Next steps. Appendix with participant demographics.
+										</p>
+									</div>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center; margin-top: 8px">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on getting real work out of AI?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+
+		<!-- ── Export toolbar (screen only) ── -->
+		<div
+			class="screen-only md-toolbar"
+			style="
+				position: fixed;
+				top: 16px;
+				right: 16px;
+				display: flex;
+				gap: 8px;
+				z-index: 9999;
+				font-family: 'Source Sans 3', sans-serif;
+			"
+		>
+			<button type="button" id="md-copy" class="md-btn">Copy as Markdown</button>
+			<button type="button" id="md-download" class="md-btn">Download .md</button>
+		</div>
+		<style>
+			.md-btn {
+				font: 600 13px 'Source Sans 3', sans-serif;
+				color: #fff;
+				background: #7e22ce;
+				border: none;
+				border-radius: 6px;
+				padding: 8px 14px;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+			}
+			.md-btn:hover {
+				background: #6b1fae;
+			}
+			@media print {
+				.md-toolbar {
+					display: none !important;
+				}
+			}
+		</style>
+		<script>
+			(function () {
+				// ── Inline (text-level) → Markdown ──
+				function inline(node) {
+					let out = '';
+					node.childNodes.forEach(function (n) {
+						if (n.nodeType === 3) {
+							out += n.textContent.replace(/\s+/g, ' ');
+						} else if (n.nodeType === 1) {
+							var t = n.tagName.toLowerCase();
+							if (t === 'a') {
+								out += '[' + inline(n).trim() + '](' + n.getAttribute('href') + ')';
+							} else if (t === 'em' || t === 'i') {
+								out += '*' + inline(n).trim() + '*';
+							} else if (t === 'strong' || t === 'b') {
+								out += '**' + inline(n).trim() + '**';
+							} else if (t === 'br') {
+								out += '\n';
+							} else {
+								out += inline(n);
+							}
+						}
+					});
+					return out;
+				}
+
+				function tableMd(table) {
+					var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+					var lines = [];
+					var headerDone = false;
+					rows.forEach(function (tr) {
+						var cells = Array.prototype.slice.call(tr.children).map(function (c) {
+							return inline(c).trim().replace(/\|/g, '\\|') || ' ';
+						});
+						lines.push('| ' + cells.join(' | ') + ' |');
+						if (!headerDone) {
+							lines.push(
+								'| ' +
+									cells
+										.map(function () {
+											return '---';
+										})
+										.join(' | ') +
+									' |'
+							);
+							headerDone = true;
+						}
+					});
+					return lines.join('\n');
+				}
+
+				// ── Block-level walk → Markdown ──
+				function block(node, out) {
+					Array.prototype.slice.call(node.childNodes).forEach(function (el) {
+						if (el.nodeType !== 1) return;
+						var cls = el.classList;
+						var tag = el.tagName.toLowerCase();
+						if (cls.contains('running-ftr')) return;
+
+						if (cls.contains('section-hdr')) {
+							var label = el.querySelector('.section-label');
+							var sub = el.querySelector('.section-subtitle');
+							if (label) out.push('## ' + inline(label).trim());
+							if (sub) out.push('*' + inline(sub).trim() + '*');
+							return;
+						}
+						if (tag === 'h1') {
+							out.push('# ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('tip-title') || tag === 'h2' || tag === 'h3') {
+							out.push('### ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('apx-cat')) {
+							out.push('## ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('apx-title')) {
+							out.push('### ' + inline(el).trim().replace(/^(\d+)(?=\S)/, '$1. '));
+							return;
+						}
+						if (cls.contains('apx-desc')) {
+							out.push(inline(el).trim());
+							return;
+						}
+						if (cls.contains('apx-prompt')) {
+							var plabel = el.querySelector('.apx-prompt-label');
+							var ptext = el.querySelector('.apx-prompt-text');
+							var ps = '';
+							if (plabel) ps += '> **' + inline(plabel).trim() + '**\n>\n';
+							if (ptext) ps += '> ' + inline(ptext).trim().replace(/\n/g, '\n> ');
+							out.push(ps);
+							return;
+						}
+						if (cls.contains('pull-quote')) {
+							out.push('> ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('example-box')) {
+							var elabel = el.querySelector('.example-label');
+							var content = el.querySelector('.example-content');
+							var s = '';
+							if (elabel) s += '> **' + inline(elabel).trim() + '**\n>\n';
+							if (content) s += '> ' + inline(content).trim().replace(/\n/g, '\n> ');
+							out.push(s);
+							return;
+						}
+						if (cls.contains('res')) {
+							var name = el.querySelector('.res-name');
+							var desc = el.querySelector('.res-desc');
+							var r = '';
+							if (name) r += '**' + inline(name).trim() + '**  \n';
+							if (desc) r += inline(desc).trim();
+							out.push(r);
+							return;
+						}
+						if (tag === 'table') {
+							out.push(tableMd(el));
+							return;
+						}
+						if (tag === 'p') {
+							var txt = inline(el).trim();
+							if (!txt) return;
+							// Bold standalone sub-heads (font-weight:700 inline)
+							if (el.style && el.style.fontWeight === '700') out.push('#### ' + txt);
+							else out.push(txt);
+							return;
+						}
+						// Wrappers (tip, cta-box, dividers, etc.) → recurse
+						if (tag === 'div') {
+							block(el, out);
+							return;
+						}
+					});
+				}
+
+				function toMarkdown() {
+					var root = document.querySelector('.doc-frame tbody td');
+					if (!root) return '';
+					var out = [];
+					block(root, out);
+					return out
+						.filter(function (b) {
+							return b && b.trim();
+						})
+						.join('\n\n')
+						.replace(/\n{3,}/g, '\n\n')
+						.trim();
+				}
+
+				function flash(btn, msg) {
+					var orig = btn.textContent;
+					btn.textContent = msg;
+					setTimeout(function () {
+						btn.textContent = orig;
+					}, 1500);
+				}
+
+				document.getElementById('md-copy').addEventListener('click', function () {
+					var md = toMarkdown();
+					var btn = this;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(md).then(
+							function () {
+								flash(btn, 'Copied!');
+							},
+							function () {
+								flash(btn, 'Copy failed');
+							}
+						);
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = md;
+						document.body.appendChild(ta);
+						ta.select();
+						try {
+							document.execCommand('copy');
+							flash(btn, 'Copied!');
+						} catch (e) {
+							flash(btn, 'Copy failed');
+						}
+						document.body.removeChild(ta);
+					}
+				});
+
+				document.getElementById('md-download').addEventListener('click', function () {
+					var md = toMarkdown();
+					var blob = new Blob([md], { type: 'text/markdown' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'ClaudeDesignGuide.md';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					flash(this, 'Downloaded!');
+				});
+			})();
+		</script>
+	</body>
+</html>

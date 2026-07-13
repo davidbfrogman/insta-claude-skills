@@ -1,0 +1,1066 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+
+					/* ── Stat band ── */
+					.stat-band {
+						display: flex;
+						flex-wrap: wrap;
+						gap: 12px;
+						margin: 8px 0 24px;
+					}
+					.stat {
+						flex: 1 1 150px;
+						background: #faf5ff;
+						border-radius: 8px;
+						padding: 16px 18px;
+					}
+					.stat-num {
+						font-family: 'Lora', serif;
+						font-size: 30px;
+						font-weight: 700;
+						color: #7e22ce;
+						line-height: 1;
+						margin: 0 0 6px;
+					}
+					.stat-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 13px;
+						color: #5b5551;
+						line-height: 1.4;
+						margin: 0;
+					}
+
+					/* ── Resource entry ── */
+					.res {
+						margin-bottom: 18px;
+						padding-left: 16px;
+						border-left: 2px solid #ecd9fb;
+					}
+					.res-name {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 2px;
+					}
+					.res-name a {
+						color: #7e22ce;
+						text-decoration: none;
+					}
+					.res-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Don't Get Hollowed Out
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									A 2026 positioning strategy for anyone who's worried AI is coming for the bottom of the ladder.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown &middot; built from the Stanford 2026 AI Index Report
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									This is written for people early in a career &mdash; or early in a reinvention &mdash; in any field, not
+									just tech. Here is the uncomfortable thing the data keeps whispering, and almost nobody wants to say out
+									loud: <strong>the bottom rung of the career ladder is being sawed off.</strong>
+								</p>
+								<p class="body-text">
+									For a century, the deal was simple. You entered a field at the bottom, did the repetitive, low-judgment
+									work nobody senior wanted to do, and in exchange you absorbed the reps that slowly turned you into someone
+									valuable. The grunt work <em>was</em> the tuition. AI is now doing the grunt work &mdash; faster, cheaper,
+									and without complaint &mdash; which means the tuition is no longer being collected, and the apprenticeship
+									it used to buy is quietly disappearing.
+								</p>
+								<p class="body-text" style="margin-bottom: 28px">
+									You can read that as a threat or a tell. This document treats it as a tell. If the bottom rung is gone, the
+									counter-move is not to cling to it. <strong>The counter-move is to skip it.</strong> Use AI to operate at a
+									level of judgment, strategy, and output that the old ladder would have made you wait a decade to reach
+									&mdash; and reach it before anyone expects you to. What follows are ten strategies for doing exactly that.
+									They are not about becoming a programmer. They are about making yourself the kind of person AI amplifies
+									rather than the kind of person AI replaces.
+								</p>
+
+								<div class="stat-band">
+									<div class="stat">
+										<p class="stat-num">10,000%+</p>
+										<p class="stat-desc">Year-over-year growth in one category of AI-orchestration job postings</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">~20%</p>
+										<p class="stat-desc">Drop in employment for the youngest workers (22&ndash;25) in the field AI hit first</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">88%</p>
+										<p class="stat-desc">Organizational AI adoption &mdash; while in-production autonomous use stays in single digits</p>
+									</div>
+								</div>
+
+								<p class="pull-quote">
+									The tools are the great equalizer. Whether they lift you or replace you comes down to a single choice: are
+									you the hands, or the head?
+								</p>
+
+								<!-- ── The two futures ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Fork</p>
+									<p class="section-subtitle">Every strategy here is a way of choosing the left column</p>
+								</div>
+
+								<p class="body-text">
+									Before the ten moves, it helps to name the two people the data is separating. The same technology produces
+									both. The difference is never the tool &mdash; it's the posture the person takes toward it.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th></th>
+											<th>The person AI amplifies</th>
+											<th>The person AI replaces</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Defines their worth by</td>
+											<td>Judgment, taste, and outcomes owned</td>
+											<td>Tasks executed and hours logged</td>
+										</tr>
+										<tr>
+											<td>Uses AI to</td>
+											<td>Do the work; keep the thinking</td>
+											<td>Skip the thinking; sound fluent</td>
+										</tr>
+										<tr>
+											<td>Relationship to the tool</td>
+											<td>Directs it &mdash; decides what, why, in what order</td>
+											<td>Operates it &mdash; runs the buttons on request</td>
+										</tr>
+										<tr>
+											<td>Career timeline</td>
+											<td>Compresses the ladder into a sprint</td>
+											<td>Waits to be promoted into judgment</td>
+										</tr>
+										<tr>
+											<td>Proof they offer</td>
+											<td>Visible artifacts &mdash; things shipped in the real world</td>
+											<td>Credentials and job titles</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- ── The Ten ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Ten Strategies</p>
+									<p class="section-subtitle">Read the data, then make the move it implies</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Stop being the hands. Start being the person who directs the hands.</h3>
+									<p class="body-text">
+										The single clearest signal in the labor data is that demand is fleeing the "operate the tool" layer and
+										rushing toward the "orchestrate the work" layer. In the AI job market specifically, postings that just
+										mention chat tools are <em>declining</em>, while postings for people who can coordinate and operationalize
+										AI systems have exploded &mdash; one category grew over <strong>10,000% year-over-year</strong>. But you
+										don't need to work in tech for the lesson to apply. In every field, the person who knows how to <em>run</em>
+										a tool is worth less each year, and the person who knows how to design the workflow the tool runs inside is
+										worth more.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Stop measuring yourself by the tasks you can personally execute. Start measuring yourself by the outcomes
+											you can orchestrate &mdash; deciding what should be done, sequencing it, and pointing tools (and people)
+											at it. Being good at the button is table stakes. Owning the decision of which buttons, in what order, to
+											what end is the job that's growing.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Chase judgment, because that's the one thing the productivity studies can't crack.</h3>
+									<p class="body-text">
+										When researchers measured where AI actually boosts output, they found gains of <strong>14% to 26%</strong>
+										in structured, well-defined work like customer support and routine drafting &mdash; and <em>weaker or even
+										negative</em> effects on tasks that require real judgment. That last clause is the whole game. AI is
+										spectacular at the parts of a job that can be specified and checked. It stumbles exactly where ambiguity,
+										taste, tradeoffs, and context live.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Deliberately migrate your time toward the judgment-heavy parts of your work &mdash; the ambiguous calls,
+											the "it depends," the situations with no clean answer. If a task can be fully specified in a clear
+											instruction, assume AI will do it soon and stop building your identity around it. Build your identity
+											around the calls that can't be reduced to a spec.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Reach senior-level judgment faster than any generation before you — because you have to.</h3>
+									<p class="body-text">
+										This is the hard one. In the field where AI landed first and hardest, employment for the <em>youngest</em>
+										workers (ages 22&ndash;25) fell <strong>nearly 20%</strong> from its peak, even as headcount for
+										experienced workers in the same field kept growing. Researchers named it bluntly:
+										<strong>"seniority-biased technological change."</strong> AI substitutes for junior labor and leaves senior
+										judgment intact. The juniors are the canaries. Expect this pattern to spread into any field where
+										entry-level work is routine and documentable.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Treat the traditional "pay your dues for a decade" timeline as canceled. The winners aren't waiting to be
+											promoted into senior judgment &mdash; they're practicing it now, on real problems, using AI to cover the
+											experience they don't yet have. Ask the questions a senior person would ask. Produce the deliverable a
+											senior person would produce. Compress the ladder into a sprint.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — If you're inexperienced, AI is the biggest unfair advantage you'll ever get — so use it that way.</h3>
+									<p class="body-text">
+										Here's the twist that sits right next to the threat: the same studies show that
+										<strong>less experienced people benefit the most</strong> from AI. Newcomers to customer support saw
+										30&ndash;35% performance gains; junior workers consistently gained more than veterans. AI closes skill
+										gaps. It is, functionally, a great equalizer &mdash; <em>for the people who lean into it.</em>
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											The technology thinning out entry-level jobs is the exact same technology that lets a motivated beginner
+											punch a full weight class up. Don't use AI to avoid learning the work. Use it to perform the work at a
+											level your résumé says you shouldn't be able to reach yet &mdash; and then keep the receipts.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Guard your learning like it's the asset it is — because AI can quietly hollow it out.</h3>
+									<p class="body-text">
+										There's a trap inside strategy #4, and it's the most important warning in this whole document. Research
+										found that people who leaned on AI to <em>learn</em> showed no real speed improvement and suffered
+										measurable <strong>"learning penalties"</strong> &mdash; their long-term skill growth slowed. The ones who
+										avoided the trap used AI for conceptual inquiry (<em>help me understand why this works</em>) rather than as
+										a way to skip the thinking (<em>just give me the answer</em>).
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Draw a bright line. Using AI to do your work is fine and often smart. Using AI to replace your learning is
+											how you wake up in three years fluent-sounding and actually empty. Let AI accelerate your output, but
+											never outsource the reps that build the judgment strategies #2 and #3 depend on. Do the thinking; let AI
+											do the typing.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">06</span> — Be the "AI person" in an industry that doesn't have one yet.</h3>
+									<p class="body-text">
+										Everyone's instinct is to run toward the obvious AI hotspots. That's exactly why they're crowded. The data
+										shows AI demand is now spreading into sectors that historically had almost none &mdash; transportation and
+										warehousing, real estate, education, finance, manufacturing are all climbing. Meanwhile organizational
+										adoption has hit <strong>88%</strong>, but actual <em>deployment</em> of autonomous AI systems is still in
+										the <strong>single digits</strong> across nearly every business function. Most organizations have bought the
+										AI and have no idea how to run it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											You do not need to out-compete four thousand specialists at an AI lab. You need to be the most AI-fluent
+											person in a hospital, a logistics firm, a school district, a real-estate brokerage, a manufacturer. Being
+											the frontier in a field that hasn't reached the frontier yet is a dramatically easier way to become
+											indispensable than joining the stampede.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">07</span> — Position yourself where AI demand is <em>dense</em>, not where it's merely <em>big</em>.</h3>
+									<p class="body-text">
+										The obvious geography is the biggest markets. The smart geography is the densest ones &mdash; where AI
+										demand is high relative to the total job pool, which means less competition per opportunity. In the data,
+										the largest raw markets weren't the most concentrated; smaller places had far higher <em>intensity</em> of
+										AI-related demand. The principle generalizes past geography: seek the pools where demand for what you're
+										building is high relative to the supply of people offering it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Stop defaulting to the crowded, obvious market. Where you work — physically or remotely — and which niche
+											you plant your flag in are strategic choices, not defaults. Aim for high demand-to-competition ratio, not
+											high raw headcount.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">08</span> — Use the current tailwind before the window narrows.</h3>
+									<p class="body-text">
+										Conditions right now are unusually favorable for people already positioned to move, and they may not stay
+										that way. Global movement of AI talent <em>into</em> the U.S. has dropped <strong>89% since 2017</strong>
+										&mdash; meaning a thinner competitive pool &mdash; while capital keeps pouring in: the U.S. still leads
+										global AI investment by a wide margin and funded nearly <strong>2,000</strong> new AI companies in a single
+										year. A growing pile of money, a shrinking crowd competing for it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Tailwinds like this don't announce their expiration date. If you've been planning to make a move — a pivot,
+											a bet, a new skill you'd monetize — the cost of waiting is rising. Position now, while the money is
+											abundant and the field is comparatively thin.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">09</span> — Be the person who <em>ships</em> it, not the person who talks about it.</h3>
+									<p class="body-text">
+										This might be the most valuable line in the entire report. Adoption is at <strong>88%</strong>, but
+										<em>scaled, in-production</em> use of autonomous AI is in the <strong>single digits</strong> — in most
+										business functions, two-thirds or more of organizations report <em>zero</em>. There is a canyon between "we
+										bought AI" and "we actually run AI." That canyon is a job description waiting to be filled.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Talking intelligently about AI is now common and cheap. Turning a pilot into a working, reliable, deployed
+											system is rare and expensive — and it's what organizations are desperate for. Whatever your field, become
+											the person who bridges idea to thing that runs every day. Implementers beat commentators, every time.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">10</span> — Make your skills visible, because the credential is no longer the signal.</h3>
+									<p class="body-text">
+										Formal education is, in the report's own framing, badly behind: only about half of schools even have AI
+										policies, and just <strong>6%</strong> of teachers call the ones they have clear. No degree program is going
+										to certify what you can do here in time to matter. Meanwhile, publicly demonstrated AI skill is itself a
+										rising, tracked signal on résumés — and it splits into two tiers: basic literacy (prompting, everyday
+										copilots) and the higher-value tier (designing AI-driven workflows, AI strategy, running systems in
+										production).
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Don't wait for a certificate. Build things, in public, that prove the higher tier — the strategy and the
+											shipping, not just the prompting. A visible portfolio of "here's a real problem I solved with AI" is
+											currently a stronger signal than a credential, and you can start assembling it this month.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Added analysis ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Reading Between the Data</p>
+									<p class="section-subtitle">Five things the report implies but doesn't quite say out loud</p>
+								</div>
+
+								<p class="body-text">
+									The ten strategies above come straight from the numbers. What follows is my own read &mdash; the second-order
+									consequences those numbers set up, and the traps and openings that sit just underneath them. Treat this
+									section as the "so what if I actually believe all of it."
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">A.</span> The compression paradox — and how to survive it.</h3>
+									<p class="body-text">
+										Strategy #3 says compress the ladder into a sprint. Strategy #5 says protect the learning the ladder used to
+										provide. Put them together and you get the sharpest tension in the whole document: the reps that built senior
+										judgment are the exact reps AI just removed. If you skip the bottom rung <em>and</em> let AI do your
+										thinking, you don't arrive senior — you arrive hollow, with senior-looking output and no one home behind it.
+										The resolution isn't to slow down. It's to <em>manufacture the reps on purpose</em>. Write your own answer
+										before you ask the model. Predict what it will say, then diff your version against its. Argue with it. The
+										goal is to reach senior judgment early <strong>and</strong> real — you only get the compression if you keep
+										the friction.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">B.</span> Beware the sinking middle — the market is becoming a barbell.</h3>
+									<p class="body-text">
+										Read strategies #1 and #10 together and a shape appears: basic literacy is being commoditized at the bottom
+										while orchestration and shipping soar at the top. The dangerous place to stand is the middle — "competent AI
+										user," fluent enough to prompt, not distinct enough to direct. That middle feels safe because it's busy, but
+										it's the part of the curve compressing fastest, because it's the part easiest to specify. Pick an end of the
+										barbell and commit to it. Being merely competent with AI is on its way to meaning as little as being
+										competent with email.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The tell</p>
+										<p class="example-content">
+											If everything you do with AI could be written down as a clear instruction for someone else to follow, you're
+											standing in the middle. The top of the barbell is the part that can't — the judgment about what's worth
+											doing and whether the output is actually right.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">C.</span> As output gets cheap, accountability gets expensive.</h3>
+									<p class="body-text">
+										There's a scarcity flip hiding in the "88% adoption, single-digit deployment" gap. When AI makes competent
+										output nearly free and nearly infinite, the bottleneck stops being production and becomes <em>trust</em> —
+										someone who will stake their name on the result being right, safe, and worth acting on. That's why strategy #9
+										matters more than it first looks: shipping isn't just building the thing, it's being the human accountable
+										for it in production. The rarest, best-paid role in an AI-saturated org isn't the one who generates the most.
+										It's the one leadership trusts to decide what actually ships. Cultivate that trust deliberately; it's
+										becoming the real premium.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">D.</span> The hollowed-out pipeline is a time bomb — and an opening.</h3>
+									<p class="body-text">
+										Here's the second-order consequence almost no one is pricing in. If every company saws off its bottom rung at
+										once, then five to ten years from now there's a shortage of people who came up through it — a
+										<em>seniority drought</em> caused by never training the juniors who'd have become seniors. Organizations
+										that hollowed out their pipeline will wake up unable to refill the top. If you're early now, that's a double
+										opportunity: reach senior judgment fast via strategy #3, and become one of the few people who can
+										<em>rebuild the ladder</em> — designing how humans and AI train the next cohort. "Knows how to grow talent in
+										an AI-first org" will be a scarce and valuable line on a résumé precisely because so few companies are
+										practicing it today.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">E.</span> Your edge is a depreciating asset — treat it like one.</h3>
+									<p class="body-text">
+										Every advantage in this document has a half-life. The tailwind in #8 narrows. The uncrowded industry in #6
+										fills up. The dense market in #7 gets discovered. Being "the AI person" is a lead, not a moat — the frontier
+										keeps moving, and standing still on last year's fluency is how the lead evaporates. The only durable asset
+										here is the <em>meta-skill</em>: the habit of repositioning faster than the field catches up. Don't optimize
+										for being early once. Optimize for being able to be early again, and again, as the frontier moves under you.
+									</p>
+								</div>
+
+								<!-- ── Through-line ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Through-Line</p>
+									<p class="section-subtitle">Strategies 2, 3, 5, and 9 are one idea in four accents</p>
+								</div>
+
+								<p class="pull-quote">
+									Don't try to be an excellent junior doing junior work. AI does that now. Use AI to operate at a senior level of
+									judgment and delivery faster than anyone expects you to — and protect the learning that makes that judgment
+									real.
+								</p>
+
+								<p class="body-text">
+									The entry-level rung is being removed. That's not a reason to grip it harder. It's permission — and pressure —
+									to climb past it. The people getting hollowed out are the ones still defining their worth by tasks a machine can
+									now specify and execute. The people pulling ahead redefined their worth as judgment, strategy, and the ability
+									to make AI actually <em>work</em> in the real world.
+								</p>
+
+								<!-- ── Start this week ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Start This Week</p>
+									<p class="section-subtitle">Turning the philosophy into three concrete moves</p>
+								</div>
+
+								<p class="body-text">
+									Strategy is worthless undeployed — which is the whole point of #9. So here is the smallest version of this
+									document you can act on before the week is out. Pick one real problem in your world. Use AI to solve it at a
+									level above your title. Then make the result visible.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Do this</th>
+											<th>Because</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Ship one real thing AI helped you build, end to end</td>
+											<td>Implementers beat commentators (#9), and it becomes portfolio proof (#10)</td>
+										</tr>
+										<tr>
+											<td>Do the thinking first, then let AI do the typing</td>
+											<td>Keeps the learning intact while you compress the timeline (#3, #5)</td>
+										</tr>
+										<tr>
+											<td>Point it at your own industry's mess, not the crowded AI frontier</td>
+											<td>You become the frontier where there isn't one yet (#6, #7)</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										The tools are the great equalizer. The same technology thinning out entry-level jobs is the one that lets a
+										motivated beginner operate a full weight class up. Which of those two things it does to you is not decided by
+										the model. It's decided by whether you use it to skip the thinking or to skip the waiting.
+									</p>
+									<p class="body-text">
+										The bottom rung is gone. Don't mourn it, and don't grip what's left of it. Climb past it — and protect the
+										judgment that makes the climb real. Are you the hands, or the head?
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on positioning yourself for the AI economy?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 12px;
+										color: #9a9492;
+										margin: 28px 0 0;
+										font-style: italic;
+									"
+								>
+									Source: Stanford 2026 AI Index Report — Economy and Education chapters, plus the 10 career insights derived
+									from it. Figures are drawn directly from the report; the "Reading Between the Data" section is added analysis.
+								</p>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+
+		<!-- ── Export toolbar (screen only) ── -->
+		<div
+			class="screen-only md-toolbar"
+			style="
+				position: fixed;
+				top: 16px;
+				right: 16px;
+				display: flex;
+				gap: 8px;
+				z-index: 9999;
+				font-family: 'Source Sans 3', sans-serif;
+			"
+		>
+			<button type="button" id="md-copy" class="md-btn">Copy as Markdown</button>
+			<button type="button" id="md-download" class="md-btn">Download .md</button>
+		</div>
+		<style>
+			.md-btn {
+				font: 600 13px 'Source Sans 3', sans-serif;
+				color: #fff;
+				background: #7e22ce;
+				border: none;
+				border-radius: 6px;
+				padding: 8px 14px;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+			}
+			.md-btn:hover {
+				background: #6b1fae;
+			}
+			@media print {
+				.md-toolbar {
+					display: none !important;
+				}
+			}
+		</style>
+		<script>
+			(function () {
+				// ── Inline (text-level) → Markdown ──
+				function inline(node) {
+					let out = '';
+					node.childNodes.forEach(function (n) {
+						if (n.nodeType === 3) {
+							out += n.textContent.replace(/\s+/g, ' ');
+						} else if (n.nodeType === 1) {
+							var t = n.tagName.toLowerCase();
+							if (t === 'a') {
+								out += '[' + inline(n).trim() + '](' + n.getAttribute('href') + ')';
+							} else if (t === 'em' || t === 'i') {
+								out += '*' + inline(n).trim() + '*';
+							} else if (t === 'strong' || t === 'b') {
+								out += '**' + inline(n).trim() + '**';
+							} else if (t === 'br') {
+								out += '\n';
+							} else {
+								out += inline(n);
+							}
+						}
+					});
+					return out;
+				}
+
+				function tableMd(table) {
+					var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+					var lines = [];
+					var headerDone = false;
+					rows.forEach(function (tr) {
+						var cells = Array.prototype.slice.call(tr.children).map(function (c) {
+							return inline(c).trim().replace(/\|/g, '\\|') || ' ';
+						});
+						lines.push('| ' + cells.join(' | ') + ' |');
+						if (!headerDone) {
+							lines.push(
+								'| ' +
+									cells
+										.map(function () {
+											return '---';
+										})
+										.join(' | ') +
+									' |'
+							);
+							headerDone = true;
+						}
+					});
+					return lines.join('\n');
+				}
+
+				// ── Block-level walk → Markdown ──
+				function block(node, out) {
+					Array.prototype.slice.call(node.childNodes).forEach(function (el) {
+						if (el.nodeType !== 1) return;
+						var cls = el.classList;
+						var tag = el.tagName.toLowerCase();
+						if (cls.contains('running-ftr')) return;
+
+						if (cls.contains('stat-band')) {
+							Array.prototype.slice.call(el.querySelectorAll('.stat')).forEach(function (s) {
+								var num = s.querySelector('.stat-num');
+								var desc = s.querySelector('.stat-desc');
+								out.push('**' + (num ? inline(num).trim() : '') + '** — ' + (desc ? inline(desc).trim() : ''));
+							});
+							return;
+						}
+						if (cls.contains('section-hdr')) {
+							var label = el.querySelector('.section-label');
+							var sub = el.querySelector('.section-subtitle');
+							if (label) out.push('## ' + inline(label).trim());
+							if (sub) out.push('*' + inline(sub).trim() + '*');
+							return;
+						}
+						if (tag === 'h1') {
+							out.push('# ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('tip-title') || tag === 'h2' || tag === 'h3') {
+							out.push('### ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('pull-quote')) {
+							out.push('> ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('example-box')) {
+							var elabel = el.querySelector('.example-label');
+							var content = el.querySelector('.example-content');
+							var s = '';
+							if (elabel) s += '> **' + inline(elabel).trim() + '**\n>\n';
+							if (content) s += '> ' + inline(content).trim().replace(/\n/g, '\n> ');
+							out.push(s);
+							return;
+						}
+						if (cls.contains('res')) {
+							var name = el.querySelector('.res-name');
+							var desc = el.querySelector('.res-desc');
+							var r = '';
+							if (name) r += '**' + inline(name).trim() + '**  \n';
+							if (desc) r += inline(desc).trim();
+							out.push(r);
+							return;
+						}
+						if (tag === 'table') {
+							out.push(tableMd(el));
+							return;
+						}
+						if (tag === 'p') {
+							var txt = inline(el).trim();
+							if (!txt) return;
+							// Bold standalone sub-heads (font-weight:700 inline)
+							if (el.style && el.style.fontWeight === '700') out.push('#### ' + txt);
+							else out.push(txt);
+							return;
+						}
+						// Wrappers (tip, cta-box, dividers, etc.) → recurse
+						if (tag === 'div') {
+							block(el, out);
+							return;
+						}
+					});
+				}
+
+				function toMarkdown() {
+					var root = document.querySelector('.doc-frame tbody td');
+					if (!root) return '';
+					var out = [];
+					block(root, out);
+					return out
+						.filter(function (b) {
+							return b && b.trim();
+						})
+						.join('\n\n')
+						.replace(/\n{3,}/g, '\n\n')
+						.trim();
+				}
+
+				function flash(btn, msg) {
+					var orig = btn.textContent;
+					btn.textContent = msg;
+					setTimeout(function () {
+						btn.textContent = orig;
+					}, 1500);
+				}
+
+				document.getElementById('md-copy').addEventListener('click', function () {
+					var md = toMarkdown();
+					var btn = this;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(md).then(
+							function () {
+								flash(btn, 'Copied!');
+							},
+							function () {
+								flash(btn, 'Copy failed');
+							}
+						);
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = md;
+						document.body.appendChild(ta);
+						ta.select();
+						try {
+							document.execCommand('copy');
+							flash(btn, 'Copied!');
+						} catch (e) {
+							flash(btn, 'Copy failed');
+						}
+						document.body.removeChild(ta);
+					}
+				});
+
+				document.getElementById('md-download').addEventListener('click', function () {
+					var md = toMarkdown();
+					var blob = new Blob([md], { type: 'text/markdown' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'AIPositioningStrategy.md';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					flash(this, 'Downloaded!');
+				});
+			})();
+		</script>
+	</body>
+</html>

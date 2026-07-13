@@ -1,0 +1,1555 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Code block (Claude Code prompts) ── */
+					.code-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 14px 0 4px;
+					}
+					.code-box {
+						font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+						font-size: 12.5px;
+						line-height: 1.5;
+						color: #2d2a27;
+						background: #f7f3fb;
+						border: 1px solid #ecd9fb;
+						border-left: 3px solid #7e22ce;
+						border-radius: 0 4px 4px 0;
+						padding: 12px 16px;
+						margin: 0 0 18px;
+						overflow-x: auto;
+						white-space: pre;
+					}
+					.what-proves {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.55;
+						margin: 0 0 6px;
+						font-style: italic;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+					/* Data table variant (numeric, no forced first-col width) */
+					.data-table tr td:first-child {
+						width: auto;
+					}
+					.data-table td:not(:first-child),
+					.data-table th:not(:first-child) {
+						text-align: right;
+						white-space: nowrap;
+					}
+
+					/* ── Stat band ── */
+					.stat-band {
+						display: flex;
+						flex-wrap: wrap;
+						gap: 12px;
+						margin: 8px 0 24px;
+					}
+					.stat {
+						flex: 1 1 150px;
+						background: #faf5ff;
+						border-radius: 8px;
+						padding: 16px 18px;
+					}
+					.stat-num {
+						font-family: 'Lora', serif;
+						font-size: 30px;
+						font-weight: 700;
+						color: #7e22ce;
+						line-height: 1;
+						margin: 0 0 6px;
+					}
+					.stat-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 13px;
+						color: #5b5551;
+						line-height: 1.4;
+						margin: 0;
+					}
+
+					/* ── Resource entry ── */
+					.res {
+						margin-bottom: 18px;
+						padding-left: 16px;
+						border-left: 2px solid #ecd9fb;
+					}
+					.res-name {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 2px;
+					}
+					.res-name a {
+						color: #7e22ce;
+						text-decoration: none;
+					}
+					.res-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box,
+						.code-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Breaking Into AI-First Work Without Fighting the Crowd
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									A strategy guide to the two moves that actually widen your odds — by industry, and by geography.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown &middot; grounded entirely in the Stanford 2026 AI Index Report (Economy chapter)
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<!-- ── The problem ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Problem</p>
+									<p class="section-subtitle">Everyone is pushing on the same front door</p>
+								</div>
+
+								<p class="body-text">
+									If you want to work in AI, the instinct is to aim straight at the center of gravity: the frontier labs, the
+									marquee names, the postings in San Francisco and New York. That instinct is also what a few hundred thousand
+									other people are acting on at the same time. You end up as applicant number four thousand for a role that was
+									designed to attract exactly that crowd.
+								</p>
+								<p class="body-text">
+									There's a quieter, more winnable version of the same ambition. AI demand is no longer confined to the places
+									and companies you'd name first. It is <em>diffusing</em> — spreading outward into industries that historically
+									had almost no AI hiring, and concentrating, in density terms, in states and countries that aren't the headline
+									answers. The people who read that diffusion correctly get to compete in thinner pools for a growing pile of
+									demand.
+								</p>
+								<p class="body-text" style="margin-bottom: 24px">This guide lays out the two levers you can pull to do that.</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Lever</th>
+											<th>The move</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Industry</td>
+											<td>Become "the AI person" in a second-wave sector that isn't yet saturated with AI talent</td>
+										</tr>
+										<tr>
+											<td>Geography</td>
+											<td>Target where AI hiring is <em>dense</em> relative to the local market, not where it's simply <em>big</em></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text" style="margin-bottom: 28px">
+									They stack. Pull both and you compound the advantage. But first, the thesis they share.
+								</p>
+
+								<!-- ── Core thesis ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Core Thesis</p>
+									<p class="section-subtitle">Chase diffusion, not headlines</p>
+								</div>
+
+								<div class="stat-band">
+									<div class="stat">
+										<p class="stat-num">88%</p>
+										<p class="stat-desc">Organizational AI adoption in 2025 — nearly every company says it uses AI somewhere</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">Single digits</p>
+										<p class="stat-desc">Scaled use of AI agents across nearly every business function — the deployment gap</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">Declining</p>
+										<p class="stat-desc">Postings mentioning chatbots — while agent &amp; orchestration postings climb sharply</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									Two facts from the report frame everything that follows. First, <strong>organizational AI adoption reached
+									88% in 2025</strong> — nearly every company now says it uses AI in at least one function. Second, actual
+									<em>deployment</em> lags that number badly: <strong>scaled use of AI agents sits in the single digits across
+									nearly every business function</strong>, and in most functions two-thirds or more of organizations report no
+									agent use at all (Figure 4.3.7). Even the sectors furthest along — technology's own software engineering (24%
+									scaled agent use), IT (22%), and service operations (21%) — are the exception, not the rule (Figure 4.3.8).
+								</p>
+								<p class="body-text">
+									That gap between "we bought AI" and "we run AI in production" is the entire opportunity. Companies everywhere
+									have committed to AI on paper and staffed it thinly in practice. The demand isn't concentrated where the
+									technology was invented; it's concentrated where the technology is being <em>adopted faster than it's being
+									staffed</em>. Both levers in this guide are just two ways of locating that mismatch — one across industries,
+									one across places.
+								</p>
+								<p class="body-text">
+									A related shift tells you what kind of skill the mismatch rewards. The report finds that job postings mentioning
+									ChatGPT, chatbots, and "conversational AI" are <strong>declining</strong>, while postings referencing AI
+									agents, agentic systems, and orchestration frameworks like LangGraph are climbing sharply (Figure 4.4).
+									Demand is moving from <em>familiarity with chat tools</em> to the ability to <em>operationalize task-oriented
+									systems</em>. Wherever you land, the premium is on people who can implement and scale, not just discuss.
+								</p>
+
+								<p class="pull-quote">
+									The demand isn't concentrated where the technology was invented. It's concentrated where the technology is
+									being adopted faster than it's being staffed.
+								</p>
+
+								<!-- ── Lever 1 ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Lever 1 — Industry</p>
+									<p class="section-subtitle">Follow the second-wave sectors</p>
+								</div>
+
+								<p class="body-text">
+									The most crowded framing of "an AI job" is a role at a technology company. But the report's sector data shows
+									AI hiring spreading well past tech, and — critically — into industries that had almost no AI adoption a year
+									earlier. Here is the full picture of where AI skills show up in US job postings, by sector, with each sector's
+									share of its own postings and its one-year growth (Figure 4.4.9, 2024 vs. 2025):
+								</p>
+
+								<table class="compare data-table">
+									<thead>
+										<tr>
+											<th>Sector</th>
+											<th>AI share of 2025 postings</th>
+											<th>YoY growth</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>Information</td><td>13.22%</td><td>+69.12%</td></tr>
+										<tr><td>Professional, scientific &amp; technical services</td><td>6.49%</td><td>+47.10%</td></tr>
+										<tr><td>Finance &amp; insurance</td><td>5.33%</td><td>+62.94%</td></tr>
+										<tr><td>Manufacturing</td><td>4.66%</td><td>+39.27%</td></tr>
+										<tr><td>Management of companies &amp; enterprises</td><td>3.28%</td><td>+102.28%</td></tr>
+										<tr><td>Utilities</td><td>2.89%</td><td>+44.35%</td></tr>
+										<tr><td>Educational services</td><td>2.42%</td><td>+19.14%</td></tr>
+										<tr><td>Real estate &amp; rental &amp; leasing</td><td>2.08%</td><td>+93.48%</td></tr>
+										<tr><td>Wholesale trade</td><td>1.93%</td><td>+83.00%</td></tr>
+										<tr><td>Mining, quarrying, oil &amp; gas extraction</td><td>1.87%</td><td>+7.64%</td></tr>
+										<tr><td>Public administration</td><td>1.69%</td><td>+41.58%</td></tr>
+										<tr><td>Retail trade</td><td>1.67%</td><td>+60.25%</td></tr>
+										<tr><td>Agriculture, forestry, fishing &amp; hunting</td><td>1.32%</td><td>+33.04%</td></tr>
+										<tr><td>Transportation &amp; warehousing</td><td>1.26%</td><td>+55.40%</td></tr>
+										<tr><td>Waste management &amp; administrative support</td><td>0.46%</td><td>+30.80%</td></tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									The report is explicit about what this means: "In 2025, AI hiring also expanded in sectors with historically
+									low adoption rates. Transportation and warehousing, real estate, and education showed year-over-year increases,
+									evidence that the diffusion is reaching beyond traditional technology-driven industries" (Figure 4.4.9
+									discussion).
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									How to read this table strategically
+								</p>
+								<p class="body-text">
+									The naive read is "go where the share is highest" — Information at 13.22%. That's the <em>tech-adjacent</em>
+									answer, and it's where AI talent already clusters. The strategic reads are different:
+								</p>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Read the growth column, not just the share column</p>
+										<p class="example-content">
+											Management of companies (+102.28%), real estate (+93.48%), and wholesale trade (+83.00%) are growing faster
+											than Information (+69.12%) from far smaller bases. High growth off a low base is the signature of a sector
+											that is just now deciding it needs AI people — and hasn't yet hired the ones who understand it.
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text">
+									<strong>Weight the big, established industries that are quietly climbing.</strong> Finance &amp; insurance (5.33%)
+									and manufacturing (4.66%) aren't novelties — they're enormous employment bases with real budgets, now posting AI
+									shares that put them second only to tech-adjacent categories. Being the AI-literate person inside a large
+									manufacturer or insurer means competing against that firm's <em>existing</em> workforce for an internal-frontier
+									role, not against the global applicant flood chasing the labs.
+								</p>
+								<p class="body-text">
+									<strong>Treat the low-share, rising sectors as first-mover territory.</strong> Transportation &amp; warehousing
+									(1.26%, +55.40%), real estate (2.08%, +93.48%), and educational services (2.42%) have low absolute AI
+									penetration but clear upward motion. If you can be early here, you're defining the role rather than filling a
+									slot that fifty other qualified people also want.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Positioning: how to actually become "the AI person" in a second-wave sector
+								</p>
+								<p class="body-text">
+									The advantage only materializes if you're legible to hiring managers in that industry. Three moves:
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Pair domain fluency with implementation skill, not modeling theory.</h3>
+									<p class="body-text">
+										These sectors don't need someone who can train a model; they need someone who can take a bought-but-unused
+										tool and make it run against a real workflow — the exact gap the 88%-adoption-versus-single-digit-deployment
+										data describes. Learn the sector's vocabulary, its systems of record, and its compliance constraints, then
+										position yourself as the person who bridges those to a working AI process.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Build a visible artifact in the target sector's context.</h3>
+									<p class="body-text">
+										The report notes that formal education is lagging AI badly and that <em>advertising demonstrated AI skills</em>
+										is itself a rising, tracked signal on resumes (Figure 4.4). A public project — an agent that handles a
+										logistics reconciliation task, a retrieval system over insurance documents, a warehouse-routing prototype —
+										does more for a second-wave employer than a credential, because it proves you can do the thing they can't yet
+										staff.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Name the higher-value skill cluster, not the literacy one.</h3>
+									<p class="body-text">
+										The report separates fast-growing "literacy" skills (AI prompting, Copilot) from higher-value "engineering"
+										skills (AI agents, AI productivity, AI strategy, LLMOps). In a sector that's new to AI, claiming the
+										engineering cluster — and backing it with the artifact above — is what separates a strategic hire from a power
+										user.
+									</p>
+								</div>
+
+								<!-- ── Weekend builds ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Weekend Build Ideas</p>
+									<p class="section-subtitle">One shippable artifact per second-wave sector</p>
+								</div>
+
+								<p class="body-text">
+									The point of the "visible artifact" advice is to <em>show</em>, not claim. Each project below is scoped to a
+									single weekend, uses off-the-shelf pieces (an LLM API, a small retrieval library, public or synthetic data, a
+									spreadsheet or lightweight web front end), and deliberately avoids anything that needs a data pipeline, a
+									trained model, or production infrastructure. The goal isn't a polished product — it's a working demo plus a
+									short write-up that proves you can turn a bought-but-idle capability into a real workflow.
+								</p>
+								<p class="body-text">
+									<strong>Build these in Claude Code, not a chat window — and that distinction is the point.</strong> These are
+									not "ask an AI a question" exercises; they're <em>buildouts</em>. You want an agent working inside a real project
+									folder on your machine: creating files, generating synthetic data, writing and running the code, installing
+									dependencies, hitting an actual API, and leaving you a runnable repo with a README. A chat session can hand you
+									a snippet to copy-paste; Claude Code scaffolds the whole thing, runs it, sees the errors, and fixes them — which
+									is exactly the "operationalize it end-to-end" muscle the report says employers are paying for.
+								</p>
+								<p class="body-text" style="margin-bottom: 24px">
+									<em>How to use each prompt:</em> install Claude Code, make an empty folder for the project, open it, paste the
+									prompt, and drive from there. Each prompt is a starting instruction — expect to steer, correct, and extend as it
+									builds. Swap in your own API key when it asks.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title">Finance &amp; insurance — a claims / document triage assistant</h3>
+									<p class="body-text">
+										Take a folder of sample insurance claims or loan applications (synthetic, or public sample forms) and build a
+										retrieval-augmented assistant that reads each document, extracts the key fields, flags missing information, and
+										drafts a plain-language summary with a recommended next action. Add one guardrail: it must cite the source line
+										for every extracted value.
+									</p>
+									<p class="what-proves">
+										What it proves: you can put an LLM against messy, regulated documents and keep it auditable — the exact
+										concern that stops finance teams from deploying.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable Python project called claims-triage. First, generate a
+/data folder with 15 synthetic insurance claim documents as text files —
+vary the format and quality, and deliberately leave required fields missing
+in a few. Then build a CLI that, for each document, calls an LLM to extract
+key fields (claimant, date, policy number, claim amount, incident type),
+flags any missing required fields, and drafts a plain-language summary with a
+recommended next action. Hard requirement: every extracted value must include
+the exact source line it came from, so the output is auditable. Write results
+to /output as JSON + a readable report. Add a README explaining the workflow
+it replaces and the auditability guarantee. Set it up so I paste my API key
+into a .env file. Then run it on the sample data and show me the output.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Manufacturing — a maintenance-log root-cause helper</h3>
+									<p class="body-text">
+										Feed a synthetic set of equipment maintenance tickets and shift notes into a small system that clusters
+										recurring failure descriptions, summarizes likely root-cause themes, and drafts a standardized work order from
+										a free-text complaint. Bonus: a simple retrieval step over an equipment manual so the assistant can suggest the
+										relevant procedure.
+									</p>
+									<p class="what-proves">
+										What it proves: you can turn unstructured shop-floor text into structured, actionable output — the near-universal
+										starting point for industrial AI.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called maintenance-rootcause. Generate a /data
+folder of 30 synthetic equipment maintenance tickets and shift notes as
+free text — messy, with recurring failure patterns hidden across them, plus
+one short fake equipment manual as a text file. Build a tool that: (1) clusters
+the tickets by likely failure theme and summarizes each cluster's probable
+root cause, (2) takes a single free-text complaint and drafts a standardized
+work order from it, and (3) retrieves the relevant section of the equipment
+manual and cites it in the suggested procedure. Output a summary report to
+/output. Add a README describing the shop-floor workflow this automates. Use a
+.env file for my API key, then run it end-to-end and show me the clusters and
+a sample work order.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Real estate — a listing-and-comps drafting agent</h3>
+									<p class="body-text">
+										Build a tool that takes a property's raw details (or a public listing) plus a few recent comparable sales, then
+										generates a compliant listing description, a pricing-rationale paragraph, and a buyer-question FAQ. Add a step
+										that rewrites the description for three audiences (first-time buyer, investor, downsizer).
+									</p>
+									<p class="what-proves">
+										What it proves: you can automate the high-volume writing and summarization that eats an agent's week, with tone
+										control — an immediately legible win for a low-AI-penetration field.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called listing-drafter with a small local web UI.
+Generate /data with 8 synthetic property records (address, beds/baths,
+square footage, features, condition notes) and, for each, 3 recent comparable
+sales. Build a tool that takes one property plus its comps and generates: a
+compliant MLS-style listing description, a pricing-rationale paragraph that
+references the comps, and a buyer-question FAQ. Then add a feature that rewrites
+the description for three audiences — first-time buyer, investor, and downsizer.
+Put it behind a simple form (Flask or a single HTML page) so I can paste in a
+property and see the output. README should explain the agent workflow and the
+weekly task it replaces. Use a .env for my API key and run it locally.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Transportation &amp; warehousing — a delivery-exception reconciliation agent</h3>
+									<p class="body-text">
+										Simulate a small set of shipment records with mismatches (late deliveries, quantity discrepancies, missing
+										PODs). Build an agent that reads each exception, classifies the likely cause, drafts the customer-facing update,
+										and produces a prioritized action list for a dispatcher. Keep a running log so it's demonstrably repeatable.
+									</p>
+									<p class="what-proves">
+										What it proves: you can operationalize a repetitive coordination task end-to-end — the "agentic, not chat" skill
+										the report says demand is shifting toward.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called delivery-exceptions. Generate /data with 25
+synthetic shipment records containing mismatches — late deliveries, quantity
+discrepancies, missing proof-of-delivery. Build an agent loop that processes
+each exception: classify the likely cause, draft a customer-facing status
+update, and assign a priority. Aggregate everything into a dispatcher action
+list sorted by priority, written to /output. Keep an append-only run log so I
+can show the process is repeatable across runs. Make it a real agentic loop
+(process → decide → draft → log), not a single prompt. README should frame it
+as a coordination workflow. Use a .env for my API key, then run it and show me
+the dispatcher list and the log.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Educational services — an auto-grading and feedback drafter</h3>
+									<p class="body-text">
+										Take a set of sample short-answer responses against a rubric and build a tool that scores each one, drafts
+										specific, encouraging feedback, and flags borderline cases for human review. Add a summary view that surfaces
+										the class's most common misconceptions.
+									</p>
+									<p class="what-proves">
+										What it proves: you can save instructor time while keeping a human in the loop — the trust condition education
+										buyers insist on.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called rubric-grader. Generate /data with one
+short-answer question, a grading rubric, and 20 synthetic student responses
+of varying quality (include a few borderline and a few off-topic). Build a
+tool that scores each response against the rubric, drafts specific and
+encouraging feedback, and flags borderline cases for human review instead of
+committing a grade. Add a summary view that surfaces the class's most common
+misconceptions. Output a per-student report plus the class summary to /output.
+Hard requirement: nothing is auto-finalized — everything is a draft for a human
+to approve. README explains the human-in-the-loop design. Use a .env for my
+API key, then run it and show me the scores, a flagged case, and the summary.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Public administration — a constituent-request router and drafter</h3>
+									<p class="body-text">
+										Using public FAQ or policy documents from any agency's website, build a retrieval assistant that answers common
+										constituent questions with citations to the source policy, routes anything ambiguous to the right department,
+										and drafts a first-response email. Include a "no answer found — escalate" path so it never fabricates.
+									</p>
+									<p class="what-proves">
+										What it proves: you can deploy AI in a low-tolerance-for-error, high-accountability setting — precisely the
+										D.C. / public-sector density lane most technical applicants ignore.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called constituent-router. In /data, save 5-6 pages
+of plain-text policy/FAQ content (I'll paste real content from a public agency
+site, or generate realistic placeholder content to start). Build a retrieval
+assistant that answers common constituent questions using ONLY that content and
+cites the exact source passage for every answer. If it can't find a supported
+answer, it must return "no answer found — escalate to [department]" and never
+guess. Add routing logic that tags ambiguous requests to the right department
+and drafts a first-response email. Output a transcript log showing question,
+answer, and citation for each. README emphasizes the no-fabrication and
+escalation design. Use a .env for my API key, then run a batch of sample
+questions including one it should refuse to answer, and show me the results.</pre>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">Wholesale trade — a purchase-order and catalog normalizer</h3>
+									<p class="body-text">
+										Take a messy mix of supplier product descriptions (varying formats, units, abbreviations) and build a tool that
+										normalizes them to a clean schema, matches likely duplicates, and drafts a standardized catalog entry. Add a
+										confidence score and a review queue for low-confidence matches.
+									</p>
+									<p class="what-proves">
+										What it proves: you can tame the data-cleanup problem that blocks almost every downstream analytics or automation
+										effort in distribution-heavy businesses.
+									</p>
+									<p class="code-label">Drop this into Claude Code</p>
+									<pre class="code-box">Build me a runnable project called catalog-normalizer. Generate /data with a
+messy CSV of 40 supplier product descriptions — inconsistent formats, mixed
+units, abbreviations, and some near-duplicate entries. Build a tool that
+normalizes each row to a clean target schema (name, category, unit, size,
+brand), detects likely duplicates, and drafts a standardized catalog entry for
+each. Attach a confidence score to every normalized row and route anything
+below a threshold into a separate review-queue CSV instead of auto-committing.
+Output the clean catalog and the review queue to /output. README explains how
+this unblocks downstream analytics. Use a .env for my API key, then run it on
+the messy CSV and show me the clean output plus the review queue.</pre>
+								</div>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">The repeatable pattern</p>
+										<p class="example-content">
+											Ingest the sector's messy text → extract or classify → draft the human-facing output → keep it auditable with
+											a review or escalation path. Learn that pattern once and you can retarget it to any of these industries in a
+											weekend. Package each as a short repo plus a one-paragraph "here's the workflow it replaces and why it's safe"
+											write-up — that framing is what turns a demo into a hiring signal.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Interrogate ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">After the Build</p>
+									<p class="section-subtitle">Use Claude Code to interrogate what you made</p>
+								</div>
+
+								<p class="body-text">
+									Here's the move most people skip, and it's where the real learning lives. A weekend demo runs on your laptop, on
+									synthetic data, when you type a command. A <em>production system</em> runs on its own, on real data, for other
+									people, without you babysitting it. The gap between those two is exactly the "we bought AI but haven't deployed
+									it" canyon the report describes — and understanding that gap is a hiring signal in itself.
+								</p>
+								<p class="body-text">
+									The advantage of having built in Claude Code is that the agent can <em>see your actual repo</em>. So instead of
+									asking generic questions about deployment, you can ask it to explain what <em>your specific project</em> would
+									need. Paste these prompts into the same session after your build runs. You're not asking it to build production —
+									you're asking it to <em>teach you the map</em> using your own code as the textbook.
+								</p>
+
+								<p class="code-label">Understand what you actually built</p>
+								<pre class="code-box">Walk me through the architecture of this project as if you're onboarding me.
+What are the moving parts, how does data flow through it, where does the LLM
+get called, and what are the current assumptions that would break if a real
+user ran this instead of me on sample data? Draw it as a simple diagram in text.</pre>
+
+								<p class="code-label">What would it take to deploy and host it</p>
+								<pre class="code-box">Right now this runs on my laptop when I type a command. Explain, in plain
+terms, what it would take to host this so it runs somewhere other than my
+machine. What are my realistic options (from simplest to most robust), what
+would each cost roughly, and what would I have to change in THIS codebase to
+make it deployable? Don't build it yet — just teach me the tradeoffs.</pre>
+
+								<p class="code-label">How to make it run automatically on a schedule</p>
+								<pre class="code-box">I want this to run on its own — say, every morning, or whenever a new file
+shows up — instead of me running it by hand. Explain the ways I could schedule
+or trigger this (cron, a scheduled cloud job, an event trigger), which fits
+this project best, and what code or config I'd need to add. Show me the
+smallest possible version I could set up first.</pre>
+
+								<p class="code-label">How to feed it real data instead of my synthetic sample</p>
+								<pre class="code-box">This currently reads from a /data folder I generated. In the real world the
+data would live somewhere else — a database, a shared Google Drive or Dropbox
+folder, an email inbox, or an uploaded file. Pick two realistic sources for
+THIS use case and explain what it would take to connect them, what a database
+would add versus flat files, and where I'd have to change my code to swap the
+input source cleanly.</pre>
+
+								<p class="code-label">How to make it reliable enough to trust</p>
+								<pre class="code-box">If a real team depended on this, what would break and how would I know? Explain
+what I'd need to add for reliability — error handling, retries when the API
+fails, logging, and some way to monitor that it's actually working. Point to
+the specific places in my current code that are fragile and would need this.</pre>
+
+								<p class="code-label">How to secure it and handle sensitive data</p>
+								<pre class="code-box">This project touches data that could be sensitive in the real version. Explain
+what I'd need to think about for security: where secrets like API keys should
+live, how I'd add access control if other people used it, and what handling
+personal or regulated data would require. What in my current setup is fine for
+a demo but unacceptable in production?</pre>
+
+								<p class="code-label">How to put a usable interface on it</p>
+								<pre class="code-box">Right now only someone comfortable in a terminal can run this. Explain my
+options for giving a non-technical colleague a way to use it — a simple web
+form, an internal tool, a scheduled report that lands in their inbox. Which is
+the least effort for the most value here, and what would I add to my project
+to get there?</pre>
+
+								<p class="body-text">
+									You don't have to act on the answers. The point is to walk away able to <em>talk</em> about productionizing what
+									you built — which, in an interview for a second-wave-industry AI role, is often the difference between "I made a
+									toy" and "I understand what it takes to run this for real."
+								</p>
+
+								<!-- ── Productionizing map ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The General Map</p>
+									<p class="section-subtitle">What "productionizing" actually involves — six moves</p>
+								</div>
+
+								<p class="body-text">
+									You don't need to be an infrastructure engineer to be credible here. You need a working mental model of the
+									handful of things that change when something goes from <em>a script you run</em> to <em>a system a team relies
+									on</em>. In broad strokes, that's six moves.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — From your laptop to somewhere it can live (hosting).</h3>
+									<p class="body-text">
+										A weekend build runs where you built it. Production needs a home that's always on — a small cloud server, a
+										serverless function, or a managed platform. The trade is effort versus control: a managed platform gets you
+										running in an afternoon but hides the plumbing; a raw server gives you full control and more to maintain. For
+										most of these tools, the simplest hosted option is more than enough to start.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — From "I run it" to "it runs itself" (scheduling and triggers).</h3>
+									<p class="body-text">
+										Most of these workflows are valuable precisely because they're repetitive, which means nobody should have to
+										launch them by hand. Production replaces the manual command with a trigger: a scheduled job (the classic "cron
+										job" that fires every night at 2 a.m.), or an event ("when a new claim lands in this folder, process it"). This
+										one shift — from on-demand to automatic — is often what turns a demo into something a team actually adopts.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — From a sample folder to real, changing data (storage and inputs).</h3>
+									<p class="body-text">
+										Your build reads synthetic files you generated. The real version pulls from where the business already keeps
+										its information: a database, a shared Google Drive or SharePoint folder, an inbox, a form, or an existing system
+										of record. Two things usually have to appear here — a real <em>input connection</em> that fetches the live
+										data, and often a <em>database</em> to store results, track what's already been processed, and let you query
+										history. You don't need anything exotic; you need the tool to stop assuming the data is sitting in a folder you
+										made.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — From "it worked once" to "it keeps working" (reliability).</h3>
+									<p class="body-text">
+										Real systems fail in boring ways: the API times out, a document is malformed, the network hiccups. Production
+										adds the unglamorous scaffolding that handles this — retries when a call fails, sensible error handling so one
+										bad record doesn't crash the whole run, logging so there's a record of what happened, and basic monitoring so
+										someone gets alerted when it breaks instead of discovering it three days later. This is a large part of what
+										"operationalizing" really means.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — From open on your machine to safe for a team (security and secrets).</h3>
+									<p class="body-text">
+										The moment real data and other people are involved, a few things become non-negotiable: API keys and passwords
+										live in a secrets manager, not in the code; access is controlled so only the right people can use it; and any
+										personal, financial, or regulated data is handled according to the rules that govern that sector. The
+										auditability and human-in-the-loop guardrails you built into the weekend versions are the foundation here —
+										production just formalizes them.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">06</span> — From terminal-only to something people can use (interface and cost).</h3>
+									<p class="body-text">
+										A tool only a developer can run has a ceiling. Production usually adds a way in for everyone else — a simple web
+										form, an internal dashboard, or a scheduled report that just shows up in someone's inbox. And once it runs on
+										real volume, someone has to watch the bill: LLM calls cost money per use, so production systems batch work,
+										cache repeated results, and pick right-sized models to keep costs sane.
+									</p>
+								</div>
+
+								<p class="body-text">
+									None of this has to happen at once. The honest path is incremental: get it hosted, then get it scheduled, then
+									connect one real data source, then add reliability, and so on. Being able to <em>sequence</em> that journey — to
+									say "here's where I'd start and here's what I'd add next" — is exactly the judgment that separates someone who
+									can implement AI from someone who can only prototype it. That judgment, not a finished production system, is what
+									these exercises are really building.
+								</p>
+
+								<!-- ── Lever 2 ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Lever 2 — Geography</p>
+									<p class="section-subtitle">Play the density game, not the volume game</p>
+								</div>
+
+								<p class="body-text">
+									The second lever is where you look for the role. The default is to chase the biggest markets. The report shows
+									why that default is the crowded trade — and where the thinner pools are.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									The obvious answer: raw volume is concentrated in three states
+								</p>
+								<p class="body-text">
+									Within the US, AI labor demand clusters heavily. California leads with <strong>170,881 postings — 17.2% of the
+									2025 national total.</strong> Texas follows with <strong>80,547 (8.1%)</strong> and New York with
+									<strong>66,029 (6.6%)</strong>. Together, those three states hold roughly a third of all AI job postings in the
+									country (Figures 4.4.10–4.4.11). That's the volume answer, and it's exactly where competition is fiercest. Worth
+									noting: even California's dominance is <em>thinning</em> — its share of the national total has fallen from over
+									25% in 2012 to around 17% in 2025 (Figure 4.4.12). The center is slowly redistributing outward, which is the
+									macro version of the entire diffusion thesis.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									The non-obvious answer: density relative to the local market
+								</p>
+								<p class="body-text">
+									Volume tells you where the most postings are. <em>Density</em> tells you where AI makes up the largest slice of
+									what's being hired locally — which is a much better proxy for "how much competition per role." On that measure,
+									the report highlights a different set of leaders:
+								</p>
+								<p class="pull-quote">
+									"Looking at the density of AI labor demand within each state... despite having smaller total numbers, Washington,
+									D.C., accounts for a comparatively high 6.2% share of those postings, followed by Delaware at 4.4%." (Figure
+									4.4.13)
+								</p>
+								<p class="body-text">
+									<strong>Washington, D.C. (6.2%)</strong> and <strong>Delaware (4.4%)</strong> aren't the states you'd name in a
+									word-association test about AI. But a high density of AI postings against a <em>smaller</em> total job market is
+									precisely the condition you want: meaningful demand, without the applicant tsunami that follows a California
+									posting. D.C.'s profile in particular reflects heavy public-sector and policy-adjacent AI demand — a lane most
+									technically-minded applicants overlook entirely. The report also notes that from 2024 to 2025, California,
+									Washington state, New York, and Texas all continued to see growth in AI postings (Figure 4.4.14) — so the big
+									states aren't shrinking in absolute terms; they're just no longer the only game, and they carry the heaviest
+									competition.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Go global: the density logic is even sharper across countries
+								</p>
+								<p class="body-text">
+									Zoom out and the same principle produces a striking result. Measured as AI's share of <em>all</em> job postings —
+									the cleanest available proxy for how AI-intensive a labor market is — the 2025 leaders are (Figures 4.4.1–4.4.2):
+								</p>
+
+								<table class="compare data-table">
+									<thead>
+										<tr>
+											<th>Market</th>
+											<th>AI share of all job postings, 2025</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td>Singapore</td><td>4.69%</td></tr>
+										<tr><td>Hong Kong</td><td>3.5%</td></tr>
+										<tr><td>Luxembourg</td><td>3.4%</td></tr>
+										<tr><td>Spain</td><td>3.3%</td></tr>
+										<tr><td>United States</td><td>2.6%</td></tr>
+										<tr><td>Chile</td><td>2.4%</td></tr>
+										<tr><td>United Kingdom</td><td>1.9%</td></tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									<strong>Singapore leads the world at 4.69%</strong> — nearly double the intensity of the entire United States
+									(2.6%). The country most saturated with AI <em>opportunity per job</em> is not the one with the most jobs. If you
+									have any optionality about where you work — or can work remotely for an employer based there — this table is a
+									strategic input, not a footnote.
+								</p>
+
+								<p
+									class="body-text"
+									style="font-family: 'Source Sans 3', sans-serif; font-weight: 700; color: #2d2a27; margin: 20px 0 10px"
+								>
+									Turning density into a job-search tactic
+								</p>
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Three deliberate moves</p>
+										<p class="example-content">
+											Treat "where I'm willing to work" as a lever you're actively setting, not a default you inherited — the calculus
+											of competition per role changes materially between a California posting and a D.C., Delaware, or Singapore one.
+
+											Use remote and relocation openness to arbitrage the gap — you don't have to live in D.C. to apply into its
+											density, or move to Singapore to benefit from its intensity.
+
+											Combine density with the second-wave sectors — a high-density market that's also home to an under-staffed
+											second-wave industry is the strongest single target.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Why now ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Why Now</p>
+									<p class="section-subtitle">Two tailwinds behind both levers</p>
+								</div>
+
+								<p class="body-text">
+									Timing matters, and two data points suggest the window for this strategy is unusually favorable right now.
+								</p>
+								<div class="tip">
+									<h3 class="tip-title">The inbound talent competition is thinning.</h3>
+									<p class="body-text">
+										The number of AI researchers and developers moving <em>to</em> the United States has
+										<strong>dropped 89% since 2017</strong>, with 80% of that decline occurring in the last year alone (Economy
+										chapter, talent-flows section). For a domestic early-career professional, that means competing against a
+										<em>shrinking</em> inflow of global talent — the external applicant pool feeding US roles is smaller than it
+										has been in years.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title">The money hasn't left; the deployment gap hasn't closed.</h3>
+									<p class="body-text">
+										The same report shows US AI investment still dwarfing rivals and thousands of new AI companies being funded,
+										even as adoption (88%) massively outruns real deployment (single-digit scaled agent use). Enormous capital, a
+										widening implementation gap, and a thinner competitor pool is about as favorable a setup as an entrant gets.
+										The caveat is that talent-flow and policy conditions shift — so the argument is to use the tailwind now rather
+										than assume it persists.
+									</p>
+								</div>
+
+								<!-- ── Matrix ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Targeting Matrix</p>
+									<p class="section-subtitle">Putting both levers together</p>
+								</div>
+
+								<p class="body-text">
+									The two moves aren't alternatives; they're axes. Score any opportunity on both:
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th></th>
+											<th>High-density / thinner geography <br />(D.C., Delaware, Singapore, remote-for-intense-market)</th>
+											<th>High-volume / crowded geography <br />(CA, NY, TX metros)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Second-wave industry <br />(manufacturing, finance, real estate, transport, education, public admin)</td>
+											<td><strong>Best target.</strong> Both levers working for you: scarce talent, rising demand, less competition.</td>
+											<td><strong>Strong.</strong> Sector scarcity offsets geographic crowding.</td>
+										</tr>
+										<tr>
+											<td>Tech / Information sector</td>
+											<td><strong>Good.</strong> Density offsets the crowd of AI-native applicants.</td>
+											<td><strong>Hardest.</strong> The default everyone else is also chasing — the applicant-#4,000 zone.</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									The bottom-right cell — a frontier-lab-style role in a top-volume metro — is the one to <em>avoid</em> as a
+									default, not because those jobs are bad, but because that's where your odds are worst. Every step you take toward
+									the top-left cell improves the ratio of demand to competition working in your favor.
+								</p>
+
+								<!-- ── Checklist ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Action Checklist</p>
+									<p class="section-subtitle">Concrete steps to operationalize both levers</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">1.</span> Pick one second-wave sector you have a genuine angle on.</h3>
+									<p class="body-text">
+										Prior experience, network, or authentic interest in finance, insurance, manufacturing, real estate, logistics,
+										education, or public administration beats a cold entry into tech. Weight sectors with high <em>growth</em> off a
+										modest base — that's where talent is scarcest.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">2.</span> Learn the engineering cluster, not the literacy cluster.</h3>
+									<p class="body-text">
+										Prioritize AI agents, orchestration, and LLMOps — the skills the report shows demand shifting <em>toward</em> —
+										over chat-tool familiarity, which it shows demand shifting <em>away</em> from.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">3.</span> Ship one visible artifact set in your target sector's context.</h3>
+									<p class="body-text">
+										Solve a real workflow problem for that industry and make it public. This substitutes for the credential the
+										education system is failing to provide.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">4.</span> Redraw your geographic map around density.</h3>
+									<p class="body-text">
+										Add D.C., Delaware, and other high-density-but-lower-volume US markets to your search. If you have any
+										international optionality, weigh Singapore and the other high-intensity markets.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">5.</span> Set remote / relocation openness as a deliberate lever.</h3>
+									<p class="body-text">
+										Decide how wide your geographic aperture is on purpose — it directly determines how many thinner pools you can
+										compete in.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">6.</span> Aim for the top-left of the matrix.</h3>
+									<p class="body-text">
+										A second-wave industry inside a high-density market is your single best target. Treat a headline-lab role in a
+										top-volume metro as the fallback, not the goal.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">7.</span> Move while the tailwinds hold.</h3>
+									<p class="body-text">
+										Thinning inbound talent competition and an unclosed deployment gap won't stay this favorable indefinitely. The
+										strategy rewards acting now.
+									</p>
+								</div>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The One-Line Version</h3>
+									<p class="body-text">
+										Everyone is pushing on the front door — the famous companies, in the biggest cities, doing the most visible AI
+										work. The report's data says the openings are around the side: in industries that just started adopting AI and
+										haven't staffed it, and in places where AI demand is dense but the applicant crowd isn't. Position yourself at
+										that frontier — by sector, by geography, or ideally both — and you compete for growing demand in a thinner pool
+										instead of fighting the crowd for the same scarce seats.
+									</p>
+								</div>
+
+								<!-- ── Soft pitch ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">One More Thing</p>
+									<p class="section-subtitle">If you want a second set of eyes</p>
+								</div>
+
+								<p class="body-text">
+									I put this guide together because the strategy inside it is real, but I also know that reading a framework and
+									applying it to your own career are two very different things. A matrix is easy to nod along to. Figuring out
+									which second-wave industry actually fits your background, which of your existing skills transfer, and what's
+									genuinely worth learning next — that part is personal, and it's a lot harder to do alone.
+								</p>
+								<p class="body-text">
+									So I'm starting to do a small number of informal career audits for people working through exactly this. The idea
+									is simple: I take a look at your résumé and where you are right now, and I give you honest, specific thoughts —
+									which directions might fit you best, where your experience already gives you an edge, a few skills or projects
+									worth prioritizing, and resources that'll actually move the needle. No script, no generic advice, just a real
+									read on your situation and where the openings are for you.
+								</p>
+								<p class="body-text">
+									This is early and pretty informal right now. I'm mostly trying to help a handful of people and learn what's most
+									useful in the process. If that sounds like something you'd want, just send me an email with a little about where
+									you're at and what you're trying to figure out, and we'll take it from there. No pressure either way — the whole
+									guide above is yours to run with regardless.
+								</p>
+
+								<div
+									class="cta-box"
+									style="
+										background: #faf5ff;
+										padding: 24px 28px;
+										border-radius: 8px;
+										border-left: 4px solid #7e22ce;
+										margin: 20px 0 24px;
+									"
+								>
+									<p style="font-family: 'Lora', serif; font-size: 17px; font-weight: 700; color: #2d2a27; margin: 0 0 6px">
+										📩 Interested?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.6; margin: 0">
+										Email me at
+										<a href="mailto:davebrown.dev@gmail.com?subject=Career%20Audit" style="color: #7e22ce; font-weight: 700; text-decoration: none">davebrown.dev@gmail.com</a>
+										with the subject line <strong>"Career Audit"</strong> and a couple sentences about your background and what
+										you're hoping to move toward.
+									</p>
+								</div>
+
+								<p class="body-text" style="margin-bottom: 8px">
+									If nothing else, I'd genuinely love to hear which part of this was most useful to you. Good luck out there — the
+									frontier is wide open right now, and earlier than most people realize.
+								</p>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center; margin-top: 28px">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on positioning yourself for the AI economy?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 12px;
+										color: #9a9492;
+										margin: 28px 0 0;
+										font-style: italic;
+									"
+								>
+									Source: Stanford 2026 AI Index Report — Economy chapter (Section 4.4, "Jobs," and Section 4.3 on agent
+									deployment). Sector shares and growth (Fig 4.4.9); US state volume and concentration (Figs 4.4.10–4.4.12); US
+									state density (Figs 4.4.13–4.4.14); global AI job intensity (Figs 4.4.1–4.4.2); skill-cluster shift (Fig 4.4);
+									adoption vs. scaled agent use (Figs 4.3.7–4.3.8); US AI talent inflow down 89% since 2017 (talent-flows
+									section).
+								</p>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+
+		<!-- ── Export toolbar (screen only) ── -->
+		<div
+			class="screen-only md-toolbar"
+			style="
+				position: fixed;
+				top: 16px;
+				right: 16px;
+				display: flex;
+				gap: 8px;
+				z-index: 9999;
+				font-family: 'Source Sans 3', sans-serif;
+			"
+		>
+			<button type="button" id="md-copy" class="md-btn">Copy as Markdown</button>
+			<button type="button" id="md-download" class="md-btn">Download .md</button>
+		</div>
+		<style>
+			.md-btn {
+				font: 600 13px 'Source Sans 3', sans-serif;
+				color: #fff;
+				background: #7e22ce;
+				border: none;
+				border-radius: 6px;
+				padding: 8px 14px;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+			}
+			.md-btn:hover {
+				background: #6b1fae;
+			}
+			@media print {
+				.md-toolbar {
+					display: none !important;
+				}
+			}
+		</style>
+		<script>
+			(function () {
+				// ── Inline (text-level) → Markdown ──
+				function inline(node) {
+					let out = '';
+					node.childNodes.forEach(function (n) {
+						if (n.nodeType === 3) {
+							out += n.textContent.replace(/\s+/g, ' ');
+						} else if (n.nodeType === 1) {
+							var t = n.tagName.toLowerCase();
+							if (t === 'a') {
+								out += '[' + inline(n).trim() + '](' + n.getAttribute('href') + ')';
+							} else if (t === 'em' || t === 'i') {
+								out += '*' + inline(n).trim() + '*';
+							} else if (t === 'strong' || t === 'b') {
+								out += '**' + inline(n).trim() + '**';
+							} else if (t === 'br') {
+								out += '\n';
+							} else {
+								out += inline(n);
+							}
+						}
+					});
+					return out;
+				}
+
+				function tableMd(table) {
+					var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+					var lines = [];
+					var headerDone = false;
+					rows.forEach(function (tr) {
+						var cells = Array.prototype.slice.call(tr.children).map(function (c) {
+							return inline(c).trim().replace(/\|/g, '\\|').replace(/\n/g, ' ') || ' ';
+						});
+						lines.push('| ' + cells.join(' | ') + ' |');
+						if (!headerDone) {
+							lines.push(
+								'| ' +
+									cells
+										.map(function () {
+											return '---';
+										})
+										.join(' | ') +
+									' |'
+							);
+							headerDone = true;
+						}
+					});
+					return lines.join('\n');
+				}
+
+				// ── Block-level walk → Markdown ──
+				function block(node, out) {
+					Array.prototype.slice.call(node.childNodes).forEach(function (el) {
+						if (el.nodeType !== 1) return;
+						var cls = el.classList;
+						var tag = el.tagName.toLowerCase();
+						if (cls.contains('running-ftr')) return;
+
+						if (cls.contains('stat-band')) {
+							Array.prototype.slice.call(el.querySelectorAll('.stat')).forEach(function (s) {
+								var num = s.querySelector('.stat-num');
+								var desc = s.querySelector('.stat-desc');
+								out.push('**' + (num ? inline(num).trim() : '') + '** — ' + (desc ? inline(desc).trim() : ''));
+							});
+							return;
+						}
+						if (cls.contains('section-hdr')) {
+							var label = el.querySelector('.section-label');
+							var sub = el.querySelector('.section-subtitle');
+							if (label) out.push('## ' + inline(label).trim());
+							if (sub) out.push('*' + inline(sub).trim() + '*');
+							return;
+						}
+						if (tag === 'h1') {
+							out.push('# ' + inline(el).trim());
+							return;
+						}
+						if (tag === 'pre') {
+							out.push('```\n' + el.textContent.replace(/\s+$/, '') + '\n```');
+							return;
+						}
+						if (cls.contains('code-label')) {
+							out.push('**' + inline(el).trim() + '**');
+							return;
+						}
+						if (cls.contains('tip-title') || tag === 'h2' || tag === 'h3') {
+							out.push('### ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('pull-quote')) {
+							out.push('> ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('example-box')) {
+							var elabel = el.querySelector('.example-label');
+							var content = el.querySelector('.example-content');
+							var s = '';
+							if (elabel) s += '> **' + inline(elabel).trim() + '**\n>\n';
+							if (content) s += '> ' + inline(content).trim().replace(/\n/g, '\n> ');
+							out.push(s);
+							return;
+						}
+						if (cls.contains('res')) {
+							var name = el.querySelector('.res-name');
+							var desc = el.querySelector('.res-desc');
+							var r = '';
+							if (name) r += '**' + inline(name).trim() + '**  \n';
+							if (desc) r += inline(desc).trim();
+							out.push(r);
+							return;
+						}
+						if (tag === 'table') {
+							out.push(tableMd(el));
+							return;
+						}
+						if (tag === 'p') {
+							var txt = inline(el).trim();
+							if (!txt) return;
+							// Bold standalone sub-heads (font-weight:700 inline)
+							if (el.style && el.style.fontWeight === '700') out.push('#### ' + txt);
+							else out.push(txt);
+							return;
+						}
+						// Wrappers (tip, cta-box, dividers, etc.) → recurse
+						if (tag === 'div') {
+							block(el, out);
+							return;
+						}
+					});
+				}
+
+				function toMarkdown() {
+					var root = document.querySelector('.doc-frame tbody td');
+					if (!root) return '';
+					var out = [];
+					block(root, out);
+					return out
+						.filter(function (b) {
+							return b && b.trim();
+						})
+						.join('\n\n')
+						.replace(/\n{3,}/g, '\n\n')
+						.trim();
+				}
+
+				function flash(btn, msg) {
+					var orig = btn.textContent;
+					btn.textContent = msg;
+					setTimeout(function () {
+						btn.textContent = orig;
+					}, 1500);
+				}
+
+				document.getElementById('md-copy').addEventListener('click', function () {
+					var md = toMarkdown();
+					var btn = this;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(md).then(
+							function () {
+								flash(btn, 'Copied!');
+							},
+							function () {
+								flash(btn, 'Copy failed');
+							}
+						);
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = md;
+						document.body.appendChild(ta);
+						ta.select();
+						try {
+							document.execCommand('copy');
+							flash(btn, 'Copied!');
+						} catch (e) {
+							flash(btn, 'Copy failed');
+						}
+						document.body.removeChild(ta);
+					}
+				});
+
+				document.getElementById('md-download').addEventListener('click', function () {
+					var md = toMarkdown();
+					var blob = new Blob([md], { type: 'text/markdown' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'AICareerTwoPathways.md';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					flash(this, 'Downloaded!');
+				});
+			})();
+		</script>
+	</body>
+</html>
