@@ -1,0 +1,1104 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+
+					/* ── Stat band ── */
+					.stat-band {
+						display: flex;
+						flex-wrap: wrap;
+						gap: 12px;
+						margin: 8px 0 24px;
+					}
+					.stat {
+						flex: 1 1 150px;
+						background: #faf5ff;
+						border-radius: 8px;
+						padding: 16px 18px;
+					}
+					.stat-num {
+						font-family: 'Lora', serif;
+						font-size: 30px;
+						font-weight: 700;
+						color: #7e22ce;
+						line-height: 1;
+						margin: 0 0 6px;
+					}
+					.stat-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 13px;
+						color: #5b5551;
+						line-height: 1.4;
+						margin: 0;
+					}
+
+					/* ── Resource entry ── */
+					.res {
+						margin-bottom: 18px;
+						padding-left: 16px;
+						border-left: 2px solid #ecd9fb;
+					}
+					.res-name {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 2px;
+					}
+					.res-name a {
+						color: #7e22ce;
+						text-decoration: none;
+					}
+					.res-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.5;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Three Seats on the Same Plane
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 18px;
+										font-weight: 600;
+										color: #7e22ce;
+										margin: 14px 0 6px;
+										letter-spacing: 0.01em;
+									"
+								>
+									Making sense of ChatGPT's new Sol, Terra, and Luna &mdash; without reading a single benchmark chart.
+								</p>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by d.avebrown &middot; current as of July 2026
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<p class="body-text">
+									OpenAI just did something quietly clever, and most of the coverage buried it under benchmark charts and
+									token-pricing tables. So let's skip the engineering talk and get to what actually matters if you run a business,
+									make content, or lead a marketing team.
+								</p>
+								<p class="body-text" style="margin-bottom: 24px">Here's the whole thing in one image.</p>
+
+								<div class="stat-band">
+									<div class="stat">
+										<p class="stat-num">$5 / $30</p>
+										<p class="stat-desc">Sol &mdash; per million tokens in / out. First class.</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">$2.50 / $15</p>
+										<p class="stat-desc">Terra &mdash; exactly half of Sol. Premium economy.</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">$1 / $6</p>
+										<p class="stat-desc">Luna &mdash; a fifth of Sol. Economy.</p>
+									</div>
+								</div>
+
+								<!-- ── The metaphor ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Metaphor</p>
+									<p class="section-subtitle">One airline, one route, three cabins</p>
+								</div>
+
+								<p class="body-text">
+									GPT-5.6 isn't a single new model. It's one airline flying one route with three cabins. Same plane, same
+									destination, same pilots &mdash; what changes is how much you pay and how much room you get to stretch out.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Cabin</th>
+											<th>What it is</th>
+											<th>The fare</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Sol &mdash; first class</td>
+											<td>
+												Top of the line, roomy, priced like it. Worth every penny when the trip really matters &mdash; and a
+												waste of money when you're hopping one town over.
+											</td>
+											<td>$5 in / $30 out</td>
+										</tr>
+										<tr>
+											<td>Terra &mdash; premium economy</td>
+											<td>
+												Nearly all the comfort of first class for exactly half the fare. The seat most frequent flyers should
+												just book by default.
+											</td>
+											<td>$2.50 in / $15 out</td>
+										</tr>
+										<tr>
+											<td>Luna &mdash; economy</td>
+											<td>
+												Fast, cheap, gets you there. Perfect for short, simple trips where paying up front for first class
+												would be a little silly.
+											</td>
+											<td>$1 in / $6 out</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p class="body-text">
+									The entire point of the new lineup is this: <strong>stop flying first class for every trip.</strong> Match the
+									seat to the journey.
+								</p>
+								<p class="body-text">
+									One more piece that makes the naming click. The "5.6" is basically the
+									<strong>model year of the aircraft</strong> &mdash; this year's plane. The cabin names, Sol, Terra, and Luna, are
+									meant to stay the same from year to year, with each tier free to improve on its own schedule. So when next year's
+									plane rolls out, you won't have to relearn a brand-new menu; you'll still be choosing between the same three
+									cabins, just on a newer jet. After years of confusing "mini" and "nano" suffixes, that's a real quality-of-life
+									upgrade for anyone who isn't a full-time AI nerd.
+								</p>
+								<p class="body-text" style="margin-bottom: 24px">
+									I'll be honest about my skepticism, though: OpenAI has promised naming sanity before. The proof will be whether
+									"Terra" still means the middle seat two model years from now, or whether we get a
+									<em>Terra Pro Max</em> and start the whole cycle over. Judge it in 2027, not on the press release.
+								</p>
+
+								<p class="pull-quote">
+									The plane didn't get much faster this year. The seat map got honest. That's the actual story.
+								</p>
+
+								<!-- ── Which seat ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Booking Your Seat</p>
+									<p class="section-subtitle">Which cabin should you actually pay for?</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Sol: for your hardest, highest-stakes work.</h3>
+									<p class="body-text">
+										This is the flagship. Reach for it when the output really matters and you'd be embarrassed to get it wrong: a
+										big client proposal, a meaty research project, a detailed strategy doc, or any long and messy task where you
+										need it to hold everything together without losing the thread. It's the strongest of the three, and it's the
+										engine behind ChatGPT's deeper "thinking" modes. It's a paid-plan feature &mdash; Plus, Pro, Business, and
+										Enterprise accounts get it at medium effort and above, with Pro and Enterprise also able to reach for an even
+										heavier "Sol Pro" setting. On a free account, this cabin is roped off.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The tell</p>
+										<p class="example-content">
+											If you'd hesitate to send the output to a client without reading it twice, you're in Sol territory. If
+											you'd skim it and hit send, you're overpaying.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Terra: your everyday workhorse.</h3>
+									<p class="body-text">
+										For most people, this is simply the answer. OpenAI pitches it as competitive with their previous flagship at
+										half the cost, and independent analysts put it within a few points of Sol on most agentic benchmarks. Drafting
+										emails, writing blog posts and captions, answering customer questions, summarizing documents, general
+										back-and-forth brainstorming &mdash; Terra covers all of it. If you're not sure which to pick, start here and
+										only move up if the work demands it.
+									</p>
+									<div class="example-box">
+										<p class="example-label">Worth knowing</p>
+										<p class="example-content">
+											Terra is also the tier free and low-cost accounts get access to. Which tells you something: OpenAI is
+											comfortable putting it in front of millions of people as the default experience. That's a stronger
+											endorsement than any benchmark chart.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Luna: for high-volume, repetitive, simple stuff.</h3>
+									<p class="body-text">
+										This is the speed-and-savings option. When you're grinding through a big pile of the same basic task &mdash;
+										sorting hundreds of customer messages, tagging content, summarizing a stack of reviews, banging out
+										first-draft captions at scale &mdash; Luna does it fast and cheap. It gives up more ground on genuinely hard
+										problems, so don't hand it your important work. But for sheer volume, it's the bargain of the bunch. (It also
+										has one specific, sharp weakness that nobody put in the launch coverage &mdash; see angle B below before you
+										point it at anything long.)
+									</p>
+								</div>
+
+								<p class="body-text">
+									A simple rule of thumb that cuts through all of it:
+									<strong
+										>pick the best model you have access to, start it on its lowest effort setting, and only turn the dial up if
+										you're not happy with the result.</strong
+									>
+									There's no sense paying for extra "thinking" you don't actually need.
+								</p>
+								<p class="body-text" style="margin-bottom: 24px">
+									One correction to how this gets described online, because it tripped me up too: the three-cabin
+									<em>picker</em> isn't sitting in the standard ChatGPT chat box for everyone. As of launch, the explicit
+									Sol/Terra/Luna choice with per-request effort levels shows up in the developer API and in the work- and
+									coding-focused surfaces. In an ordinary ChatGPT conversation, most of this is being chosen for you behind the
+									scenes. So if you open ChatGPT looking for a three-way dropdown and don't find one, you're not going crazy &mdash;
+									and the routing is still worth understanding, because it's deciding your quality and your bill either way.
+								</p>
+
+								<!-- ── Takes ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">A Few Takes Worth Chewing On</p>
+									<p class="section-subtitle">What the launch-day coverage mostly got wrong</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">A.</span> The real headline is price, not brainpower.</h3>
+									<p class="body-text">
+										The interesting move here isn't that the top model got dramatically smarter &mdash; it's what happened to the
+										pricing. Sol costs the same as the previous flagship rather than more, and Terra delivers roughly
+										last-generation flagship quality for half of that. Translation: OpenAI is telling you to pay premium prices
+										<em>only</em> when a task genuinely needs it, and to run everything else on the cheaper cabins. For anyone
+										keeping an eye on their AI spend, that's the whole story. The frontier stopped moving up and started moving
+										<em>down</em> &mdash; in price.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">B.</span> AI is quietly turning into a "normal" product.</h3>
+									<p class="body-text">
+										One commenter on launch day summed it up perfectly: AI is becoming a fairly competitive but
+										<em>ordinary</em> product, with companies carving out niches on cost. The era of one magical do-everything
+										model is giving way to a boring, sensible menu &mdash; small, medium, large. And that's genuinely good news
+										for buyers. Boring is what happens right before a technology gets cheap enough to put everywhere. It means
+										more choice and steady downward pressure on price.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">C.</span> Don't take the scorecards at face value.</h3>
+									<p class="body-text">
+										OpenAI's "look how much better we are" numbers are its own, and independent evaluators have flagged real
+										daylight between vendor-reported and independently-run scores. More telling than any number they published is
+										the list they <em>didn't</em>: several long-standing academic reasoning and math benchmarks were simply left
+										out of the launch materials, while agent-and-coding benchmarks where the family leads got top billing. That's
+										not fraud &mdash; every lab does it &mdash; but it is marketing, and you should read it as marketing. The
+										honest read from independent testers: Terra is often within a couple of points of Sol, and Luna is the budget
+										pick that stumbles on the hardest tasks. Fine for most people. Just know the headline gap is almost certainly
+										smaller than advertised.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The pattern to watch for</p>
+										<p class="example-content">
+											When a lab publishes six benchmarks you've never heard of and omits four you have, the omission is the
+											finding. Ask what's missing before you're impressed by what's there.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">D.</span> If you're on Claude and peeking over the fence.</h3>
+									<p class="body-text">
+										A few honest things worth knowing. The pricing pressure is real &mdash; the cheaper cabins here are
+										aggressively priced, and that deserves your attention if cost is your main lever. But the flashy "X times
+										cheaper than Claude" comparisons come straight from OpenAI's own marketing, so take them as directional, not
+										proven; on at least one major independent coding benchmark the two families trade places depending on whose
+										harness you run. The practical truth is that these tools are close enough in everyday quality that, for most
+										content and marketing work, the real differences come down to which interface you actually enjoy using, which
+										ecosystem your team already lives in, and price &mdash; not some giant capability gap. If you're happy where
+										you are, this launch isn't a reason to panic-switch. If cost is pinching, it's a fair reason to run a small
+										side-by-side test on your own real work before deciding anything.
+									</p>
+								</div>
+
+								<!-- ── New angles ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Three Things Nobody Put in the Launch Coverage</p>
+									<p class="section-subtitle">The parts that will actually change what you do on Monday</p>
+								</div>
+
+								<p class="body-text">
+									Everything above is the story that got told. These three are the ones I had to go digging for &mdash; and each of
+									them will affect your quality or your invoice more than the choice of cabin will.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title">
+										<span class="tip-num">A.</span> There's a second dial, and it matters more than the first.
+									</h3>
+									<p class="body-text">
+										Everyone's arguing about which model to pick. Almost nobody mentions that every cabin has its own
+										<strong>effort dial</strong> &mdash; a setting that runs from essentially none up to max, controlling how hard
+										the model thinks before it answers. That's not a minor tweak. The same model at low effort and at max effort
+										are, in practice, two different products with two very different bills.
+									</p>
+									<p class="body-text">
+										This is where the seat metaphor stretches a little: you're not just picking a cabin, you're picking how far
+										around the world you're willing to fly to get there. And there's a turbo button beyond even that &mdash; an
+										"ultra" mode that spins up several copies of the model working in parallel and reconciles their answers. It
+										costs roughly <strong>three times</strong> as much and buys you something like three or four points on a
+										benchmark.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											Triple the cost for a few percent is a terrible trade for a blog post and a great trade for something
+											legally binding. Which is exactly the point: the effort dial is where you should be economizing, not the
+											model name. Most people would save more money leaving Sol on low effort than they'd save downgrading to
+											Luna at max.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title">
+										<span class="tip-num">B.</span> The cheap seat has a memory cliff — and it's steeper than anyone told you.
+									</h3>
+									<p class="body-text">
+										Here's the single most useful number I found, and it appeared in almost none of the coverage. On the standard
+										test of long-context recall &mdash; can the model actually find and use a specific detail buried deep in a
+										long document &mdash; Sol and Terra both score around <strong>90%</strong>. Luna scores
+										<strong>about 41%</strong>.
+									</p>
+									<p class="body-text">
+										That is not "a bit weaker on hard problems." That is a cliff. On short tasks Luna is a perfectly good,
+										genuinely cheap workhorse. Hand it your 40-page brand guidelines, a long transcript, or a stack of contracts
+										and ask it to pull out the one clause that matters, and it will confidently hand you something wrong &mdash;
+										not because the task was hard, but because it lost the thread somewhere in the middle.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The rule</p>
+										<p class="example-content">
+											Luna is for <em>many small things</em>, not <em>one big thing</em>. Two hundred short customer messages:
+											perfect. One long document you need read carefully: move up a cabin. The length of the input matters more
+											than the difficulty of the question.
+										</p>
+									</div>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">C.</span> Your bill is written by the output, not the input.</h3>
+									<p class="body-text">
+										Look at the pricing again and you'll spot a pattern that holds across all three cabins:
+										<strong>output costs exactly six times what input costs.</strong> Every tier. Sol, Terra, Luna &mdash; same
+										6&times; ratio.
+									</p>
+									<p class="body-text">
+										That single fact reframes how you save money. Most people assume the expensive part is feeding the model a lot
+										of material. It isn't. Feeding it a long document is comparatively cheap; asking it to write you a long answer
+										is what runs up the tab. A rambling, hedge-everything, bulleted-summary-at-the-end response costs you six
+										times more per word than the entire document you pasted in.
+									</p>
+									<p class="body-text">
+										There's a second lever hiding next to it: if you send the same material repeatedly &mdash; the same brand
+										guide, the same product catalog, the same system instructions &mdash; that repeated content can be cached and
+										re-read at roughly a <strong>90% discount</strong>. Put the stable stuff first and keep it identical, and you
+										stop paying full freight for it every single time.
+									</p>
+									<div class="example-box">
+										<p class="example-label">The move</p>
+										<p class="example-content">
+											"Be concise" is not a style preference. It is a cost control, and it's worth six times more than trimming
+											your inputs. If your AI bill is uncomfortable, look at how much your prompts ask the model to
+											<em>write</em> before you look at which model wrote it.
+										</p>
+									</div>
+								</div>
+
+								<p class="body-text" style="margin-bottom: 24px">
+									One footnote that belongs with these three: models retire. Older versions in this family are already scheduled to
+									be turned off, and anything you've built or gotten used to on a specific version has a quiet expiration date.
+									That's the strongest argument for the durable Sol/Terra/Luna naming actually working &mdash; if the tiers persist,
+									"book premium economy" survives the aircraft being replaced under you.
+								</p>
+
+								<!-- ── Bottom line ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Bottom Line</p>
+									<p class="section-subtitle">Forget the benchmark wars; remember three things</p>
+								</div>
+
+								<p class="pull-quote">
+									Terra is your everyday driver. Sol is for when it really counts. Luna is for grinding through volume.
+								</p>
+
+								<p class="body-text" style="margin-bottom: 24px">
+									For most content creators, small business owners, and marketing teams, that's the whole decision. Book the seat
+									that fits the trip, keep the effort dial low until the work argues otherwise, and don't overthink the rest.
+								</p>
+
+								<!-- ── Cheat sheet ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Cheat Sheet</p>
+									<p class="section-subtitle">See the difference yourself in 60 seconds</p>
+								</div>
+
+								<p class="body-text">
+									Reading about the gap between the three cabins is one thing. <em>Feeling</em> it is what makes the choice stick.
+									So here's a pocket reference plus four test prompts you can paste into all three models and watch the difference
+									show up in real time.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Cabin</th>
+											<th>Reach for it when&hellip;</th>
+											<th>Skip it when&hellip;</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Luna (economy)</td>
+											<td>You're doing the same easy thing hundreds of times, on short inputs</td>
+											<td>The task is hard, layered, the input is long, or the output really matters</td>
+										</tr>
+										<tr>
+											<td>Terra (premium economy)</td>
+											<td>You're drafting, summarizing, answering, brainstorming &mdash; the bulk of everyday work</td>
+											<td>You hit a genuinely hard, multi-step problem it can't hold together</td>
+										</tr>
+										<tr>
+											<td>Sol (first class)</td>
+											<td>You'd be embarrassed to get it wrong</td>
+											<td>It's a quick, simple task &mdash; you're overpaying for nothing</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="example-box" style="margin-bottom: 24px">
+									<p class="example-label">Golden rule</p>
+									<p class="example-content">
+										Pick the best model you have access to, start it on the <em>lowest</em> effort setting, and only turn the dial
+										up if you're not happy.
+									</p>
+								</div>
+
+								<p class="body-text" style="margin-bottom: 20px">
+									<strong>How to run the test.</strong> Open the same prompt in Luna, Terra, and Sol, back to back. On easy prompts
+									you <em>won't</em> see much difference &mdash; that's exactly the point, and why you shouldn't overpay for them.
+									The prompts below are deliberately hard enough that the cheaper cabins start to crack, so you can see where the
+									extra money actually buys you something.
+								</p>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">Test 1</span> — Chained reasoning: does it hold the thread?</h3>
+									<div class="example-box">
+										<p class="example-label">Paste this</p>
+										<p class="example-content">
+											A store marks an item up 40%, then takes 25% off the marked-up price, then knocks off an extra 10% at the
+											register. I paid $94.50. What was the original price — and is that a better deal than a flat 20% off the
+											original?
+										</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px">
+										<strong>Watch for:</strong> the cheaper cabins often botch the chained percentages or answer only half the
+										question. The top cabin nails the price <em>and</em> the comparison, and shows its work.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">Test 2</span> — Messy synthesis: can it find the signal?</h3>
+									<div class="example-box">
+										<p class="example-label">Paste this</p>
+										<p class="example-content">
+											Here are 8 rambling customer complaints [paste them]. Group them into root causes, rank the causes by how
+											many customers each affects, and tell me the single fix that resolves the most complaints at once.
+										</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px">
+										<strong>Watch for:</strong> Luna tends to hand back a generic summary. Terra groups them decently. Sol spots
+										the <em>overlapping</em> root cause and prioritizes the one fix correctly. Make the complaints long and
+										rambling on purpose &mdash; that's where the memory cliff from angle B shows up.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">Test 3</span> — Constraint juggling: does it respect every rule?</h3>
+									<div class="example-box">
+										<p class="example-label">Paste this</p>
+										<p class="example-content">
+											Plan me a 3-day trip. Constraints: I land at 2pm on day 1 and must be back at the airport by 11am on day
+											3; no more than 90 minutes of commuting on any day; one dinner must be vegetarian; and day 2 needs an
+											indoor backup in case it rains. Give me the schedule and explain your tradeoffs.
+										</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px">
+										<strong>Watch for:</strong> cheaper cabins quietly drop or break a constraint &mdash; they forget the rain
+										backup or overstuff the last morning. The top cabin honors all of them and flags where two rules conflict.
+									</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">Test 4</span> — The premise trap: does it push back?</h3>
+									<div class="example-box">
+										<p class="example-label">Paste this</p>
+										<p class="example-content">
+											Since we lose an hour of sleep in spring and gain it back in fall, daylight saving time must be
+											net-neutral for our health, right? Write me a short post arguing that.
+										</p>
+									</div>
+									<p class="body-text" style="margin-top: 10px">
+										<strong>Watch for:</strong> Luna usually just writes the post as asked. Sol catches the flawed premise
+										<em>before</em> writing &mdash; the health research doesn't actually support "net-neutral" &mdash; and tells
+										you so. This is the test that matters most for anyone publishing under their own name.
+									</p>
+								</div>
+
+								<p class="body-text">
+									<strong>The takeaway from the tests.</strong> If a prompt is easy enough that all three give you the same answer,
+									book economy and pocket the savings. The moment a task starts to buckle a cabin &mdash; dropped constraints,
+									generic synthesis, a confidently wrong number &mdash; that's your signal to move up a seat. Match the cabin to the
+									trip, and you'll never overpay or underpower again.
+								</p>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The Takeaway</h3>
+									<p class="body-text">
+										The three-cabin lineup isn't a technical announcement, it's a pricing announcement wearing a technical
+										costume. The plane is roughly as fast as last year's. What changed is that you can finally see the fare
+										difference on the seat map &mdash; and OpenAI is openly telling you to stop buying the expensive seat out of
+										habit.
+									</p>
+									<p class="body-text">
+										So the skill worth building isn't "keeping up with model releases." It's the boring discipline of matching the
+										tool to the job: cheapest cabin that clears the bar, lowest effort setting that gets it done, shortest output
+										that answers the question. That habit will outlast Sol, Terra, and Luna &mdash; and every plane that replaces
+										them.
+									</p>
+								</div>
+
+								<div class="cta-box" style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center">
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more plain-English breakdowns of the AI news?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly guides.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davecto</a
+									>
+								</div>
+
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 12px;
+										color: #9a9492;
+										margin: 28px 0 0;
+										font-style: italic;
+									"
+								>
+									Sources: OpenAI's GPT-5.6 launch and help-center materials (general availability July 9, 2026); independent
+									benchmark reporting from Artificial Analysis and Vellum; pricing as published July 2026. Prices, plan
+									availability, and benchmark figures change &mdash; verify before making a purchasing decision. The editorial
+									reads, the three added angles, and the test prompts are mine.
+								</p>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+
+		<!-- ── Export toolbar (screen only) ── -->
+		<div
+			class="screen-only md-toolbar"
+			style="position: fixed; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 9999; font-family: 'Source Sans 3', sans-serif"
+		>
+			<button type="button" id="md-copy" class="md-btn">Copy as Markdown</button>
+			<button type="button" id="md-download" class="md-btn">Download .md</button>
+		</div>
+		<style>
+			.md-btn {
+				font:
+					600 13px 'Source Sans 3',
+					sans-serif;
+				color: #fff;
+				background: #7e22ce;
+				border: none;
+				border-radius: 6px;
+				padding: 8px 14px;
+				cursor: pointer;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+			}
+			.md-btn:hover {
+				background: #6b1fae;
+			}
+			@media print {
+				.md-toolbar {
+					display: none !important;
+				}
+			}
+		</style>
+		<script>
+			(function () {
+				// ── Inline (text-level) → Markdown ──
+				function inline(node) {
+					let out = '';
+					node.childNodes.forEach(function (n) {
+						if (n.nodeType === 3) {
+							out += n.textContent.replace(/\s+/g, ' ');
+						} else if (n.nodeType === 1) {
+							var t = n.tagName.toLowerCase();
+							if (t === 'a') {
+								out += '[' + inline(n).trim() + '](' + n.getAttribute('href') + ')';
+							} else if (t === 'em' || t === 'i') {
+								out += '*' + inline(n).trim() + '*';
+							} else if (t === 'strong' || t === 'b') {
+								out += '**' + inline(n).trim() + '**';
+							} else if (t === 'br') {
+								out += '\n';
+							} else {
+								out += inline(n);
+							}
+						}
+					});
+					return out;
+				}
+
+				function tableMd(table) {
+					var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+					var lines = [];
+					var headerDone = false;
+					rows.forEach(function (tr) {
+						var cells = Array.prototype.slice.call(tr.children).map(function (c) {
+							return inline(c).trim().replace(/\|/g, '\\|') || ' ';
+						});
+						lines.push('| ' + cells.join(' | ') + ' |');
+						if (!headerDone) {
+							lines.push(
+								'| ' +
+									cells
+										.map(function () {
+											return '---';
+										})
+										.join(' | ') +
+									' |'
+							);
+							headerDone = true;
+						}
+					});
+					return lines.join('\n');
+				}
+
+				// ── Block-level walk → Markdown ──
+				function block(node, out) {
+					Array.prototype.slice.call(node.childNodes).forEach(function (el) {
+						if (el.nodeType !== 1) return;
+						var cls = el.classList;
+						var tag = el.tagName.toLowerCase();
+						if (cls.contains('running-ftr')) return;
+
+						if (cls.contains('stat-band')) {
+							Array.prototype.slice.call(el.querySelectorAll('.stat')).forEach(function (s) {
+								var num = s.querySelector('.stat-num');
+								var desc = s.querySelector('.stat-desc');
+								out.push('**' + (num ? inline(num).trim() : '') + '** — ' + (desc ? inline(desc).trim() : ''));
+							});
+							return;
+						}
+						if (cls.contains('section-hdr')) {
+							var label = el.querySelector('.section-label');
+							var sub = el.querySelector('.section-subtitle');
+							if (label) out.push('## ' + inline(label).trim());
+							if (sub) out.push('*' + inline(sub).trim() + '*');
+							return;
+						}
+						if (tag === 'h1') {
+							out.push('# ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('tip-title') || tag === 'h2' || tag === 'h3') {
+							out.push('### ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('pull-quote')) {
+							out.push('> ' + inline(el).trim());
+							return;
+						}
+						if (cls.contains('example-box')) {
+							var elabel = el.querySelector('.example-label');
+							var content = el.querySelector('.example-content');
+							var s = '';
+							if (elabel) s += '> **' + inline(elabel).trim() + '**\n>\n';
+							if (content) s += '> ' + inline(content).trim().replace(/\n/g, '\n> ');
+							out.push(s);
+							return;
+						}
+						if (cls.contains('res')) {
+							var name = el.querySelector('.res-name');
+							var desc = el.querySelector('.res-desc');
+							var r = '';
+							if (name) r += '**' + inline(name).trim() + '**  \n';
+							if (desc) r += inline(desc).trim();
+							out.push(r);
+							return;
+						}
+						if (tag === 'table') {
+							out.push(tableMd(el));
+							return;
+						}
+						if (tag === 'p') {
+							var txt = inline(el).trim();
+							if (!txt) return;
+							// Bold standalone sub-heads (font-weight:700 inline)
+							if (el.style && el.style.fontWeight === '700') out.push('#### ' + txt);
+							else out.push(txt);
+							return;
+						}
+						// Wrappers (tip, cta-box, dividers, etc.) → recurse
+						if (tag === 'div') {
+							block(el, out);
+							return;
+						}
+					});
+				}
+
+				function toMarkdown() {
+					var root = document.querySelector('.doc-frame tbody td');
+					if (!root) return '';
+					var out = [];
+					block(root, out);
+					return out
+						.filter(function (b) {
+							return b && b.trim();
+						})
+						.join('\n\n')
+						.replace(/\n{3,}/g, '\n\n')
+						.trim();
+				}
+
+				function flash(btn, msg) {
+					var orig = btn.textContent;
+					btn.textContent = msg;
+					setTimeout(function () {
+						btn.textContent = orig;
+					}, 1500);
+				}
+
+				document.getElementById('md-copy').addEventListener('click', function () {
+					var md = toMarkdown();
+					var btn = this;
+					if (navigator.clipboard && navigator.clipboard.writeText) {
+						navigator.clipboard.writeText(md).then(
+							function () {
+								flash(btn, 'Copied!');
+							},
+							function () {
+								flash(btn, 'Copy failed');
+							}
+						);
+					} else {
+						var ta = document.createElement('textarea');
+						ta.value = md;
+						document.body.appendChild(ta);
+						ta.select();
+						try {
+							document.execCommand('copy');
+							flash(btn, 'Copied!');
+						} catch (e) {
+							flash(btn, 'Copy failed');
+						}
+						document.body.removeChild(ta);
+					}
+				});
+
+				document.getElementById('md-download').addEventListener('click', function () {
+					var md = toMarkdown();
+					var blob = new Blob([md], { type: 'text/markdown' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'ThreeSeatsSamePlane.md';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					flash(this, 'Downloaded!');
+				});
+			})();
+		</script>
+	</body>
+</html>

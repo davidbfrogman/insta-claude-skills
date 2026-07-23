@@ -1,0 +1,820 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+					rel="stylesheet"
+				/>
+				<style>
+					body {
+						margin: 0;
+						background: #fff;
+					}
+					.doc {
+						box-sizing: border-box;
+						max-width: 8.5in;
+						margin: 0 auto;
+						background: inherit;
+						padding: 48px clamp(24px, 5vw, 0.75in) 96px;
+					}
+					.doc-frame {
+						width: 100%;
+						border-collapse: collapse;
+					}
+					.doc-frame td {
+						padding: 0;
+					}
+					.running-hdr,
+					.running-ftr,
+					.hdr-space,
+					.ftr-space {
+						display: none;
+					}
+					h1,
+					h2,
+					h3 {
+						text-wrap: balance;
+					}
+					p,
+					li {
+						text-wrap: pretty;
+					}
+
+					/* ── Shared typography ── */
+					.body-text {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 15px;
+						color: #3d3835;
+						line-height: 1.65;
+						margin: 0 0 10px;
+					}
+
+					/* ── Section headers ── */
+					.section-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.12em;
+						margin: 0 0 4px;
+					}
+					.section-subtitle {
+						font-family: 'Lora', serif;
+						font-size: 16px;
+						color: #9a9492;
+						margin: 0;
+						font-style: italic;
+					}
+
+					/* ── Tip cards ── */
+					.tip {
+						margin-bottom: 28px;
+					}
+					.tip-title {
+						font-family: 'Lora', serif;
+						font-size: 18px;
+						font-weight: 700;
+						color: #2d2a27;
+						margin: 0 0 8px;
+						line-height: 1.3;
+					}
+					.tip-num {
+						color: #7e22ce;
+					}
+
+					/* ── Example / syntax callout boxes ── */
+					.example-box {
+						border-left: 3px solid #7e22ce;
+						background: #faf5ff;
+						padding: 10px 16px;
+						border-radius: 0 4px 4px 0;
+						margin-top: 12px;
+					}
+					.example-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 0 0 4px;
+					}
+					.example-content {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #2d2a27;
+						line-height: 1.55;
+						margin: 0;
+						font-style: italic;
+						white-space: pre-line;
+					}
+
+					/* ── Code block (Claude prompts) ── */
+					.code-label {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 11px;
+						font-weight: 700;
+						color: #7e22ce;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						margin: 14px 0 4px;
+					}
+					.code-box {
+						font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+						font-size: 12.5px;
+						line-height: 1.5;
+						color: #2d2a27;
+						background: #f7f3fb;
+						border: 1px solid #ecd9fb;
+						border-left: 3px solid #7e22ce;
+						border-radius: 0 4px 4px 0;
+						padding: 12px 16px;
+						margin: 0 0 18px;
+						overflow-x: auto;
+						white-space: pre;
+					}
+					.what-proves {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #5b5551;
+						line-height: 1.55;
+						margin: 0 0 6px;
+						font-style: italic;
+					}
+
+					/* ── Pull quote ── */
+					.pull-quote {
+						font-family: 'Lora', serif;
+						font-size: 21px;
+						font-weight: 600;
+						font-style: italic;
+						color: #1a1a2e;
+						line-height: 1.4;
+						margin: 24px 0 28px;
+						padding-left: 20px;
+						border-left: 4px solid #7e22ce;
+					}
+
+					/* ── Compare table ── */
+					.compare {
+						width: 100%;
+						border-collapse: collapse;
+						margin: 8px 0 20px;
+					}
+					.compare th {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 12px;
+						font-weight: 700;
+						text-transform: uppercase;
+						letter-spacing: 0.08em;
+						color: #7e22ce;
+						text-align: left;
+						padding: 8px 14px;
+						border-bottom: 2px solid #ecd9fb;
+						vertical-align: bottom;
+					}
+					.compare td {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 14px;
+						color: #3d3835;
+						line-height: 1.5;
+						padding: 10px 14px;
+						border-bottom: 1px solid #eee7ee;
+						vertical-align: top;
+					}
+					.compare tr td:first-child {
+						font-weight: 600;
+						color: #2d2a27;
+						width: 34%;
+					}
+					.data-table tr td:first-child {
+						width: auto;
+					}
+
+					/* ── Stat band ── */
+					.stat-band {
+						display: flex;
+						flex-wrap: wrap;
+						gap: 12px;
+						margin: 8px 0 24px;
+					}
+					.stat {
+						flex: 1 1 150px;
+						background: #faf5ff;
+						border-radius: 8px;
+						padding: 16px 18px;
+					}
+					.stat-num {
+						font-family: 'Lora', serif;
+						font-size: 30px;
+						font-weight: 700;
+						color: #7e22ce;
+						line-height: 1;
+						margin: 0 0 6px;
+					}
+					.stat-desc {
+						font-family: 'Source Sans 3', sans-serif;
+						font-size: 13px;
+						color: #5b5551;
+						line-height: 1.4;
+						margin: 0;
+					}
+
+					@page {
+						size: letter;
+						margin: 0;
+					}
+					@media print {
+						html {
+							-webkit-print-color-adjust: exact;
+							print-color-adjust: exact;
+						}
+						html,
+						body {
+							margin: 0;
+							padding: 0;
+						}
+						.doc {
+							max-width: none !important;
+							margin: 0 !important;
+							padding: 0 0.75in !important;
+							box-shadow: none !important;
+							border: none !important;
+						}
+						#dc-root,
+						.sc-host {
+							height: auto !important;
+						}
+						.hdr-space,
+						.ftr-space {
+							display: table-cell;
+							height: 0.75in !important;
+						}
+						.running-ftr {
+							display: flex !important;
+							justify-content: space-between;
+							align-items: baseline;
+							position: fixed !important;
+							left: 0;
+							right: 0;
+							margin: 0 !important;
+							font-size: 11px;
+							letter-spacing: 0.05em;
+							text-transform: uppercase;
+						}
+						.running-ftr {
+							bottom: 0;
+							padding: 0 0.75in 0.35in !important;
+						}
+						h1,
+						h2,
+						h3,
+						h4,
+						h5,
+						h6 {
+							break-after: avoid;
+						}
+						figure,
+						pre,
+						blockquote,
+						img,
+						svg,
+						tr,
+						.tip,
+						.cta-box,
+						.code-box {
+							break-inside: avoid;
+						}
+						.section-hdr {
+							break-after: avoid;
+						}
+						p,
+						li {
+							orphans: 3;
+							widows: 3;
+						}
+						.screen-only {
+							display: none !important;
+						}
+					}
+				</style>
+			</helmet>
+
+			<main class="doc">
+				<div class="running-ftr">
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">d.avebrown</span>
+					<span style="font-family: 'Source Sans 3', sans-serif; color: #999">instagram.com/d.avebrown</span>
+				</div>
+				<table class="doc-frame" role="presentation">
+					<thead>
+						<tr>
+							<td class="hdr-space"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h1
+									style="
+										font-family: 'Lora', serif;
+										font-size: 38px;
+										font-weight: 700;
+										color: #1a1a2e;
+										line-height: 1.12;
+										margin: 0;
+									"
+								>
+									Give Claude a Memory of Your Business
+								</h1>
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 13px;
+										color: #9a9492;
+										margin: 0;
+										letter-spacing: 0.02em;
+									"
+								>
+									by Dave Brown &middot; a companion to the /business-memory template set
+								</p>
+								<div style="width: 48px; height: 3px; background: #7e22ce; margin: 28px 0 28px; border-radius: 2px"></div>
+
+								<!-- ── The problem ── -->
+								<div class="section-hdr" style="margin: 0 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Problem</p>
+									<p class="section-subtitle">Claude starts every session knowing nothing about you</p>
+								</div>
+
+								<p class="body-text">
+									Claude is genuinely good at the work — writing your emails, drafting your landing page, triaging your leads,
+									answering a customer. But it starts every single session as a brilliant stranger. It doesn't know who your
+									customers are, how your brand sounds, what makes your product different, or how you actually sell. So you
+									re-explain. Every time. And because you're re-explaining from memory under time pressure, you explain it a little
+									differently each time — which means the output drifts a little each time too.
+								</p>
+								<p class="body-text">
+									The fix isn't a better prompt. It's <em>standing context</em> — a small set of documents that describe your
+									business once, thoroughly, so that any session can start already knowing the things you'd otherwise repeat. You
+									write them once. Claude reads them every time. That's what the <strong>business memory</strong> folder is.
+								</p>
+
+								<p class="pull-quote">
+									A great prompt tells Claude what to do this time. A memory file tells Claude who you are every time.
+								</p>
+
+								<!-- ── The idea ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Idea</p>
+									<p class="section-subtitle">Five documents that hold everything Claude should already know</p>
+								</div>
+
+								<p class="body-text">
+									The template set breaks a business into five "pillars." Each is short on purpose — a couple of pages, not a binder
+									— because a document you'll actually finish beats a thorough one you abandon. Together they answer the five
+									questions Claude implicitly asks at the start of any real task.
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Document</th>
+											<th>The question it answers</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>company-overview</td>
+											<td>Who are you, what do you sell, and why do you exist? <em>(The anchor — start here.)</em></td>
+										</tr>
+										<tr>
+											<td>ideal-customer-profile</td>
+											<td>Who are you for, what hurts them, and what words do they use to describe that pain?</td>
+										</tr>
+										<tr>
+											<td>brand-voice</td>
+											<td>How do you sound and look when you speak?</td>
+										</tr>
+										<tr>
+											<td>product-and-positioning</td>
+											<td>What do you sell, how do you talk about it, and how do you stand apart?</td>
+										</tr>
+										<tr>
+											<td>sales-strategy</td>
+											<td>How do you find, qualify, and win customers?</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Two versions in the folder</p>
+										<p class="example-content">
+											Each template comes twice. The main folder has every field filled with a worked example (a small coffee
+											shop, "Ember &amp; Oak") so you can see the shape of a good answer. The /blank sub-folder has the same
+											sections and instructions with the examples stripped out — just a → marker waiting for your text. Learn
+											from the filled one; type into the blank one.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── How to use ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">How To Use Them</p>
+									<p class="section-subtitle">Fill once, then drop the folder into every session</p>
+								</div>
+
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">01</span> — Fill them in order, anchor first.</h3>
+									<p class="body-text">
+										Start with <strong>company-overview</strong> — it's the trunk every other document branches from. Then do
+										ideal-customer-profile, because knowing who you serve makes voice, positioning, and sales far easier to write.
+										Don't aim for perfect. A rough, honest first pass is worth more than a polished blank.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">02</span> — Quote reality; don't invent aspiration.</h3>
+									<p class="body-text">
+										The single most valuable field in the whole set is "the exact language customers use." Pull real phrases from
+										reviews, DMs, and support tickets — verbatim, unpolished. Claude will echo that language back into your
+										marketing, and copy written in your customers' own words converts. Aspirational corporate-speak does not.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">03</span> — Delete every example you don't replace.</h3>
+									<p class="body-text">
+										An example left behind reads to Claude as a fact about your business. If a section doesn't apply, write "N/A"
+										rather than leaving the coffee-shop text in place — an intentional blank is information; a stray example is
+										misinformation.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">04</span> — Drop the whole folder into your session.</h3>
+									<p class="body-text">
+										At the start of a Claude Co-Work session (or a Claude Code project, or a Project's knowledge), add the folder
+										or point Claude at it. Then just work. Ask for "a launch email for the new subscription" and Claude already
+										knows the voice, the audience, the positioning, and the offer — because it read them, not because you re-typed
+										them.
+									</p>
+								</div>
+								<div class="tip">
+									<h3 class="tip-title"><span class="tip-num">05</span> — Revisit quarterly.</h3>
+									<p class="body-text">
+										Your audience sharpens, your pricing moves, a new competitor appears. Memory that's a year stale quietly
+										steers every output wrong. Fifteen minutes a quarter keeps the whole set honest.
+									</p>
+								</div>
+
+								<!-- ── The bigger idea ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">The Bigger Idea</p>
+									<p class="section-subtitle">This works for almost any kind of work</p>
+								</div>
+
+								<p class="body-text">
+									There's nothing coffee-shop-specific — or even business-specific — about this pattern. A "memory file" is just
+									<em>durable, reusable context that a task keeps needing.</em> Any role has a handful of things you'd otherwise
+									re-explain to a new hire on day one. Write those down once, and you've built a memory set for your job.
+								</p>
+								<p class="body-text">
+									The trick to designing your own set is a single question:
+									<strong>"What do I find myself re-explaining every time I ask for help?"</strong> Each recurring answer is a
+									candidate document. Here's how that plays out across very different roles.
+								</p>
+
+								<table class="compare data-table">
+									<thead>
+										<tr>
+											<th>If you work in…</th>
+											<th>Your memory set might be…</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Marketing</td>
+											<td>
+												brand-voice · audience-personas · channel-playbook · campaign-principles · competitive-landscape ·
+												content-calendar-rules
+											</td>
+										</tr>
+										<tr>
+											<td>Sales</td>
+											<td>
+												ideal-customer-profile · product-positioning · objection-handling · account-plans · outreach-cadences
+												· pricing-guardrails
+											</td>
+										</tr>
+										<tr>
+											<td>Recruiting</td>
+											<td>
+												role-scorecards · employer-brand-voice · candidate-personas · sourcing-strategy · interview-rubrics ·
+												outreach-templates
+											</td>
+										</tr>
+										<tr>
+											<td>Software engineering</td>
+											<td>
+												architecture-overview · coding-standards · domain-glossary · deployment-runbook · testing-conventions
+												· on-call-playbook
+											</td>
+										</tr>
+										<tr>
+											<td>Freelance / consulting</td>
+											<td>
+												service-catalog · ideal-client-profile · brand-voice · pricing-and-scoping · proposal-structure ·
+												portfolio-proof
+											</td>
+										</tr>
+										<tr>
+											<td>Teaching</td>
+											<td>
+												course-overview · student-personas · grading-rubrics · communication-voice · assignment-templates ·
+												common-misconceptions
+											</td>
+										</tr>
+										<tr>
+											<td>Nonprofit / fundraising</td>
+											<td>
+												mission-and-programs · donor-personas · case-for-support · brand-voice · grant-strategy ·
+												impact-metrics
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">The repeatable recipe</p>
+										<p class="example-content">
+											Notice the pattern across every row: a "who we serve" doc, a "how we sound" doc, a "what we offer / how we
+											frame it" doc, and a "how we execute the core workflow" doc — plus one or two role-specific additions.
+											Name your version of those four, add what's unique to your work, and keep each to a couple of pages.
+											That's a complete memory set for any job.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── Sample prompts ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">Sample Prompts</p>
+									<p class="section-subtitle">Have Claude build your memory set with you</p>
+								</div>
+
+								<p class="body-text">
+									You don't have to write these from a blank page. Claude is unusually good at <em>interviewing</em> you and turning
+									your answers into clean, structured documents. Below are four prompts, from "generate the whole set" to "make mine
+									better." Paste them into Claude Co-Work, a Claude Code project folder, or any Claude chat. Steer as it goes — each
+									one is a starting instruction, not a one-shot.
+								</p>
+
+								<p class="code-label">1 — Generate a full memory set for your business</p>
+								<pre class="code-box">
+I want to build a "business memory" folder — a set of markdown files that give
+you standing context about my business so I don't re-explain it every session.
+Create five files: company-overview, ideal-customer-profile, brand-voice,
+product-and-positioning, and sales-strategy. Each should be comprehensive but
+not overwhelming (a couple of pages), with a clear section for every key detail.
+
+But don't guess about my business — interview me first. Ask me a focused batch
+of questions, a few at a time, starting with what my business does and who it's
+for. Use my answers to fill the files in my own words, and flag anything you had
+to assume so I can correct it. Save each file as its own .md in a
+/business-memory folder.</pre
+								>
+
+								<p class="code-label">2 — Adapt the whole idea to a different role</p>
+								<pre class="code-box">
+I don't run a business in the usual sense — I'm a [marketing manager / recruiter
+/ freelance designer / teacher / founder]. I love the idea of a "memory file"
+set: durable, reusable context so an AI assistant already knows how I work
+instead of me re-explaining every time.
+
+First, propose the 5–6 memory documents that would matter most for my role and
+tell me in one line what each would capture. Once I approve the list, interview
+me one document at a time and write each as its own markdown file with clearly
+labeled sections. Keep each to about two pages. Where a section needs judgment,
+give me a short instruction and an example so I can see the shape of a good
+answer before I replace it.</pre
+								>
+
+								<p class="code-label">3 — Fill in a single document by interview</p>
+								<pre class="code-box">
+Here's my blank ideal-customer-profile template [paste it, or point me at the
+file]. Walk me through it section by section. Ask me one section's worth of
+questions at a time, in plain language, and give me an example answer for each
+so I know what "good" looks like. When I answer, write that section for me in
+clean prose, then move to the next. At the end, give me the complete filled-in
+document. For the "language customers use" section, push me to give you real
+verbatim quotes from reviews or messages rather than paraphrases.</pre
+								>
+
+								<p class="code-label">4 — Pressure-test and improve a set you've already written</p>
+								<pre class="code-box">
+Read my /business-memory folder as if you're a sharp new employee reading it on
+day one. Then tell me: (1) where is it vague or generic enough that it would
+produce bland output — quote the exact lines; (2) what important context is
+missing that you'd need to actually do my marketing, sales, and customer replies;
+(3) where do two documents contradict each other; and (4) which three edits would
+most improve the quality of what you generate from these. Be specific and honest,
+not flattering. Then show me a rewritten version of the weakest section.</pre
+								>
+
+								<div class="tip">
+									<div class="example-box" style="margin-top: 4px">
+										<p class="example-label">Why the "interview me" framing matters</p>
+										<p class="example-content">
+											The instinct is to ask Claude to "write my brand voice document." But Claude doesn't know your business
+											yet — so it will invent a plausible, generic one, and generic memory produces generic output forever.
+											Asking it to interview you first flips that: your real answers become the raw material, and Claude does
+											the structuring. You supply the truth; it supplies the shape.
+										</p>
+									</div>
+								</div>
+
+								<!-- ── What good looks like ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">What Good Looks Like</p>
+									<p class="section-subtitle">The difference between memory that works and memory that doesn't</p>
+								</div>
+
+								<p class="body-text">
+									Whether you write these yourself or have Claude interview you, the same few habits separate a memory set that
+									sharpens every output from one that quietly makes it blander. The rule of thumb:
+									<strong>specific, honest, and current beats thorough, polished, and aspirational.</strong>
+								</p>
+
+								<table class="compare">
+									<thead>
+										<tr>
+											<th>Weak memory</th>
+											<th>Strong memory</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>"Our customers are busy professionals who value quality."</td>
+											<td>
+												"Our customers are 28–45, buy 4+ times a week, and say things like 'it's my little reset button.'"
+											</td>
+										</tr>
+										<tr>
+											<td>"Our voice is friendly and professional."</td>
+											<td>
+												"We say 'we' and 'our,' call customers 'neighbors,' avoid exclamation points, and never use the word
+												'cheap.'"
+											</td>
+										</tr>
+										<tr>
+											<td>"We offer great products at competitive prices."</td>
+											<td>
+												"We're premium — 15–20% above the chain — justified by roasting on-site so beans are never over 7 days
+												old."
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="stat-band">
+									<div class="stat">
+										<p class="stat-num">Specific</p>
+										<p class="stat-desc">Numbers, names, and verbatim quotes — not adjectives a competitor could also claim.</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">Honest</p>
+										<p class="stat-desc">
+											Describe the business you actually run today, not the one you hope to run in three years.
+										</p>
+									</div>
+									<div class="stat">
+										<p class="stat-num">Current</p>
+										<p class="stat-desc">
+											Dated and revisited, so Claude never acts on last year's pricing or last year's audience.
+										</p>
+									</div>
+								</div>
+
+								<!-- Closer -->
+								<div style="width: 100%; height: 1px; background: #e8e4e2; margin: 44px 0"></div>
+
+								<div class="tip">
+									<h3 class="tip-title" style="font-size: 15px; color: #7e22ce">The One-Line Version</h3>
+									<p class="body-text">
+										Stop re-explaining your business to Claude at the start of every session. Write it down once — who you serve,
+										how you sound, what you sell, how you win — in a handful of short documents, drop them into any session, and
+										every task starts from context instead of from scratch. The same trick works for any job: name the things
+										you'd tell a new hire on day one, and you've built your memory set.
+									</p>
+								</div>
+
+								<!-- ── Soft pitch ── -->
+								<div class="section-hdr" style="margin: 12px 0 28px; padding-bottom: 14px; border-bottom: 2px solid #7e22ce">
+									<p class="section-label">One More Thing</p>
+									<p class="section-subtitle">If you want a second set of eyes</p>
+								</div>
+
+								<p class="body-text">
+									I put this guide together because the strategy inside it is real, but I also know that reading a framework and
+									applying it to your own career are two very different things. A matrix is easy to nod along to. Figuring out which
+									second-wave industry actually fits your background, which of your existing skills transfer, and what's genuinely
+									worth learning next — that part is personal, and it's a lot harder to do alone.
+								</p>
+								<p class="body-text">
+									So I'm starting to do a small number of informal career audits for people working through exactly this. The idea
+									is simple: I take a look at your résumé and where you are right now, and I give you honest, specific thoughts —
+									which directions might fit you best, where your experience already gives you an edge, a few skills or projects
+									worth prioritizing, and resources that'll actually move the needle. No script, no generic advice, just a real read
+									on your situation and where the openings are for you.
+								</p>
+								<p class="body-text">
+									This is early and pretty informal right now. I'm mostly trying to help a handful of people and learn what's most
+									useful in the process. If that sounds like something you'd want, just send me an email with a little about where
+									you're at and what you're trying to figure out, and we'll take it from there. No pressure either way — the whole
+									guide above is yours to run with regardless.
+								</p>
+
+								<div
+									class="cta-box"
+									style="
+										background: #faf5ff;
+										padding: 24px 28px;
+										border-radius: 8px;
+										border-left: 4px solid #7e22ce;
+										margin: 20px 0 24px;
+									"
+								>
+									<p style="font-family: 'Lora', serif; font-size: 17px; font-weight: 700; color: #2d2a27; margin: 0 0 6px">
+										📩 Interested?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; line-height: 1.6; margin: 0">
+										Email me at
+										<a
+											href="mailto:davebrown.dev@gmail.com?subject=Career%20Audit"
+											style="color: #7e22ce; font-weight: 700; text-decoration: none"
+											>davebrown.dev@gmail.com</a
+										>
+										with the subject line <strong>"Career Audit"</strong> and a couple sentences about your background and what
+										you're hoping to move toward.
+									</p>
+								</div>
+
+								<p class="body-text" style="margin-bottom: 8px">
+									If nothing else, I'd genuinely love to hear which part of this was most useful to you. Good luck out there — the
+									frontier is wide open right now, and earlier than most people realize.
+								</p>
+
+								<!-- ── CTA ── -->
+								<div
+									class="cta-box"
+									style="background: #faf5ff; padding: 28px 32px; border-radius: 8px; text-align: center; margin-top: 28px"
+								>
+									<p style="font-family: 'Lora', serif; font-size: 20px; font-weight: 700; color: #2d2a27; margin: 0 0 8px">
+										Want more guides on working with AI like this?
+									</p>
+									<p style="font-family: 'Source Sans 3', sans-serif; font-size: 15px; color: #3d3835; margin: 0 0 12px">
+										Follow along on Instagram for weekly breakdowns.
+									</p>
+									<a
+										href="https://www.instagram.com/davebrownbrand"
+										style="
+											font-family: 'Source Sans 3', sans-serif;
+											font-size: 18px;
+											font-weight: 700;
+											color: #7e22ce;
+											text-decoration: none;
+										"
+										>@davebrownbrand</a
+									>
+								</div>
+
+								<p
+									style="
+										font-family: 'Source Sans 3', sans-serif;
+										font-size: 12px;
+										color: #9a9492;
+										margin: 28px 0 0;
+										font-style: italic;
+									"
+								>
+									Companion to the /business-memory template set — five markdown documents (plus example-free /blank versions) that
+									give Claude standing context about your business.
+								</p>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td class="ftr-space"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</main>
+		</x-dc>
+	</body>
+</html>

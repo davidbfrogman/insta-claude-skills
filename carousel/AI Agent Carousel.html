@@ -1,0 +1,578 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="./support.js"></script>
+	</head>
+	<body>
+		<x-dc>
+			<helmet>
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+				<link
+					href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Roboto:wght@400;500;700;900&display=swap"
+					rel="stylesheet"
+				/>
+				<meta name="design_doc_mode" content="canvas" />
+				<style>
+					/* ---------- global ---------- */
+					:root {
+						--paper: #f3efe9;
+						--night: #140a14;
+						--cream: #efe7d8;
+						--brand: linear-gradient(90deg, #431043, #d34681);
+						--photo: url('uploads/pexels-dav-h-58867999-7953297.jpg');
+					}
+					body {
+						margin: 0;
+						background: #c7c1b8;
+					}
+					a {
+						color: #d34681;
+						text-decoration: none;
+					}
+					a:hover {
+						color: #431043;
+					}
+
+					.deck {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						gap: 56px;
+						padding: 64px;
+						font-family: 'Lora', serif;
+					}
+
+					/* ---------- slide shell + palette ----------
+     Every colour below is a token. Light slides use the defaults on .slide;
+     dark slides just re-point the same tokens. Nothing else changes. */
+					.slide {
+						--ink: #431043; /* headlines */
+						--body: #431043; /* paragraphs */
+						--accent: #d34681; /* eyebrow, highlights, "NEXT" */
+						--soft: #d34681; /* pull-quotes / notes */
+						--num: #431043; /* footer slide number */
+						position: relative;
+						width: 1080px;
+						height: 1350px;
+						overflow: hidden;
+						flex-shrink: 0;
+						background: var(--paper);
+						box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+					}
+					.slide.dark {
+						--ink: #f3e8de;
+						--body: #d8c7cf;
+						--accent: #e77aa4;
+						--soft: #efc9d8;
+						--num: #efc9d8;
+						background: var(--night);
+						box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+					}
+
+					/* photo wash; dark slides invert it. --bright tunes the inversion */
+					.bg {
+						position: absolute;
+						inset: 0;
+						background: var(--photo) center/cover;
+						opacity: 0.4;
+					}
+					.slide.dark .bg {
+						filter: grayscale(1) invert(1) contrast(1.15) brightness(var(--bright, 0.85));
+					}
+
+					/* pink bloom on dark slides. --gx/--gy place it, --ga sets strength */
+					.glow {
+						position: absolute;
+						inset: 0;
+						background: radial-gradient(120% 90% at var(--gx, 50%) var(--gy, 20%), rgba(211, 70, 129, var(--ga, 0.16)), transparent 60%);
+					}
+
+					/* ---------- content frame ---------- */
+					.inner {
+						position: absolute;
+						inset: 0;
+						padding: 96px;
+						display: flex;
+						flex-direction: column;
+						box-sizing: border-box;
+					}
+					.inner.mid {
+						justify-content: center;
+					}
+					.inner.center {
+						text-align: center;
+						align-items: center;
+					}
+					.inner.right {
+						text-align: right;
+						align-items: flex-end;
+					}
+
+					/* ---------- type scale ----------
+     Shared rules hold the family/weight/colour. Per-slide overrides ride in
+     on the --fs / --lh / --mt / --mw / --ls custom properties. */
+					.eyebrow {
+						font-family: 'Roboto', sans-serif;
+						font-weight: 700;
+						font-size: 26px;
+						letter-spacing: 0.24em;
+						text-transform: uppercase;
+						color: var(--accent);
+					}
+
+					.title {
+						font-family: 'Lora', serif;
+						font-weight: 700;
+						font-size: var(--fs, 76px);
+						line-height: var(--lh, 1.04);
+						letter-spacing: var(--ls, normal);
+						color: var(--ink);
+						margin-top: var(--mt, 36px);
+						max-width: var(--mw, none);
+					}
+
+					.lede {
+						font-family: 'Lora', serif;
+						font-weight: 400;
+						font-size: var(--fs, 42px);
+						line-height: var(--lh, 1.45);
+						color: var(--body);
+						margin-top: var(--mt, 40px);
+						max-width: var(--mw, none);
+						text-wrap: pretty;
+					}
+
+					.note {
+						font-family: 'Lora', serif;
+						font-weight: 500;
+						font-size: var(--fs, 40px);
+						line-height: var(--lh, 1.4);
+						color: var(--soft);
+						margin-top: var(--mt, 32px);
+						max-width: var(--mw, none);
+					}
+
+					.i {
+						font-style: italic;
+					}
+					.hl {
+						font-style: italic;
+						color: var(--accent);
+					} /* inline emphasis */
+					.grad {
+						background: var(--brand);
+						-webkit-background-clip: text;
+						background-clip: text;
+						-webkit-text-fill-color: transparent;
+						color: transparent;
+					}
+
+					/* ---------- components ---------- */
+					.pill {
+						display: inline-flex;
+						align-items: center;
+						gap: var(--gap, 20px);
+						padding: var(--pad, 26px 42px);
+						border-radius: 999px;
+						background: var(--brand);
+						color: var(--cream);
+						font-family: 'Roboto', sans-serif;
+						font-weight: 700;
+						font-size: var(--fs, 26px);
+						letter-spacing: var(--ls, 0.18em);
+					}
+					.pill .arrow {
+						font-size: 22px;
+					}
+
+					.steps {
+						font-family: 'Lora', serif;
+						font-weight: 400;
+						font-size: 38px;
+						line-height: 1.35;
+						color: var(--body);
+						margin-top: 40px;
+						display: flex;
+						flex-direction: column;
+						gap: 22px;
+					}
+					.step {
+						display: flex;
+						gap: 26px;
+						align-items: baseline;
+					}
+					.step .num {
+						font-family: 'Roboto', sans-serif;
+						font-weight: 900;
+						font-size: 30px;
+						color: var(--accent);
+						min-width: 52px;
+					}
+
+					.bullets {
+						font-family: 'Lora', serif;
+						font-weight: 400;
+						font-size: 38px;
+						line-height: 1.4;
+						color: var(--body);
+						margin-top: 40px;
+						display: flex;
+						flex-direction: column;
+						gap: 24px;
+						max-width: 880px;
+					}
+					.bullets strong {
+						font-weight: 700;
+						color: var(--ink);
+					}
+
+					.schema {
+						margin-top: 40px;
+						font-family: ui-monospace, 'Roboto Mono', monospace;
+						font-size: 28px;
+						line-height: 1.6;
+						color: var(--soft);
+						background: rgba(211, 70, 129, 0.1);
+						border: 1px solid rgba(231, 122, 164, 0.35);
+						border-radius: 14px;
+						padding: 32px 36px;
+						max-width: 760px;
+						white-space: pre;
+					}
+
+					.foot {
+						position: absolute;
+						left: 96px;
+						right: 96px;
+						bottom: 72px;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						font-family: 'Roboto', sans-serif;
+						font-weight: 700;
+						font-size: 24px;
+						letter-spacing: 0.16em;
+					}
+					.foot .n {
+						color: var(--num);
+					}
+					.foot .next {
+						color: var(--accent);
+					}
+
+					/* ---------- cover-only bits ---------- */
+					.cover-head {
+						margin-top: 64px;
+					}
+					.cover-foot {
+						margin-top: auto;
+					}
+					.cover-sub {
+						font-family: 'Lora', serif;
+						font-weight: 400;
+						font-size: 66px;
+						line-height: 1.12;
+						color: var(--ink);
+						margin-top: 14px;
+					}
+					.cover-tag {
+						text-align: right;
+						font-family: 'Lora', serif;
+						font-weight: 700;
+						font-style: italic;
+						font-size: 42px;
+						line-height: 1.25;
+					}
+					.cover-cta {
+						display: flex;
+						justify-content: flex-end;
+						margin-top: 44px;
+					}
+					.cta {
+						margin-top: 52px;
+					}
+
+					/* Pixel-art mascot on the cover. --px is the size of one pixel,
+					   so the whole robot scales from that one number. Colours come
+					   from the slide tokens, so it would re-tint on a dark slide.
+					   To redraw it, edit the ASCII map beside the <svg>. */
+					.robot {
+						--px: 13px;
+						width: calc(16 * var(--px));
+						height: auto;
+						margin-top: auto;
+						shape-rendering: crispEdges;
+					}
+				</style>
+			</helmet>
+
+			<div class="deck">
+				<!-- ===================== SLIDE 1 — COVER (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner">
+						<div class="eyebrow">Dave Brown</div>
+						<div class="cover-head">
+							<div class="title" style="--fs: 104px; --lh: 0.98; --ls: -0.01em; --mt: 140px">
+								The fastest way to an <span style="font-weight: 900">AI skillset</span>
+							</div>
+							<div class="cover-sub">That gets you <em>paid</em></div>
+						</div>
+
+						<svg class="robot" viewBox="0 0 16 19" role="img" aria-label="Pixel-art robot">
+							<g fill="var(--ink)">
+								<rect x="7" y="1" width="2" height="1" />
+								<rect x="3" y="2" width="10" height="1" />
+								<rect x="3" y="3" width="1" height="1" />
+								<rect x="12" y="3" width="1" height="1" />
+								<rect x="3" y="4" width="1" height="1" />
+								<rect x="12" y="4" width="1" height="1" />
+								<rect x="3" y="5" width="1" height="1" />
+								<rect x="12" y="5" width="1" height="1" />
+								<rect x="3" y="6" width="1" height="1" />
+								<rect x="12" y="6" width="1" height="1" />
+								<rect x="3" y="7" width="1" height="1" />
+								<rect x="12" y="7" width="1" height="1" />
+								<rect x="3" y="8" width="1" height="1" />
+								<rect x="12" y="8" width="1" height="1" />
+								<rect x="3" y="9" width="10" height="1" />
+								<rect x="7" y="10" width="2" height="1" />
+								<rect x="3" y="11" width="10" height="1" />
+								<rect x="0" y="12" width="2" height="1" />
+								<rect x="3" y="12" width="1" height="1" />
+								<rect x="12" y="12" width="1" height="1" />
+								<rect x="14" y="12" width="2" height="1" />
+								<rect x="0" y="13" width="4" height="1" />
+								<rect x="12" y="13" width="4" height="1" />
+								<rect x="0" y="14" width="2" height="1" />
+								<rect x="3" y="14" width="1" height="1" />
+								<rect x="12" y="14" width="1" height="1" />
+								<rect x="14" y="14" width="2" height="1" />
+								<rect x="3" y="15" width="1" height="1" />
+								<rect x="12" y="15" width="1" height="1" />
+								<rect x="3" y="16" width="10" height="1" />
+								<rect x="4" y="17" width="3" height="1" />
+								<rect x="9" y="17" width="3" height="1" />
+								<rect x="3" y="18" width="4" height="1" />
+								<rect x="9" y="18" width="4" height="1" />
+							</g>
+							<g fill="var(--cream)">
+								<rect x="4" y="3" width="8" height="1" />
+								<rect x="4" y="4" width="1" height="1" />
+								<rect x="7" y="4" width="2" height="1" />
+								<rect x="11" y="4" width="1" height="1" />
+								<rect x="4" y="5" width="1" height="1" />
+								<rect x="7" y="5" width="2" height="1" />
+								<rect x="11" y="5" width="1" height="1" />
+								<rect x="4" y="6" width="8" height="1" />
+								<rect x="4" y="7" width="2" height="1" />
+								<rect x="10" y="7" width="2" height="1" />
+								<rect x="4" y="8" width="8" height="1" />
+								<rect x="4" y="12" width="8" height="1" />
+								<rect x="4" y="13" width="2" height="1" />
+								<rect x="10" y="13" width="2" height="1" />
+								<rect x="4" y="14" width="8" height="1" />
+								<rect x="4" y="15" width="8" height="1" />
+							</g>
+							<g fill="var(--accent)">
+								<rect x="7" y="0" width="2" height="1" />
+								<rect x="5" y="4" width="2" height="1" />
+								<rect x="9" y="4" width="2" height="1" />
+								<rect x="5" y="5" width="2" height="1" />
+								<rect x="9" y="5" width="2" height="1" />
+								<rect x="6" y="7" width="4" height="1" />
+								<rect x="6" y="13" width="4" height="1" />
+							</g>
+						</svg>
+
+						<div class="cover-foot">
+							<div class="cover-tag grad">6 steps and a free<br />build-along.</div>
+							<div class="cover-cta">
+								<div class="pill">READ MORE <span class="arrow">▶</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- ===================== SLIDE 2 — The hook (INVERTED DARK) ===================== -->
+				<div class="slide dark" style="--bright: 0.82">
+					<div class="bg"></div>
+					<div class="glow" style="--gx: 62%; --gy: 18%; --ga: 0.18"></div>
+					<div class="inner mid">
+						<div class="eyebrow">What changed</div>
+						<div class="title" style="--fs: 80px; --lh: 1.03; --mt: 32px; --mw: 900px">
+							Nobody is getting hired to write <span class="hl">prompts</span> anymore.
+						</div>
+						<div class="lede" style="--fs: 40px; --lh: 1.42; --mw: 860px">
+							Prompting took a weekend to learn, and now everyone can do it.
+						</div>
+					</div>
+					<div class="foot"><span class="n">02</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 3 — Start boring (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid center">
+						<div class="eyebrow">Start here</div>
+						<div class="title" style="--fs: 82px; --mt: 40px; --mw: 840px">
+							Your first agent should be <span class="grad i">boring.</span>
+						</div>
+						<div class="lede" style="--mt: 44px; --mw: 760px">
+							Most people start way too big — read the whole inbox, update the CRM, book the meetings. That's exactly the wrong place to
+							start. Boring is what you can <em>see</em>, debug, and fix when it breaks.
+						</div>
+					</div>
+					<div class="foot"><span class="n">03</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 4 — The real lesson (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid">
+						<div class="eyebrow">The real lesson</div>
+						<div class="title" style="--fs: 76px">You're not learning leads. You're learning a shape.</div>
+						<div class="lede" style="--mw: 860px">
+							We'll build one tiny thing: a lead-enrichment workflow. Spreadsheet in → research each business → structured results →
+							spreadsheet out.
+						</div>
+						<div class="note i" style="--mt: 36px; --mw: 860px">
+							That same shape runs support automation, document processing, research assistants, and a hundred things you'll build next.
+						</div>
+					</div>
+					<div class="foot"><span class="n">04</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 5 — Mental model (INVERTED DARK) ===================== -->
+				<div class="slide dark">
+					<div class="bg"></div>
+					<div class="glow" style="--gx: 30%"></div>
+					<div class="inner mid right">
+						<div class="eyebrow">The mental model</div>
+						<div class="title" style="--fs: 80px; --lh: 1.03; --mw: 900px">
+							It's an <span class="hl">assembly line</span> — not a genie.
+						</div>
+						<div class="lede" style="--mw: 820px">
+							Most of your "AI agent" isn't AI. Loading the file, running search, writing results back — all ordinary code.
+						</div>
+						<div class="note" style="--lh: 1.42; --mw: 820px">
+							The model only does the judgment: decide what to search, read the messy results, return clean fields.
+						</div>
+					</div>
+					<div class="foot"><span class="n">05</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 6 — Architecture (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid">
+						<div class="eyebrow">The architecture</div>
+						<div class="title" style="--fs: 72px; --mt: 32px">One row. One sequence. Repeat.</div>
+						<div class="steps">
+							<div class="step"><span class="num">01</span><span>Read a row from the spreadsheet.</span></div>
+							<div class="step"><span class="num">02</span><span>Ask the model what to search for.</span></div>
+							<div class="step"><span class="num">03</span><span>Run the search; hand results back.</span></div>
+							<div class="step"><span class="num">04</span><span>Get a structured record. Validate it.</span></div>
+							<div class="step"><span class="num">05</span><span>Write it back. Move to the next row.</span></div>
+						</div>
+						<div class="note i" style="--fs: 38px; --lh: normal; --mt: 40px">A straight line you could draw on a napkin.</div>
+					</div>
+					<div class="foot"><span class="n">06</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 7 — Structured output (INVERTED DARK) ===================== -->
+				<div class="slide dark">
+					<div class="bg"></div>
+					<div class="glow" style="--gx: 70%"></div>
+					<div class="inner mid">
+						<div class="eyebrow">Give it a shape</div>
+						<div class="title" style="--fs: 74px; --lh: 1.03; --mt: 32px">
+							Don't let the model <span class="hl">freestyle</span> the answer.
+						</div>
+						<div class="lede" style="--fs: 40px; --lh: 1.42; --mt: 36px; --mw: 860px">
+							If software has to use the answer, the answer needs structure. Hand it a schema and make it fill every field — same shape,
+							every time.
+						</div>
+						<div class="schema">
+							{ "business_summary": "string", "likely_contact": "string | null", "confidence": "high | med | low", "needs_human_review":
+							true }
+						</div>
+					</div>
+					<div class="foot"><span class="n">07</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 8 — Scope discipline (paper, right) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid right">
+						<div class="eyebrow">Scope discipline</div>
+						<div class="title" style="--fs: 84px; --lh: 1">Run it on <span class="grad">five rows.</span><br />Not five thousand.</div>
+						<div class="lede" style="--mw: 820px">
+							Five rows surface almost every problem you'll hit at scale — generic names, wrong-company matches, missing sites, and a
+							model that sounds far more confident than the evidence warrants.
+						</div>
+						<div class="note i" style="--lh: normal">Five rows is your control room.</div>
+					</div>
+					<div class="foot"><span class="n">08</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 9 — What breaks first (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid">
+						<div class="eyebrow">The curriculum</div>
+						<div class="title" style="--fs: 66px; --lh: 1.06; --mt: 32px">
+							The failures aren't bugs in your learning. <span class="hl">They are the learning.</span>
+						</div>
+						<div class="bullets">
+							<div><strong>Generic name?</strong> Fold city + state into the query.</div>
+							<div><strong>Wrong company?</strong> Make it match name, location, and site first.</div>
+							<div><strong>Invents an owner?</strong> Return <em>null</em> unless public sources prove it.</div>
+						</div>
+						<div class="note i" style="--lh: 1.35; --mt: 40px; --mw: 860px">
+							Enforce the rules that matter in code — not in the prompt.
+						</div>
+					</div>
+					<div class="foot"><span class="n">09</span><span class="next">NEXT →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 10 — Takeaway (INVERTED DARK) ===================== -->
+				<div class="slide dark" style="--bright: 0.82">
+					<div class="bg"></div>
+					<div class="glow" style="--gy: 15%; --ga: 0.18"></div>
+					<div class="inner mid center">
+						<div class="eyebrow">The takeaway</div>
+						<div class="title" style="--fs: 78px; --lh: 1.05; --mw: 880px">
+							Your first agent shouldn't be impressive. It should be <span class="hl">understandable.</span>
+						</div>
+						<div class="lede" style="--fs: 40px; --mw: 800px">
+							Narrow job. One tool. Tight scope. Structured output. Honest uncertainty. Improve it after you watch it fail.
+						</div>
+						<div class="note" style="--mw: 800px">That's how you stop <em>playing</em> with AI and start <em>managing</em> it.</div>
+					</div>
+					<div class="foot"><span class="n">10</span><span class="next">LAST →</span></div>
+				</div>
+
+				<!-- ===================== SLIDE 11 — CTA (paper) ===================== -->
+				<div class="slide">
+					<div class="bg"></div>
+					<div class="inner mid center">
+						<div class="eyebrow">Want the full build-along?</div>
+						<div class="title" style="--fs: 80px; --lh: 1.02; --mw: 860px">Comment <span class="grad i">"AGENT"</span></div>
+						<div class="lede" style="--lh: 1.4; --mt: 32px; --mw: 760px">
+							and I'll send you the complete step-by-step walkthrough — copy-paste prompts, the schema, and the run-log template. Free.
+						</div>
+						<div class="cta">
+							<div class="pill" style="--gap: 18px; --pad: 30px 52px; --fs: 30px; --ls: 0.14em">💬 COMMENT "AGENT"</div>
+						</div>
+						<div class="note i" style="--fs: 34px; --lh: normal; --mt: 48px">Follow for weekly beginner-friendly AI build-alongs.</div>
+					</div>
+					<div class="foot"><span class="n">SAVE + SHARE</span><span class="next">@davecto</span></div>
+				</div>
+			</div>
+		</x-dc>
+	</body>
+</html>
