@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" data-frame="1">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Three ways to protect your reputation · reveal frames</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown brand · progressive reveal card, 1080 x 960
+			   Sized for the top half of a 1080 x 1920 reel.
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e
+			   Four states: ?f=1 title only, ?f=2..4 reveal items in turn.
+			   Arrow keys / click / space to step through on screen.
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--muted: #6b655c;
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+				--w: 1080px;
+				--h: 960px;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				background: #d8d4cc;
+			}
+			body {
+				display: flex;
+				align-items: flex-start;
+				justify-content: center;
+			}
+
+			.card {
+				position: relative;
+				width: var(--w);
+				height: var(--h);
+				background: var(--paper);
+				padding: 88px 96px 72px;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+
+			/* ── Masthead ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 23px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 22px;
+			}
+			h1 {
+				font-family: var(--serif);
+				font-size: 74px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.04;
+				letter-spacing: -0.025em;
+				margin: 0;
+				text-wrap: balance;
+			}
+
+			/* ── The three rows ── */
+			.list {
+				margin-top: 52px;
+			}
+			.item {
+				border-top: 1px solid var(--rule);
+				padding: 30px 0 0;
+			}
+			.item + .item {
+				margin-top: 30px;
+			}
+			.num {
+				font-family: var(--sans);
+				font-size: 23px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 12px;
+				transition: color 260ms ease;
+			}
+			.item.on .num {
+				color: var(--accent);
+			}
+			.reveal {
+				transition:
+					filter 420ms ease,
+					opacity 420ms ease;
+			}
+			.item.off .reveal {
+				filter: blur(12px);
+				opacity: 0.5;
+			}
+			.item h2 {
+				font-family: var(--serif);
+				font-size: 46px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.14;
+				letter-spacing: -0.02em;
+				margin: 0;
+				text-wrap: balance;
+			}
+
+			/* ── Footer mark ── */
+			.mark {
+				margin-top: auto;
+				padding-top: 44px;
+				font-family: var(--sans);
+				font-size: 21px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+			}
+
+			/* ── On-screen stepper, never exported ── */
+			.hint {
+				position: fixed;
+				left: 50%;
+				bottom: 24px;
+				transform: translateX(-50%);
+				font-family: var(--sans);
+				font-size: 13px;
+				font-weight: 500;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: #4a453e;
+				background: #f7f5f0;
+				border: 1px solid var(--rule);
+				padding: 10px 18px;
+				user-select: none;
+			}
+			html[data-export='1'] .hint {
+				display: none;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				*,
+				*::before,
+				*::after {
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="card">
+			<p class="eyebrow">The anti-workslop guide</p>
+			<h1>Three ways to protect your reputation.</h1>
+
+			<div class="list">
+				<section class="item off" data-step="1">
+					<p class="num">01</p>
+					<div class="reveal">
+						<h2>Would they know what they’re looking at?</h2>
+					</div>
+				</section>
+
+				<section class="item off" data-step="2">
+					<p class="num">02</p>
+					<div class="reveal">
+						<h2>Generic in, generic out.</h2>
+					</div>
+				</section>
+
+				<section class="item off" data-step="3">
+					<p class="num">03</p>
+					<div class="reveal">
+						<h2>Strategize with it. Don’t outsource to it.</h2>
+					</div>
+				</section>
+			</div>
+
+			<p class="mark">@davecto</p>
+		</main>
+
+		<div class="hint">Frame <span id="n">1</span> of 4 · arrow keys or click</div>
+
+		<script>
+			const params = new URLSearchParams(location.search);
+			if (params.get('export') === '1') document.documentElement.dataset.export = '1';
+
+			let frame = Math.min(4, Math.max(1, parseInt(params.get('f') || '1', 10) || 1));
+			const items = [...document.querySelectorAll('.item')];
+			const counter = document.getElementById('n');
+
+			function render() {
+				document.documentElement.dataset.frame = String(frame);
+				items.forEach((el) => {
+					const step = Number(el.dataset.step);
+					const shown = step <= frame - 1;
+					el.classList.toggle('off', !shown);
+					el.classList.toggle('on', step === frame - 1);
+				});
+				counter.textContent = String(frame);
+			}
+
+			function step(delta) {
+				frame = Math.min(4, Math.max(1, frame + delta));
+				render();
+			}
+
+			addEventListener('keydown', (e) => {
+				if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) {
+					e.preventDefault();
+					step(1);
+				}
+				if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+					e.preventDefault();
+					step(-1);
+				}
+				if (e.key === 'Home') {
+					frame = 1;
+					render();
+				}
+			});
+			addEventListener('click', () => step(1));
+
+			render();
+		</script>
+	</body>
+</html>
