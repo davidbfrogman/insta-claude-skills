@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>The anti-workslop guide</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines: what to actually say ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Standalone strip (the drop-in standard) ── */
+			.standard {
+				border-top: 1px solid var(--ink);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 20px 0 24px;
+			}
+			.standard .std-item {
+				margin: 0 0 16px;
+			}
+			.standard .std-item p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.6;
+				margin: 4px 0 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.pull,
+				.strip,
+				.row,
+				.std-item,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								The anti-workslop guide.
+							</h1>
+							<p class="lead">
+								How to make sure the AI-assisted work leaving your hands is real work. And what to do, without starting a
+								fight, when someone hands you the other kind.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Something strange is happening inside companies that went all-in on AI. Usage is up. Mandates have landed.
+								Everyone is producing more, faster, and it all looks quite good. And the return on the investment is, by
+								most measures, close to nothing: a report out of the MIT Media Lab put 95% of organizations at no
+								measurable return at all.
+							</p>
+							<p class="body-text">
+								There are a lot of explanations for that gap. This guide is about one of them, and it’s the one you can
+								personally do something about by Thursday.
+							</p>
+							<p class="body-text">
+								Researchers at BetterUp Labs and the Stanford Social Media Lab gave it a name: <strong>workslop</strong>.
+								Their definition is precise, and worth sitting with: AI-generated work content that masquerades as good
+								work, but lacks the substance to meaningfully advance the task. It isn’t bad work in the obvious sense. Bad
+								work gets caught. Workslop is <em>polished</em>. It has headers, structure, an executive summary, a
+								confident tone. It passes the two-second glance. Then whoever receives it has to work out what’s missing,
+								what’s wrong, and what you actually meant, which was, of course, your job.
+							</p>
+							<p class="body-text">
+								You have almost certainly been on the receiving end. You open a document and feel a specific, hard-to-place
+								confusion, followed by irritation. <em>Wait, what is this?</em> Then the suspicion that the sender didn’t
+								write it so much as commission it. That feeling has a name now. And it has a price tag.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">40%</p>
+									<p class="stat-label">of full-time employees received workslop in the past month</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">1h 56m</p>
+									<p class="stat-label">average time lost dealing with a single instance</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">$9M</p>
+									<p class="stat-label">estimated annual cost per 10,000 employees</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">32%</p>
+									<p class="stat-label">don’t want to work with the sender again</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Those numbers come from a survey of 1,150 U.S. full-time employees. The last one is the one I’d tape to
+								your monitor. The productivity cost is real but recoverable; the reputational cost isn’t. Roughly half of
+								people who received workslop rated the sender as less creative, less capable, and less reliable than they
+								had before. Forty-two percent trusted them less. A third quietly decided they’d rather not work with them
+								again, and never said a word about it.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								That’s the trap. Workslop feels efficient to send and expensive to receive, and the receiver almost never
+								tells you. You get the time savings immediately and pay the bill six months later, in a meeting you weren’t
+								invited to.
+							</p>
+
+							<div class="pull">
+								<p>
+									AI produces drafts. People produce work. You are not finished until the draft is something you can stand
+									behind in a room.
+								</p>
+							</div>
+
+							<p class="body-text">
+								That single line is the whole guide. Everything below is what it looks like in practice: first as personal
+								discipline, then as self-defense, then as something you can actually ask a team to follow.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										Don’t be the source. <span>Three disciplines that keep your own output honest.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										Don’t be the victim. <span>Five ways to push back that don’t cost you the relationship.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">The slop loop. <span>What happens when two AIs argue through two people.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">If you run a team. <span>Seven changes that actually move the number.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										The drop-in standard. <span>A team norm you can paste into a channel today.</span>
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 34px">
+								One framing note before we start. None of this is an argument against using AI. The same research that
+								found workslop also found that the heaviest, most enthusiastic AI users get dramatically more out of it than everyone else. The researchers call them <em>pilots</em>: high agency, high optimism. Pilots
+								use AI 75% more at work than the passengers do. The difference isn’t how much they use it. It’s that
+								passengers use AI to <em>avoid</em> work and pilots use it to <em>do</em> work. Workslop is what
+								passengering looks like from the outside.
+							</p>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · Don’t be the source</p>
+								<h2>Three disciplines, and one test before you hit send.</h2>
+								<p class="section-sub">
+									Almost all self-inflicted workslop traces back to the same three failures: thin context, mistaking length
+									for effort, and handing over the part of the job that was actually yours.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Start with the mindset the rest of this depends on: <strong>your name on it means you vouch for it.</strong>
+								Not the tool’s name. Yours. The moment something leaves your hands, you are the author of every claim in
+								it, and “the AI wrote that part” is not a thing you will ever get to say out loud without cost. If you
+								can’t defend a line, that line isn’t finished.
+							</p>
+							<p class="body-text" style="margin-bottom: 28px">
+								Here’s the honest gut-check that catches most of it, and it takes four seconds:
+								<em>if I’d had unlimited time, is this the work I would have produced?</em> If AI let you skip the typing, that’s the deal working as intended. If it let you skip the <em>thinking</em>, you’ve made workslop, and the person
+								downstream is about to do that thinking for you.
+							</p>
+
+							<div class="tip">
+								<span class="tip-num">Discipline 01</span>
+								<h3 class="tip-title">Context is the work. The prompt is where you do it.</h3>
+								<p class="body-text">
+									The model doesn’t know what you know. It doesn’t know that this client already rejected the phased
+									option, that the VP asking for this actually wants ammunition for a budget conversation, that the number
+									in the third column is wrong for reasons everyone on the team understands and nobody has written down.
+									None of that is on the internet. All of it is the reason your version of the document should be better
+									than a stranger’s.
+								</p>
+								<p class="body-text">
+									So here’s the test that never fails: <strong>could anyone at any company have typed my prompt?</strong>
+									If yes, you are going to get output that could have gone to anyone at any company, which is precisely
+									the texture people recognize as slop. Generic in, generic out. It’s not a model limitation, it’s an
+									input problem, and it’s yours.
+								</p>
+								<p class="body-text">Three practical moves, in rough order of how much they help:</p>
+								<ul class="brand">
+									<li>
+										<strong>Give it the raw material, not a description of the raw material.</strong> Paste the actual
+										meeting notes, the actual thread, the actual numbers. “Summarize our Q3 issues” produces a horoscope.
+										The transcript plus “what did we actually decide, and what’s still open?” produces something useful.
+									</li>
+									<li>
+										<strong>Write down the three things only you know</strong> before you write the prompt. The
+										constraint, the history, the politics. That’s usually the entire delta between slop and work.
+									</li>
+									<li>
+										<strong>Name the decision the document has to serve.</strong> Not “write a proposal” but “this needs
+										to get a skeptical CFO to approve one of two options in a fifteen-minute meeting.” The model is
+										surprisingly good at reverse-engineering a document from a decision. It cannot guess the decision.
+									</li>
+								</ul>
+								<p class="body-text">
+									And then don’t stop at the first output. The first response is raw material; the real work is the second
+									and third pass, where you tell it what’s wrong, what to cut, what it assumed that isn’t true. People who
+									get consistently good results aren’t better at prompting. They’re just less willing to accept the first
+									thing they’re handed.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The tell</p>
+									<p>
+										Read your draft and hunt for any sentence that would be equally true at a competitor. Every one of
+										those is a place where you supplied no context and the model filled the space with plausible
+										filler. Cut them or replace them with something only your team could have written.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Discipline 02</span>
+								<h3 class="tip-title">Length is not effort. It only used to be.</h3>
+								<p class="body-text">
+									For all of professional history, volume was an honest signal. Nobody wrote nine pages without caring
+									about the subject, because nine pages cost a day. Length meant effort, effort meant seriousness, and
+									readers learned to respect the thick document.
+								</p>
+								<p class="body-text">
+									Generative AI severed that link completely, and our instincts haven’t caught up. Which is exactly why
+									long AI output <em>feels</em> like it’s working: you send twelve paragraphs, it reads as thorough, and
+									for about ninety seconds you look like the most diligent person on the thread. Then the reader gets to
+									paragraph five, notices nothing has been decided, and reprices the whole thing. Now you look like
+									someone who wasted their morning.
+								</p>
+								<p class="body-text">
+									The discipline is unglamorous: <strong>the finished thing is usually shorter than the draft.</strong>
+									Not tightened. Shorter. Most of what a model generates is connective tissue that exists to make prose
+									flow, and prose flow is not what your reader needs from a status update. Cut without mercy:
+								</p>
+								<ul class="brand">
+									<li>The opening paragraph explaining that the topic is important and evolving rapidly.</li>
+									<li>The paragraph summarizing what you’re about to say, followed by you saying it.</li>
+									<li>
+										The scrupulously balanced “on the other hand” section that surveys both sides and commits to
+										neither. That’s not nuance. That’s the absence of a position, dressed as maturity.
+									</li>
+									<li>The closing recap of everything above it.</li>
+									<li>Any sentence that could appear in any deck at any company. (See discipline one.)</li>
+								</ul>
+								<p class="body-text">
+									Watch for structure inflation too, because it’s the sneakier version. Headers, nested bullets, bold
+									lead-ins, a tidy three-part framework: formatting that makes thin thinking look organized. Real
+									structure comes from having a sequence of ideas that depend on each other. Applied structure is just
+									packaging, and experienced readers can smell it in seconds.
+								</p>
+								<p class="body-text">
+									Simplest rule I’ve got: if your summary is longer than the thing it summarizes, start over. And if you
+									catch yourself hoping the length itself will do some persuading: that’s the moment to stop, because
+									you already know you don’t have the substance.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Discipline 03</span>
+								<h3 class="tip-title">Don’t outsource the deciding.</h3>
+								<p class="body-text">
+									We’ve been offloading cognition to machines for a long time, and mostly it’s been fine. Nobody
+									memorizes phone numbers anymore and civilization held. The difference here is subtle but total: when
+									you Google a fact, you offload <em>retrieval</em> and you can verify the answer in a second. When you
+									ask a model to tell you what your team should do next quarter, you’re offloading <em>judgment</em>, and judgment can’t be spot-checked, because the whole point is that there’s no correct answer sitting
+									somewhere to compare against.
+								</p>
+								<p class="body-text">
+									That’s also, not coincidentally, the part you’re paid for. AI is genuinely excellent at everything up
+									to the decision, and it cannot make the decision, because the decision requires knowing which
+									stakeholder can absorb bad news this month and which one can’t. If you delete your judgment and ship
+									the scaffolding, you’ve handed over the only part of the work that was actually yours, and the person
+									receiving it now has to supply it.
+								</p>
+								<p class="body-text">
+									The fastest diagnostic I know: <strong>can you say what you think in three sentences, right now, with
+									the laptop closed?</strong> If not, you don’t have a position. You have a document. Those are extremely
+									different things and only one of them is worth sending.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The meeting test</p>
+									<p>
+										Before you send, imagine someone senior reading one line aloud and asking, “Why this?” If your
+										honest internal answer is “because it came out that way,” delete it or earn it. Anything you
+										couldn’t defend out loud isn’t ready to go out in writing. Writing just delays the question.
+									</p>
+								</div>
+								<p class="body-text">
+									There’s a compounding version of this worth naming. Every judgment call you hand to a model is a rep
+									you don’t take. One skipped rep is nothing. A year of skipped reps is a real erosion in the specific
+									muscle that makes you valuable, and the erosion is invisible right up until the moment you need to
+									make a hard call fast and notice you’re reaching for a tool instead of an opinion. Use AI to
+									<em>pressure-test</em> your thinking, argue with it, find your blind spots. Just don’t let it do the
+									thinking and then sign the result.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">The four questions, right before you send.</h3>
+								<p class="body-text">
+									This takes thirty seconds and catches nearly everything. Run it on anything AI helped you produce, including, and especially, the things you’re confident about.
+								</p>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 22%">Question</th>
+												<th>What you’re actually checking</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>Ownership</strong></td>
+												<td>
+													Can I defend every claim, number, and recommendation here without pointing at a tool? If I’d
+													be embarrassed to have written it myself, I can’t send it.
+												</td>
+											</tr>
+											<tr>
+												<td><strong>Substance</strong></td>
+												<td>
+													Did AI add length, or did it add value? If I cut this in half, what would actually be lost?
+													If the answer is “nothing,” cut it in half.
+												</td>
+											</tr>
+											<tr>
+												<td><strong>Context</strong></td>
+												<td>
+													Does this contain the specifics of <em>our</em> situation (our constraints, our people, our decision), or could it have been sent by anyone, to anyone?
+												</td>
+											</tr>
+											<tr>
+												<td><strong>Receiver</strong></td>
+												<td>
+													What will the person opening this have to do before they can use it? If they have to
+													reconstruct my thinking, I haven’t done my job. I’ve transferred it.
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									The fourth is the one that matters most and gets skipped most. Workslop is fundamentally a transfer of
+									effort, so the only reliable test is to look at the transfer directly: what is now on their plate that
+									was on mine ten minutes ago?
+								</p>
+							</div>
+
+							<div class="tip" style="margin-bottom: 8px">
+								<h3 class="tip-title">Five habits that keep you clean.</h3>
+								<ul class="brand">
+									<li>
+										<strong>Read every line before it leaves you.</strong> Pasting unread output is the single most
+										common way slop gets made. There is no version of this where you skip the read.
+									</li>
+									<li>
+										<strong>Use AI where you can verify, not where you can’t.</strong> First drafts, structure, rewrites,
+										counterarguments: excellent. Facts you have no way to check: dangerous, and eventually
+										career-limiting.
+									</li>
+									<li>
+										<strong>Add the part AI can’t.</strong> The priority call, the recommendation, the thing to ignore,
+										the political read. If that’s absent, you sent scaffolding.
+									</li>
+									<li>
+										<strong>Treat shorter as a win.</strong> Cutting is the highest-leverage editing you’ll do, and it’s
+										the one thing the model won’t volunteer.
+									</li>
+									<li>
+										<strong>Disclose plainly when it matters.</strong> “I drafted this with AI and checked the numbers
+										against the source” costs you nothing and buys you enormous credibility. Concealment is what gets
+										punished, not use.
+									</li>
+								</ul>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · Don’t be the victim</p>
+								<h2>Five ways to push back without making an enemy.</h2>
+								<p class="section-sub">
+									Everyone writes the guide about not sending slop. Almost nobody writes the one you actually need at 4pm
+									on a Tuesday, when it’s already in your inbox and the sender outranks you.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Here’s why this half matters more than it looks. When people receive workslop, the overwhelmingly common
+								response is to absorb it: quietly rewrite it, quietly do the missing thinking, quietly downgrade their
+								opinion of the sender, and say nothing. That’s the worst possible outcome for everyone involved. The
+								sender learns that it worked and does it again. You eat two hours and some resentment. And the actual
+								standard on your team drops by one notch, permanently, because nobody defended it.
+							</p>
+							<p class="body-text">
+								The reason people absorb it is simple: naming it feels like an accusation. So the whole trick (and it is the entire trick) is to <strong>make the conversation about the missing thing, never about the
+								tool.</strong> “This feels AI-generated” is a character allegation and it will go badly whether or not
+								you’re right. “What are you recommending?” is a normal professional question that happens to be
+								unanswerable by anyone who hasn’t done the work.
+							</p>
+
+							<div class="pull">
+								<p>Judge the work, not the method. It’s the same rule that protects you when you’re the one using AI.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Move 01</span>
+								<h3 class="tip-title">Ask for the position, not for more document.</h3>
+								<p class="body-text">
+									The single highest-return question you can ask, and it works in every direction on the org chart:
+									<em>“What are you recommending, in your own words?”</em>
+								</p>
+								<p class="body-text">
+									It’s genuinely neutral. You’re asking someone to summarize their own work, which is the most ordinary
+									request in professional life. But it’s unfakeable. A person who thought it through answers instantly and
+									usually with relief. A person who generated it either has to go think, or hands you another document,
+									which tells you everything. Either way the work goes back where it belongs and nobody has been accused
+									of anything.
+								</p>
+								<p class="body-text">
+									Do not ask for a shorter version of the document. That’s a formatting request and you’ll get a shorter
+									document with the same hole in it. Ask for the <em>position</em>. And ask for it in a medium that’s
+									hostile to volume: Slack, a hallway, a two-minute call.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Say this</p>
+									<p class="script">“Before I dig in, what are you recommending, and what’s the main reason?”</p>
+									<p class="script-note">
+										Variants: “What’s the decision you need from me here?” · “If you had to pick one, which and why?” ·
+										“Give me the three-sentence version.”
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Move 02</span>
+								<h3 class="tip-title">Fix it upstream: ask in a shape that’s hard to slop.</h3>
+								<p class="body-text">
+									Most workslop is invited. “Can you put together something on the vendor situation?” is an open
+									invitation to produce volume, because you haven’t said what would count as success, so the safest move
+									available to the person you asked is to send a lot and let you sort it out. That’s not laziness, it’s
+									rational under ambiguity. AI just made the lot-of-stuff option free.
+								</p>
+								<p class="body-text">
+									Constraint is the best slop filter ever invented, and it’s the only one that operates
+									<em>before</em> the work happens. Specify three things when you delegate: the length, the decision it
+									has to serve, and the requirement of a recommendation. All three are hard to fake:
+								</p>
+								<ul class="brand">
+									<li>
+										<strong>A length cap forces prioritization.</strong> “One page, max” means someone has to decide
+										what matters. That decision is the work.
+									</li>
+									<li>
+										<strong>A required recommendation forces a position.</strong> “Three options, your pick, and why”
+										can’t be produced without a human choosing.
+									</li>
+									<li>
+										<strong>A named decision forces relevance.</strong> “This has to get us to a go/no-go by Friday”
+										kills every paragraph that doesn’t move toward it.
+									</li>
+								</ul>
+								<p class="body-text">
+									Two more asks I’ve found weirdly effective: <em>“include the two strongest objections to your
+									recommendation”</em> and <em>“tell me what you decided to leave out.”</em> Both require somebody to
+									have actually held the material in their head. Neither reads as distrust. They read as rigor, which is
+									exactly what they are.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Move 03</span>
+								<h3 class="tip-title">Return it once, with one specific gap.</h3>
+								<p class="body-text">
+									When something lands short, there are three options and most people pick the worst one. You can rewrite
+									it silently (costs you two hours, teaches nobody, breeds resentment). You can do a full teardown (reads
+									as an indictment, wrecks the relationship, and takes longer than rewriting). Or you can send it back
+									once, with exactly one specific ask.
+								</p>
+								<p class="body-text">
+									One ask reads as collaboration. Five reads as a performance review. So pick the single most load-bearing hole (usually the missing recommendation, the unverified numbers, or the absent context about your actual situation) and ask for that alone. Include the deadline when you hand it back, so it’s a
+									workflow step rather than a verdict.
+								</p>
+								<p class="body-text">
+									Keep the language about the artifact, never the author or the tool. “This section needs X” is a note
+									about a document. “You clearly didn’t read this” is a note about a person, and people defend themselves
+									instead of fixing documents.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Say this</p>
+									<p class="script">
+										“This is a good start. The piece I need is your actual recommendation and the reasoning behind it.
+										Can you add that and send it back by Thursday?”
+									</p>
+									<p class="script-note">
+										Variants: “Can you flag which of these numbers you’ve verified against the source?” · “What’s the
+										part that’s specific to our situation?” · “Which of these three would you actually do?”
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Move 04</span>
+								<h3 class="tip-title">Stop paying the tax in silence.</h3>
+								<p class="body-text">
+									The two-hour rework cost is invisible for exactly one reason: receivers eat it privately. Nobody logs
+									it, nobody mentions it, and so the organization genuinely does not know it’s happening. Meanwhile a
+									third of people who receive workslop <em>are</em> telling someone, just not the sender. They’re
+									telling their manager, or each other. That’s the worst of both worlds: the cost stays hidden and the
+									reputational damage still lands.
+								</p>
+								<p class="body-text">
+									Make the cost visible, but route it to the standard rather than the person. Procedural language does
+									this well because it’s about process and future work, not blame and past work:
+								</p>
+								<div class="callout">
+									<p class="callout-label">Say this</p>
+									<p class="script">
+										“That took about two hours to reconcile on my end. Can we agree on what these should include so it
+										doesn’t next time?”
+									</p>
+									<p class="script-note">
+										Notice what it does: states a fact, proposes a fix, assigns no motive, and ends pointed forward.
+									</p>
+								</div>
+								<p class="body-text">
+									<strong>When it comes from above you</strong> (and 16% of the time it does), the calculus changes but the move doesn’t. You’re not going to send your VP’s document back for revisions. You’re going to ask
+									for the takeaway, which is a completely normal thing for a direct report to want: <em>“Just so I get
+									this right, what’s the one thing you want me to take away from this?”</em> That’s deferential on its
+									face and it does the same job. It surfaces whether there’s a position underneath.
+								</p>
+								<p class="body-text">
+									If it’s a pattern rather than an incident, take it to norms instead of people. “Could we agree that
+									anything going to the client gets a human pass first?” is a proposal about how the team works. It costs
+									no one their dignity, and it’s much easier to say yes to than an apology.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Move 05</span>
+								<h3 class="tip-title">Never answer slop with slop.</h3>
+								<p class="body-text">
+									This is the one people fail, and it’s the one that does structural damage. You receive four pages you
+									suspect were generated. You’re annoyed, you’re busy, and there’s an extremely available response: paste
+									it into a model, ask for a rebuttal, send four pages back. It feels like defending yourself. It feels,
+									briefly, like winning.
+								</p>
+								<p class="body-text">
+									What you’ve actually done is double the volume and remove the last human from the conversation. Now
+									there are two “positions” bouncing back and forth, neither of which anyone holds, and the thread can
+									never resolve, because resolution requires two people converging, and there aren’t two people in it
+									anymore.
+								</p>
+								<p class="body-text">
+									Break it by changing the medium and the direction. Get on a call. Compress instead of expanding. Put a
+									decision in writing in plain language, in your own words, with your name on it. It feels like
+									unilateral disarmament. It isn’t. It’s the only move on the board that can actually end the exchange,
+									and the person who makes it is visibly the adult.
+								</p>
+							</div>
+
+							<div class="tip" style="margin-bottom: 8px">
+								<div class="callout" style="border-left-color: var(--muted)">
+									<p class="callout-label" style="color: var(--muted)">One thing not to do</p>
+									<p>
+										Don’t become the AI police. Don’t run detectors, don’t hunt for tells, don’t open with “be honest,
+										did you write this?” Detection is unreliable, the accusation is unrecoverable if you’re wrong, and
+										the whole framing is a trap: it makes AI use the offense, when the offense is unfinished work.
+										Plenty of excellent work is AI-assisted. Plenty of terrible work is entirely human. Hold the
+										standard, stay out of the forensics.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · The slop loop</p>
+								<h2>Two AIs arguing through two people who stopped reading.</h2>
+								<p class="section-sub">
+									It has the exact shape of rigorous debate, which is why it can run for weeks before anyone notices
+									nothing is being decided.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">The fastest way a team drowns.</h3>
+								<p class="body-text">
+									The pattern: Person A generates a long proposal. Person B, rather than reading it and thinking, feeds it
+									to a model and generates a long rebuttal. A responds with another generation. Round three arrives. The
+									thread is now enormous, the tone is professional, and something that looks unmistakably like rigorous
+									disagreement is taking place.
+								</p>
+								<p class="body-text">
+									Except neither position was ever held by a human being. It’s two text generators taking turns, with
+									people acting as message routers. And because it has the <em>form</em> of debate (claims, counterclaims, evidence, structure), everyone involved feels productive. That’s what makes it so corrosive. Ordinary
+									conflict at work resolves because two humans eventually get tired and converge. This can’t converge.
+									There’s nothing in it to converge on.
+								</p>
+								<p class="body-text"><strong>Four ways to break it:</strong></p>
+								<ul class="brand">
+									<li>
+										<strong>A human holds the pen.</strong> Every artifact in a decision loop needs a named owner who
+										states their actual position in their own words. AI can inform a position. It cannot be one. If you
+										can’t say what you think in three sentences without the tool, you don’t have a position yet.
+									</li>
+									<li>
+										<strong>Compress, don’t expand.</strong> The diagnostic is simple and reliable: each round is
+										producing more text and less clarity. Real progress makes a document <em>shorter</em>. The moment
+										round two is longer than round one, stop generating and start deciding.
+									</li>
+									<li>
+										<strong>No relays.</strong> If you’re forwarding AI output, you add your take: what you agree with,
+										what to cut, what the call is. Forwarding raw output with “thoughts?” is handing someone your
+										homework with a smile.
+									</li>
+									<li>
+										<strong>Move to a decision, not another draft.</strong> If two rounds haven’t converged, a third
+										won’t. That’s not an information problem, it’s a decision problem. Get on a call, make the call,
+										write it down in plain language.
+									</li>
+								</ul>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · If you run a team</p>
+								<h2>Seven changes that actually move the number.</h2>
+								<p class="section-sub">
+									Individual discipline has a ceiling. Slop propagates because of what leadership rewards, measures, and
+									mandates, and those are all things you can change this quarter.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">01</p>
+								<h3 class="tip-title">Kill the blanket mandate.</h3>
+								<p class="body-text">
+									“Use AI everywhere, all the time” is the single instruction most likely to manufacture slop. It signals
+									that <em>volume of usage</em> is the goal, so people paste AI into everything, including the tasks it’s
+									worst at. Worse, an indiscriminate mandate models exactly the behavior you’re trying to prevent: passing
+									the buck instead of doing the thinking. Replace it with specifics: here’s where this genuinely helps
+									us, here’s where it doesn’t, here’s how we check it. Discernment is the whole game, and it has to be
+									demonstrated from the top or it doesn’t exist.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">02</p>
+								<h3 class="tip-title">Publish a quality bar, not an adoption target.</h3>
+								<p class="body-text">
+									If the only number leadership talks about is “percentage of employees using AI,” you are measuring
+									activity and you will get activity, including a great deal of activity that costs you money. Publish
+									the quality standard instead: what good AI-assisted work looks like here, and what disqualifies
+									something from being sent at all.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">03</p>
+								<h3 class="tip-title">Judge the work, not the tool.</h3>
+								<p class="body-text">
+									Adopt one line as policy: <strong>human-AI work is held to the exact same standard as human-only
+									work.</strong> This quietly removes the largest available excuse, because “the AI wrote it” stops being
+									a defense the instant the standard is identical either way. It also protects the good-faith users, who
+									currently face a real and well-documented competence penalty just for admitting they used a tool. Same
+									bar, no discount, no stigma.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">04</p>
+								<h3 class="tip-title">Build pilots, not passengers.</h3>
+								<p class="body-text">
+									The research splits users cleanly. <em>Pilots</em> (high agency, high optimism) use AI to sharpen their own output and hit specific goals. <em>Passengers</em> use it to avoid work. Passengers are the
+									slop factory, and you don’t fix that with a rule. You fix it by making purposeful use visible: have
+									someone walk the team through how they used AI on a real deliverable, <em>including how they checked
+									it.</em> “Here’s what I generated, here’s what I threw out, here’s what I verified” needs to become a
+									normal and respected thing to say out loud.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">05</p>
+								<h3 class="tip-title">Make pushback safe and boring.</h3>
+								<p class="body-text">
+									Right now, questioning a colleague’s deliverable feels like an accusation, so people absorb the rework
+									instead and the standard erodes silently. Give the team neutral, shared language (the scripts in part two exist for this), and then use it yourself, publicly, on your own team’s work. “Can you give me the
+									three-sentence version with your actual recommendation?” should be as unremarkable as asking for a
+									status update.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">06</p>
+								<h3 class="tip-title">Measure outcomes, not prompts.</h3>
+								<p class="body-text">
+									Track whether the work got better, faster, or clearer. Not how many prompts were typed, not seat
+									utilization, not tokens. If the dashboard rewards AI activity, you are directly subsidizing slop, and
+									your people will correctly optimize for what you’re counting.
+								</p>
+							</div>
+
+							<div class="row" style="margin-bottom: 30px">
+								<p class="kicker">07</p>
+								<h3 class="tip-title">Name the failure mode out loud.</h3>
+								<p class="body-text">
+									Give it a word your team actually uses. “Workslop” works fine. Naming it makes it visible, and visible
+									things get avoided: people are markedly less likely to send something they know has a label and a
+									reputation. It also gives receivers a way to describe what happened without describing a person, which
+									is the whole reason the term is useful.
+								</p>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · The drop-in standard</p>
+								<h2>Paste this into a channel and you’re done.</h2>
+								<p class="section-sub">
+									Seven lines. This is the “how do we use AI here” document people keep asking for, minus forty pages of
+									policy nobody reads.
+								</p>
+							</div>
+
+							<div class="standard">
+								<p class="rule-label">How we use AI on this team</p>
+								<div class="std-item">
+									<p class="kicker">01 · AI drafts, you finish</p>
+									<p>
+										Anything AI helps produce is a draft until a human has read every line, verified the claims, and can
+										defend it. Your name on it means you vouch for it.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">02 · Same bar, every time</p>
+									<p>
+										We judge the work, not the method. AI-assisted work is held to the identical standard as work done
+										without it. “The AI wrote it” is not a defense, and using AI is not a mark against you.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">03 · No raw paste</p>
+									<p>
+										Don’t send output you haven’t read and shaped. If you wouldn’t have written it yourself given the
+										time, don’t send it.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">04 · Add the thinking</p>
+									<p>
+										Your job is the judgment: the priorities, the recommendation, the context only you have. Don’t
+										delete that and ship the scaffolding.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">05 · Shorter is a win</p>
+									<p>If it’s longer than it needs to be, it isn’t finished. Length is not effort.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">06 · Own your position</p>
+									<p>
+										In any decision, state what you think, in your own words. AI can inform your view; it can’t be your
+										view. No AI-arguing-with-AI loops.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">07 · Asking for the real version is normal</p>
+									<p>
+										Asking a teammate for “the short version with your actual recommendation” is a welcome request, not
+										an insult. Nobody has to absorb rework in silence here.
+									</p>
+								</div>
+							</div>
+
+							<!-- ── Scripts ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">The scripts</p>
+								<h2>Naming it without starting a fight.</h2>
+								<p class="section-sub">
+									None of these accuse anyone of anything. They just quietly re-establish the standard: somebody has to
+									have done the thinking, and it isn’t going to be the person receiving the message.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 34%">When</th>
+											<th>What to say</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>It’s long and you can’t find the point</strong></td>
+											<td>“Before I dig in, what are you recommending, and what’s the main reason?”</td>
+										</tr>
+										<tr>
+											<td><strong>There’s no decision in it</strong></td>
+											<td>“What’s the decision you need from me here?”</td>
+										</tr>
+										<tr>
+											<td><strong>It reads generic</strong></td>
+											<td>“This is solid background. What’s the part that’s specific to our situation?”</td>
+										</tr>
+										<tr>
+											<td><strong>The numbers feel unverified</strong></td>
+											<td>“Can you flag which of these you’ve checked against the source?”</td>
+										</tr>
+										<tr>
+											<td><strong>You’re about to rewrite it yourself</strong></td>
+											<td>“I think this needs another pass before it goes out. Want to take it, or should I?”</td>
+										</tr>
+										<tr>
+											<td><strong>It’s the second time this month</strong></td>
+											<td>
+												“That took about two hours to reconcile. Can we agree on what these should include so it
+												doesn’t next time?”
+											</td>
+										</tr>
+										<tr>
+											<td><strong>It came from your manager</strong></td>
+											<td>“Just so I get this right, what’s the one thing you want me to take away?”</td>
+										</tr>
+										<tr>
+											<td><strong>You’re delegating and want to prevent it</strong></td>
+											<td>“One page, three options, your pick, and the two strongest objections to it.”</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ── Takeaway ── -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								Workslop is effort transfer disguised as productivity.
+							</p>
+							<p class="body-text">
+								You beat it personally by refusing to send anything you can’t defend out loud, which means bringing real
+								context to the prompt, cutting instead of padding, and keeping the judgment for yourself. You beat it
+								interpersonally by asking for the position instead of the document, constraining the ask before the work
+								starts, returning things once with a single specific gap, making the rework cost visible in neutral terms,
+								and never answering a generated argument with another one. You beat it organizationally by holding
+								AI-assisted work to precisely the same bar as everything else, killing the blanket mandate, and measuring
+								whether the work got better rather than whether the tool got used.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								The people getting real value out of these tools aren’t using them less than everyone else. They’re using
+								them as a collaborator on work they’re still doing, not as a way to hand their colleagues their job.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you want a second set of eyes.</h2>
+								<p class="section-sub">Reading a guide and changing how a team actually works are different exercises.</p>
+							</div>
+
+							<p class="body-text">
+								I put this together because the pattern is real and I keep watching it play out, in my own inbox and in teams that are genuinely trying to do this well. The individual discipline is the easy part. Rolling a
+								standard out across a team without it landing as an accusation, or as one more policy nobody follows, is
+								considerably harder, and it’s difficult to get right entirely on your own.
+							</p>
+							<p class="body-text">
+								So I’m doing a small number of informal reviews for people working on exactly this. Send me what you’ve got (a draft team standard, a mandate you’ve been handed and aren’t sure about, or just a description of how AI work is currently landing on your team) and I’ll give you honest, specific feedback on what I’d
+								change and what I’d leave alone.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								This is early and informal. No pressure either way; the guide above is yours to run with regardless.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Workslop%20Review">hi@davecto.com</a> with the subject line
+									<strong>“Workslop Review”</strong> and a couple of sentences about where it’s showing up for you.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								Figures cited throughout are from “AI-Generated ‘Workslop’ Is Destroying Productivity” (Harvard Business
+								Review, 2025), reporting research by BetterUp Labs and the Stanford Social Media Lab across 1,150 U.S.
+								full-time employees, and from the MIT Media Lab’s report on enterprise AI returns.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
