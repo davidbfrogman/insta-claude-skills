@@ -1,0 +1,1709 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>The non-coder’s study guide to building AI agents</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown, brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* Type */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* The eyebrow: the brand’s signature detail */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* Section headers: hairline rules, not boxes */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* Entries */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* Hairline list rows */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* Resource fields strip */
+			.fields {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 18px 32px;
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 14px 0 15px;
+				margin: 0 0 18px;
+			}
+			.field {
+				flex: 1 1 150px;
+				min-width: 130px;
+			}
+			.field .field-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.source-line {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.6;
+				margin: 0 0 14px;
+			}
+
+			/* Callout: one accent hairline, no fill */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			.callout ul.brand {
+				margin-bottom: 0;
+				font-size: 14px;
+			}
+
+			/* Prompt block: the one thing that should look like it goes in a chat window */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* Pull quote: serif, accent rule, never italic */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* Bordered strip (figures) */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* Contents */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* Lists */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* Tables: rules, no fills */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row,
+				.fields,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- Masthead -->
+							<p class="eyebrow">A study guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Build an AI agent without learning to code.
+							</h1>
+							<p class="lead">
+								Ten free courses, in the order that actually works, plus what to build after each one. Four weekends,
+								about twenty five hours, and one small agent at the end that does a real piece of your job.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Most material on building AI agents is written by engineers, for engineers. It opens with a framework, a
+								repository, and an architecture diagram, and gets around to explaining what the thing is supposed to
+								accomplish somewhere near the end. If you are an operator, a marketer, a consultant, a founder, or a
+								product manager, that order is backwards. You already know the work. What you are missing is the shape of
+								the machine.
+							</p>
+
+							<p class="body-text">
+								So this guide runs the other way. It starts with how to think about the problem, moves to tools you can
+								use by dragging boxes around a screen, and only then goes anywhere near a technical detail. Every
+								resource in it is free to study. Every stage ends with something you build.
+							</p>
+
+							<div class="pull">
+								<p>The hard part was never the code. It is deciding what the agent is allowed to do.</p>
+							</div>
+
+							<p class="body-text">
+								That is the honest reason non-coders can do this now. The building got easy. The deciding did not, and the
+								deciding is the part you are already good at. You know which requests are routine and which need a human.
+								You know what a bad answer costs. You know which document is the one people actually trust. Nobody has to
+								teach you that, and no platform can supply it.
+							</p>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								What follows is a sequence, not a product ranking. You will not adopt ten platforms. You will use ten
+								resources to learn one transferable skill: how an agent gets scoped, instructed, connected, grounded,
+								tested, and improved.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">10</p>
+									<p class="stat-label">free resources, sequenced in six stages</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">6</p>
+									<p class="stat-label">parts every working agent has</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">4</p>
+									<p class="stat-label">weekends, if you want a schedule</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">$0</p>
+									<p class="stat-label">to start. Free tiers cover all of it.</p>
+								</div>
+							</div>
+
+							<!-- Contents -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										What you’re actually learning. <span>The six parts, and the one distinction worth arguing about.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										The ten resources. <span>Why each one is where it is, and what to build when you finish it.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">Four weekends. <span>A schedule, and the question each one answers.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">The capstone. <span>One small agent, six components, ten test cases.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">Where people get stuck. <span>Symptom in, next step out.</span></p>
+								</div>
+							</div>
+
+							<!-- PART ONE -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · What you’re actually learning</p>
+								<h2>An agent is a job description for something that cannot ask you what you meant.</h2>
+								<p class="section-sub">
+									Six parts, one distinction, and an honest note about the two places this gets uncomfortable.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Start with the definition, because a lot of confusion downstream comes from skipping it.
+								<strong>An agent receives a goal, reads the situation, decides what to do next, and uses tools or
+								information to finish the job.</strong> An automation follows the path you drew for it. An agent has some
+								discretion over the path it takes.
+							</p>
+
+							<p class="body-text">
+								That distinction sounds academic until something goes wrong. When an automation breaks, it breaks in the
+								same place every time and you go fix that step. When an agent goes wrong, it went somewhere you did not
+								anticipate, which is both the entire value and the entire risk. Discretion is the feature you are buying.
+								It is also the thing you have to bound.
+							</p>
+
+							<p class="body-text">
+								A fair amount of what gets sold as an AI agent is an automation with a language model bolted onto one
+								step. That is not an insult. Plenty of those are excellent, cheaper, and easier to trust. But you should
+								be able to tell which one you are looking at, because it tells you what can go wrong and how much
+								supervision it needs. By the end of this guide, you will be able to.
+							</p>
+
+							<div class="tip" style="margin-top: 30px">
+								<h3 class="tip-title">The six parts.</h3>
+								<p class="body-text">
+									Every agent that works in the real world, on any platform, in any price bracket, has the same six
+									components. Learn to see them and the platform differences shrink to vocabulary and button placement.
+								</p>
+								<ul class="brand">
+									<li><strong>A task worth doing.</strong> Narrow, recurring, and painful enough that someone notices when it gets done.</li>
+									<li><strong>Instructions.</strong> What it does, how it behaves, what it never does. This is writing, not engineering.</li>
+									<li><strong>Knowledge.</strong> The specific material it is allowed to read and answer from.</li>
+									<li><strong>Tools.</strong> The systems it can touch, and whether it can only look or also change things.</li>
+									<li><strong>A human checkpoint.</strong> The moment it stops and asks, and the rule for when that moment arrives.</li>
+									<li><strong>A way to tell if it worked.</strong> Test cases, a metric, or at minimum a person who reads the output for a week.</li>
+								</ul>
+								<p class="body-text">
+									The ten resources ahead are sequenced because each one teaches a couple of these better than the rest.
+									Anthropic and Botpress teach the task. Zapier and Make teach the tools. Voiceflow teaches the
+									checkpoint. n8n teaches knowledge and error handling. Salesforce and Microsoft teach permissions and
+									accountability. Flowise shows you the whole machine with the cover off.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The shortcut, if you want one</p>
+									<p>
+										When an agent misbehaves, one of the six is missing or vague. Nine times out of ten it is the
+										checkpoint or the criteria for success, because those are the two nobody enjoys writing.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">What you don’t need.</h3>
+								<p class="body-text">
+									Worth saying plainly, because the fear of these is what keeps most people from starting.
+								</p>
+								<ul class="brand">
+									<li><strong>You do not need to write code.</strong> Every building tool here is visual. You connect boxes and type instructions in English.</li>
+									<li><strong>You do not need to pick the right platform.</strong> You are learning a skill that transfers. The tool you finish on will probably not be the one you started on, and that is fine.</li>
+									<li><strong>You do not need a budget.</strong> All ten resources are free to study. The free product tiers are enough to build everything in this guide.</li>
+									<li><strong>You do not need to understand how the model works.</strong> You need to know what it is reliably good at, what it is quietly bad at, and where to put a human.</li>
+								</ul>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">And the two places it gets uncomfortable.</h3>
+								<p class="body-text">
+									Naming these in advance so you do not mistake them for evidence that you are the wrong person for this.
+								</p>
+								<p class="body-text">
+									<strong>The first is around resource six.</strong> Words like API, JSON, credential, and error handling
+									start appearing. None of them are conceptually hard. An API is a doorway one system leaves open for
+									another. JSON is a way of writing down a record so a machine can read it without guessing. A credential
+									is a key you store once. They feel hard because they arrive as unfamiliar vocabulary in the middle of a
+									task you were previously enjoying. Slow down for one afternoon and they become unremarkable.
+								</p>
+								<p class="body-text">
+									<strong>The second is the demo cliff.</strong> Your first agent will work beautifully on the example you
+									built it for and fall over on the third real input. This is normal and it is the exact moment most
+									people quit. It is also the moment learning starts, because everything after it is about handling the
+									inputs you did not imagine. That is why every stage below ends with something you build rather than
+									something you read.
+								</p>
+							</div>
+
+							<!-- PART TWO -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The ten resources</p>
+								<h2>In the order that keeps you from quitting.</h2>
+								<p class="section-sub">
+									Six stages. Each entry has why it sits where it does, what you should be able to do afterward, and the
+									one thing to build before moving on. Everything here was verified free to study on August 17, 2026.
+								</p>
+							</div>
+
+							<div class="section-hdr" style="margin-top: 20px">
+								<p class="eyebrow eyebrow-quiet">Stage one · Understand the system before you touch a tool</p>
+								<h2>Two resources, one afternoon, no software.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 01</span>
+								<h3 class="tip-title">Anthropic: Building Effective Agents.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Editorial and technical primer</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner concepts, developer asides</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">One focused sitting</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Read it here:
+									<a href="https://www.anthropic.com/engineering/building-effective-agents">Building Effective Agents</a>
+								</p>
+								<p class="body-text">
+									This goes first because it is the clearest mental model in the collection, and because its central
+									argument is a subtraction. Most of what you want does not need an agent. Simple, composable patterns
+									beat elaborate architectures, and autonomy should be added only where it earns its place. Starting here
+									saves you from the most expensive beginner mistake, which is building something clever for a problem
+									that wanted something boring.
+								</p>
+								<p class="body-text">
+									It is an engineering article. There are code samples. You are allowed to skim them, and nothing in the
+									argument depends on them. Read the definitions, the diagrams, the workflow patterns, and the design
+									principles. Those are the parts you will still be using in five years.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>The difference between a workflow and an agent, stated in your own words</li>
+									<li>How a model, tools, instructions, and context combine into a system</li>
+									<li>Why autonomy is a cost, not a feature, until it improves the task</li>
+									<li>The common patterns: routing, parallelization, orchestration, evaluation</li>
+									<li>Why more complexity does not produce a better system</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Pick one recurring process you already run, and separate the parts that
+									are predictable from the parts that need judgment. A content process, for example, always collects a
+									brief, researches a topic, drafts, reviews, and requests approval. The sequence never changes. The
+									research and the drafting need judgment. Those two steps are where an agent might belong. The rest
+									probably wants an automation, or a checklist, or nothing at all.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										A one page map with three columns: fixed steps, judgment steps, and the tools or information each
+										step needs. Keep it. It becomes the working brief for everything else in this guide, and you will
+										revise it four times before the end.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 02</span>
+								<h3 class="tip-title">Botpress Academy: How to Build and Ship Your First AI Agent.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Short beginner course</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">About 35 minutes</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://botpress.com/academy-course/your-first-ai-agent">How to Build and Ship Your First AI Agent</a>
+								</p>
+								<p class="body-text">
+									Thirty five minutes, and it addresses the thing that sinks most agent projects. They rarely fail in the
+									building. They fail because nobody could say, in one sentence, what the agent was for, who it served,
+									and how anyone would know it was working. Then the demo impresses a room, nothing happens for six
+									weeks, and the project quietly ends.
+								</p>
+								<p class="body-text">
+									Botpress spends its time on exactly those decisions: choosing a task, choosing where the agent lives,
+									choosing a model, defining oversight, handling compliance, picking a measure, and planning past the
+									prototype. It is a course about scoping disguised as a course about building, which is the right way
+									around.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>A narrow first use case, chosen on purpose rather than by enthusiasm</li>
+									<li>An honest answer to whether it needs an agent at all</li>
+									<li>The right channel for the people who will use it</li>
+									<li>A defined escalation path to a human</li>
+									<li>A success measure simple enough to check weekly</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Turn the map from resource one into a project brief. Answer six
+									questions and refuse to move on until each answer fits in a line: Who uses this? What single job does
+									it do? What can it read? What can it change? When must it stop and ask a person? How will I know it
+									worked?
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										A one page agent charter. Make the first version narrower than feels satisfying. Narrow scope is not
+										a limitation you accept early on, it is the reason the thing ships at all. You can widen it later,
+										once something is running and someone is using it.
+									</p>
+									<p class="script-note">
+										Botpress Academy is free to study. The platform has a
+										<a href="https://botpress.com/en/pricing">pay as you go tier starting at $0</a> with limited usage
+										and a small monthly AI credit.
+									</p>
+								</div>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Stage two · Build a first visual agent</p>
+								<h2>The weekend it stops being reading.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 03</span>
+								<h3 class="tip-title">Zapier Academy: AI Builder Path.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Four course learning path</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Complete beginners, explicitly</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">About two hours</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a
+										href="https://learn.zapier.com/courses/c8a7d45c-ecf1-480f-ba21-d10f6fed4b39/sections/9d862b0e-9d34-4a8b-bae2-2f41ea87c0c3/blocks/d0216a4a-8bbe-4111-b1c2-195130dfe0f16"
+										>AI Builder Path</a
+									>
+								</p>
+								<p class="body-text">
+									Zapier is the gentlest possible on ramp. The path starts with triggers, actions, field mapping, and app
+									connections, which is the plumbing under every agent you will ever build, and only then introduces
+									agents themselves. Zapier states outright that no coding and no prior Zapier experience is required.
+									The final section covers giving an agent tools, instructions, and guardrails.
+								</p>
+								<p class="body-text">
+									The reason to start here rather than somewhere more powerful is momentum. You need one thing that runs
+									on its own, on real data, this weekend. That first moment where something happens in an app you did not
+									touch is worth more to your learning than another two hours of theory.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>How data moves between applications, and why field mapping is where things break</li>
+									<li>A working trigger and action workflow</li>
+									<li>Conditions and utility steps, so the path can fork</li>
+									<li>A workflow described in plain language and built from that description</li>
+									<li>An agent with a deliberately small set of tools and stated boundaries</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build one agent that handles a low risk, multi step task. Good first
+									projects: classifying inbound requests, qualifying leads, summarizing form submissions, preparing a
+									meeting brief, routing customer questions, or drafting a reply that a person approves before it sends.
+									Notice what those have in common. Every one of them either produces a draft or moves information. None
+									of them can embarrass you on their own.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										One working agent that completes a real task using at least two connected applications. Real means
+										your data, your inbox, your spreadsheet. A sandbox demo will teach you the interface and none of the
+										lessons.
+									</p>
+									<p class="script-note">Free with a Zapier account. Platform activity limits still apply.</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 04</span>
+								<h3 class="tip-title">Make Academy: Automation to AI Agents, Foundation.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Six courses plus an assessment</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">New to Make</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">Two to three and a half hours</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://academy.make.com/bundles/automation-to-ai-agents-foundation">Automation to AI Agents: Foundation</a>
+								</p>
+								<p class="body-text">
+									Zapier teaches you to think in lines. Make teaches you to think in shapes. Information branches, loops
+									back, passes through routers, and splits across applications, and you can see all of it on one canvas.
+									That visual difference is not decoration. It is the first time the structure of your process becomes
+									something you can look at and criticize.
+								</p>
+								<p class="body-text">
+									The course also draws a distinction worth internalizing early: traditional automation, AI assisted
+									automation, and agentic automation are three different things with three different risk profiles. Most
+									real systems end up containing all three, and knowing which is which is how you decide where the
+									supervision goes.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>Foundational language model concepts, in business terms</li>
+									<li>Visual workflows spanning several applications</li>
+									<li>A working sense of when an agent beats a fixed automation, and when it does not</li>
+									<li>An agent’s objective, knowledge, and tools planned before it is built</li>
+									<li>One agentic automation you built and ran yourself</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Rebuild your Zapier project in Make, and add one decision point. An
+									inbound request agent might read the request, classify its urgency, retrieve relevant information,
+									draft a response, escalate anything high risk, and log the result. Building the same thing twice feels
+									wasteful. It is the fastest way to learn which parts of your first build were the idea and which parts
+									were just the platform.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										A visual diagram of that workflow, annotated. For every step, write whether it is fixed, AI assisted,
+										or agentic, and one line on why. This is the exercise that turns the Anthropic reading into
+										something you own.
+									</p>
+									<p class="script-note">The learning path is free. Make’s free product tier supports limited experimentation.</p>
+								</div>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Stage three · Design the conversation</p>
+								<h2>The first time a person is on the other side.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 05</span>
+								<h3 class="tip-title">Voiceflow Basics.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Guided visual course</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">One or two sessions</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here: <a href="https://www.voiceflow.com/lessons/voiceflow-basics">Voiceflow Basics</a>
+								</p>
+								<p class="body-text">
+									Everything so far has happened backstage. Voiceflow turns the camera around and puts a person in front
+									of the agent, which changes the design problem completely. It covers workflows, user input, intents,
+									variables, conditions, knowledge, integrations, and conversational experience design.
+								</p>
+								<p class="body-text">
+									Do this stage even if you never use Voiceflow again. Every agent that talks to a human needs a plan for
+									the moment it does not understand, and most first drafts do not have one. They have a happy path and a
+									cliff. What separates an agent people trust from one they route around is almost always the handling of
+									confusion: does it guess, does it ask, or does it hand off?
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>A conversation with a deliberate structure rather than an accidental one</li>
+									<li>Information captured from the user once and reused</li>
+									<li>Branches and fallback behavior that degrade gracefully</li>
+									<li>An agent grounded in a specific knowledge source</li>
+									<li>Integrations to outside services, and a view on what happens when one fails</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build a support or FAQ agent grounded in a small, trustworthy set of
+									documents. A product information assistant, an onboarding guide, an event concierge, a policy
+									assistant, a lead intake agent. Small and trustworthy matters more than comprehensive. Ten documents you
+									have read beat four hundred you have not, because you can tell instantly when the answer is wrong.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>A working conversational agent containing all five of these:</p>
+									<ul class="brand">
+										<li>A clear introduction that says what it can and cannot do</li>
+										<li>Three supported user goals</li>
+										<li>One clarifying question</li>
+										<li>One fallback response for when it has no idea</li>
+										<li>One human escalation path</li>
+									</ul>
+								</div>
+								<p class="body-text">
+									Voiceflow offers a
+									<a href="https://docs.voiceflow.com/documentation/account-management/billing">free Starter tier</a> with
+									limited features and credits, intended for experimentation rather than production.
+								</p>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Stage four · Connect it to data, tools, and other agents</p>
+								<h2>Where it stops being a demo.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 06</span>
+								<h3 class="tip-title">n8n Quickstart.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Hands on, with exercises and assessments</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner to early intermediate</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">Three to five hours</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://learn.n8n.io/courses/course-v1%3An8n%2BQS101%2B2026H2/about">n8n Quickstart</a>
+								</p>
+								<p class="body-text">
+									This is the stretch course, and it is the one that will make you feel out of your depth. That feeling
+									is the point. n8n gives you considerably more flexibility than the platforms before it, and in exchange
+									it stops hiding the machinery: APIs, JSON, credentials, data transformation, error handling. The course
+									says coding experience is not required, and that is true, though familiarity with APIs and JSON helps.
+									It ends with a customer service agent that can reach real data, hold memory, and call tools.
+								</p>
+								<p class="body-text">
+									Two things make it worth the discomfort. The first is error handling, which nothing before this taught
+									you and which is the difference between an agent you can leave running and one you have to watch. The
+									second is that once you have seen how an agent reaches out to a system, retrieves a record, and answers
+									from it rather than from memory, you will never again be confused about why agents make things up. They
+									make things up when nothing told them where to look.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>Triggers, nodes, and how data physically moves between steps</li>
+									<li>A model connected to your business data</li>
+									<li>Memory and tools, and the difference between them</li>
+									<li>Information transformed and routed rather than passed along whole</li>
+									<li>Errors and edge cases handled on purpose</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build an internal information agent that looks something up before it
+									answers. A customer, an order, a project, an inventory item. The behavior you are after is specific:
+									the agent should retrieve the record first and then respond from what it found, rather than producing a
+									confident sentence out of thin air.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>An agent with all five: one external data source, one tool, memory, a defined error path, and a human approval step before anything consequential happens.</p>
+									<p class="script-note">
+										The course is free. Hands on work needs an n8n instance and a model provider API key. Cloud offers a
+										trial; self hosting is free and more technical.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 07</span>
+								<h3 class="tip-title">Relevance AI Academy.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">No code tutorial and learning library</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">One to two sessions</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://relevanceai.com/relevance-academy/build-your-first-no-code-ai-agent-full-relevance-ai-tutorial">Build Your First No-Code AI Agent</a>
+								</p>
+								<p class="body-text">
+									After the technical stretch of n8n, this is a deliberate return to easier ground with a new idea
+									attached: more than one agent. Relevance AI is built around assembling specialized agents and tools
+									into something like a small team, which makes it the natural bridge from one agent to several. It is
+									explicitly no code, with templates and a natural language builder, so you can prototype a structure
+									before you fully understand every part of it.
+								</p>
+								<p class="body-text">
+									One caution, learned expensively by many people. Two agents are not twice as good as one agent. They
+									are one agent, plus a handoff, and the handoff is where quality leaks out. If agent one summarizes its
+									findings and agent two writes from the summary, agent two is working from a compressed version of
+									reality and every subsequent step inherits the compression. Pass evidence, not conclusions.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>An agent created from a description or a template</li>
+									<li>Specialized tools attached to a specific role</li>
+									<li>A business process translated into instructions someone else could follow</li>
+									<li>A feel for how specialized agents collaborate, and where they misfire</li>
+									<li>An early view on actions, cost, and whether any of this pays for itself</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build a two role workflow. One agent gathers and summarizes, a second
+									turns findings into a brief, a human reviews before anything is used. Lead qualification, market
+									research, content repurposing, and support preparation all fit this shape.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										The two role workflow, plus a written note for each agent stating what it is allowed to do and what
+										it must hand off. If you cannot write that note, the roles are not actually separate and you have
+										built one agent with extra steps.
+									</p>
+									<p class="script-note">
+										Relevance AI offers a <a href="https://relevanceai.com/pricing-new">free plan</a> with limited
+										monthly actions and vendor credits. No credit card required as of this research.
+									</p>
+								</div>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Stage five · See how enterprises do it</p>
+								<h2>Pick one. Whichever one your company already pays for.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 08</span>
+								<h3 class="tip-title">Salesforce: Agentblazer Champion 2026.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Structured Trailhead curriculum</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Intermediate, end user oriented</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">About eight and a half hours for the full trail</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://trailhead.salesforce.com/content/learn/trails/become-an-agentblazer-champion-2026">Become an Agentblazer Champion 2026</a>
+								</p>
+								<p class="body-text">
+									Everything before this was you, building for you. This is the stage where the agent touches customer
+									data and a business process, and a different set of questions arrives: whose data is this, which records
+									may it read, what may it change, and who is accountable when it is wrong. Salesforce takes those
+									seriously because its customers make it. The trail covers AI fundamentals, prompting, trust,
+									Agentforce, Agent Builder, and a hands on service agent project.
+								</p>
+								<p class="body-text">
+									It is product specific and it is the longest thing in this guide. Be strategic. If you do not work in
+									Salesforce, prioritize Agentforce Basics and the first hands on agent build, and skip the rest without
+									guilt. The transferable material is grounding, permissions, business rules, and trusted actions, and
+									you will have met all four within the first two hours.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>The business case for an enterprise agent, stated the way a budget holder would state it</li>
+									<li>How customer records ground an agent’s answers</li>
+									<li>Prompt templates, and why an organization standardizes them</li>
+									<li>Why trust and data protection are design constraints rather than paperwork</li>
+									<li>A basic service agent, assembled and connected to a real process</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Design an agent for a CRM shaped task: answering customer questions,
+									assisting with bookings, qualifying an opportunity, summarizing an account, or preparing a service rep
+									before a call. You do not need to build it. You need to be able to propose it.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>A short enterprise proposal with six headings: business objective, required data, permitted actions, sensitive data restrictions, escalation rules, and success metrics. That document is the artifact that gets an agent approved. Everything else is a demo.</p>
+									<p class="script-note">Trailhead is free and provides hands on environments for supported exercises.</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 09</span>
+								<h3 class="tip-title">Microsoft Learn: Create Agents with Copilot Studio.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Five module learning path</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Beginner, app maker and business user</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">About two hours fifty minutes</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Take it here:
+									<a href="https://learn.microsoft.com/en-gb/training/paths/power-virtual-agents-workshop/">Create Agents with Microsoft Copilot Studio</a>
+								</p>
+								<p class="body-text">
+									The same enterprise questions from a different vendor, and considerably shorter. Copilot Studio
+									emphasizes conversational authoring, knowledge sources, generative orchestration, variables, and Power
+									Automate flows. If your organization runs on Microsoft 365, Teams, or the Power Platform, this is the
+									more useful of the two enterprise stages by a wide margin, because the agent you design here can
+									plausibly exist next month.
+								</p>
+								<p class="body-text">
+									The reason both eight and nine are in this guide is not that you should do both. It is that whichever
+									one matches your employer is the one that turns this from a hobby into something you can propose on a
+									Tuesday. Do that one properly and skim the other for contrast.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>A business oriented agent, planned before it is built</li>
+									<li>An agent created through natural language description</li>
+									<li>Structured conversation topics layered on top of that</li>
+									<li>Answers grounded in approved internal knowledge rather than the open internet</li>
+									<li>A connection to Power Automate, so the agent can actually do something</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build an internal employee agent that answers from approved
+									documentation and triggers one simple workflow. Finding an HR policy, preparing an onboarding checklist,
+									submitting an internal request, looking up an approved procedure, routing a question to the right team.
+									Internal agents are the best first enterprise project because your colleagues will tell you immediately
+									and bluntly when the answer is wrong.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>A prototype with one knowledge source, one action, and one escalation path. Three components, and it is a real system.</p>
+									<p class="script-note">
+										Microsoft Learn content is free. Full hands on work requires a suitable Microsoft environment;
+										Copilot Studio offers a trial with account and publishing restrictions.
+									</p>
+								</div>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Stage six · Open the hood</p>
+								<h2>The same machine, with the cover off.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Resource 10</span>
+								<h3 class="tip-title">Flowise: documentation and tutorials.</h3>
+								<div class="fields">
+									<div class="field">
+										<p class="kicker">Format</p>
+										<p class="field-v">Open source docs and tutorials</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Difficulty</p>
+										<p class="field-v">Early intermediate</p>
+									</div>
+									<div class="field">
+										<p class="kicker">Time</p>
+										<p class="field-v">One focused session, then return as needed</p>
+									</div>
+								</div>
+								<p class="source-line">
+									Read it here: <a href="https://docs.flowiseai.com/">Flowise Documentation</a>
+								</p>
+								<p class="body-text">
+									Flowise comes last because it is the most open ended thing here and because it makes the most sense
+									once you have already built five agents. It is a visual interface over assistants, chatflows, agent
+									flows, retrieval, tools, evaluations, and human review. Everything the managed platforms tastefully hid
+									from you is on the screen. That is the value, and it is also the cost: installing, hosting, and
+									connecting models introduces real technical friction that none of the previous nine had.
+								</p>
+								<p class="body-text">
+									Start with the Assistant builder, which is the friendliest entry point, and let the rest wait. The
+									concept worth taking away is retrieval, sometimes dressed up as RAG. Stripped of the acronym it means:
+									look it up before you answer. That single behavior is the difference between an agent that sounds
+									authoritative and one that is, and seeing it assembled by hand makes it permanent knowledge rather than
+									a feature toggle you once flipped.
+								</p>
+								<p class="body-text"><strong>What you should walk away with:</strong></p>
+								<ul class="brand">
+									<li>The components of an open agent system, named and recognized</li>
+									<li>An assistant with instructions, tools, and knowledge, wired by you</li>
+									<li>Retrieval, understood mechanically rather than as a buzzword</li>
+									<li>A visual sense of more complex flows: branching, routing, multiple agents</li>
+									<li>A clear view of the trade between open source flexibility and managed convenience</li>
+									<li>Honest recognition of where you would want technical help</li>
+								</ul>
+								<p class="body-text">
+									<strong>Then do this.</strong> Build a document assistant over a controlled knowledge base. When it
+									works, add exactly one thing: a retrieval step, a human review checkpoint, a second specialized agent, a
+									routing decision, or a simple evaluation. One at a time, so you can see what each addition costs.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Build this before you move on</p>
+									<p>
+										An architecture diagram of that assistant, even if you never deploy it. If you can draw the system
+										and explain each box to a colleague, you have the skill. The deployment is a separate problem and it
+										is somebody’s job, not necessarily yours.
+									</p>
+									<p class="script-note">Documentation and the open source software are free. Hosting and model usage may cost money and setup time.</p>
+								</div>
+							</div>
+
+							<!-- PART THREE -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Four weekends</p>
+								<h2>A schedule, if you want one.</h2>
+								<p class="section-sub">
+									Each weekend answers one question. If you finish a weekend and cannot answer its question out loud, do
+									that weekend again rather than moving on. The sequence compounds; the pace does not matter.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Weekend one</span>
+								<h3 class="tip-title">Mental models and the first working agent.</h3>
+								<p class="body-text"><strong>Complete:</strong> Anthropic, Botpress, Zapier.</p>
+								<p class="body-text"><strong>Produce:</strong> a workflow map, an agent charter, and one simple agent that runs on real data.</p>
+								<div class="callout">
+									<p class="callout-label">The question</p>
+									<p>What should this agent decide, and what should stay deterministic?</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Weekend two</span>
+								<h3 class="tip-title">Orchestration and conversation.</h3>
+								<p class="body-text"><strong>Complete:</strong> Make, Voiceflow.</p>
+								<p class="body-text"><strong>Produce:</strong> a branched visual workflow, a conversational agent with real fallback behavior, and a written list of the knowledge sources it is allowed to use.</p>
+								<div class="callout">
+									<p class="callout-label">The question</p>
+									<p>How do information and people move through this system, including when something goes wrong?</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Weekend three</span>
+								<h3 class="tip-title">Data, tools, and collaboration.</h3>
+								<p class="body-text"><strong>Complete:</strong> n8n, Relevance AI.</p>
+								<p class="body-text"><strong>Produce:</strong> an agent connected to real or sample data, a tool calling workflow, a two role agent system, and a human approval checkpoint.</p>
+								<div class="callout">
+									<p class="callout-label">The question</p>
+									<p>What can this agent see, and what is it allowed to change?</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Weekend four</span>
+								<h3 class="tip-title">Enterprise systems and open architecture.</h3>
+								<p class="body-text"><strong>Complete:</strong> selected modules from Salesforce, Microsoft, and Flowise. Selected is the operative word. This weekend is the only one where skipping is the correct strategy.</p>
+								<p class="body-text"><strong>Produce:</strong> an enterprise use case proposal, a permissions and escalation plan, a lightweight evaluation checklist, and an architecture diagram.</p>
+								<div class="callout">
+									<p class="callout-label">The question</p>
+									<p>What would make this safe, measurable, and maintainable by someone other than me?</p>
+								</div>
+							</div>
+
+							<!-- PART FOUR -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · The capstone</p>
+								<h2>One small agent, around a process you actually run.</h2>
+								<p class="section-sub">
+									Not a portfolio piece. Something that removes a genuine annoyance from your week, which is the only
+									kind of agent anyone keeps using.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Good candidates, all of them narrow on purpose: a research and briefing agent, a content intake and
+								drafting agent, a lead qualification agent, a support preparation agent, an employee policy assistant, a
+								meeting preparation agent.
+							</p>
+
+							<p class="body-text">Whichever you choose, it needs six components, which are the same six from part one, now with your name on them.</p>
+
+							<ol class="brand">
+								<li><strong>A defined user and a single task.</strong> One person, one job. Not a platform.</li>
+								<li><strong>Written instructions.</strong> Including what it must never do, which is the half people skip.</li>
+								<li><strong>A limited knowledge source.</strong> Limited is the important word. You have to be able to check its answers.</li>
+								<li><strong>At least one tool or connected application.</strong> Otherwise it is a chat window with a personality.</li>
+								<li><strong>A human approval or escalation point.</strong> With a stated rule for when it triggers.</li>
+								<li><strong>Ten test cases.</strong> Written before you finish building, not after.</li>
+							</ol>
+
+							<div class="tip" style="margin-top: 26px">
+								<h3 class="tip-title">About those ten test cases.</h3>
+								<p class="body-text">
+									This is the component that separates people who built an agent from people who can build agents, and it
+									takes about twenty minutes. Write the cases before the agent is finished, so the standard cannot quietly
+									bend to fit whatever you happened to produce.
+								</p>
+								<ul class="brand">
+									<li><strong>Five ordinary cases.</strong> The requests you built it for. These should pass on the first run, and if they do not, nothing else matters yet.</li>
+									<li><strong>Three awkward cases.</strong> Vague phrasing, missing information, two questions at once, a request that is nearly but not quite in scope. This is where you find out whether it guesses or asks.</li>
+									<li><strong>Two cases it must refuse.</strong> Something outside its remit, and something that requires a human decision. An agent that never declines anything has not been given boundaries, it has been given permission.</li>
+								</ul>
+								<p class="body-text">
+									Run all ten. Write down what happened. Then fix the instructions rather than the test, which is a
+									temptation more real than it sounds at eleven on a Sunday night.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The bar to clear</p>
+									<p>
+										Not perfection. A useful capstone gets the five ordinary cases right, asks a sensible question on the
+										awkward ones, and refuses the two it should refuse. That is a working system, and it is more than
+										most agent pilots inside large companies manage.
+									</p>
+								</div>
+							</div>
+
+							<!-- PART FIVE -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Where people get stuck</p>
+								<h2>Symptom in, next step out.</h2>
+								<p class="section-sub">
+									Choose by what is actually blocking you, not by which stage sounds most advanced.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 44%">What’s happening</th>
+											<th>Go here</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>I don’t know what to build</strong></td>
+											<td>Botpress, then write the charter. The six questions do the work.</td>
+										</tr>
+										<tr>
+											<td><strong>I’ve read a lot and built nothing</strong></td>
+											<td>Zapier, tonight, one hour. Momentum beats the next article.</td>
+										</tr>
+										<tr>
+											<td><strong>It worked in the demo and broke on real input</strong></td>
+											<td>Voiceflow. You are missing clarification and fallback, not intelligence.</td>
+										</tr>
+										<tr>
+											<td><strong>It answers confidently and it’s wrong</strong></td>
+											<td>n8n or Flowise. It has no grounded source, so it is producing plausible text.</td>
+										</tr>
+										<tr>
+											<td><strong>It does one thing and I need five</strong></td>
+											<td>Relevance AI, two roles. Watch the handoff, that’s where quality goes.</td>
+										</tr>
+										<tr>
+											<td><strong>It’s good and I still don’t trust it</strong></td>
+											<td>The ten test cases, and one human checkpoint before consequential actions.</td>
+										</tr>
+										<tr>
+											<td><strong>My company will never approve this</strong></td>
+											<td>Salesforce or Microsoft, whichever they already pay for. Write the proposal, not the demo.</td>
+										</tr>
+										<tr>
+											<td><strong>I want to see how it works underneath</strong></td>
+											<td>Flowise, Assistant builder first. Add one component at a time.</td>
+										</tr>
+										<tr>
+											<td><strong>I keep switching platforms</strong></td>
+											<td>Stop. The platform was never the skill. Finish something on the one you’re on.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- Takeaway -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								You are not learning ten platforms. You are learning to write a job description.
+							</p>
+							<p class="body-text">
+								Scope it narrowly. Write the instructions, including what it must never do. Give it a small body of
+								knowledge you can check. Give it the fewest tools that get the job done. Decide in advance when it stops
+								and asks a person. Then test it against ten cases you wrote before you were emotionally invested in the
+								answer.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								Every platform in this guide will look different in two years. Some will not exist. That sequence will be
+								exactly the same, because it is not a fact about software. It is a fact about delegating work to something
+								that cannot read your mind, will not ask a clarifying question unless you tell it to, and will do
+								precisely what you said rather than what you meant. You have delegated work to people. This is that, with
+								the ambiguity removed by you, in advance, in writing.
+							</p>
+
+							<!-- Soft pitch -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you want a second read on your charter.</h2>
+								<p class="section-sub">The one page from resource two, before you spend a weekend building on top of it.</p>
+							</div>
+
+							<p class="body-text">
+								Most agent projects I see were not badly built. They were built confidently on a scope that was too wide,
+								with no stated escalation rule and no definition of success, and every hour of building after that made
+								the problem more expensive to fix. The charter is ninety seconds to read and it is where almost all of the
+								avoidable trouble lives.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								So I am doing a small number of informal reviews. Send me your one page charter and a sentence on what you
+								are planning to build it with. I will tell you where the scope is too wide, which of the six components is
+								missing, and which stage in this guide I would do next. No pressure either way; everything above is yours
+								to use regardless.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Agent%20Charter">hi@davecto.com</a> with the subject line
+									<strong>“Agent Charter”</strong> and your one page attached.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing: course formats, durations, difficulty levels, and free tiers were verified on August
+								17, 2026, and every one of them is the kind of thing a vendor changes without announcing it. Check the
+								pricing page before you plan around a free tier. The sequencing, the six components, and the ten test
+								cases are working practice rather than published research. The claim I would most like you to check
+								yourself is the central one: that scoping is harder than building. You can test that in a single weekend
+								with resource three and one real task, and I would rather you did than took my word for it.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
