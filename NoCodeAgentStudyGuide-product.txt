@@ -1,0 +1,46 @@
+THE NON-CODER'S STUDY GUIDE TO BUILDING AI AGENTS
+Ten free courses, in the order that actually works.
+
+---
+
+Most material on building AI agents is written by engineers, for engineers. It opens with a framework, a repository, and an architecture diagram, and gets around to explaining what the thing is supposed to accomplish somewhere near the end.
+
+If you are an operator, a marketer, a consultant, a founder, or a product manager, that order is backwards. You already know the work. What you are missing is the shape of the machine.
+
+This guide runs the other way. It starts with how to think about the problem, moves to tools you can use by dragging boxes around a screen, and only then goes anywhere near a technical detail. Every resource in it is free to study. Every stage ends with something you build.
+
+The premise, stated plainly: the building got easy, the deciding did not, and the deciding is the part you are already good at.
+
+---
+
+WHAT'S INSIDE
+
+· The six components every working agent has, and how to spot which one is missing when yours misbehaves
+· Ten free resources sequenced across six stages, each with a reason it sits where it does
+· What to build after each one, so you finish with working agents instead of notes
+· A four-weekend schedule, and the single question each weekend has to answer
+· The capstone: one small agent, six components, and the ten test cases that separate people who built an agent from people who can build agents
+· A stuck-point lookup table. Symptom in, next step out.
+· An honest section on the two places this gets uncomfortable, so neither one reads as evidence you are the wrong person for it
+
+---
+
+WHO IT'S FOR
+
+Operators, marketers, consultants, founders, product managers, and anyone else who wants to understand agentic systems without first becoming a software developer.
+
+WHAT IT ISN'T
+
+Not a framework tutorial. No code, no repository, no API keys needed to follow the argument. It will not make you an engineer and it is not trying to.
+
+---
+
+FORMAT
+
+21-page PDF. Reads on a screen, prints cleanly.
+About twenty five hours of study if you do all of it. Part four tells you what to skip.
+Course formats, durations, and free tiers verified August 17, 2026.
+
+PRICE
+
+Free.
