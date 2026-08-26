@@ -1,0 +1,31 @@
+Somewhere in your company is a paid AI seat nobody has opened in six weeks.
+
+That gap, between what a company bought and what people actually do on a Tuesday, is a job now. It's called AI enablement, and companies cannot staff it.
+
+Here's the part nobody says out loud: almost none of that job is about AI. It's use case discovery, workflow redesign, role based training, champion networks, guardrails, measurement. That's adoption work. If you've ever launched a tool nobody asked for and gotten people to actually use it, you've done the harder half already.
+
+You're not starting over. You're aiming the same skill somewhere new.
+
+YOUR DOOR · pick one, not four
+1. Customer Success and onboarding. You've spent your career on the exact problem this job exists to solve: someone bought the thing, now it has to get used.
+2. Sales enablement. You already build the thing most AI programs are missing: plays a busy person will actually follow under pressure.
+3. Operations and program management. Use case discovery is workflow mapping with a new name. Shortest walk of the four.
+4. Learning and HR. AI rollouts die on fear and confidence far more often than on capability. That's your table.
+
+THE PAPER · rewrite the top third, leave the rest
+5. Fix the headline and summary first. Nobody reads a résumé bottom to top, and the first four lines decide whether the bullets get read at all.
+6. Do not rename your old jobs. Title inflation is checkable, and it reads as a small dishonesty right when you're asking to be trusted with governance.
+7. Swap the metric, not the verb. "Trained 40 people" is effort. "Active usage went from X to Y, thirty days later" is change. They're hiring for the second one.
+
+THE PROOF · three case studies beat any certificate
+8. A workflow assessment. The column that wins it is the one listing what AI should stay away from, and why.
+9. One workflow you actually built. Include what broke. The failure is the most valuable paragraph in the whole portfolio.
+10. A mini adoption program, run for five real people. Measure confidence before and after. Five is enough. It's not the sample size, it's that you watched humans get confused and changed the material.
+
+That's the pivot. Thirty days of deliberate work, not a career restart.
+
+What I couldn't fit here: the eleven titles this job hides behind (search only for "AI enablement" and you'll miss most of the market), the six saved searches that find the rest, the four things to learn and the order they go in, the before and after résumé bullets, the metrics table that swaps training attendance for the numbers that get a second conversation, the six ways this pivot quietly stalls, and the eight interview objections with what answers each one.
+
+It's all in the free guide.
+
+Comment ENABLE and I'll send it over.

@@ -1,0 +1,1668 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>The AI enablement pivot</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row,
+				.std-item,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								The AI enablement pivot.
+							</h1>
+							<p class="lead">
+								How to move a career you already have into the job companies are creating right now: getting real
+								people to actually use the AI they already bought. What the work is, which door you walk in, and the
+								thirty days that make you credible.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Somewhere in your company there is a paid AI seat that nobody has opened since the launch email. The
+								license was approved, security signed off, the all-hands demo went well, and then usage did what
+								usage does. It spiked, it drifted, and now a handful of enthusiasts carry the whole adoption number
+								while everyone else quietly went back to the old way.
+							</p>
+							<p class="body-text">
+								That gap, between what a company has paid for and what its people actually do on a Tuesday afternoon,
+								has become a job. It goes by a few names. The most common one is AI enablement.
+							</p>
+
+							<div class="pull">
+								<p>The hard part was never the software. It’s the ninety people who have to change how they work.</p>
+							</div>
+
+							<p class="body-text">
+								Here is the part worth sitting with if you are thinking about this move. Read a stack of AI enablement
+								postings and you will notice how little of the work is about AI. It is use case discovery, workflow
+								redesign, role based training, internal communications, guardrails, champion networks, and
+								measurement. That is adoption work. It is the same job people have been doing for Salesforce
+								rollouts, EHR migrations, and new onboarding programs for twenty years, pointed at a newer and
+								stranger tool.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								Which means if you have run an onboarding program, launched a platform nobody asked for, built a
+								curriculum, or dragged a cross functional project across the finish line, you have already done the
+								harder half. What you are missing is evidence that you have done it with AI in the middle. That is a
+								gap you can close in a month of deliberate work. This is a repositioning, not a restart.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">4</p>
+									<p class="stat-label">doors into the work, depending on where you’re standing now</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">3</p>
+									<p class="stat-label">case studies that outweigh any certificate</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">1</p>
+									<p class="stat-label">credential actually worth paying for</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">30</p>
+									<p class="stat-label">days to a portfolio, a rewritten profile, and a real story</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								One promise and one caveat. The promise: you do not need to build models, write production code, or
+								become an engineer. The caveat: you do need enough hands on experience to know what these tools do
+								well, where they fail, and what it feels like when one confidently invents something. You cannot
+								coach people through a change you have not been through yourself. Everything in this guide is
+								arranged around closing that specific gap.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										What the job actually is. <span>The eight things you’d be hired to do, and the one you can’t fake.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">Your door. <span>Four lanes in, and the sentence that positions each one.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										The paper. <span>Rewriting the top third, plus copy you can lift today.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">The proof. <span>Three projects that do what a certificate can’t.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">The search. <span>Titles are a mess. Read responsibilities instead.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">The curriculum. <span>Four things to learn, in this order, mostly free.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">07</span>
+									<p class="what">The month. <span>A week by week plan, and the six ways it stalls.</span></p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · What the job is</p>
+								<h2>It’s an adoption job wearing an AI hat.</h2>
+								<p class="section-sub">
+									AI enablement sits between a technology and the people expected to use it. Almost every difficult
+									part of it is on the people side, which is very good news for anyone arriving from a non technical
+									career.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Strip the acronyms out of the postings and the role comes down to eight recurring responsibilities.
+								They tend to appear in roughly this order, because each one depends on the one above it.
+							</p>
+
+							<ul class="brand" style="margin-bottom: 22px">
+								<li><strong>Find the use cases worth doing.</strong> Not the impressive ones. The frequent, annoying, high volume ones where a small improvement compounds.</li>
+								<li><strong>Redesign the workflow around them.</strong> Bolting AI onto a broken process gives you a faster broken process.</li>
+								<li><strong>Train people on the approved tools.</strong> By role, with their real work, not a generic prompting webinar.</li>
+								<li><strong>Deal with the fear.</strong> Some of your audience believes this technology is coming for their job. That is a conversation, not a slide.</li>
+								<li><strong>Set practical guardrails.</strong> What goes in, what never goes in, who reviews the output before it leaves the building.</li>
+								<li><strong>Build the internal resources.</strong> Playbooks, prompt libraries, templates, an intranet page people can actually find.</li>
+								<li><strong>Measure adoption and value.</strong> Usage that persists past week three, and a number tied to the business.</li>
+								<li><strong>Turn the wins into programs.</strong> One team’s successful experiment becomes a repeatable rollout for nine more.</li>
+							</ul>
+
+							<p class="body-text">
+								Notice what is not on that list. Fine tuning. Model selection. Building agents from scratch. Those
+								belong to other roles. Your job is the translation layer, and translation layers are where change
+								actually succeeds or dies.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The one you can’t fake</p>
+								<p>
+									You need to have built something yourself and had it break. Not because anyone will quiz you on
+									architecture, but because the credibility of every workshop you run depends on you having a real
+									answer to “what happens when it gets it wrong?” One workflow you built, broke, and fixed is worth
+									more in an interview than four courses.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								Here is the reframe that makes the rest of this guide work. You are not applying as an AI person. You
+								are applying as an adoption person who has done the AI part firsthand. Those are very different
+								candidates, and companies are quietly discovering they need the second one more than they thought.
+							</p>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · Your door</p>
+								<h2>Your last job is the reason you’d be good at this one.</h2>
+								<p class="section-sub">
+									There are four common lanes into AI enablement. Your existing experience decides which one you walk
+									in through, and the positioning sentence you lead with everywhere: the résumé summary, the LinkedIn
+									headline, the first thirty seconds of an interview.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 24px">
+								Pick one. Candidates who claim all four read as unfocused, and the hiring manager cannot tell what
+								they would be handed on day one. You can always widen later. Depth is what gets the first
+								conversation.
+							</p>
+
+							<div class="tip">
+								<span class="tip-num">Lane 01</span>
+								<h3 class="tip-title">Customer success and onboarding.</h3>
+								<p class="body-text">
+									You have spent your career on the exact problem AI enablement was invented to solve: someone bought
+									the thing, and now it has to get used. You already know that adoption is not a training event, that
+									the quiet accounts are the ones in trouble, and that the barrier is usually one unglamorous step in
+									the middle of a workflow.
+								</p>
+								<p class="body-text"><strong>Lead with:</strong> technology adoption, customer education, onboarding program design, office hours and coaching, diagnosing adoption barriers, utilization and retention.</p>
+								<div class="callout">
+									<p class="callout-label">The positioning sentence</p>
+									<p>“I help teams get from buying AI tools to actually using them in their daily work.”</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Lane 02</span>
+								<h3 class="tip-title">Sales and sales enablement.</h3>
+								<p class="body-text">
+									Enablement is literally your job title’s other half. You have already built the thing most AI
+									programs are missing: role specific plays that a busy person will actually follow under pressure,
+									reinforced by coaching, and measured against a number somebody cares about.
+								</p>
+								<p class="body-text"><strong>Lead with:</strong> role based training, behavior change, playbooks and messaging, coaching programs, CRM and workflow adoption, performance measurement.</p>
+								<div class="callout">
+									<p class="callout-label">The positioning sentence</p>
+									<p>“I turn AI capabilities into repeatable workflows that teams will actually run.”</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Lane 03</span>
+								<h3 class="tip-title">Operations and program management.</h3>
+								<p class="body-text">
+									You are the lane with the shortest walk. Use case discovery is workflow mapping with a different
+									name, and the reason most AI pilots stall is that nobody sequenced the rollout or defined what done
+									looked like. You have run the cross functional program where IT, legal, and three business units
+									all had to agree. That is the hard skill.
+								</p>
+								<p class="body-text"><strong>Lead with:</strong> workflow mapping, process redesign, cross functional implementation, pilot design, documentation and governance, cycle time and cost and quality metrics.</p>
+								<div class="callout">
+									<p class="callout-label">The positioning sentence</p>
+									<p>“I find the high friction workflows and run the AI adoption programs that make them measurably better.”</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Lane 04</span>
+								<h3 class="tip-title">Learning, HR, and organizational development.</h3>
+								<p class="body-text">
+									You own the part everyone else underestimates. AI rollouts fail on confidence and fear far more
+									often than on capability, and you already know that a single training session with no
+									reinforcement is a receipt, not a result. Champion networks, communities of practice, and skills
+									assessments are your existing toolkit pointed at a new subject.
+								</p>
+								<p class="body-text"><strong>Lead with:</strong> curriculum design, facilitation, change communications, skills assessment, champion networks, organizational readiness.</p>
+								<div class="callout">
+									<p class="callout-label">The positioning sentence</p>
+									<p>“I build the training, support, and reinforcement systems people need to adopt AI safely and confidently.”</p>
+								</div>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								If you are looking at two lanes and cannot choose, pick the one where you can point at a specific
+								outcome with a number attached. Positioning is not about which story is most flattering. It is about
+								which story you can prove in ninety seconds.
+							</p>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · The paper</p>
+								<h2>Rewrite the top third and leave your job titles alone.</h2>
+								<p class="section-sub">
+									A résumé pivot is mostly a framing problem. The work you did was already relevant. It is described
+									in the vocabulary of the industry you are leaving, and the reader has six seconds to decide
+									whether to keep going.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Start at the top, because that’s where the decision happens.</h3>
+								<p class="body-text">
+									Almost nobody reads a résumé from bottom to top. The headline and the summary decide whether the
+									bullets ever get read, so the most valuable forty minutes you will spend is on the first four
+									lines. Everything below can stay largely as it is.
+								</p>
+								<div class="prompt">
+									<p class="prompt-label">The headline</p>
+									<p class="prompt-body">
+										AI Enablement · Technology Adoption · Change Management ·<br />
+										Workflow Transformation
+									</p>
+								</div>
+								<p class="prompt-note" style="margin-bottom: 16px">
+									Four terms, no adjectives. It gets you through keyword filters and tells a human reader what you
+									think you are in one glance.
+								</p>
+								<p class="body-text">Then a summary that stacks four things in this order, because that order is an argument:</p>
+								<ol class="brand">
+									<li>Your existing professional specialty, stated plainly.</li>
+									<li>Your track record changing behavior or implementing technology.</li>
+									<li>Your hands on AI capability.</li>
+									<li>The business outcomes you know how to move.</li>
+								</ol>
+								<div class="prompt">
+									<p class="prompt-label">The summary · swap the bracketed parts</p>
+									<p class="prompt-body">
+										<span class="fill">[Operations and enablement]</span> leader with
+										<span class="fill">[seven]</span> years helping cross functional<br />
+										teams adopt new tools and workflows. Program design, stakeholder<br />
+										engagement, role based training, and adoption measurement. Hands on<br />
+										experience identifying and piloting AI assisted workflows that improve<br />
+										speed, quality, and capacity, with human review built in.
+									</p>
+								</div>
+								<p class="prompt-note">
+									“With human review built in” is doing quiet work. It signals you understand the governance half of
+									the job without spending a paragraph on it.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Do not rename your old jobs.</h3>
+								<p class="body-text">
+									It is tempting to retitle “Customer Success Manager” as “AI Adoption Lead” because that is closer
+									to what you want next. Resist it. Title inflation is easy to check, it reads as a small dishonesty
+									at exactly the moment you are asking to be trusted with governance, and it makes the real
+									accomplishments underneath look inflated too.
+								</p>
+								<p class="body-text">
+									Keep the official title. Translate the work under it. Nobody has ever been rejected for having an
+									honest title above excellent bullets.
+								</p>
+								<p class="body-text" style="margin-bottom: 4px">
+									These are the terms that recur across postings, and they belong in your bullets where they are
+									true:
+								</p>
+								<p class="body-text" style="color: var(--muted); margin-bottom: 18px">
+									AI adoption · AI enablement · change management · organizational readiness · workflow
+									transformation · use case discovery · role based learning · champion networks · responsible AI ·
+									AI governance · stakeholder engagement · program management · process redesign · adoption
+									analytics · value realization · productivity measurement
+								</p>
+								<p class="body-text">
+									Salt them in where they describe something you did. Do not build a skills wall out of them. A list
+									of sixteen keywords with no evidence behind it reads as anxiety.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Rewrite bullets around adoption, not activity.</h3>
+								<p class="body-text">
+									The universal weakness in pivot résumés is that bullets describe what you did rather than what
+									changed. The fix is mechanical. Name the population, name the mechanism, name the movement.
+								</p>
+
+								<div class="row">
+									<p class="kicker">Before</p>
+									<p class="body-text">“Trained employees on new software.”</p>
+									<p class="kicker" style="margin-top: 12px">After</p>
+									<p class="body-text">
+										“Designed and delivered role based onboarding, documentation, and weekly office hours for
+										<span style="color: var(--accent)">[N]</span> employees, moving active usage from
+										<span style="color: var(--accent)">[X]</span> to <span style="color: var(--accent)">[Y]</span>
+										over <span style="color: var(--accent)">[period]</span>.”
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">Before</p>
+									<p class="body-text">“Helped improve the sales process.”</p>
+									<p class="kicker" style="margin-top: 12px">After</p>
+									<p class="body-text">
+										“Mapped five high friction sales workflows and piloted an AI assisted account research process
+										that cut preparation time by <span style="color: var(--accent)">[X%]</span> while keeping human
+										review before client contact.”
+									</p>
+								</div>
+
+								<div class="row" style="margin-bottom: 20px">
+									<p class="kicker">Before</p>
+									<p class="body-text">“Managed a cross functional technology project.”</p>
+									<p class="kicker" style="margin-top: 12px">After</p>
+									<p class="body-text">
+										“Led a technology adoption program across Operations, IT, and Customer Success. Set success
+										metrics, recruited departmental champions, and tracked utilization and employee feedback through
+										<span style="color: var(--accent)">[period]</span>.”
+									</p>
+								</div>
+
+								<p class="body-text">
+									If you genuinely do not have the number, use the honest version: the population size, the mechanism,
+									and the qualitative result. “Recruited eleven champions across four departments and ran the office
+									hours that took the support queue from daily to weekly” is a real bullet without a percentage in
+									it.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Measure the thing they’re actually asking about.</h3>
+								<p class="body-text">
+									Current postings are unusually specific about this. They ask candidates to measure activation,
+									utilization, confidence, productivity, engagement, value, and risk. Not attendance. The
+									<a href="https://jobs.jobvite.com/varonis-internal/job/o4GdAfwh">Varonis</a> and
+									<a href="https://www.linkedin.com/jobs/view/us-canada-ai-enablement-leader-at-mercer-4407523565">Mercer</a>
+									listings are useful examples of the vocabulary, and the pattern holds well beyond those two.
+								</p>
+								<p class="body-text">
+									So the fastest upgrade to your bullets is swapping the metric, not the verb.
+								</p>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 44%">What most candidates report</th>
+												<th>What gets you a second conversation</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>Training attendance</strong></td>
+												<td>Weekly active use, measured thirty days after the session</td>
+											</tr>
+											<tr>
+												<td><strong>“The team was excited”</strong></td>
+												<td>Confidence score before and after, same five questions</td>
+											</tr>
+											<tr>
+												<td><strong>Number of workshops delivered</strong></td>
+												<td>Time to proficiency on a named task</td>
+											</tr>
+											<tr>
+												<td><strong>“Saved the team time”</strong></td>
+												<td>Cycle time on one specific workflow, measured twice</td>
+											</tr>
+											<tr>
+												<td><strong>Tools deployed</strong></td>
+												<td>Share of a team using it inside a real workflow, not a sandbox</td>
+											</tr>
+											<tr>
+												<td><strong>Prompt library published</strong></td>
+												<td>Error and rework rate before and after it existed</td>
+											</tr>
+											<tr>
+												<td><strong>“No incidents”</strong></td>
+												<td>Review steps defined, and what was routed to a human and why</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									The left column describes effort. The right column describes change. Every enablement hire is a bet
+									that you can produce the right column, and most candidates only ever demonstrate the left.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">One outreach note, since you’ll need it.</h3>
+								<p class="body-text">
+									Applications through the portal are a numbers game. A short note to someone already doing this work
+									is a much better use of the same fifteen minutes, and enablement people are unusually willing to
+									answer because their whole discipline is explaining things to people who are new.
+								</p>
+								<div class="prompt">
+									<p class="prompt-label">The note · keep it this short</p>
+									<p class="prompt-body">
+										I’m moving from <span class="fill">[field]</span> into AI enablement and I built<br />
+										<span class="fill">[the thing]</span> for a <span class="fill">[N]</span> person team.
+										<span class="fill">[What broke]</span> surprised me.<br /><br />
+										You’ve been doing this at <span class="fill">[company]</span> for a while. If you have<br />
+										ten minutes, I’d like to ask what you’d do differently on a rollout<br />
+										that size. Happy to send what I built first so it’s not a cold ask.
+									</p>
+								</div>
+								<p class="prompt-note">
+									You are leading with something you made and something that failed. That combination is rare enough
+									to be memorable and specific enough to be answerable.
+								</p>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · The proof</p>
+								<h2>Nobody hires the certificate.</h2>
+								<p class="section-sub">
+									A credential proves you sat through something. A portfolio proves you have judgment. For a career
+									changer these are not close in value, and the portfolio is faster to build than most people
+									expect.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Build three case studies. They stack deliberately: the first shows you can find the right problem, the
+								second shows you can actually make the technology work, and the third shows you can get other humans
+								to come with you. That sequence is the job, in miniature, and an interviewer can see it immediately.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								You do not need a company’s permission to do any of this. Pick a team you know well, real or clearly
+								hypothetical, and be honest about which it was. Nobody expects a career changer to have run an
+								enterprise rollout. They expect you to have thought like someone who could.
+							</p>
+
+							<div class="tip">
+								<span class="tip-num">Project 01</span>
+								<h3 class="tip-title">The workflow assessment.</h3>
+								<p class="body-text">
+									Choose a team whose work you understand: sales, recruiting, support, marketing, operations. Then
+									document, in two or three pages:
+								</p>
+								<ul class="brand">
+									<li>The most repetitive or frustrating workflows, with rough volume and time per instance.</li>
+									<li>Which of those problems AI is genuinely suited to, and which it is not.</li>
+									<li>Expected value, risk, and implementation difficulty for each.</li>
+									<li>Which single use case you would pilot first, and why that one.</li>
+									<li>How you would know it worked, defined before you start.</li>
+								</ul>
+								<p class="body-text">
+									The discipline here is the “not suited” column. Anyone can list ten things AI could theoretically
+									do. Naming the two it should stay away from, and saying why, is what makes a hiring manager believe
+									you would not walk their confidential data into a chat window in week one.
+								</p>
+								<div class="callout">
+									<p class="callout-label">What this demonstrates</p>
+									<p>Use case discovery and prioritization, which is the first thing you would be asked to do and the thing most enthusiastic candidates skip entirely.</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Project 02</span>
+								<h3 class="tip-title">The workflow you actually built.</h3>
+								<p class="body-text">
+									Build one genuinely useful workflow. Use whatever is in reach: Claude, ChatGPT, Gemini, Microsoft
+									Copilot, or a no code automation platform. The tool matters far less than the fact that it runs and
+									someone would miss it if you took it away.
+								</p>
+								<p class="body-text">Then write it up with all seven of these, in this order:</p>
+								<ul class="brand">
+									<li>The original process, with its real cost in time or quality.</li>
+									<li>The AI assisted process, step by step.</li>
+									<li>The actual prompts, templates, or instructions. Include them, do not describe them.</li>
+									<li>Where a human reviews, and what they are checking for.</li>
+									<li>The privacy and accuracy guardrails, stated as rules.</li>
+									<li><strong>What broke during testing.</strong></li>
+									<li>The resulting improvement in time, quality, or capacity.</li>
+								</ul>
+								<p class="body-text">
+									Item six is the one that separates you from the field. Chime’s AI Enablement Program Manager
+									posting asks candidates directly about something they personally built, what failed, and what
+									changed afterward. Read that as a general signal rather than one company’s quirk:
+									<a href="https://www.linkedin.com/jobs/view/senior-program-manager-ai-enablement-at-chime-4417688641">the posting is here</a>
+									while it lasts.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Write the failure down while it’s fresh</p>
+									<p>
+										The hallucinated policy number. The prompt that worked for three weeks and then quietly stopped.
+										The person who used it wrong in a way you never anticipated. These are your best interview
+										material and you will forget the details within a month.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Project 03</span>
+								<h3 class="tip-title">The adoption program.</h3>
+								<p class="body-text">
+									Now package it as if you were rolling it out to a real department. A miniature enablement kit,
+									seven pieces:
+								</p>
+								<ul class="brand">
+									<li>A thirty day rollout plan with named milestones.</li>
+									<li>One role based workshop, with the actual materials.</li>
+									<li>A manager toolkit, because managers decide whether adoption survives past week two.</li>
+									<li>An AI acceptable use checklist in plain language.</li>
+									<li>An office hours plan, including what happens when nobody shows up.</li>
+									<li>A champions network structure: who, chosen how, doing what.</li>
+									<li>A simple adoption dashboard with the three metrics you would actually watch.</li>
+								</ul>
+								<p class="body-text">
+									Then, if you possibly can, run the workshop for a small real group. Five people is enough. Survey
+									confidence before and after with the same five questions and put both numbers in the write up.
+								</p>
+								<div class="pull">
+									<p>A five person pilot with a before and after number beats a hypothetical enterprise plan every time.</p>
+								</div>
+								<p class="body-text">
+									It is not the sample size that matters. It is that you stood in front of humans, watched what
+									confused them, and changed the material. That is the entire job compressed into an afternoon, and
+									you can describe it in an interview in ninety seconds.
+								</p>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · The search</p>
+								<h2>The title is the least reliable part of the posting.</h2>
+								<p class="section-sub">
+									This field is about three years old and nobody has agreed on what to call it. Searching only for
+									“AI enablement” hides most of the market from you.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 20px">
+								Set alerts across all of these. The same job appears under a dozen names depending on whether it
+								reports into HR, Operations, IT, or a Chief AI Officer who was hired last spring.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 22%">Level</th>
+											<th>Titles to set alerts for</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Earlier career</strong></td>
+											<td>AI Enablement Analyst · AI Adoption Specialist · Generative AI Program Coordinator · AI Learning and Enablement Specialist · AI Operations Analyst · Digital Adoption Specialist</td>
+										</tr>
+										<tr>
+											<td><strong>Mid career</strong></td>
+											<td>AI Enablement Program Manager · AI Enablement Manager · AI Adoption Manager · AI Change Management Consultant · Workforce AI Enablement Lead · Generative AI Adoption Lead · Organizational Readiness and AI Enablement Lead · AI Transformation Consultant</td>
+										</tr>
+										<tr>
+											<td><strong>Senior</strong></td>
+											<td>Director of AI Enablement · Head of AI Adoption · AI Transformation Lead · Workforce AI Enablement Leader · Enterprise AI Enablement Lead · Future of Work and AI Transformation Lead</td>
+										</tr>
+										<tr>
+											<td><strong>Adjacent, and often better</strong></td>
+											<td>Future of Work Program Manager · Digital Transformation Manager · Service Adoption Specialist · Change Management Consultant · Organizational Readiness Lead · AI Customer Success Manager · AI Implementation Consultant · AI Product Operations Manager · Learning Program Manager, AI · Business Transformation Consultant, AI</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								Pay particular attention to that last row. Adjacent titles attract a fraction of the applicants that
+								anything with “AI” in the name does, and the work is frequently identical. A “Digital Transformation
+								Manager” posting that spends four bullets on Copilot rollout is an AI enablement job that HR named
+								using last year’s template.
+							</p>
+
+							<div class="tip">
+								<h3 class="tip-title">Searches worth saving.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Paste into LinkedIn, Indeed, or your alert tool</p>
+									<p class="prompt-body">
+										"AI enablement" OR "AI adoption"<br />
+										("generative AI" OR "AI") AND "change management"<br />
+										("AI transformation" OR "future of work") AND "program manager"<br />
+										("AI enablement" OR "AI transformation") AND operations<br />
+										("AI adoption" OR "AI implementation") AND "customer success"<br />
+										("AI champions" OR "role based learning") AND adoption
+									</p>
+								</div>
+								<p class="prompt-note">Six alerts, once. Then stop searching manually and let them arrive.</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Read the responsibilities, then decide.</h3>
+								<p class="body-text">
+									Because titles are unreliable, judge a posting by what it asks you to do. If it mentions workflow
+									redesign, champion programs, employee training, adoption dashboards, or sustained behavior change,
+									it is in this family whether or not the word “enablement” appears.
+								</p>
+								<p class="body-text">
+									The reverse test matters too. If a posting titled “AI Enablement Manager” is mostly about model
+									evaluation, prompt engineering pipelines, and shipping features, that is a technical role using a
+									fashionable title, and applying to it will only teach you that you are unqualified for a job you
+									never wanted.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The thirty second filter</p>
+									<p>
+										Count the responsibilities that are about people versus systems. Six or more on the people side
+										means your background is the qualification. Two or fewer means keep scrolling, and do it without
+										taking it personally.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · The curriculum</p>
+								<h2>Learn four things, in this order.</h2>
+								<p class="section-sub">
+									Enough fundamentals to be dangerous, the shape of the role itself, a real change framework, and
+									enough governance vocabulary to be trusted. Most of it is free. One piece is worth paying for.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">First</span>
+								<h3 class="tip-title">Fundamentals, without the coding.</h3>
+								<p class="body-text">
+									<a href="https://www.deeplearning.ai/courses/genai4e/">Generative AI for Everyone</a> from
+									DeepLearning.AI is the cleanest introduction to how these systems work, what they can and cannot
+									do, and how businesses apply them. No code required. Its real value is that it gives you accurate
+									mental models, which is what stops you from promising a room full of people something the
+									technology cannot deliver.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Second</span>
+								<h3 class="tip-title">The shape of the role itself.</h3>
+								<p class="body-text">
+									<a href="https://academy.openai.com/pages/openai-champion-programs-7ggypa">OpenAI Academy’s Champion Pathways</a>
+									are the most role specific material available, and they split the work into four tracks that map
+									neatly onto how companies actually staff it:
+								</p>
+								<ul class="brand">
+									<li><strong>Lead.</strong> Strategy, executive sponsorship, value.</li>
+									<li><strong>Enable.</strong> Fluency, education, adoption programs.</li>
+									<li><strong>Deploy.</strong> Rollout, governance, access, change management.</li>
+									<li><strong>Integrate.</strong> Workflows, agents, scalable implementation.</li>
+								</ul>
+								<p class="body-text">
+									The <a href="https://academy.openai.com/en/public/clubs/champions-ecqup/resources/the-ai-champion-role">AI Champion role guide</a>
+									covers the day to day mechanics: workshops, role based guidance, office hours, resources,
+									communities of practice. Read it as a job description you are auditioning for, and notice how much
+									of it you have already done under different names.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Third</span>
+								<h3 class="tip-title">A real change framework.</h3>
+								<p class="body-text">
+									Study the <a href="https://www.prosci.com/blog/adkar-model">Prosci ADKAR model</a>: Awareness,
+									Desire, Knowledge, Ability, Reinforcement. It takes an afternoon and it will change how you
+									diagnose every stalled rollout you ever see.
+								</p>
+								<p class="body-text">
+									The reason it matters is that most organizations respond to low adoption by scheduling more
+									training. Training only addresses Knowledge. If people are not using the tool because they are
+									afraid it will make them redundant, that is a Desire problem, and a fourth webinar will not touch
+									it. Being the person in the room who can name which of the five stages is actually broken is a
+									genuinely valuable thing to be.
+								</p>
+								<p class="body-text">
+									Microsoft’s free module on
+									<a href="https://learn.microsoft.com/en-us/training/modules/phase-two-onboard/">onboarding and empowering employees to use Copilot</a>
+									pairs well with it. It covers training strategy, early adopter programs, champions, and communities
+									of practice, and it is written from inside a real rollout rather than from a framework diagram.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Fourth</span>
+								<h3 class="tip-title">One credential, chosen to match your targets.</h3>
+								<p class="body-text">
+									Pick the one that matches the technology stack your target employers already run. Two are worth
+									considering:
+								</p>
+								<ul class="brand">
+									<li>
+										<a href="https://learn.microsoft.com/en-us/credentials/certifications/ai-transformation-leader/">Microsoft AI Transformation Leader</a>,
+										which covers identifying AI opportunities, business value, adoption planning, responsible AI, and
+										business process transformation. No coding.
+									</li>
+									<li>
+										<a href="https://cloud.google.com/learn/certification/generative-ai-leader">Google Cloud Generative AI Leader</a>,
+										which covers fundamentals, business strategy, responsible adoption, and Google’s enterprise AI
+										offerings. No prerequisites, and priced around $99 at the time of writing.
+									</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The rule</p>
+									<p>
+										One relevant credential plus a real portfolio beats five introductory certificates. A long
+										certificate list signals preparation without application, which is precisely the doubt a career
+										changer needs to remove.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">And enough governance to be credible.</h3>
+								<p class="body-text">
+									Work through the
+									<a href="https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook">NIST AI Risk Management Framework Playbook</a>
+									far enough to understand its four functions: Govern, Map, Measure, Manage. You are not becoming a
+									compliance attorney. You are learning to recognize, in the moment, when someone is about to paste
+									customer data into an unapproved tool.
+								</p>
+								<p class="body-text">
+									The six things to be able to spot without notes: confidential data going somewhere it should not,
+									missing human oversight on a consequential decision, accuracy claims nobody verified, bias in an
+									output that affects people, access controls that do not match sensitivity, and use that is
+									technically allowed but would be embarrassing on the front page.
+								</p>
+								<p class="body-text">
+									This is also the section that quietly wins interviews. A candidate who can talk about enthusiasm
+									and risk in the same breath sounds like someone you could hand a department to.
+								</p>
+							</div>
+
+							<!-- ══════════ PART SEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part seven · The month</p>
+								<h2>Thirty days is enough to become a credible candidate.</h2>
+								<p class="section-sub">
+									Not an expert. Credible, which is the bar that actually matters and the one most people
+									overestimate. Roughly eight to ten hours a week, four weeks, in this sequence.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week one · Aim</span>
+								<h3 class="tip-title">Let the market tell you what to say.</h3>
+								<ul class="brand">
+									<li>Collect twenty relevant job descriptions and save them in one document.</li>
+									<li>Highlight every responsibility and keyword that appears three times or more.</li>
+									<li>Choose one lane and three target titles. Write them down so you stop drifting.</li>
+									<li>Rewrite your headline, summary, skills, and five strongest bullets.</li>
+								</ul>
+								<p class="body-text">
+									The highlighting exercise is not busywork. Twenty postings will hand you the exact vocabulary of the
+									field in about ninety minutes, and it is more current than any article about it, including this
+									one.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week two · Build</span>
+								<h3 class="tip-title">Make something that runs.</h3>
+								<ul class="brand">
+									<li>Finish an AI fundamentals course.</li>
+									<li>Map three workflows from the field you already know.</li>
+									<li>Build and document one working AI assisted workflow, including what broke.</li>
+								</ul>
+								<p class="body-text">
+									Resist the urge to build something impressive. Build something small that someone would notice if
+									it disappeared. That is the story you will tell forty times over the next three months, so it
+									should be one you can explain without slides.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week three · Teach</span>
+								<h3 class="tip-title">Put it in front of humans.</h3>
+								<ul class="brand">
+									<li>Study ADKAR and one AI adoption framework.</li>
+									<li>Create a role based workshop and a rollout plan.</li>
+									<li>Run the workshop with a small group. Five people counts.</li>
+									<li>Collect feedback and measure the confidence change.</li>
+								</ul>
+								<p class="body-text">
+									This is the week most people skip, and it is the week that produces your best material. Running a
+									session for five colleagues on a Thursday afternoon gives you something no certificate can: an
+									answer to “what surprised you about how people reacted?”
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week four · Ship</span>
+								<h3 class="tip-title">Package it and start talking.</h3>
+								<ul class="brand">
+									<li>Turn the work into two or three short case studies, one page each.</li>
+									<li>Update the résumé and the LinkedIn profile so they say the same thing.</li>
+									<li>Set the six saved searches across every title variation.</li>
+									<li>Begin applying, and send five notes to people already doing this work.</li>
+								</ul>
+								<p class="body-text">
+									One page per case study, not five. The document is a prompt for a conversation, not a substitute
+									for one.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Six ways this stalls.</h3>
+
+								<div class="row">
+									<p class="kicker">01</p>
+									<h4 class="tip-title">Collecting certificates instead of evidence.</h4>
+									<p class="body-text">
+										The most common failure, because courses feel like progress and have a completion bar. Six
+										certificates and nothing built reads as someone preparing to start. Cap it at one, then go make
+										something.
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">02</p>
+									<h4 class="tip-title">Tool tourism.</h4>
+									<p class="body-text">
+										Trying nineteen tools and going deep on none. Enablement work rewards depth in one stack far more
+										than breadth across many, because the interview question is “how would you roll this out,” never
+										“which is best.” Pick the stack your target employers run and know it properly.
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">03</p>
+									<h4 class="tip-title">Waiting for permission.</h4>
+									<p class="body-text">
+										Hoping your current employer will hand you an AI project so the résumé writes itself. Sometimes
+										that happens. More often the job appears elsewhere first. You do not need a mandate to map a
+										workflow, build a tool, and teach five people to use it.
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">04</p>
+									<h4 class="tip-title">Leading with AI instead of outcomes.</h4>
+									<p class="body-text">
+										Opening with the model you used rather than what changed. Hiring managers are not short of
+										AI enthusiasm. They are short of people who can produce measured behavior change. Lead with the
+										change and mention the tool second.
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">05</p>
+									<h4 class="tip-title">Searching for one exact title.</h4>
+									<p class="body-text">
+										Filtering on “AI Enablement Manager” and concluding the market is small. The market is fine. The
+										naming is chaotic. The adjacent titles in part five have less competition and frequently better
+										work.
+									</p>
+								</div>
+
+								<div class="row" style="margin-bottom: 26px">
+									<p class="kicker">06</p>
+									<h4 class="tip-title">Promising transformation you cannot measure.</h4>
+									<p class="body-text">
+										Talking in language borrowed from a vendor deck. It is the fastest way to sound like the last
+										consultant who overpromised, and enablement teams have usually just finished cleaning up after
+										one. Small verified numbers, honestly scoped, are more persuasive than large vague ones.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ THE OBJECTION TABLE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">The interview</p>
+								<h2>What they’ll push on, and what answers it.</h2>
+								<p class="section-sub">
+									Every one of these is fair, and every one of them has a good answer if you did the work in parts
+									four and six. Practice the answers out loud, because the difference between defensive and matter of
+									fact is entirely in the delivery.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 42%">The doubt behind the question</th>
+											<th>What answers it</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>“You’ve never worked in AI.”</strong></td>
+											<td>The workflow you built, what broke, and what you changed after</td>
+										</tr>
+										<tr>
+											<td><strong>“Isn’t this a technical role?”</strong></td>
+											<td>Read their own responsibilities back, then name the one thing you built</td>
+										</tr>
+										<tr>
+											<td><strong>“We need someone who’s done it at scale.”</strong></td>
+											<td>The five person pilot with a before and after number. Scale multiplies a method</td>
+										</tr>
+										<tr>
+											<td><strong>“Everyone claims AI experience now.”</strong></td>
+											<td>Activation, time to proficiency, hours returned. Specific numbers, honestly scoped</td>
+										</tr>
+										<tr>
+											<td><strong>“Why hire out of support or ops or L&amp;D?”</strong></td>
+											<td>Because rollouts fail on people, and that is the part you have been doing for years</td>
+										</tr>
+										<tr>
+											<td><strong>“How do we know you won’t create risk?”</strong></td>
+											<td>Your acceptable use checklist, plus where you route decisions to a human</td>
+										</tr>
+										<tr>
+											<td><strong>“Do you have a certification?”</strong></td>
+											<td>One relevant credential, then move straight to what you did with it</td>
+										</tr>
+										<tr>
+											<td><strong>“What would you do in your first ninety days?”</strong></td>
+											<td>Your project one assessment, applied to their org, out loud</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ── Takeaway ── -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								You are not starting over. You are pointing what you already do at a newer problem.
+							</p>
+							<p class="body-text">
+								The scarce skill in this market is not knowing which model is best. It is getting a room of busy,
+								slightly suspicious people to change how they work on Monday and still be doing it in March. You have
+								been solving some version of that problem for years. The only genuinely new part is doing it with a
+								technology that occasionally makes things up, which is why the hands on project matters so much and
+								why the governance vocabulary is worth an afternoon.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								So: choose one lane, rewrite the top third, build three pieces of proof, learn four things, and search
+								for ten titles instead of one. The goal is not to convince an employer that you know every AI tool.
+								It is to show that you can take a new capability, connect it to work that matters, help skeptical
+								people adopt it responsibly, and prove the change was worth making. That is a demonstrable thing, and
+								thirty deliberate days is genuinely enough to demonstrate it.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you want a second read on your positioning.</h2>
+								<p class="section-sub">Which is, admittedly, the argument of the guide applied to the guide.</p>
+							</div>
+
+							<p class="body-text">
+								Most of this came from watching pivots that were nearly right stall for one small reason: the summary
+								led with enthusiasm instead of outcomes, the portfolio project had no failure in it, or the search was
+								filtered to a single title that three companies happen to use. The individual pieces are not hard. The
+								framing is, and it is difficult to see your own framing from the inside for the same reason it is hard
+								to proofread your own writing.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								So I’m doing a small number of informal reads. Send me your headline, your summary, and one line about
+								the workflow you built. I’ll tell you which lane your material is actually pointing at, and which one
+								sentence is costing you the most. No pressure; everything above is yours to use either way.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Enablement%20Pivot">hi@davecto.com</a> with the
+									subject line <strong>“Enablement Pivot”</strong> and a couple of sentences about where you’re
+									coming from.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing: the frameworks and courses linked above are the published versions, and the
+								Google Cloud exam fee was $99 when this was written. The job postings cited are live listings and
+								will expire, so treat them as examples of how the language is being used rather than as permanent
+								references. The four lanes, the three projects, and the thirty day sequence are working practice
+								rather than research findings. Everything here is checkable in a month with one workflow and five
+								willing colleagues, and I’d rather you checked than took my word for it.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
