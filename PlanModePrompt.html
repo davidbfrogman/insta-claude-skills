@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Make it ask before it builds</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 18px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+			.row h4 {
+				font-family: var(--serif);
+				font-size: 17.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 8px;
+				line-height: 1.3;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Prompt block: the one thing meant to be copied verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			pre.prompt-body {
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				font-size: 11.5px;
+				line-height: 1.62;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 40px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A one-pager</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 40px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Make it ask before it builds.
+							</h1>
+							<p class="lead">
+								One block of text you paste above any real request. It forces the model to interview you first, show you its plan, and
+								wait for approval before it writes a word.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 32px"></div>
+
+							<p class="body-text">
+								The usual failure with a long AI deliverable is not bad writing. It is a well written document that answers a question
+								you did not ask. You wanted a one page brief for a skeptical CFO and you received two thousand words for a general
+								audience, with an executive summary you did not want and none of the context that would have made it land.
+							</p>
+							<p class="body-text">
+								That happens because a model cannot leave a gap open. Every unstated detail gets filled with a default: middle length,
+								neutral tone, generic reader, standard structure. You never see those choices get made. You only see the result, at
+								which point the wrong assumptions are baked into every paragraph and fixing them means starting again.
+							</p>
+
+							<div class="pull">
+								<p>A model never says “I don’t know enough to start yet.” It just starts.</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 24px">
+								So make the interview mandatory. Everyone who has briefed an agency, a contractor, or a new hire already knows this
+								move. The good ones ask ten questions before they touch anything. The prompt below is that behavior, written down and
+								made non optional.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">6</p>
+									<p class="stat-label">steps, run in order, before any drafting happens</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">10</p>
+									<p class="stat-label">questions, delivered at once, ranked by consequence</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">2</p>
+									<p class="stat-label">places it has to stop and wait for you</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">3</p>
+									<p class="stat-label">minutes of answering that saves an hour of rewriting</p>
+								</div>
+							</div>
+
+							<!-- ══════════ THE PROMPT ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">The prompt</p>
+								<h2>Paste this, then your request at the bottom.</h2>
+								<p class="section-sub">
+									Works in any chat window. Nothing to install, no settings to change. The only part you edit is the last line.
+								</p>
+							</div>
+
+							<div class="prompt">
+								<p class="prompt-label">Copy from here</p>
+								<pre class="prompt-body">PLAN MODE — do not produce the deliverable yet.
+
+I'm going to ask you to create a document. Before you write a single word of it,
+you will run an intake interview. Follow this sequence exactly.
+
+STEP 1 — RESTATE
+In two sentences, tell me what you think I'm asking for and what type of
+document it is (e.g. marketing plan, SOP, financial model, brief, proposal).
+
+STEP 2 — DECLARE YOUR DEFAULT ASSUMPTIONS
+List 5-8 assumptions you would make if I gave you nothing else — audience,
+length, format, tone, time horizon, level of detail, what you'd include and
+what you'd leave out. Be specific and committal ("I'd assume ~1,500 words,
+written for an internal ops team, no exec summary"). Vague assumptions are
+useless to me. Mark any assumption you think is most likely to be wrong.
+
+STEP 3 — ASK ME 10 QUESTIONS
+Ask up to 10 questions, numbered, all in one message — do not drip them one at
+a time. Prioritize by how much the answer would change the output: question 1
+should be the one where a wrong guess wrecks the whole document.
+
+Rules for the questions:
+- Every question gets a proposed default answer in brackets, so I can reply
+  "3, 5, 7" and let you use your defaults for the rest.
+- Ask about things you genuinely cannot infer: internal context, constraints,
+  audience, decisions already made, what's off the table, what "good" looks
+  like, what this replaces or feeds into.
+- Do not ask questions you could answer yourself, and do not ask me to do your
+  thinking for you (no "what sections would you like?").
+- Include at least one question about what should NOT be in the document.
+- Include at least one question about how success will be judged and by whom.
+- If a real example, source document, or past version would help, ask for it.
+
+STEP 4 — WAIT
+Stop. Do not proceed until I answer. If my answers are thin or contradictory,
+say so and ask up to 3 follow-ups.
+
+STEP 5 — WRITE THE PLAN
+Then produce a plan, not the document:
+- The full outline, section by section, with a one-line description and rough
+  word count for each
+- Format, tone, and length
+- What you're explicitly excluding and why
+- Any remaining assumptions you're proceeding on
+- Anything you'd need from me (data, names, numbers) that would otherwise be a
+  placeholder — list them
+- Open risks: where you think this could come out wrong
+
+Ask me to approve, change, or expand the plan.
+
+STEP 6 — BUILD
+Only after I approve, write the document.
+
+My request: <span class="fill">[DESCRIBE WHAT YOU WANT HERE]</span></pre>
+							</div>
+							<p class="prompt-note">
+								Your request on the last line can stay short. Two sentences is fine. The whole point is that the model is about to ask
+								you for the rest.
+							</p>
+
+							<!-- ══════════ WHY EACH STEP ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">What each step buys you</p>
+								<h2>Every step removes one way this goes wrong.</h2>
+								<p class="section-sub">
+									None of the six is decoration. Delete one and a specific failure comes back, usually the one you will not notice
+									until the document is finished.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Step 01</p>
+								<h4>Restate.</h4>
+								<p class="body-text">
+									Two sentences that catch the wrong document entirely. This is where you find out it heard “competitive analysis”
+									when you said “competitive positioning,” and it costs you ten seconds instead of a thousand words.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Step 02</p>
+								<h4>Declare the assumptions.</h4>
+								<p class="body-text">
+									The dangerous assumptions are the invisible ones. Written into a list, they become arguable, and you can strike
+									the wrong one in four words. Asking it to flag the assumption most likely to be wrong is the highest value line in
+									the whole prompt, because it makes the model do your triage.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Step 03</p>
+								<h4>Ten questions, all at once.</h4>
+								<p class="body-text">
+									Drip fed questions turn into an interrogation nobody finishes. One batch, ranked so the most consequential is
+									first, is a brief you can answer over coffee. The bracketed defaults are what makes it survive contact with a busy
+									person: reply “3, 5, 7” and it proceeds on its own answers for the rest.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Step 04</p>
+								<h4>Wait.</h4>
+								<p class="body-text">
+									Models resolve ambiguity by producing something. Without an explicit stop, many will ask their questions and then
+									helpfully answer them and keep going. One word is carrying real weight here.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Step 05</p>
+								<h4>The plan, not the document.</h4>
+								<p class="body-text">
+									An outline is the cheapest thing in the process to fix. You can read one in ninety seconds and see that section
+									four answers the wrong question. You cannot check a finished twelve page draft that fast, which is why weak work
+									often survives simply because it is already complete.
+								</p>
+							</div>
+
+							<div class="row" style="margin-bottom: 26px">
+								<p class="kicker">Step 06</p>
+								<h4>Build.</h4>
+								<p class="body-text">
+									By this point the model is executing an approved brief rather than guessing at one, and you are reviewing a
+									document you already agreed to the shape of.
+								</p>
+							</div>
+
+							<div class="callout">
+								<p class="callout-label">The three questions doing the heavy lifting</p>
+								<p>
+									What should <strong>not</strong> be in it. How success gets judged, and <strong>by whom</strong>. And a real past
+									version to work from. Those three are required by the prompt on purpose, because they are the three a model will
+									never think to ask and the three that most often decide whether the output is usable.
+								</p>
+							</div>
+
+							<!-- ══════════ RUNNING IT ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Running it</p>
+								<h2>Two habits, and one honest limit.</h2>
+							</div>
+
+							<p class="body-text">
+								<strong>Answer sparsely on purpose.</strong> You do not owe it ten answers. The bracketed defaults exist so you can
+								answer the two or three that matter and let it commit to the rest. What you get back is a document built on stated
+								assumptions rather than hidden ones, which is the actual win.
+							</p>
+							<p class="body-text">
+								<strong>Push back on the plan.</strong> Step five is a real gate, not a formality. Cutting a section at the outline
+								stage costs a sentence. Cutting it after the draft costs a rewrite, and you will be more reluctant to do it, because
+								by then something has been made.
+							</p>
+							<p class="body-text" style="margin-bottom: 20px">
+								<strong>Skip the whole thing when the work is small.</strong> This is overhead, and overhead has to earn its place.
+								Use it when the deliverable is long, when it goes to someone whose opinion matters, or when you would struggle to
+								check the result yourself. For a quick draft you are going to rewrite anyway, just ask for the draft.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 46%">What went wrong last time</th>
+											<th>The step that prevents it</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>It wrote the wrong kind of document</strong></td>
+											<td>Step 1, and you saw it in two sentences</td>
+										</tr>
+										<tr>
+											<td><strong>Right topic, wrong reader</strong></td>
+											<td>Step 2, where audience becomes a stated choice</td>
+										</tr>
+										<tr>
+											<td><strong>Generic because it lacked your context</strong></td>
+											<td>Step 3, the questions it cannot answer itself</td>
+										</tr>
+										<tr>
+											<td><strong>Included the thing you specifically didn’t want</strong></td>
+											<td>Step 3, the required question about exclusions</td>
+										</tr>
+										<tr>
+											<td><strong>Structurally wrong, so the fix was a rewrite</strong></td>
+											<td>Step 5, caught at outline cost</td>
+										</tr>
+										<tr>
+											<td><strong>Full of confident placeholders</strong></td>
+											<td>Step 5, which lists what it needs from you first</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ── Takeaway ── -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								The model isn’t missing intelligence. It’s missing your context, and it will never ask for it unless you make it.
+							</p>
+							<p class="body-text" style="margin-bottom: 30px">
+								Left alone, it fills every gap with a default and shows you the finished result. This prompt moves the gaps to the
+								front, where they cost a sentence each, and puts two gates between the request and the draft. Three minutes of
+								answering, one look at an outline, and the document you get back is the one you meant to ask for.
+							</p>
+
+							<div style="text-align: center; padding: 40px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p style="font-family: var(--sans); font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 16px">
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
