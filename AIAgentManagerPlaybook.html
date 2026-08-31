@@ -1,0 +1,2434 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>The AI agent manager playbook</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines: what to actually say ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Standalone strip (the drop-in standard) ── */
+			.standard {
+				border-top: 1px solid var(--ink);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 20px 0 24px;
+			}
+			.standard .std-item {
+				margin: 0 0 16px;
+			}
+			.standard .std-item p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.6;
+				margin: 4px 0 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			/* ── Phase block: the 90-day plan ── */
+			.phase {
+				border-top: 1px solid var(--ink);
+				padding: 20px 0 2px;
+				margin: 0 0 28px;
+			}
+			.phase-hd {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: baseline;
+				gap: 8px 14px;
+				margin: 0 0 4px;
+			}
+			.phase-days {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0;
+			}
+			.phase-hours {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0;
+			}
+			.week {
+				border-top: 1px solid var(--rule);
+				padding: 16px 0 2px;
+			}
+			.week-no {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.week h4 {
+				font-family: var(--serif);
+				font-size: 17px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				line-height: 1.34;
+				margin: 0 0 8px;
+			}
+			.deliverable {
+				font-family: var(--sans);
+				font-size: 13px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+			}
+			.deliverable strong {
+				color: var(--accent);
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				font-size: 10.5px;
+			}
+
+			/* ── Resource entries ── */
+			.res {
+				border-top: 1px solid var(--rule);
+				padding: 15px 0 3px;
+			}
+			.res:first-child {
+				border-top: 0;
+			}
+			.res p.res-t {
+				font-family: var(--sans);
+				font-size: 14.5px;
+				font-weight: 600;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 4px;
+			}
+			.res p.res-d {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.58;
+				margin: 0 0 4px;
+			}
+			.res .tag {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.14em;
+				margin-left: 8px;
+				white-space: nowrap;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.pull,
+				.strip,
+				.row,
+				.std-item,
+				.contents,
+				.week,
+				.res {
+					break-inside: avoid;
+				}
+				.section-hdr,
+				.phase-hd {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.week-no,
+				.phase-days {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A career pivot playbook</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								How to become an AI agent manager.
+							</h1>
+							<p class="lead">
+								Ninety days, no computer science degree, and a portfolio you can build on your own time. A practical
+								route into the job companies are quietly desperate for and have mostly forgotten to hire.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Every so often a job appears in the gap between two things a company already believes. Right now the two
+								beliefs are: <em>AI agents are going to run real parts of our business</em>, and
+								<em>somebody, somewhere, is presumably making sure that goes well.</em> The first one is funded. The
+								second one is mostly a shrug.
+							</p>
+							<p class="body-text">
+								KPMG put numbers on the shrug. Their Q2 2026 Global AI Pulse surveyed 2,145 senior leaders across 20
+								countries, and the headline is not that companies are backing off. Seventy-nine percent say AI would stay
+								a priority even in a recession. Planned spending is holding steady. What has changed is the expectation:
+								leaders now want accountability, cost discipline, and evidence that any of this is working.
+							</p>
+							<p class="body-text">
+								And here is the part worth reading twice. Three-quarters of organizations say their CEO actively owns AI
+								as a strategic priority. But only 24 percent can name the CEO or executive committee as
+								<em>ultimately accountable</em> for decisions made using AI outputs. Twenty-nine percent say
+								accountability is shared across multiple roles or teams. Another 13 percent say it is unclear or
+								undefined.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								Translated out of survey language: a very large amount of AI work currently has no owner. That is not a
+								crisis. That is an open lane.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">3x</p>
+									<p class="stat-label">more likely to report established ROI where accountability is clear</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">5x</p>
+									<p class="stat-label">more likely to report ROI with full visibility into AI operating costs</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">49%</p>
+									<p class="stat-label">have delayed or scaled back agent rollouts on cost</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">35%</p>
+									<p class="stat-label">have “very clear” rules for when a human overrides AI</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Sit with that last one for a second. Sixty-five percent of organizations deploying AI do not have a clear
+								answer to the question “when is a person supposed to step in?” If you write that document for your team,
+								you have not just written a document. You have become the person who owns the question.
+							</p>
+
+							<div class="pull">
+								<p>
+									An AI agent manager is not the person who builds the agent. It is the person who makes the agent
+									trustworthy enough to run inside a real business.
+								</p>
+							</div>
+
+							<p class="body-text">
+								That distinction is the whole opportunity. Building agents is an engineering problem, and engineers are
+								already on it. Making an agent safe to point at accounting, HR, customer support, or a client inbox is a
+								<em>process</em> problem. It needs someone who can define a job, set boundaries, design approvals, run
+								tests, watch the cost, and know when to pull the plug. If you have worked in operations, project
+								management, compliance, finance, HR, support, or product, you already own most of those muscles. What you
+								are missing is vocabulary, a handful of frameworks, and proof.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">This guide is how you get all three in 90 days.</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										Why this role exists now. <span>The accountability gap, in numbers, and why agents made it urgent.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										What the job actually is. <span>Five responsibilities that fit on one page.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Your transferable skills. <span>What your current job already taught you, translated.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										The literacy floor. <span>The eleven concepts you need, and the ones you can skip.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">The agent charter. <span>Four questions every agent must answer in writing.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">
+										Governance, override, and risk. <span>Including the human-override playbook nobody has written.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">07</span>
+									<p class="what">Cost, measurement, and ROI. <span>The money skill that is currently a named gap.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">08</span>
+									<p class="what">Security for non-engineers. <span>Seven controls you can specify without writing code.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">09</span>
+									<p class="what">The portfolio. <span>Six artifacts, one fictional case study, zero NDA problems.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">10</span>
+									<p class="what">The 90-day plan. <span>Week by week, with a deliverable attached to each one.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">11</span>
+									<p class="what">Titles, résumé, interviews. <span>What to search for and how to talk about it.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">12</span>
+									<p class="what">The resource list. <span>Real links, honestly annotated, mostly free.</span></p>
+								</div>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 34px">
+								One honest positioning note before we start. <strong>“AI agent manager” is not yet a standardized job
+								title.</strong> You will rarely see it printed on a req. It is an umbrella for a cluster of roles that
+								are being posted right now under other names: AI operations, AI governance, responsible AI, automation
+								program management, AI product operations, agent lifecycle management. Treat the phrase as a description
+								of the work, and treat section eleven as the list of words you actually type into a search box.
+							</p>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · Why this role exists now</p>
+								<h2>Agents broke the thing that made chatbots safe.</h2>
+								<p class="section-sub">
+									A chatbot that is wrong produces a bad sentence. An agent that is wrong produces a bad action. Those
+									are not the same category of problem, and most governance was written for the first one.
+								</p>
+							</div>
+
+							<p class="body-text">
+								For two years the risk conversation about AI was fundamentally about text. Hallucinations, tone, bias,
+								citations. Annoying, sometimes serious, but bounded: a human read the output before anything happened.
+								The human was the last mile, and the human was free.
+							</p>
+							<p class="body-text">
+								Agents removed the last mile. An agent takes multi-step actions using tools and permissions you gave it.
+								It reads a system, decides something, writes to another system, sends a message, files a ticket, issues a
+								refund, updates a record. The output <em>is</em> the action. And that changes the failure math
+								completely: a bad answer in a chat window is a minor irritation, while a bad action inside accounting,
+								payroll, security tooling, or a client email thread is an incident with a name and a meeting attached.
+							</p>
+							<p class="body-text">
+								Companies figured this out fast. Almost half of organizations, 49 percent, report having questioned,
+								delayed, or scaled back agent deployments once expected costs started outweighing value. That is not fear.
+								That is a market learning that agents need management, and discovering nobody was assigned to do it.
+							</p>
+
+							<div class="tip" style="margin-top: 26px">
+								<h3 class="tip-title">The gap, stated plainly.</h3>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 46%">What organizations have</th>
+												<th>What they’re missing</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>75% CEO ownership of AI as a priority</strong></td>
+												<td>Only 24% can name the CEO or exec committee as ultimately accountable for AI-informed decisions</td>
+											</tr>
+											<tr>
+												<td><strong>Widespread agent deployment</strong></td>
+												<td>Only 35% have “very clear” rules for when a human should override AI output</td>
+											</tr>
+											<tr>
+												<td><strong>Growing AI spend, steady budgets</strong></td>
+												<td>Only 35% have full visibility into what their AI actually costs to run</td>
+											</tr>
+											<tr>
+												<td><strong>Data feeding AI systems everywhere</strong></td>
+												<td>Only 35% have “very clear” accountability for AI data quality and refresh cycles</td>
+											</tr>
+											<tr>
+												<td><strong>Cost dashboards (53%) and cost reviews (54%)</strong></td>
+												<td>Only 40% have usage or token budgets; only 39% have architecture or prompt design standards</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									Read the right-hand column again. Every line is a job description. Unclaimed, unglamorous, and directly
+									tied to outcomes leadership has already said they care about. Organizations with clearly defined
+									accountability report established ROI at three times the rate of those without it. Organizations with
+									full cost visibility report it at five times the rate.
+								</p>
+							</div>
+
+							<div class="callout">
+								<p class="callout-label">The tell</p>
+								<p>
+									KPMG’s own recommendation list for leaders starts with “clarify accountability, make decision rights
+									explicit.” When a Big Four firm tells 2,145 executives that their top priority is figuring out who owns
+									this, that is career advice wearing a suit. Somebody has to be the answer to that question. It might as
+									well be someone who volunteered.
+								</p>
+							</div>
+
+							<p class="body-text">
+								There is a workforce signal underneath the governance one, too. Seventy-eight percent of leaders expect AI
+								fluency to become more important, and believe roles will change for people who do not develop it. Employee
+								adoption of AI agents rose to 28 percent this quarter. The work is arriving whether or not anyone is
+								managing it. That is the window: adoption is ahead of governance, and it will not stay that way for long.
+							</p>
+							<p class="body-text" style="margin-bottom: 30px">
+								The uncomfortable flip side, which you should hold onto: windows close. The people who move into these roles
+								in the next 12 to 18 months will define them. The people who move in three years will be hired into
+								structures somebody else designed.
+							</p>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · What the job actually is</p>
+								<h2>Five responsibilities, and none of them require a compiler.</h2>
+								<p class="section-sub">
+									If you can describe the job crisply in an interview, you are already ahead of most candidates, because
+									most candidates describe enthusiasm instead.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Microsoft’s current agent lifecycle guidance treats agents the way good product teams treat products: named
+								owners, monitoring plans, evaluation cycles, improvement loops, and explicit retirement criteria. Not
+								one-time projects. That framing is the right one, and it collapses neatly into five things.
+							</p>
+
+							<div class="row">
+								<p class="kicker">01</p>
+								<h3 class="tip-title">Define the agent’s job and its boundaries.</h3>
+								<p class="body-text">
+									One sentence on what it does. A list of what it must never do. The scope question is where most agent
+									programs quietly fail, because “handle customer emails” is not a job description, it is a hope. “Draft
+									replies to shipping-status questions on orders under $500, for a human to approve” is a job description.
+									Narrow scope is not timidity. It is the only thing that makes evaluation, cost tracking, and blame
+									assignment possible later.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">02</p>
+								<h3 class="tip-title">Control its data, tools, permissions, and actions.</h3>
+								<p class="body-text">
+									What can it read? What can it write? Which systems, which records, which fields, under whose identity?
+									This is access management applied to a non-human actor that works fast and does not get tired. If you
+									have ever run a permissions review or scoped a vendor integration, this is the same discipline with new
+									vocabulary.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">03</p>
+								<h3 class="tip-title">Test it before it touches anything real.</h3>
+								<p class="body-text">
+									Agents need the equivalent of QA, and almost nobody is doing it properly. That means a test set of real
+									cases with known-correct answers, a scorecard, a pass threshold, and a documented result. It also means
+									deliberately trying to break it: weird inputs, missing data, hostile instructions buried in a document it
+									reads. “We tried it a few times and it seemed good” is the current state of the art at most companies.
+									Beating that is not hard.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">04</p>
+								<h3 class="tip-title">Monitor quality, cost, and business value in production.</h3>
+								<p class="body-text">
+									Accuracy drifts. Data goes stale. Costs climb with usage in ways nobody forecast. Somebody has to watch
+									three dials at once and know what each one means. This is the responsibility with the shortest supply of
+									qualified people, which is exactly why section seven exists.
+								</p>
+							</div>
+
+							<div class="row" style="margin-bottom: 26px">
+								<p class="kicker">05</p>
+								<h3 class="tip-title">Improve it, narrow it, pause it, or retire it.</h3>
+								<p class="body-text">
+									Agents are not monuments. The mature move is having pre-agreed thresholds that trigger a decision:
+									accuracy below X, cost above Y, escalation rate above Z, and we revisit. Almost no one sets these in
+									advance, which is why the 49 percent who scaled back deployments mostly did it in a panic rather than on
+									a schedule.
+								</p>
+							</div>
+
+							<div class="callout">
+								<p class="callout-label">How to say it in an interview</p>
+								<p class="script">
+									“I make sure an agent has a defined job, controlled access, a test it has to pass, numbers we watch after
+									launch, and a decision point where we improve it or turn it off.”
+								</p>
+								<p class="script-note">
+									Twenty-nine words. Delivered without notes, it separates you from every candidate who opens with “I’m
+									really passionate about AI.”
+								</p>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Your transferable skills</p>
+								<h2>You are probably 60% qualified and 0% fluent.</h2>
+								<p class="section-sub">
+									That combination feels like being unqualified. It is not. Fluency is the fast part, and it is the part
+									this guide fixes.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 8px">
+								Find your row. The left column is what you have done. The right column is the same skill, described the way
+								a hiring manager for an AI operations role would recognize it.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">If you come from</th>
+											<th>You already do the agent-management version of</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Operations</strong></td>
+											<td>
+												Workflow decomposition and process controls. You know how to break a messy process into steps,
+												find the handoffs, and spot where it breaks. That is 80% of scoping an agent.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Project or program management</strong></td>
+											<td>
+												Ownership, approval gates, stakeholder coordination, status reporting. Agent lifecycle management
+												is program management with a non-human team member.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Compliance, legal, or audit</strong></td>
+											<td>
+												Policy writing, documentation trails, risk assessment, evidence. You are natively good at the part
+												everyone else finds tedious and regulators find mandatory.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Finance or FP&amp;A</strong></td>
+											<td>
+												Unit economics, budgets, variance analysis, ROI cases. Token pricing is just a new unit cost, and
+												one-third of leaders named cost literacy as a blocker to deploying agents.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>HR or L&amp;D</strong></td>
+											<td>
+												Adoption, training, change management, role redesign, and the human oversight question. Somebody has
+												to teach people how to work alongside these things.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Customer support or success</strong></td>
+											<td>
+												Escalation paths, QA scoring, tone standards, incident handling. You have run the human version of
+												exactly the review loop an agent needs.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Product management</strong></td>
+											<td>
+												Requirements, success metrics, testing, iteration, sunsetting. Microsoft’s lifecycle model is
+												essentially product management applied to agents.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>IT, security, or data</strong></td>
+											<td>
+												Least privilege, identity, data classification, logging, incident response. You are closest to the
+												technical end and should lean into risk tiering.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Marketing or comms</strong></td>
+											<td>
+												Brand safety, approval workflows, review chains, factual accuracy under deadline. Content agents are
+												the most-deployed and least-governed category out there.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 18px">
+								The World Economic Forum’s Future of Jobs research keeps landing on the same point: analytical thinking,
+								leadership, and collaboration stay critical alongside growing technical AI skills. The skills that transfer
+								are the ones that were always about judgment.
+							</p>
+							<p class="body-text">
+								Coding is genuinely useful here and I am not going to pretend otherwise. If you can read a bit of Python or
+								SQL, you will be faster and more credible. But it is a multiplier, not a prerequisite. The bottleneck in
+								most organizations right now is not people who can build agents. It is people who can decide what an agent
+								should be allowed to do, and defend that decision to a room.
+							</p>
+
+							<div class="callout" style="border-left-color: var(--muted)">
+								<p class="callout-label" style="color: var(--muted)">One honest caveat</p>
+								<p>
+									“Transferable” does not mean “automatic.” Nobody is going to look at your ops résumé and infer the AI
+									part. You have to build the bridge yourself, in artifacts, which is what sections nine and ten are for.
+									The audit above tells you the bridge is short. It does not build it.
+								</p>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · The literacy floor</p>
+								<h2>Eleven concepts. About two weekends.</h2>
+								<p class="section-sub">
+									You need enough fluency to ask sharp questions and call nonsense when you hear it. You do not need to be
+									able to build the thing.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 01</span>
+								<h3 class="tip-title">What an agent is, versus a chatbot, versus automation.</h3>
+								<p class="body-text">
+									A chatbot answers. Traditional automation follows a fixed script you wrote in advance. An agent is given
+									a goal and a set of tools, and it decides the steps itself, in a loop, until it thinks it is done. The
+									word that matters is <strong>decides</strong>. That is where the value and the risk both come from, and
+									it is why the governance you would apply to a macro is not sufficient here.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 02</span>
+								<h3 class="tip-title">The anatomy: model, prompt, tools, knowledge, memory.</h3>
+								<p class="body-text">
+									Five parts, and you should be able to name all five. The <strong>model</strong> is the reasoning engine.
+									The <strong>system prompt</strong> is its standing instructions and boundaries. <strong>Tools</strong> (or
+									connectors, or function calls) are the actions it can take in other systems.
+									<strong>Knowledge sources</strong> are the documents and data it can look things up in.
+									<strong>Memory</strong> is what it carries between steps or sessions. Every governance question you will
+									ever ask maps onto one of those five boxes.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 03</span>
+								<h3 class="tip-title">Tokens, and why the bill is variable.</h3>
+								<p class="body-text">
+									Models charge per token, roughly a word fragment, for both what goes in and what comes out. Output tokens
+									usually cost several times more than input tokens. Agents are expensive because a single “task” might be
+									dozens of model calls, each carrying the whole conversation history forward, so cost grows faster than
+									task count. This is the single highest-leverage concept in the guide, and it gets its own section.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 04</span>
+								<h3 class="tip-title">Model choice is now a budget decision.</h3>
+								<p class="body-text">
+									Access to lower-cost, high-fidelity models was the fastest-rising strategic influence in the KPMG data,
+									moving from 15 to 22 percent in a single quarter. Frontier models can cost many times what a small fast
+									model costs for the same job. Knowing which tier a task actually needs, and being willing to test the
+									cheaper one, is a money skill that currently reads as a technical one.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 05</span>
+								<h3 class="tip-title">Failure modes you must be able to name.</h3>
+								<ul class="brand">
+									<li><strong>Hallucination.</strong> Confident invention. Worse in agents, because it becomes an action.</li>
+									<li><strong>Stale or wrong grounding.</strong> The agent is right about a document that is out of date.</li>
+									<li><strong>Prompt injection.</strong> Malicious instructions hidden in content the agent reads.</li>
+									<li><strong>Scope creep.</strong> The agent solves a nearby problem you never approved.</li>
+									<li><strong>Silent degradation.</strong> Quality drifts slowly and nobody notices because nobody is measuring.</li>
+									<li><strong>Cascading error.</strong> Step three was wrong, so steps four through nine are confidently wrong.</li>
+								</ul>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 06</span>
+								<h3 class="tip-title">Non-determinism, and what it does to testing.</h3>
+								<p class="body-text">
+									The same input can produce different output twice. That breaks the pass/fail testing instinct most people
+									bring from software or process work. You test agents statistically: run 50 cases, score them, track the
+									rate. “It worked when I tried it” is meaningless. A 92 percent pass rate across a documented test set is
+									an actual claim.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 07</span>
+								<h3 class="tip-title">Identity and permissions for non-humans.</h3>
+								<p class="body-text">
+									When an agent acts, whose account is it using? If it runs as a shared service account with broad access,
+									it can see and do more than any individual user should, and your audit log says “service account” instead
+									of a name. Ask that question in any meeting about an agent and watch the room go quiet.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 08</span>
+								<h3 class="tip-title">Evaluation, or “evals.”</h3>
+								<p class="body-text">
+									The industry word for structured testing. A set of inputs, expected outputs or grading criteria, and a
+									score. Evals can be automated, human-graded, or model-graded (one model scoring another’s work, which is
+									cheap, fast, and needs a human spot-check). Learning to design a good eval set is arguably the single most
+									marketable non-coding skill in this whole field.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 09</span>
+								<h3 class="tip-title">Observability: traces and logs.</h3>
+								<p class="body-text">
+									A <strong>trace</strong> is the full record of what the agent did on one task: every step, every tool
+									call, every token, every cost. Without traces you cannot debug, price, or audit anything. When you evaluate
+									a platform, “can I see a full trace of a single run?” is the question that matters most.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Concept 10</span>
+								<h3 class="tip-title">Human in the loop, on the loop, out of the loop.</h3>
+								<p class="body-text">
+									Three postures. <strong>In the loop</strong>: a human approves every action before it happens. <strong>On
+									the loop</strong>: the agent acts, a human monitors and can intervene. <strong>Out of the loop</strong>:
+									fully autonomous, reviewed after the fact or by sampling. Choosing the right posture per action, not per
+									agent, is a craft, and it is the heart of the override playbook in section six.
+								</p>
+							</div>
+
+							<div class="tip" style="margin-bottom: 26px">
+								<span class="tip-num">Concept 11</span>
+								<h3 class="tip-title">Fluency is not coding.</h3>
+								<p class="body-text">
+									You are aiming to be the person who can sit between a business owner and an engineer and make both of them
+									more effective. That means you can translate a fuzzy business process into explicit instructions and
+									controls, and you can read a technical answer well enough to know whether it addressed your question. Build
+									toward that. If you find yourself trying to learn transformer architecture, you have wandered off.
+								</p>
+							</div>
+
+							<div class="callout">
+								<p class="callout-label">A quick self-test</p>
+								<p>
+									Can you explain, to a colleague, in under two minutes, why an agent that summarizes 200 support tickets
+									might cost forty times more than one that summarizes five, even though both “do a summary”? If yes, you
+									have concept three. If not, that is your first evening.
+								</p>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · The agent charter</p>
+								<h2>Four questions. One page. Enormous leverage.</h2>
+								<p class="section-sub">
+									This is the artifact to build first, because it is the one that makes you useful in a meeting before you
+									have any credentials at all.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Every agent running in a business should have written answers to four questions. Most have zero. Walking into
+								a room with a filled-in charter for an agent your company already runs is the fastest credibility move
+								available to you, and it costs an afternoon.
+							</p>
+
+							<div class="standard">
+								<p class="rule-label">The agent charter</p>
+								<div class="std-item">
+									<p class="kicker">01 · Who owns this agent?</p>
+									<p>
+										A named human, not a team. Plus a named backup, and the executive this rolls up to. If the answer takes
+										more than five seconds, you have found the problem. Twenty-nine percent of organizations report
+										accountability spread across multiple teams, which is functionally the same as nobody.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">02 · What job does it do, and what does it touch?</p>
+									<p>
+										One sentence of scope. Then the inventory: which systems it can read, which it can write to, which
+										actions it can take, whose identity it runs as, and what data classification it handles. Include an
+										explicit “never does this” list. The never-list is usually more useful than the scope statement.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">03 · How do we know it’s helping?</p>
+									<p>
+										The baseline before the agent existed. The two or three metrics you now track. The review cadence and
+										who attends. And the cost, per task and per month, sitting right next to the benefit so the comparison
+										is unavoidable.
+									</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">04 · What happens when it’s wrong?</p>
+									<p>
+										How a mistake gets detected, who gets told, who can pause it, how the action gets reversed, how the
+										customer or employee gets made whole, and what changes afterward so it does not recur. If you cannot
+										describe the rollback, the agent is not ready for production.
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Notice what this document quietly does. It forces a named owner into existence, makes access explicit, puts
+								cost next to value, and pre-commits an incident path. Those are exactly the four things the KPMG data says
+								organizations are missing, and it is one page.
+							</p>
+							<p class="body-text" style="margin-bottom: 30px">
+								Make this your calling card. Write it once as a blank template, then fill it in for a real or fictional
+								agent. You now have something to show people, which is more than most candidates in this space have.
+							</p>
+
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · Governance, override, and risk</p>
+								<h2>The unglamorous half, which is where the leverage is.</h2>
+								<p class="section-sub">
+									Only about one-third of organizations describe their governance roles and processes as very clear and well
+									managed. This is a field with plenty of principles and very little practice.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								You do not need to invent any of this. Two frameworks cover nearly everything, and knowing them by name is
+								itself a hiring signal.
+							</p>
+
+							<div class="tip">
+								<h3 class="tip-title">NIST AI RMF: govern, map, measure, manage.</h3>
+								<p class="body-text">
+									The US National Institute of Standards and Technology publishes an AI Risk Management Framework built on
+									four functions. It is free, readable in an afternoon, vendor-neutral, and increasingly the shared
+									vocabulary in job descriptions.
+								</p>
+								<ul class="brand">
+									<li><strong>Govern.</strong> Culture, policies, roles, accountability. The layer everything else sits on.</li>
+									<li><strong>Map.</strong> Understand context: what the system does, who it affects, what could go wrong.</li>
+									<li><strong>Measure.</strong> Analyze and track risk with actual metrics and testing.</li>
+									<li><strong>Manage.</strong> Prioritize, respond, monitor, and act on what you measured.</li>
+								</ul>
+								<p class="body-text">
+									Learn these four words well enough to structure a conversation around them. NIST also publishes a
+									companion Playbook with concrete suggested actions per function, and a Generative AI Profile that maps the
+									framework onto generative and agentic systems specifically.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">ISO/IEC 42001: the certifiable management system.</h3>
+								<p class="body-text">
+									Where NIST gives you a way of thinking, ISO/IEC 42001 gives you an auditable management system for AI:
+									policies, defined responsibilities, risk assessment, monitoring, internal audit, and continuous
+									improvement. If you have worked anywhere near ISO 27001 or SOC 2, the shape is instantly familiar.
+									Enterprises pursuing certification need people who can run the program, and there are not many of them.
+								</p>
+								<p class="body-text">
+									You do not need to memorize the standard. You need to know what it is, why a company would pursue it, and
+									roughly what conformance requires. That is enough to be the person in the room who has heard of it.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Risk tiering, which is the practical core.</h3>
+								<p class="body-text">
+									Not every agent deserves the same scrutiny, and pretending otherwise is how governance programs die. Tier
+									agents by what they can access and what they can change:
+								</p>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 18%">Tier</th>
+												<th style="width: 42%">Looks like</th>
+												<th>Controls</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>Low</strong></td>
+												<td>Read-only, internal, non-sensitive. Drafts and summaries a person reviews anyway.</td>
+												<td>Named owner, basic logging, quarterly spot check.</td>
+											</tr>
+											<tr>
+												<td><strong>Medium</strong></td>
+												<td>Writes to internal systems, or touches employee or business-confidential data. No external exposure.</td>
+												<td>Full charter, eval set with a pass threshold, human approval on writes, monthly review, cost budget.</td>
+											</tr>
+											<tr>
+												<td><strong>High</strong></td>
+												<td>Customer-facing, money-moving, or touching regulated, personal, or safety-relevant data.</td>
+												<td>Everything above, plus pre-deployment sign-off, human in the loop on every consequential action, full trace retention, tested rollback, incident runbook, scheduled access reviews.</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									Build this table for your own organization and you have produced something most companies do not have. It
+									is also a beautiful interview artifact, because it demonstrates proportional thinking rather than blanket
+									caution.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">The human-override playbook.</h3>
+								<p class="body-text">
+									This is the highest-value document in the guide, precisely because only 35 percent of organizations have
+									very clear guidance here. Six questions, answered in writing, per agent:
+								</p>
+								<ol class="brand">
+									<li>
+										<strong>What can it decide alone?</strong> List the actions that need no approval. Be specific and be
+										generous where the blast radius is genuinely small, because an override policy that stops everything
+										gets ignored within a week.
+									</li>
+									<li>
+										<strong>What always needs approval?</strong> Anything involving money above a threshold, anything a
+										customer sees, anything touching personal or regulated data, anything irreversible. Name the approver
+										by role.
+									</li>
+									<li>
+										<strong>What auto-escalates?</strong> Define the triggers, not just the vibes. Low confidence, an
+										unrecognized input, a repeat contact from the same customer, a value outside normal range, a tool
+										failure, more than N steps taken.
+									</li>
+									<li>
+										<strong>Who can pause it, and how fast?</strong> Name the people and describe the mechanism. A kill
+										switch that requires a ticket and an engineer is not a kill switch. Test it before you claim to have
+										one.
+									</li>
+									<li>
+										<strong>How do people report bad behavior?</strong> One channel, publicly known, that a frontline
+										employee can use in ten seconds without needing permission. Most bad agent behavior is spotted by
+										someone junior who assumes it is not their place to say anything.
+									</li>
+									<li>
+										<strong>What happens after?</strong> Who reviews, what gets logged, what gets fixed, who tells the
+										affected person, and how the fix gets verified. Incidents without a written aftermath repeat.
+									</li>
+								</ol>
+								<div class="callout">
+									<p class="callout-label">The design rule that matters</p>
+									<p>
+										Set override thresholds per <em>action</em>, not per agent. One agent might be free to draft and
+										categorize all day while requiring approval for a single kind of write. Governing at the agent level
+										forces you to choose between too much friction and too much risk, and you will end up with both.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip" style="margin-bottom: 26px">
+								<h3 class="tip-title">The rest of the governance kit.</h3>
+								<ul class="brand">
+									<li><strong>An agent inventory.</strong> A living list of every agent, its owner, its tier, and its status. Astonishingly few companies have one. Proposing to build it is a great first internal move.</li>
+									<li><strong>Approved and prohibited data sources.</strong> What the agent may ground itself in, and what is off limits, in writing.</li>
+									<li><strong>Audit logs and transcript retention.</strong> What gets kept, for how long, who can read it, and how it satisfies your existing records policy.</li>
+									<li><strong>Change control.</strong> Prompt changes and model swaps are production changes. Treat a model version upgrade like a deployment, because it is one.</li>
+									<li><strong>Scheduled access and policy reviews.</strong> Quarterly for high tier. Permissions granted for a pilot have a way of becoming permanent.</li>
+									<li><strong>A regulatory watch item.</strong> If you operate in or sell into the EU, the AI Act’s obligations phase in on a published timeline. You do not need to be a lawyer. You need to be the person who raised it first.</li>
+								</ul>
+							</div>
+
+							<!-- ══════════ PART SEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part seven · Cost, measurement, and ROI</p>
+								<h2>The money skill nobody has, named in a survey.</h2>
+								<p class="section-sub">
+									One-third of leaders cite AI cost and economic literacy as a challenge to deploying agents. That is a
+									stated skill gap from 2,145 executives. Go be the person who has it.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Here is the situation in three numbers. Only 35 percent of organizations have full visibility into what
+								their AI costs to run. Forty-two percent describe that visibility as “somewhat.” Thirteen percent find out
+								when the bill arrives. And organizations with full cost visibility report established ROI at five times the
+								rate of those without it, 15 percent versus 3 percent.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								Knowing what your tools cost turns out to be a competitive advantage. I find this genuinely funny, and also
+								the most actionable fact in the entire report.
+							</p>
+
+							<div class="tip">
+								<h3 class="tip-title">Why agent costs surprise people.</h3>
+								<p class="body-text">
+									The mental model most people carry over from SaaS is per-seat, predictable, and flat. Agent economics are
+									none of those things. Four things drive the surprise:
+								</p>
+								<ul class="brand">
+									<li><strong>Usage-based pricing.</strong> You pay per token, so cost scales with how much work gets done, not how many people are licensed.</li>
+									<li><strong>Loops multiply calls.</strong> One user request can trigger many model calls as the agent plans, calls tools, reads results, and revises.</li>
+									<li><strong>Context accumulates.</strong> Each step often resends the growing conversation, so later steps cost more than earlier ones. Long-running agents get expensive at an accelerating rate.</li>
+									<li><strong>Retries and failures still bill.</strong> An agent that fails a task three times before succeeding charged you four times.</li>
+								</ul>
+								<p class="body-text">
+									None of this is a reason not to use agents. It is a reason to know your cost per completed task before you
+									scale from ten a day to ten thousand.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">The measurement set that actually convinces people.</h3>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 26%">Metric</th>
+												<th>What it tells you, and the trap</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>Baseline</strong></td>
+												<td>What the process cost in time, money, and error rate <em>before</em> the agent. Capture it first. Without a baseline every later claim is unfalsifiable, and you will be asked.</td>
+											</tr>
+											<tr>
+												<td><strong>Completion rate</strong></td>
+												<td>Share of tasks the agent finishes end to end without help. The most honest headline number.</td>
+											</tr>
+											<tr>
+												<td><strong>Accuracy or quality score</strong></td>
+												<td>From your eval set, sampled continuously in production. Say how it is graded and by whom.</td>
+											</tr>
+											<tr>
+												<td><strong>Escalation rate</strong></td>
+												<td>How often a human has to step in. Rising escalation is the earliest warning sign you will get.</td>
+											</tr>
+											<tr>
+												<td><strong>Rework rate</strong></td>
+												<td>How often the output needs fixing afterward. This is the number that separates real savings from moved work, and almost nobody tracks it.</td>
+											</tr>
+											<tr>
+												<td><strong>Cost per completed task</strong></td>
+												<td>Total spend divided by successful completions. Not per call, per <em>completion</em>, because failures cost money too.</td>
+											</tr>
+											<tr>
+												<td><strong>Time saved</strong></td>
+												<td>Useful, and the most abused metric in the field. Twenty minutes saved is only value if it went somewhere. Say where.</td>
+											</tr>
+											<tr>
+												<td><strong>Cost delta versus the old process</strong></td>
+												<td>The agent’s run cost plus oversight time versus the baseline. Oversight time is a real cost. Include it or someone else will.</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">The four controls, and the two nobody has.</h3>
+								<p class="body-text">
+									Companies are watching the spend without changing the behavior. Cost reviews (54 percent) and dashboards
+									(53 percent) are the common controls. Usage or token budgets (40 percent) and architecture or prompt design
+									standards (39 percent) lag behind. That is the exact pattern of someone who checks their bank balance
+									frequently and has no budget, which, respectfully, is most people’s personal finances.
+								</p>
+								<p class="body-text">The full set, in the order I would build them:</p>
+								<ol class="brand">
+									<li><strong>Visibility.</strong> A dashboard showing spend by agent, by team, by day. You cannot manage what you see monthly and in aggregate.</li>
+									<li><strong>Review gates.</strong> A cost estimate required in the approval process, before a single line is built. Force the forecast.</li>
+									<li><strong>Budgets and limits.</strong> A hard token or spend cap per agent, with an alert at 80 percent. This is the one most organizations skip and most regret.</li>
+									<li><strong>Design standards.</strong> Rules about which model tier fits which task, how much context to carry, when to cache, when to stop retrying. This is where the real savings live and where the fewest people are working.</li>
+								</ol>
+							</div>
+
+							<div class="callout">
+								<p class="callout-label">A move you can make in one week</p>
+								<p>
+									Pick one agent or AI workflow at your company. Find out what it cost last month and what it produced.
+									Write both numbers on one page with a per-task figure. In most organizations, nobody has done this, and the
+									act of doing it makes you the person who owns AI cost visibility. That is not a metaphor. That is how these
+									roles actually get created.
+								</p>
+							</div>
+
+							<!-- ══════════ PART EIGHT ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part eight · Security for non-engineers</p>
+								<h2>Seven controls you can specify without writing code.</h2>
+								<p class="section-sub">
+									You are not going to be the security engineer. You are going to be the person who insists the questions get
+									asked and written down, which is a different job and currently a vacant one.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 20px">
+								Autonomous, multi-step, tool-using systems create risks that traditional application security was not designed
+								for. OWASP’s Agentic Security Initiative is the best free starting point for understanding the emerging threat
+								model. Here is the practical floor.
+							</p>
+
+							<div class="row">
+								<p class="kicker">01</p>
+								<h3 class="tip-title">Least privilege, enforced and reviewed.</h3>
+								<p class="body-text">
+									The agent gets the narrowest access that lets it do its defined job, and nothing held “just in case.” Write
+									down what it has, and re-check quarterly. Pilot-era permissions are the most common source of quiet
+									over-access in any organization.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">02</p>
+								<h3 class="tip-title">Know every connector and data source.</h3>
+								<p class="body-text">
+									Maintain the list. Each connector is a door in both directions: data the agent can reach, and a system it
+									can affect. If nobody can produce this list on request, that is your finding.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">03</p>
+								<h3 class="tip-title">Separation between users, customers, and tenants.</h3>
+								<p class="body-text">
+									Can the agent, while helping customer A, surface something belonging to customer B? Can it show an employee
+									data their own login would not permit? Agents inherit whatever access they were given, not the access of the
+									person asking, and that mismatch is where the ugliest incidents come from.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">04</p>
+								<h3 class="tip-title">Treat retrieved content as untrusted.</h3>
+								<p class="body-text">
+									Prompt injection is the defining new risk: instructions hidden inside a document, email, web page, or
+									support ticket that the agent reads and obeys. The mitigation is architectural (the agent should not act on
+									instructions found in data), but the governance move is yours: for any agent that reads external content,
+									require that the injection question was explicitly considered and the answer written down.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">05</p>
+								<h3 class="tip-title">Classify and constrain sensitive data.</h3>
+								<p class="body-text">
+									Which categories may this agent touch, where does that data go, is it retained by a vendor, is it used for
+									training, and does that satisfy your existing policy? These are the questions your privacy team already asks
+									about vendors. Bring them to agents.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">06</p>
+								<h3 class="tip-title">Log the consequential actions.</h3>
+								<p class="body-text">
+									Every write, send, payment, permission change, or deletion, with a timestamp, the triggering input, and the
+									identity used. If you cannot reconstruct what happened after an incident, you cannot fix it and you cannot
+									prove anything to anyone.
+								</p>
+							</div>
+
+							<div class="row" style="margin-bottom: 30px">
+								<p class="kicker">07</p>
+								<h3 class="tip-title">Rehearse the shutdown.</h3>
+								<p class="body-text">
+									Actually pause an agent in a test window and time it. Then walk through reversing an action it took. A
+									rollback plan that has never been executed is a paragraph, not a control, and you will find out which one it
+									is at the worst possible moment.
+								</p>
+							</div>
+
+							<!-- ══════════ PART NINE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part nine · The portfolio</p>
+								<h2>Six artifacts. This is the part that gets you hired.</h2>
+								<p class="section-sub">
+									Nobody can verify that you understand agent governance from a résumé bullet. They can verify it in about
+									ninety seconds from a well-made document.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Everything in this section can be built without writing code, without your employer’s data, and without
+								anyone’s permission. Build them around a fictional but realistic company, which solves the confidentiality
+								problem completely and lets you make the example as clean as you want.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The worked example I’d use</p>
+								<p>
+									<strong>Meridian Freight</strong>, a mid-size logistics company, 400 employees. Their accounts payable team
+									manually triages about 600 supplier invoice exceptions a month: mismatched amounts, missing purchase order
+									numbers, duplicate submissions. Average 11 minutes each. The proposed agent reads the invoice and the PO
+									record, classifies the exception, drafts a resolution, and routes it for human approval. It never pays
+									anything. It never emails a supplier directly.
+								</p>
+								<p>
+									Boring, specific, plausible, and touching money without moving it. That last part is what makes it a great
+									portfolio subject: it is genuinely medium-risk, so all your controls have a reason to exist.
+								</p>
+							</div>
+
+							<div class="tip" style="margin-top: 24px">
+								<h3 class="tip-title">The six.</h3>
+								<ol class="brand">
+									<li>
+										<strong>The agent charter.</strong> One page, the four questions from section five, fully answered for
+										Meridian. This is your lead artifact.
+									</li>
+									<li>
+										<strong>The workflow and approval map.</strong> The current process, then the proposed process, with
+										decision points marked: agent decides, agent proposes and human approves, or auto-escalate. A simple
+										diagram or a clean table both work. The point is showing you can see a process, not that you can use
+										a drawing tool.
+									</li>
+									<li>
+										<strong>The risk-tier assessment.</strong> Which tier, why, and the specific controls that tier requires.
+										Include the two or three risks you rated as most serious and what you did about each. Reference NIST’s
+										four functions by name.
+									</li>
+									<li>
+										<strong>The evaluation scorecard.</strong> Thirty to fifty test cases with expected outcomes, your grading
+										criteria, your pass threshold, and the results of an actual run. Include the failures. Especially include
+										the failures.
+									</li>
+									<li>
+										<strong>The cost and value model.</strong> Baseline cost of the manual process, estimated agent run cost
+										per task, oversight cost, and the break-even point. One page, real arithmetic, stated assumptions. This is
+										the artifact hiring managers remember, because almost nobody brings one.
+									</li>
+									<li>
+										<strong>The incident and rollback playbook.</strong> Detection, notification, pause, reversal,
+										communication, and the post-incident change. Two pages maximum. Written so a stranger could follow it at
+										2am.
+									</li>
+								</ol>
+							</div>
+
+							<div class="tip" style="margin-bottom: 28px">
+								<h3 class="tip-title">Then actually build something small.</h3>
+								<p class="body-text">
+									The artifacts are the proof of judgment. A working agent, however humble, is the proof you have touched the
+									material. Use a no-code platform, pick a genuinely low-risk workflow from your own life or work, build it,
+									and then, critically, <strong>run your own eval set against it and write up what broke.</strong>
+								</p>
+								<p class="body-text">
+									The write-up matters more than the agent. “I built a thing and it worked” is a hobby. “I built a thing, tested
+									it on 40 cases, found it failed on a specific category of input, narrowed the scope, retested, and here is
+									the cost per run” is the job. Failures documented honestly are the strongest signal in your entire portfolio,
+									because they prove you were actually measuring.
+								</p>
+							</div>
+
+							<!-- ══════════ PART TEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part ten · The 90-day plan</p>
+								<h2>Thirteen weeks, five to seven hours each.</h2>
+								<p class="section-sub">
+									Every week has one deliverable. If you finish the week without producing the artifact, you did not finish the
+									week. Reading does not count.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								This assumes you have a job and a life, so it is built for roughly one hour on four weekday evenings and a
+								two-hour block on a weekend. Slip a week if you need to. Do not skip the deliverables, because the deliverables
+								<em>are</em> the pivot. The learning is just what makes them possible.
+							</p>
+
+							<div class="phase">
+								<div class="phase-hd">
+									<p class="phase-days">Days 1 to 30 · Learn</p>
+									<p class="phase-hours">Goal: vocabulary, frameworks, and one mapped workflow</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 01</p>
+									<h4>Get fluent in the anatomy.</h4>
+									<p class="body-text">
+										Work through section four until all eleven concepts are yours. Read Anthropic’s “Building effective agents”
+										essay, which is short, vendor-honest, and the single best explanation of when an agent is and is not the
+										right tool. Then go hands-on: spend two hours actually using an agentic tool, watching what it does step by
+										step rather than just reading its answer.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A one-page glossary in your own words. Model, prompt, tool, knowledge,
+										memory, token, eval, trace, human in the loop. Writing definitions yourself is the test of whether you have
+										them.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 02</p>
+									<h4>Learn the governance frameworks by name.</h4>
+									<p class="body-text">
+										Read the NIST AI Risk Management Framework and skim its Playbook. Understand govern, map, measure, manage
+										well enough to structure a conversation around them. Read a summary of ISO/IEC 42001 and understand what
+										certification involves. Skim OWASP’s agentic security material for the threat vocabulary.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A two-page brief: what each framework is, who it is for, and how you
+										would use it. This becomes an interview answer and, later, an internal memo.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 03</p>
+									<h4>Learn the money.</h4>
+									<p class="body-text">
+										Read the pricing pages of two or three major model providers until token pricing is intuitive. Compare model
+										tiers on a price-and-quality comparison site. Do the arithmetic on a hypothetical workload: 500 tasks a day,
+										eight model calls each, roughly this much context, what does that cost per month at three different model
+										tiers? Get the estimate wrong, then figure out why.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A reusable cost estimator, in a spreadsheet. Inputs at the top,
+										assumptions stated, output as cost per task and cost per month. This is a portfolio artifact and a genuinely
+										useful tool.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 04</p>
+									<h4>Map one real workflow from your own field.</h4>
+									<p class="body-text">
+										Pick a process you already understand deeply. Document it honestly: every step, every handoff, every decision
+										point, how long each part takes, how often it goes wrong, and what happens when it does. Then mark which
+										steps an agent could plausibly take and which absolutely need a person. Your domain knowledge is the
+										advantage here, so use a process you know better than a consultant would.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A workflow map with a baseline: time per instance, volume, error rate,
+										cost. You now have the “before” half of every claim you will make later.
+									</p>
+								</div>
+							</div>
+
+							<div class="phase">
+								<div class="phase-hd">
+									<p class="phase-days">Days 31 to 60 · Build</p>
+									<p class="phase-hours">Goal: six artifacts and one working agent you have broken on purpose</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 05</p>
+									<h4>Write the charter and the approval map.</h4>
+									<p class="body-text">
+										Using your week-four workflow, or the Meridian example if your own work is too sensitive, produce artifacts
+										one and two. Answer all four charter questions completely, including the uncomfortable ones. Mark every
+										decision point in the approval map as decide, propose, or escalate.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;Agent charter (1 page) and workflow and approval map (1 to 2 pages).
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 06</p>
+									<h4>Build the thing.</h4>
+									<p class="body-text">
+										Use a no-code agent builder. Microsoft Copilot Studio, Zapier Agents, n8n, or a custom assistant in Claude or
+										ChatGPT with documents and instructions attached. Keep the scope small enough to finish. Expect the first
+										version to be disappointing, because it will be, and that disappointment is the curriculum.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A working agent, plus a short build log: what you tried, what did not
+										work, what you changed.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 07</p>
+									<h4>Test it properly and write the risk tier.</h4>
+									<p class="body-text">
+										Build 30 to 50 test cases with known-correct answers, including the awkward edge cases and at least three
+										deliberately hostile inputs. Define your grading criteria before you run it, because defining them after is
+										how you fool yourself. Run the set, score it, log every failure with a category. Then write the risk-tier
+										assessment: which tier, why, and which controls follow.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;Evaluation scorecard with real results, and a risk-tier assessment
+										referencing NIST’s four functions.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 08</p>
+									<h4>Price it, and plan for it going wrong.</h4>
+									<p class="body-text">
+										Fill in your week-three estimator with actual numbers from your week-six agent. Compare against the week-four
+										baseline, including oversight time. Find the break-even volume. Then write the incident and rollback playbook:
+										detection, notification, pause, reversal, communication, follow-up. Rehearse the pause step for real.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;Cost and value model with break-even, and the incident and rollback
+										playbook. Portfolio complete: all six artifacts.
+									</p>
+								</div>
+							</div>
+
+							<div class="phase">
+								<div class="phase-hd">
+									<p class="phase-days">Days 61 to 90 · Position</p>
+									<p class="phase-hours">Goal: be visibly the person who does this, internally and externally</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 09</p>
+									<h4>Write the case study and publish it.</h4>
+									<p class="body-text">
+										Eight hundred to twelve hundred words. Structure: the process and its baseline, what you built, what broke
+										during evaluation, what you changed, what it costs, and what you would require before running it for real.
+										Lead with the failures. Publish it somewhere public: LinkedIn, a personal site, a newsletter. Public is the
+										whole point, because it converts a private project into a thing people can find and forward.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A published case study with a stable link you can put in an application.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 10</p>
+									<h4>Rewrite the résumé and the headline.</h4>
+									<p class="body-text">
+										Rebuild your bullets around ownership and outcomes, not tools. Every AI-adjacent line should contain a scope,
+										an action, and a number. Rewrite your LinkedIn headline to state the role you want alongside the domain you
+										have. “Operations manager” becomes something closer to “Operations and AI agent governance, supply chain.”
+										Add the case study link to your profile.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A rewritten résumé, an updated headline, and a two-sentence positioning
+										statement you can say out loud without cringing.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 11</p>
+									<h4>Make the internal move.</h4>
+									<p class="body-text">
+										This is the highest-probability path by a wide margin, and most people skip it because it feels less exciting
+										than applying somewhere new. Propose one concrete thing to your leadership: an inventory of the AI tools and
+										agents already running, with owners and risk tiers. It is small, cheap, obviously sensible, and impossible
+										to argue against. Bring your charter template as the format. If an inventory does not fit, propose the
+										override policy instead, since only 35 percent of organizations have a clear one.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;A one-page proposal, sent to a named person, with a specific ask and a
+										date attached.
+									</p>
+								</div>
+
+								<div class="week">
+									<p class="week-no">Week 12</p>
+									<h4>Go find the people who do this.</h4>
+									<p class="body-text">
+										Search the titles in section eleven and save ten real job postings. Read them for the vocabulary they use and
+										adjust your language to match theirs. Then reach out to eight people currently doing the work, at companies
+										you find interesting, with a specific question about how they handle something you actually built. Not
+										“can I pick your brain.” Something like: “I built an eval set for an invoice-triage agent and struggled to
+										grade partial correctness. How does your team handle that?” People answer that email.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;Ten saved postings, eight sent messages, and at least three applications
+										submitted.
+									</p>
+								</div>
+
+								<div class="week" style="border-bottom: 1px solid var(--rule); padding-bottom: 18px">
+									<p class="week-no">Week 13 · Days 85 to 90</p>
+									<h4>Prepare the stories, then keep going.</h4>
+									<p class="body-text">
+										Prepare four stories, each two minutes: a process you redesigned, a risk you caught before it landed, a
+										number you owned and moved, and the failure mode you found in your own agent and the control you designed in
+										response. That last one is the story that wins interviews, because it demonstrates exactly the judgment the
+										role exists to supply. Bring printed artifacts. Offer them.
+									</p>
+									<p class="deliverable">
+										<strong>Deliverable</strong> &nbsp;Four rehearsed stories and a printed portfolio. Then start month four,
+										because the pivot is a direction, not a finish line.
+									</p>
+								</div>
+							</div>
+
+							<div class="callout" style="margin-top: 26px">
+								<p class="callout-label">If you only have three hours a week</p>
+								<p>
+									Do weeks 1, 2, 5, 7, 9, and 11, in that order, over about five months. That sequence gets you the vocabulary,
+									the frameworks, the charter, a real eval, a published case study, and an internal proposal. Everything else is
+									depth. Those six are the spine.
+								</p>
+							</div>
+
+							<!-- ══════════ PART ELEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part eleven · Titles, résumé, interviews</p>
+								<h2>What to type in the search box, and what to say in the room.</h2>
+								<p class="section-sub">
+									Remember: the job exists, the title does not. Search for the work, not the phrase.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Search these terms.</h3>
+								<ul class="brand">
+									<li><strong>Governance and risk:</strong> AI Governance Analyst · Responsible AI Program Manager · AI Risk and Controls Manager · AI Compliance Manager · AI Assurance Lead</li>
+									<li><strong>Operations and lifecycle:</strong> AI Operations Manager · Agent Lifecycle Manager · AI Product Operations Manager · Automation Program Manager · AI Delivery Manager</li>
+									<li><strong>Enablement and adoption:</strong> AI Center of Excellence Program Manager · AI Adoption Lead · AI Enablement Manager · AI Transformation Manager</li>
+									<li><strong>Adjacent and underrated:</strong> AI Quality Analyst · Human-in-the-loop Operations Lead · AI Evaluation Specialist · AI FinOps Analyst</li>
+								</ul>
+								<p class="body-text">
+									Set alerts on all four clusters. Also search for the <em>work</em> rather than the title: try phrases like
+									“agent evaluation,” “AI governance framework,” “human in the loop,” and “LLM cost” in job search text, because
+									plenty of relevant roles are titled something forgettable and describe exactly this in the third bullet.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Rewriting your bullets.</h3>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 42%">Instead of</th>
+												<th>Write</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>“Used AI tools to improve team productivity”</td>
+												<td>“Defined scope, approval thresholds, and escalation rules for an AI-assisted invoice triage workflow handling 600 cases a month”</td>
+											</tr>
+											<tr>
+												<td>“Familiar with AI governance”</td>
+												<td>“Built a three-tier risk classification for AI use cases mapped to NIST AI RMF functions, with tier-specific controls”</td>
+											</tr>
+											<tr>
+												<td>“Managed vendor relationships”</td>
+												<td>“Ran access and data-handling reviews for third-party AI tools, including connector inventory and retention terms”</td>
+											</tr>
+											<tr>
+												<td>“Interested in AI and its business applications”</td>
+												<td>“Built and documented a cost model for agent workloads, establishing cost per completed task and break-even volume”</td>
+											</tr>
+											<tr>
+												<td>“Tested new AI features”</td>
+												<td>“Designed a 45-case evaluation set with defined grading criteria; identified a failure category affecting 12% of inputs and narrowed agent scope in response”</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									The pattern in the right column is always the same: a specific scope, a concrete action, and a number. Generic
+									AI enthusiasm on a résumé now reads as a negative signal, because everyone has it and it distinguishes no one.
+								</p>
+							</div>
+
+							<div class="tip" style="margin-bottom: 26px">
+								<h3 class="tip-title">The four questions you will be asked.</h3>
+								<ul class="brand">
+									<li>
+										<strong>“How would you decide whether an agent is safe to deploy?”</strong> Answer with tiering, evals with a
+										threshold, override design, and rollback. Not with a feeling.
+									</li>
+									<li>
+										<strong>“How would you measure whether it’s working?”</strong> Baseline first. Then completion, accuracy,
+										escalation, rework, cost per completed task. Mention that time saved is only value if you can say where it
+										went.
+									</li>
+									<li>
+										<strong>“Tell me about a time something went wrong.”</strong> Use your own agent’s failure. Detection, root
+										cause, control designed, retest. This is the story that separates you.
+									</li>
+									<li>
+										<strong>“You’re not technical. How would you work with engineering?”</strong> Do not apologize. Say that your
+										job is to arrive with the business process decomposed, the boundaries defined, and the success criteria
+										written, so engineering spends its time building rather than interviewing stakeholders. That is a genuinely
+										valuable division of labor and everyone in the room knows it.
+									</li>
+								</ul>
+							</div>
+
+							<!-- ══════════ PART TWELVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part twelve · The resource list</p>
+								<h2>Real links, honestly annotated.</h2>
+								<p class="section-sub">
+									Mostly free. Where something costs money, I have said so, and none of it is required.
+								</p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 30px">Frameworks and standards</p>
+							<div class="res">
+								<p class="res-t">NIST AI Risk Management Framework <span class="tag">Free</span></p>
+								<p class="res-d">
+									The govern, map, measure, manage structure, plus a companion Playbook with concrete suggested actions and a
+									Generative AI Profile. Start here. It is the vocabulary the field is standardizing on.
+								</p>
+								<p class="res-d">
+									<a href="https://www.nist.gov/itl/ai-risk-management-framework">nist.gov/itl/ai-risk-management-framework</a>
+									&nbsp;·&nbsp; <a href="https://airc.nist.gov/">airc.nist.gov</a>
+								</p>
+							</div>
+							<div class="res">
+								<p class="res-t">ISO/IEC 42001, AI management systems <span class="tag">Standard is paid, summaries are free</span></p>
+								<p class="res-d">
+									The certifiable management-system approach. Read the free overview page first. Buy the standard only if your
+									organization is actually pursuing conformance.
+								</p>
+								<p class="res-d"><a href="https://www.iso.org/standard/42001">iso.org/standard/42001</a></p>
+							</div>
+							<div class="res">
+								<p class="res-t">OWASP GenAI Security Project and Agentic Security Initiative <span class="tag">Free</span></p>
+								<p class="res-d">
+									The best open resource on agent-specific threats, including prompt injection, excessive agency, and tool misuse.
+									Their Top 10 for LLM Applications is the fastest way to sound informed about failure modes.
+								</p>
+								<p class="res-d">
+									<a href="https://genai.owasp.org/">genai.owasp.org</a> &nbsp;·&nbsp;
+									<a href="https://genai.owasp.org/initiatives/agentic-security-initiative/">Agentic Security Initiative</a>
+								</p>
+							</div>
+							<div class="res">
+								<p class="res-t">Google Secure AI Framework (SAIF) <span class="tag">Free</span></p>
+								<p class="res-d">
+									A practical, well-organized security framing with a self-assessment tool. Useful complement to OWASP if you want
+									something more checklist-shaped.
+								</p>
+								<p class="res-d"><a href="https://saif.google">saif.google</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">EU AI Act explorer <span class="tag">Free</span></p>
+								<p class="res-d">
+									A readable, searchable version of the regulation with implementation timelines. Relevant if you operate in or sell
+									into the EU, and worth an hour regardless because it shapes how everyone else writes policy.
+								</p>
+								<p class="res-d"><a href="https://artificialintelligenceact.eu">artificialintelligenceact.eu</a></p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Understanding agents</p>
+							<div class="res">
+								<p class="res-t">Anthropic, “Building effective agents” <span class="tag">Free</span></p>
+								<p class="res-d">
+									Short, clear, and unusually honest about when you should <em>not</em> build an agent. The best single thing to
+									read in week one.
+								</p>
+								<p class="res-d"><a href="https://www.anthropic.com/engineering/building-effective-agents">anthropic.com/engineering/building-effective-agents</a></p>
+							</div>
+							<div class="res">
+								<p class="res-t">Microsoft Learn, agent lifecycle and Center of Excellence guidance <span class="tag">Free</span></p>
+								<p class="res-d">
+									Treats agents as ongoing products with owners, monitoring, evaluation, improvement, and retirement criteria. The
+									closest thing to an official job description for the role you are pursuing.
+								</p>
+								<p class="res-d"><a href="https://learn.microsoft.com/en-us/agents/center-of-excellence/agent-lifecycle">learn.microsoft.com/en-us/agents/center-of-excellence/agent-lifecycle</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">Model Context Protocol documentation <span class="tag">Free</span></p>
+								<p class="res-d">
+									The open standard for connecting agents to tools and data. You do not need to implement it. You need to know what
+									it is, because connectors are where your access-control questions land.
+								</p>
+								<p class="res-d"><a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Cost and economics</p>
+							<div class="res">
+								<p class="res-t">Provider pricing pages <span class="tag">Free</span></p>
+								<p class="res-d">
+									Read the actual pricing pages for Anthropic, OpenAI, and Google. Note the input versus output split, the tier
+									differences, and any caching or batch discounts. An hour here makes you literate in the thing one-third of leaders
+									named as a blocker.
+								</p>
+							</div>
+							<div class="res">
+								<p class="res-t">Artificial Analysis <span class="tag">Free</span></p>
+								<p class="res-d">
+									Independent benchmarking of models on quality, speed, and price. The fastest way to build intuition for which
+									model tier a task actually needs, which is the core of the design-standards control only 39 percent of
+									organizations have.
+								</p>
+								<p class="res-d"><a href="https://artificialanalysis.ai">artificialanalysis.ai</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">FinOps Foundation <span class="tag">Free resources, paid certification</span></p>
+								<p class="res-d">
+									The cloud cost-management community, now extending its framework to AI workloads. If your background is finance,
+									this is your fastest credible bridge into the AI world.
+								</p>
+								<p class="res-d"><a href="https://www.finops.org/">finops.org</a></p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Evaluation and observability</p>
+							<div class="res">
+								<p class="res-t">Promptfoo <span class="tag">Open source, free</span></p>
+								<p class="res-d">
+									Define test cases in a config file and run them against models and prompts. About as close to no-code evals as you
+									will get, and building one eval set here teaches you more than a month of reading.
+								</p>
+								<p class="res-d"><a href="https://www.promptfoo.dev">promptfoo.dev</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">Langfuse <span class="tag">Open source, free tier</span></p>
+								<p class="res-d">
+									Tracing, evaluation, and cost tracking for LLM applications. Even if you never deploy it, poking at the demo
+									teaches you what a trace is and what production monitoring should show you.
+								</p>
+								<p class="res-d"><a href="https://langfuse.com">langfuse.com</a></p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Building without code</p>
+							<div class="res">
+								<p class="res-t">Microsoft Copilot Studio <span class="tag">Paid, trial available</span></p>
+								<p class="res-d">
+									The most enterprise-relevant no-code agent builder, which matters because it is what a lot of large employers are
+									actually standardizing on. Highest résumé value of the options here.
+								</p>
+							</div>
+							<div class="res">
+								<p class="res-t">n8n <span class="tag">Open source, free self-hosted</span></p>
+								<p class="res-d">
+									Visual workflow automation with solid AI agent nodes. Best option if you want to see the wiring without paying for
+									anything, and self-hosting it teaches you more than the managed alternatives.
+								</p>
+								<p class="res-d"><a href="https://n8n.io">n8n.io</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">Zapier Agents, or a custom assistant in Claude or ChatGPT <span class="tag">Free tiers available</span></p>
+								<p class="res-d">
+									The lowest-friction way to get something running this week. Perfectly adequate for a portfolio project. The
+									artifacts around the agent are what you are being judged on, not the platform.
+								</p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Courses and credentials</p>
+							<div class="res">
+								<p class="res-t">DeepLearning.AI short courses <span class="tag">Mostly free</span></p>
+								<p class="res-d">
+									One to two hour courses on agents, evaluation, and LLM application patterns. Practical, current, and short enough
+									to actually finish. The evaluation-focused ones are the ones to prioritize.
+								</p>
+								<p class="res-d"><a href="https://www.deeplearning.ai/short-courses/">deeplearning.ai/short-courses</a></p>
+							</div>
+							<div class="res">
+								<p class="res-t">IAPP AI Governance Professional (AIGP) <span class="tag">Paid</span></p>
+								<p class="res-d">
+									The most recognized governance-specific credential right now, and it shows up by name in job postings. Worth it if
+									you are pointing at compliance, legal, or risk roles. Not necessary for operations roles. Do the 90 days first and
+									decide after.
+								</p>
+								<p class="res-d"><a href="https://iapp.org/certify/aigp/">iapp.org/certify/aigp</a></p>
+							</div>
+							<div class="res">
+								<p class="res-t">ISACA AI audit and AI security management credentials <span class="tag">Paid</span></p>
+								<p class="res-d">
+									Strong fit if you are coming from audit, IT risk, or security and already hold a CISA or CISM. Redundant if you are
+									not.
+								</p>
+								<p class="res-d"><a href="https://www.isaca.org/">isaca.org</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">Microsoft AI-900 and Applied Skills <span class="tag">Low cost</span></p>
+								<p class="res-d">
+									A cheap, fast, recognizable fundamentals credential. It will not get you hired on its own, but it is a clean signal
+									on a résumé that is otherwise light on AI, and it takes a weekend.
+								</p>
+								<p class="res-d"><a href="https://learn.microsoft.com/en-us/training/">learn.microsoft.com/training</a></p>
+							</div>
+
+							<p class="rule-label" style="margin-top: 34px">Staying current</p>
+							<div class="res">
+								<p class="res-t">Stanford HAI AI Index Report <span class="tag">Free</span></p>
+								<p class="res-d">
+									The annual data reference on capability, cost, adoption, and policy. Use it when you need a defensible number in a
+									proposal.
+								</p>
+								<p class="res-d"><a href="https://hai.stanford.edu/ai-index">hai.stanford.edu/ai-index</a></p>
+							</div>
+							<div class="res" style="margin-bottom: 8px">
+								<p class="res-t">WEF Future of Jobs Report <span class="tag">Free</span></p>
+								<p class="res-d">
+									Useful for the skills-demand argument, and for the reminder that analytical thinking, leadership, and collaboration
+									stay critical alongside technical AI skills. Good ammunition for an internal proposal.
+								</p>
+								<p class="res-d"><a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/">weforum.org, Future of Jobs Report</a></p>
+							</div>
+
+							<!-- ══════════ CHECKLIST ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">The final checklist</p>
+								<h2>What you should have on day 91.</h2>
+								<p class="section-sub">If you can tick all nine, you are not pivoting toward this role. You are doing it, without the title.</p>
+							</div>
+
+							<div class="standard">
+								<p class="rule-label">Day 91</p>
+								<div class="std-item">
+									<p class="kicker">01 · A target role, named</p>
+									<p>One of the title clusters from section eleven, chosen deliberately based on where your existing experience is strongest.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">02 · A transferable-skills map</p>
+									<p>Your background translated into the language of the role, with the specific gaps you are still closing named honestly.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">03 · One documented agent use case</p>
+									<p>Real or fictional, with a baseline you captured before anything was built.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">04 · Six portfolio artifacts</p>
+									<p>Charter, workflow and approval map, risk tier, evaluation scorecard, cost and value model, incident playbook.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">05 · One agent you built and broke</p>
+									<p>With the evaluation results and the failure log written up, including the fix and the retest.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">06 · A published case study</p>
+									<p>Public, linkable, leading with what went wrong rather than what went well.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">07 · A rewritten résumé and headline</p>
+									<p>Scope, action, number in every relevant bullet. No generic enthusiasm anywhere on the page.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">08 · One internal proposal, sent</p>
+									<p>An agent inventory, an override policy, or a cost review. Sent to a named person with a date on it.</p>
+								</div>
+								<div class="std-item">
+									<p class="kicker">09 · Four rehearsed stories</p>
+									<p>Process redesigned, risk caught, number moved, failure found and controlled. Two minutes each, no notes.</p>
+								</div>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ── Takeaway ── -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								The agents are already deployed. The accountability is not.
+							</p>
+							<p class="body-text">
+								Companies have the budget, the executive sponsorship, and the tools. What they are missing, by their own
+								account, is someone who can say who owns this agent, what it is allowed to do, how we know it is working,
+								what it costs, and what happens when it is wrong. Twenty-nine percent describe that ownership as shared
+								across teams. Thirteen percent say it is undefined. Only 35 percent have clear override rules, and only 35
+								percent know what any of it costs to run.
+							</p>
+							<p class="body-text">
+								You do not need to become an engineer to fill that gap. You need enough fluency to ask the right questions,
+								two frameworks you can name, a cost model you can defend, and six documents that prove you have actually
+								done the thinking. That is a quarter of deliberate evenings, not a career restart.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								The people who move first will define what this role means. Everyone else will interview for a job description
+								somebody else wrote. Raise your hand.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you want a second set of eyes.</h2>
+								<p class="section-sub">Building the artifacts is the easy part. Knowing whether they’re any good is harder on your own.</p>
+							</div>
+
+							<p class="body-text">
+								I put this together because I keep watching capable people assume they are locked out of AI work on the
+								grounds that they cannot code, while the roles that are actually going unfilled are the ones their existing
+								experience prepares them for almost perfectly. The gap is real, it is documented, and it is closing.
+							</p>
+							<p class="body-text">
+								So I am doing a small number of informal reviews for people working through this. Send me an artifact (a
+								draft agent charter, a risk tier you are unsure about, an eval scorecard, or just a description of the
+								workflow you are thinking of mapping) and I will give you honest, specific feedback on what I would change
+								and what I would leave alone.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								This is early and informal. No pressure either way. The playbook above is yours to run with regardless.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Agent%20Manager%20Review">hi@davecto.com</a> with the subject
+									line <strong>“Agent Manager Review”</strong> and a couple of sentences about where you are in the 90 days.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								Survey figures cited throughout are from the Global AI Pulse Q2 2026, KPMG International, June 2026, drawing
+								on 2,145 senior leaders across 20 countries and territories, with Q1 comparisons from Global AI Pulse Q1
+								2026, April 2026. Lifecycle framing draws on Microsoft Learn’s agent lifecycle guidance; risk framing on the
+								NIST AI Risk Management Framework and ISO/IEC 42001; agent security framing on the OWASP GenAI Security
+								Project. Skills-demand context from the World Economic Forum’s Future of Jobs Report. “Meridian Freight” is a
+								fictional company used as a worked example. Nothing here is legal or compliance advice.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>

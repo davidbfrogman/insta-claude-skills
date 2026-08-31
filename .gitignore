@@ -1,1 +1,4 @@
 .DS_Store
+
+# HubSpot config file
+hubspot.config.yml
