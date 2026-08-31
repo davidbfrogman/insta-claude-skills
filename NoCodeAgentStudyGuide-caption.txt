@@ -1,0 +1,35 @@
+The hard part of building an AI agent was never the code. It's deciding what the thing is allowed to do.
+
+That's why non-coders can do this now. The building got easy. The deciding didn't, and the deciding is the part you're already good at.
+
+So I pulled ten free courses and put them in the order that actually works.
+
+STAGE 1 · Understand the system before you touch a tool
+1. Anthropic, "Building Effective Agents." Clearest mental model out there, and its main argument is a subtraction: most of what you want doesn't need an agent.
+2. Botpress Academy, 35 minutes. Agent projects rarely fail in the building. They fail because nobody could say in one sentence what the thing was for.
+
+STAGE 2 · Build your first one
+3. Zapier AI Builder Path, 2 hrs. The gentlest on-ramp. You need one thing running on real data this weekend.
+4. Make Academy Foundation. Zapier teaches you to think in lines. Make teaches you to think in shapes.
+
+STAGE 3 · Design the conversation
+5. Voiceflow Basics. Every agent that talks to a human needs a plan for the moment it doesn't understand. Most first drafts have a happy path and a cliff.
+
+STAGE 4 · Connect it to real data
+6. n8n Quickstart. The stretch course. Also where you learn why agents make things up: nothing told them where to look.
+7. Relevance AI. Two agents aren't twice as good as one. They're one agent plus a handoff, and the handoff is where quality leaks out.
+
+STAGE 5 · See how enterprises do it
+8. Salesforce Agentblazer. Whose data, which records, what can it change, who's accountable when it's wrong.
+9. Microsoft Copilot Studio. Do the one your company already pays for. Skim the other.
+
+STAGE 6 · Open the hood
+10. Flowise docs. Everything the managed platforms politely hid from you, on one screen.
+
+All ten are free. All verified this month.
+
+What I couldn't fit here: the six components every working agent has (and which one is missing when yours misbehaves), what to BUILD after each course, the four-weekend schedule, the ten test cases your first agent has to pass, and an honest section on the two places this gets uncomfortable.
+
+It's all in the free guide.
+
+Comment STUDY and I'll send it over.

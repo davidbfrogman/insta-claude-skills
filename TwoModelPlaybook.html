@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>The two-model playbook</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Prompt block: the one thing that should look like it goes in a chat window ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row,
+				.std-item,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								The two-model playbook.
+							</h1>
+							<p class="lead">
+								Ten ways to put two AI models on the same problem so the second one catches what the first one missed.
+								Why each works, and the one rule that decides whether you get better answers or just more expensive
+								ones.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">When one model isn’t giving you what you need, the obvious moves are a bigger model and a longer prompt. Both help a little. Both are attempts to squeeze more out of a single pass. The move that keeps paying is to run the problem past a second model with a <em>different job</em>. Not a second opinion. A second role.</p>
+							
+							<p class="body-text">The accidental version doesn’t work. Pasting your answer into another window and asking “is this good?” is the most common two-model setup in the world, and it reliably returns three compliments and a note about your headings. You weren’t checked. You were agreed with, by something that had no way to disagree.</p>
+
+							<div class="pull">
+								<p>The second model isn’t there to be smarter. It’s there to be uncommitted.</p>
+							</div>
+
+							<p class="body-text">A model that has just written an argument has an entire context window supporting it. Asking it to find the flaw is asking it to contradict everything in front of it. A model that arrives clean, with the goal and the source material and a specific mandate, is looking at the same words with none of the investment. It isn’t better. It just hasn’t already said yes.</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								Three angles below: <strong>why it works</strong>, <strong>the ten pairings</strong> worth knowing, and
+								<strong>how to run one</strong> without building an expensive way to be confidently wrong.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">10</p>
+									<p class="stat-label">pairings worth knowing, in four families</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">4</p>
+									<p class="stat-label">distinct reasons a second pass helps at all</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">1</p>
+									<p class="stat-label">rule that decides whether any of them work</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">0</p>
+									<p class="stat-label">extra subscriptions required. A second window counts.</p>
+								</div>
+							</div>
+
+							<p class="body-text">One clarification, because “two models” is doing loose work. What you’re buying is <strong>two independent passes with different jobs</strong>. Two vendors is the strongest version, since models from different families fail differently. But a second chat window, opened clean and given a role, is most of the benefit at none of the cost. Context dominates weights.</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										Why it works. <span>Four reasons, and the rule that decides if any of them apply.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">The ten pairings. <span>What each is for, how to set it up, how it fails.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Running it. <span>The handoff, seven failure modes, and when one model is plenty.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">The drop-in prompts. <span>Six you can paste today.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">The lookup table. <span>Symptom in, pattern out.</span></p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · Why it works</p>
+								<h2>There are only four ways to make the second pass different.</h2>
+								<p class="section-sub">
+									Every pattern in this guide is one of them. They don’t buy the same thing, which is why picking the
+									right one matters more than running more of them.
+								</p>
+							</div>
+
+							<p class="body-text">Underneath all four sits one fact: <strong>producing and judging are different tasks, and judging is easier.</strong> You know the human version. You can’t proofread your own copy, and you find the typo three seconds after you print it.</p>
+							<p class="body-text" style="margin-bottom: 28px">Models have a mechanical version of it. Generating commits one token at a time, each sentence conditioned on the last, so a wrong turn at sentence three shapes everything after it and nothing goes back to check. Judging has the finished artifact sitting there, available from any direction. The second pass starts with an edge. The four moves below widen it on purpose.</p>
+
+							<div class="tip">
+								<span class="tip-num">Way 01 · Patterns 1 and 2</span>
+								<h3 class="tip-title">Divide the labor.</h3>
+								<p class="body-text">Ask one pass to research a market and write the memo and you get 70% of each. By the time it writes, its context holds forty turns of half-relevant material, and the three sentences that mattered compete with everything that didn’t. A clean pass that reads only the good material gets full strength on one job.</p>
+								<p class="body-text">The second benefit gets missed: when you split a job, something has to cross the gap. A plan, a brief, a set of findings, legible to someone who wasn’t there. The implicit has to become explicit. It’s why writing a spec catches bugs before any code exists, and it means the handoff often earns its keep before the second model reads a word.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Way 02 · Patterns 3, 4 and 5</span>
+								<h3 class="tip-title">Turn judgment into checking.</h3>
+								<p class="body-text">
+									“Is this contract summary good?” has no procedure behind it. Anyone answering it is producing an
+									impression. “Does clause 7.2 say what this bullet claims it says?” has a procedure: go look, quote the
+									line, pass or fail.
+								</p>
+								<p class="body-text">The strongest pairings all run that conversion, breaking an unbounded judgment into bounded questions with checkable answers. The gain isn’t a cleverer second model. It’s a second model handed a task where <strong>being wrong is visible</strong>. Wherever you can force a finding to cite evidence, force it. A reviewer that says “looks good” without pointing at anything hasn’t reviewed. It has responded.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Way 03 · Patterns 6 and 7</span>
+								<h3 class="tip-title">Take more than one draw.</h3>
+								<p class="body-text">A response is one plausible continuation, not the best available one, weighted toward the middle of the distribution, because the middle is what good looks like on average. Fine most of the time. A problem exactly when you need something that isn’t average.</p>
+								<p class="body-text">
+									So take more samples before you choose, and keep the samples separate. Agreement between two
+									independent answers tells you something real about how determined the answer was by the evidence.
+									Agreement between two dependent ones tells you nothing. Which is the whole mechanism:
+									<strong>correlated errors are invisible errors.</strong> Anything both passes get wrong in the same
+									way, the pair cannot see.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Way 04 · Patterns 8, 9 and 10</span>
+								<h3 class="tip-title">Change who’s in the chair.</h3>
+								<p class="body-text">
+									Telling a model to answer as a skeptical CFO teaches it nothing. Everything it knows about CFOs was
+									already in there. What changes is what surfaces: a prompt conditions which considerations carry weight
+									and which vocabulary comes first.
+								</p>
+								<p class="body-text">The default setting is a bad one for evaluation. “Helpful assistant answering the question” under-weights objection, audience, cost and consequence. It isn’t hiding those from you. It wasn’t asked, and it doesn’t volunteer. Which is why “be critical” underperforms “you are the person whose budget this comes out of.” One is a tone request. The other is a set of incentives.</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">And the rule that governs all four.</h3>
+								<p class="body-text">
+									Give the second model the <strong>goal, the source material, and the criteria</strong>. Not the first
+									model’s conclusion, and never your enthusiasm for it.
+								</p>
+								<p class="body-text">
+									A second pass that reads the first answer inherits four things at once: the framing, the vocabulary,
+									the assumptions, and the omissions. It will now evaluate the answer it was given rather than the
+									question you actually asked.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The thing to remember</p>
+									<p>
+										A reviewer that has read the answer can only find errors of commission. Only an independent pass
+										finds errors of omission. What’s missing is invisible from inside the frame, and what’s missing is
+										usually what hurts you.
+									</p>
+								</div>
+								<p class="body-text">There’s a second reason. A finished document sitting in the context window is a strong prior that the document is fine, and models lean toward coherence and agreement. “Here’s my draft, thoughts?” is a request for approval wearing the clothes of a request for review, and you will get what you asked for.</p>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The ten pairings</p>
+								<h2>Ten ways to give two models two different jobs.</h2>
+								<p class="section-sub">Grouped by which of the four they run on. Each gets the setup, why it works, the handoff that makes it work, and how it fails. Most people get most of the value from the three or four that match how their own work goes wrong.</p>
+							</div>
+
+							<div class="section-hdr" style="margin-top: 20px">
+								<p class="eyebrow eyebrow-quiet">Family one · Divide the labor</p>
+								<h2>For work that sprawls and never lands.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 01</span>
+								<h3 class="tip-title">Planner–Executor.</h3>
+								<p class="body-text">
+									Model A breaks the goal into ordered steps with success criteria. Model B follows the plan and produces
+									the deliverable. <em>One model designs a research plan; the other conducts the research.</em>
+								</p>
+								<p class="body-text">Planning and doing pull against each other. Planning wants the whole shape held loosely; doing wants one thing at full depth. A single pass asked for both starts executing step one while it’s still writing the plan, then re-scopes the rest to fit what it already produced.</p>
+								<p class="body-text">The bigger win is economic. <strong>A plan is the only artifact in the process that’s cheap to fix.</strong> You can read one in ninety seconds and see that step four aims at the wrong question. You cannot read a finished twelve-page deliverable in ninety seconds, which is why bad deliverables survive.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>Goal, constraints, audience, and what “done” looks like. Then demand a success criterion per step: what it produces and how you’d know it worked. That’s the part models skip, and the part that makes a plan executable.</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> steps that are topics rather than outcomes. If a step doesn’t say what
+									it produces, you have a table of contents. Also: not reading the plan, which forfeits the entire reason
+									you split the job.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 02</span>
+								<h3 class="tip-title">Researcher–Synthesizer.</h3>
+								<p class="body-text">
+									Model A gathers facts, evidence, examples and sources. Model B turns them into a narrative or a
+									recommendation. <em>One model collects customer evidence; the other writes the strategy memo.</em>
+								</p>
+								<p class="body-text">
+									The two jobs have opposite virtues. Research rewards breadth and hoarding: keep the odd data point, you
+									may need it. Synthesis rewards throwing nearly all of it away and committing to a line. One pass doing
+									both produces the document everyone recognizes: everything I found, lightly organized, no position.
+								</p>
+								<p class="body-text">A clean synthesizer also meets the evidence the way your reader will. The researcher is attached to the thing it dug up in turn thirty-one; the synthesizer has no idea that was hard, and correctly cuts it.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>Evidence, not conclusions. Verbatim excerpts, numbers with units and dates, who said it and when. Then name the decision: not “write a memo,” but “this has to get two execs to pick one of three segments on Thursday.”</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> the researcher hands over its own summary, so the synthesizer works from
+									a compression of the evidence instead of the evidence. Every compression drops detail and the losses
+									stack. Pass the material, not the memo about the material.
+								</p>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Family two · Turn judgment into checking</p>
+								<h2>For work that reads well and isn’t true.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 03</span>
+								<h3 class="tip-title">Builder–Reviewer.</h3>
+								<p class="body-text">
+									Model A creates the first version. Model B identifies errors, omissions and weak reasoning. Model A
+									revises. <em>One model writes a proposal; the other reviews it as a skeptical executive.</em>
+								</p>
+								<p class="body-text">The reason to bring in a second model is commitment, not capability. The builder’s context is a monument to its own argument: every paragraph it wrote is now sitting there as evidence for the conclusion. The reviewer isn’t smarter. It simply hasn’t already said yes.</p>
+								<p class="body-text">Two mistakes ruin this pattern, and almost everyone makes both. Telling the reviewer who wrote it and how you feel about it, because “here’s a proposal I put together, what do you think?” is a request for approval that no amount of “be critical” overrides. And asking an open question, because “any issues?” gets flattery: with no criteria the only available standard is “does this look like a proposal,” and it does.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>
+										The original brief, the criteria, the role. Then a quota and a standard of proof: find the three
+										weakest claims, and for each, what would have to be true for it to hold and what evidence would
+										settle it.
+									</p>
+									<p class="script-note">
+										The quota does real work. Open asks return praise; a forced ranking of three returns a review,
+										because something has to occupy the top slot.
+									</p>
+								</div>
+								<p class="body-text">Then <strong>the builder revises, not the reviewer.</strong> A reviewer that rewrites hands you a different document in a different voice, usually with fresh unexamined claims smuggled in during the rewrite. The reviewer diagnoses. The builder treats.</p>
+								<p class="body-text"><strong>How it fails:</strong> the rubber stamp, and the polish spiral. Cap it at two rounds, decided in advance. By round three you’re sanding off the specific, slightly awkward parts that were the only reason it was worth reading.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 04</span>
+								<h3 class="tip-title">Checklist–Operator.</h3>
+								<p class="body-text">
+									Model A writes a detailed checklist of requirements and likely failure points. Model B works each item
+									and reports its status. <em>One model creates a website-launch checklist; the other audits the site
+									against it.</em>
+								</p>
+								<p class="body-text">The most underrated of the ten, for three compounding reasons. First, the checklist is written before anyone sees the work, so the standard can’t drift to fit what got produced. Standard drift is the most common failure in all review, human included: you read the thing, form an impression, then grade it against the impression rather than against what it needed to do.</p>
+								<p class="body-text">
+									Second, it’s the checking conversion in pure form. “Audit this site” returns a vibes report. “Here are
+									forty items; give pass, fail or not applicable, with the evidence” returns an audit.
+								</p>
+								<p class="body-text">
+									Third, and this changes the economics: <strong>the checklist is an asset.</strong> Every other pattern
+									costs you double every single run. This one you generate once, correct by hand, and use for a year.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>Ask for likely failure points, not just requirements; requirements are the easy half. Group by severity: catastrophic, embarrassing, untidy. Require evidence per status, and forbid “not applicable” without a reason.</p>
+								</div>
+								<p class="body-text"><strong>How it fails:</strong> long, shallow lists that check presence rather than quality. “Has a privacy policy”: yes, and it’s for a different company. Severity grouping fixes most of that, because it forces the generator to think about consequence instead of coverage.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 05</span>
+								<h3 class="tip-title">Extractor–Verifier.</h3>
+								<p class="body-text">
+									Model A converts messy material into structured information. Model B checks every claim against the
+									original and flags anything unsupported. <em>One model extracts obligations from a contract; the other
+									verifies the clause references and wording.</em>
+								</p>
+								<p class="body-text">Extraction is where models are most useful and most quietly wrong. The output arrives as a clean table, and a plausible wrong field is far harder to catch than a blank one, because blanks announce themselves. You will scan twenty correct rows and slide straight over the twenty-first.</p>
+								<p class="body-text">Verification, by contrast, is bounded and nearly mechanical: the claim is in the source or it isn’t. Run this on anything with fields. Obligations, dates, amounts, citations, quotes, entity names.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>The verifier gets the <em>source</em>, not the extractor’s reasoning, and works backward from each claim. Three verdicts only: supported with the exact quote, unsupported, or contradicted. Requiring the quote is the entire mechanism, because a verifier that can say “yes, correct” without producing the line has done nothing.</p>
+									<p class="script-note">
+										Then ask the fourth question people forget: what’s in the source that didn’t make it into the table?
+										Omissions are the errors that otherwise never get caught.
+									</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> the verifier that checks the extraction against itself. If the source
+									isn’t in front of it, that isn’t verification. It’s proofreading.
+								</p>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Family three · Take more than one draw</p>
+								<h2>For the same three obvious ideas, every time.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 06</span>
+								<h3 class="tip-title">Generator–Ranker.</h3>
+								<p class="body-text">
+									Model A produces many possible ideas. Model B scores them against explicit criteria, picks the
+									strongest and explains why. <em>One model generates 30 campaign concepts; the other ranks them by
+									originality, feasibility and audience fit.</em>
+								</p>
+								<p class="body-text">
+									Generating and judging conflict, because judgment prunes. A model evaluating as it goes kills the odd
+									idea at birth and settles into the safe middle, which is precisely where the ideas you’d have thought
+									of yourself live.
+								</p>
+								<p class="body-text">Volume is a mechanism, not a luxury. Ask for eight and you get eight reasonable ones. Ask for thirty and the material worth having sits around eighteen through thirty, once the obvious is exhausted. <strong>The point of asking for thirty isn’t to get thirty. It’s to get past the first ten.</strong></p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>Explicit criteria with weights. Score every item and show the scoring, rather than picking three favorites and praising them. Ask for two winners: the strongest, and the most interesting one that carries real risk.</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> criteria the ranker invents for itself, which are always the generic
+									ones and always favor the middle. If you didn’t write down what good means for this decision, you paid
+									twice to be handed the average.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 07</span>
+								<h3 class="tip-title">Independent answers–Reconciliation.</h3>
+								<p class="body-text">
+									Both models solve the problem separately, without seeing each other’s work. Then a pass compares them,
+									names the disagreements and produces a combined conclusion. <em>Two models independently estimate a
+									project’s risks, then reconcile.</em>
+								</p>
+								<p class="body-text">The disagreements are the payload. Where two independent passes converge, the answer was well determined by the evidence. Where they diverge, it wasn’t, and the divergence shows you where the uncertainty actually lives. One estimate gives you a number. Two independent estimates give you a number and a confidence.</p>
+								<p class="body-text">The reconciler has to explain <em>why</em> they differ before it merges anything: different assumptions, a different reading of an ambiguous input, different definitions of a term. That explanation is the insight. Skipping to the merged answer gives you a conclusion with no lineage.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>
+										Identical inputs, separate windows, different model families if you have them. The reconciler gets
+										both answers <em>and</em> the original material, so it can adjudicate against the evidence instead
+										of splitting the difference.
+									</p>
+								</div>
+								<p class="body-text"><strong>How it fails:</strong> averaging. If one answer is right and one is wrong, the average is a new answer that is also wrong and now looks reasonable. And leaking: run this in one chat and you haven’t run it at all, because the second answer was conditioned on the first the moment it appeared. It’s also the most expensive pattern here, so spend it on decisions with real downside.</p>
+							</div>
+
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">Family four · Change who’s in the chair</p>
+								<h2>For work that’s technically fine and lands wrong.</h2>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 08</span>
+								<h3 class="tip-title">Expert–Translator.</h3>
+								<p class="body-text">
+									Model A works the subject as a technical specialist. Model B rewrites it for a specific audience
+									without losing the meaning that matters. <em>One model explains a cybersecurity incident technically;
+									the other rewrites it for company leadership.</em>
+								</p>
+								<p class="body-text">Accuracy and accessibility compete, and one pass negotiates them badly: you get something correct that nobody finishes, or something readable that’s subtly false. Split them and the first pass optimizes purely for correctness, with no pressure to be palatable.</p>
+								<p class="body-text">The subtler reason is jargon. Jargon is compression, and among people who share it, it’s more precise than plain language rather than less. Tell the first model to keep things accessible and it decompresses too early, dropping information before anyone has decided what could safely be lost. Let the expert pass be dense, then decide what to drop.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>The translator needs the audience’s actual situation: what they have to decide, what they already know, how long they’ll read. Plus one hard rule. It may simplify. It may not change a claim or drop a qualifier, and anything it can’t say plainly comes back as a question rather than a guess.</p>
+									<p class="script-note">
+										For anything going to a board, a regulator or a customer, send the translation back to the expert
+										seat: does this still say the same thing?
+									</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> the lost qualifier, and it’s expensive. “We have no evidence of data
+									exfiltration” becoming “no data was taken” is what a translator does <em>by default</em>, because the
+									qualifier reads like hedging and hedging reads like bad writing. In technical work, hedges are usually
+									load-bearing.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 09</span>
+								<h3 class="tip-title">Advocate–Skeptic.</h3>
+								<p class="body-text">
+									Model A makes the strongest possible case for an idea. Model B attacks the assumptions and identifies
+									the conditions under which it fails. <em>One model argues for launching the product; the other
+									constructs the strongest case against.</em>
+								</p>
+								<p class="body-text">Ask a single model “is this a good idea?” and you get a balanced answer that leans yes, because it’s answering in the register you asked in. Worse, a balanced single answer is usually two weak cases stapled together. Two one-sided passes give you two strong cases, and each side is <em>permitted</em> to be one-sided, which is the only way you see the best version of either.</p>
+								<p class="body-text">Here’s the refinement that separates this from theater. <strong>The skeptic’s job is not to say no.</strong> It’s to state the conditions under which the thing fails. “This is risky” is worthless and infinitely available. “This works only if acquisition cost lands under $40, here’s why I doubt it, here’s the test that tells us inside three weeks” is a plan.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>
+										Same brief, same material, neither sees the other. Ask the skeptic for falsifiable conditions and
+										the cheapest test that would resolve each one. Then you read both and decide. Neither of them is
+										deciding.
+									</p>
+								</div>
+								<p class="body-text">
+									<strong>How it fails:</strong> generic risk lists. Market conditions, execution risk, competitive
+									response. If the objection could be raised about any product by someone who knows nothing about it, you
+									gave the skeptic no material and it filled the space with plausible structure.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Pattern 10</span>
+								<h3 class="tip-title">Simulator–Strategist.</h3>
+								<p class="body-text">
+									Model A plays a person, customer, competitor or future scenario. Model B watches the reactions and
+									builds a better strategy from them. <em>One model role-plays a resistant customer; the other improves
+									the sales approach based on the objections raised.</em>
+								</p>
+								<p class="body-text">This is the only pattern where the second model’s input is <em>behavior</em> rather than prose. You’re manufacturing cheap data about how a plan meets reality, before it meets reality expensively. Models are decent at it because they’ve absorbed an enormous amount of how people talk when they’re skeptical, stalling, or quietly trying to end a meeting. Sampling that beats imagining it at your desk, where everyone you imagine is reasonable.</p>
+								<p class="body-text">It lives or dies on the specification. “Play a skeptical customer” gets you a polite person persuaded in four turns, because the helpful-assistant default leaks straight through the costume. Give it a life: what they’re measured on, what they’ve been burned by, what their budget actually is, and how much they’d like the call to be over.</p>
+								<div class="callout">
+									<p class="callout-label">The handoff</p>
+									<p>Spell out the persona’s incentives and constraints, then add the instruction that makes it real: do not become convinced unless the objection is genuinely answered. Hand the transcript to a strategist that didn’t do the arguing.</p>
+								</div>
+								<p class="body-text"><strong>How it fails:</strong> the simulator that folds, and the strategist that fixes wording instead of substance. If the roleplay ends with them buying, you learned nothing. And if the objection is “your pricing doesn’t work for our team size,” a better sentence doesn’t address it, though a strategist left alone will happily write you one.</p>
+								<p class="body-text">
+									One caveat, honestly. A simulation is a hypothesis, not evidence. It’s very good at generating the
+									objection list you’d otherwise discover live, at cost. It is not a customer and should never be cited
+									as one.
+								</p>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Running it</p>
+								<h2>The handoff is the whole craft.</h2>
+								<p class="section-sub">Every pattern above is a shape. What determines whether you get lift is what crosses the gap between the two models, and what you keep on your side of it.</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">What crosses the gap.</h3>
+								<ul class="brand">
+									<li><strong>The goal, not the task.</strong> “Review this” is a task. “This has to survive a CFO who has already turned down two versions” is a goal, and it decides what counts as a finding.</li>
+									<li><strong>The source material, not a summary of it.</strong> Verification and synthesis both collapse the moment the second model is working from someone else’s compression.</li>
+									<li><strong>The criteria, written by you, in advance.</strong> The one input nothing else can supply. Skip it and both models default to generic quality, which is how you get a beautifully run process that produces the average answer.</li>
+									<li><strong>The constraints.</strong> Length, audience, format, what’s already been ruled out. Constraints stop the second model from improving the work by removing the things that made it correct.</li>
+								</ul>
+								<p class="body-text">
+									What mostly stays on your side is the first model’s conclusion. But that’s a dial rather than a switch,
+									and each pattern wants a specific setting:
+								</p>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 20%">Level</th>
+												<th style="width: 40%">What the second model sees</th>
+												<th>Use for</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>Blind</strong></td>
+												<td>Goal, source material, criteria. Never the first answer, never who wrote it.</td>
+												<td>Independent answers, checklist generation, advocate and skeptic, simulation</td>
+											</tr>
+											<tr>
+												<td><strong>Informed</strong></td>
+												<td>The artifact plus the original brief and rubric, presented neutrally.</td>
+												<td>Builder–Reviewer, ranking, the operator half of a checklist audit</td>
+											</tr>
+											<tr>
+												<td><strong>Anchored</strong></td>
+												<td>The claims <em>and</em> the original material, working backward from one to the other.</td>
+												<td>Extractor–Verifier, citation checking, translation fidelity</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p class="body-text" style="margin-top: 16px">
+									Notice that even “informed” excludes two things people include by reflex: who made it, and whether you
+									like it. Those aren’t context. They’re instructions to agree, in disguise.
+								</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Which model goes in which seat.</h3>
+								<p class="body-text"><strong>Put the strong model where the judgment is unbounded and the cheap one where the work is bounded.</strong> Generating thirty concepts is volume work. Ranking them against weighted criteria is judgment. Extraction is mechanical. Planning is not, because planning errors compound downstream.</p>
+								<p class="body-text">
+									The one seat not to economize on is the reviewer’s. A weak reviewer doesn’t produce a weak review, it
+									produces confident noise, which is worse than no review because you’ll act on it.
+								</p>
+								<p class="body-text">These also compose: plan, build, review, verify is a natural chain. But every link costs time, money and one more place to lose fidelity, and three is about the ceiling before you’re administering a bureaucracy instead of doing work.</p>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Where you sit.</h3>
+								<p class="body-text">There’s a version of all this where you become a message router, pasting output between windows. That isn’t orchestration, and it has a smell: each round gets longer and less clear, and nothing resolves.</p>
+								<p class="body-text">Three things no pattern does for you:</p>
+								<ul class="brand">
+									<li><strong>Set the criteria.</strong> What good means for this work, this company, this reader. Nothing in the system can supply it and everything in the system depends on it.</li>
+									<li><strong>Arbitrate the disagreement.</strong> Adding a third model to adjudicate just moves the problem and launders it.</li>
+									<li><strong>Own the output.</strong> Two models reviewing each other is not a chain of custody, and “both models agreed” is not a sentence you will enjoy saying out loud.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The point of the whole exercise</p>
+									<p>
+										The models can manufacture the disagreement. Only you can settle it, and settling it is the part
+										that was ever your job.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Seven ways this goes wrong.</h3>
+
+								<div class="row">
+									<p class="kicker">01</p>
+									<h4 class="tip-title">The rubber stamp.</h4>
+									<p class="body-text">No criteria, no quota, no role, so the reviewer returns three compliments and a note about headings. It’s the default outcome of an unspecified review, and it’s why most people conclude two-model workflows don’t do much. Fix it with criteria, a forced quota, and a severity rating per finding.</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">02</p>
+									<h4 class="tip-title">Confidence laundering.</h4>
+									<p class="body-text">
+										The expensive one. Two passes agree, you feel corroborated, and the only reason they agreed is that
+										the second read the first one’s answer. You’ve produced no new information and a great deal of new
+										confidence, which is a net loss: you’d have been better off with the single answer you still
+										doubted. This is why independence is the master rule and not a best practice. It’s the difference
+										between a check and a ceremony.
+									</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">03</p>
+									<h4 class="tip-title">The polish spiral.</h4>
+									<p class="body-text">Reviews always find something, so an uncapped loop runs forever, trading a little specificity for a little smoothness every pass. Decide the number of rounds before you start. Two is usually right.</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">04</p>
+									<h4 class="tip-title">Criteria drift.</h4>
+									<p class="body-text">Nobody wrote down what good meant, so each pass invents its own standard and the bar becomes whatever the most recent model assumed. The tell is a revision that’s clearly different and not clearly better. Write the criteria once and pass the same text to every seat.</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">05</p>
+									<h4 class="tip-title">The lossy relay.</h4>
+									<p class="body-text">Each handoff summarizes, so by the third one you’re working from a summary of a summary and the original numbers have quietly become “roughly.” Carry the source material through the whole chain.</p>
+								</div>
+
+								<div class="row">
+									<p class="kicker">06</p>
+									<h4 class="tip-title">Two models arguing with nobody reading.</h4>
+									<p class="body-text">The chain runs, the documents get longer, and at some point you stopped reading them. It has the exact form of rigorous process, which is why it can run for weeks. The diagnostic is reliable: if each round produces more text and less clarity, the process has become the work.</p>
+								</div>
+
+								<div class="row" style="margin-bottom: 26px">
+									<p class="kicker">07</p>
+									<h4 class="tip-title">Paying triple for a ten-minute task.</h4>
+									<p class="body-text">The most common and the most forgivable. This is a quality intervention with a real cost in time, money and attention, and most work doesn’t need one.</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">When one model is plenty.</h3>
+								<p class="body-text">Skip all of it when:</p>
+								<ul class="brand">
+									<li>You can verify the answer yourself faster than a second pass would take.</li>
+									<li>The task is reversible and the stakes are low.</li>
+									<li>The output is a rough draft you’re going to substantially rewrite anyway.</li>
+									<li>Speed matters more than the marginal accuracy, and you know that’s the trade you’re making.</li>
+								</ul>
+								<p class="body-text">And the corollary worth acting on: <strong>the highest-value place to spend a second pass is anything you’d have difficulty checking yourself.</strong> Obligations pulled from a fifty-page contract. A market estimate with no ground truth. An explanation for an audience that can’t catch the error. That’s also exactly where people skip it, because it’s the hardest place to feel good about the result. Confidence and verifiability are close to unrelated, and the gap is where the second model earns its keep.</p>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · The drop-in prompts</p>
+								<h2>Six you can paste today.</h2>
+								<p class="section-sub">
+									Each assumes you’ve pasted the source material and your criteria above it, because those are the parts
+									only you can write. Teal marks what you fill in.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Prompt 01</span>
+								<h3 class="tip-title">The reviewer.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window</p>
+									<p class="prompt-body">
+										Here is the brief this document had to satisfy, and here is the document.<br />
+										You are <span class="fill">[the person whose budget this comes out of]</span>.<br /><br />
+										Identify the three weakest claims. For each one, tell me what would have<br />
+										to be true for it to hold, and what evidence would settle it.
+									</p>
+								</div>
+								<p class="prompt-note">Don’t say who wrote it. Don’t say you like it. Both are instructions to agree.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Prompt 02</span>
+								<h3 class="tip-title">The checklist generator.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window · before you show it anything</p>
+									<p class="prompt-body">
+										We are about to ship <span class="fill">[thing]</span>. Before you see what we built,<br />
+										write the checklist: requirements and likely failure points, grouped by<br />
+										severity as catastrophic, embarrassing, or untidy.<br /><br />
+										Every item must be checkable by looking at the artifact.
+									</p>
+								</div>
+								<p class="prompt-note">
+									Correct it by hand once and you own it for a year. The only pattern here that stops costing double.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Prompt 03</span>
+								<h3 class="tip-title">The verifier.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window · paste the source, then the extraction</p>
+									<p class="prompt-body">
+										Above is the source document. Below it is a table extracted from it.<br /><br />
+										For every row, work backward to the source and return one of: supported<br />
+										(with the exact quote), unsupported, or contradicted.<br /><br />
+										Then list anything material in the source that is not in the table.
+									</p>
+								</div>
+								<p class="prompt-note">No quote, no pass. That rule is the whole pattern.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Prompt 04</span>
+								<h3 class="tip-title">The ranker.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window</p>
+									<p class="prompt-body">
+										Score all thirty of these against <span class="fill">[criteria]</span>, weighted
+										<span class="fill">[40/30/30]</span>.<br />
+										Show every score.<br /><br />
+										Then name two: the strongest, and the most interesting one that carries<br />
+										real risk, with what would have to go right for it to work.
+									</p>
+								</div>
+								<p class="prompt-note">You supply the criteria. If it invents them, it will invent average ones.</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Prompt 05</span>
+								<h3 class="tip-title">The skeptic.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window · never the one that argued in favor</p>
+									<p class="prompt-body">
+										Build the strongest case against this.<br /><br />
+										Not a risk list. State the specific conditions under which it fails, why<br />
+										you think each is plausible here, and the cheapest test that would tell us<br />
+										inside <span class="fill">[a month]</span>.
+									</p>
+								</div>
+								<p class="prompt-note">If the objections could apply to any company, you gave it nothing to work with.</p>
+							</div>
+
+							<div class="tip" style="margin-bottom: 8px">
+								<span class="tip-num">Prompt 06</span>
+								<h3 class="tip-title">The translator.</h3>
+								<div class="prompt">
+									<p class="prompt-label">Fresh window · paste the expert version above</p>
+									<p class="prompt-body">
+										Rewrite this for <span class="fill">[audience]</span>, who need to decide
+										<span class="fill">[decision]</span>,<br />
+										already know <span class="fill">[X]</span>, and will read for four minutes.<br /><br />
+										You may simplify. You may not change a claim or drop a qualifier.<br />
+										If you can’t say something plainly without changing it, flag it as a<br />
+										question instead of guessing.
+									</p>
+								</div>
+								<p class="prompt-note">
+									Then send the result back to the expert seat and ask: does this still say the same thing?
+								</p>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · The lookup table</p>
+								<h2>Symptom in, pattern out.</h2>
+								<p class="section-sub">
+									Choose by how your output is actually failing, not by which pattern sounds most sophisticated.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 42%">What’s going wrong</th>
+											<th>Reach for</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Fluent, confident, and says nothing</strong></td>
+											<td>Builder–Reviewer with a quota, or Advocate–Skeptic</td>
+										</tr>
+										<tr>
+											<td><strong>Details that turn out to be wrong</strong></td>
+											<td>Extractor–Verifier, anchored to the source</td>
+										</tr>
+										<tr>
+											<td><strong>The same three obvious ideas, every time</strong></td>
+											<td>Generator–Ranker, with the volume turned up</td>
+										</tr>
+										<tr>
+											<td><strong>Sprawls, wanders, never lands</strong></td>
+											<td>Planner–Executor, and read the plan</td>
+										</tr>
+										<tr>
+											<td><strong>Comprehensive, no position</strong></td>
+											<td>Researcher–Synthesizer, with the decision named</td>
+										</tr>
+										<tr>
+											<td><strong>Correct, and the audience bounced off it</strong></td>
+											<td>Expert–Translator, then back to the expert</td>
+										</tr>
+										<tr>
+											<td><strong>You need a number you can defend</strong></td>
+											<td>Independent answers–Reconciliation</td>
+										</tr>
+										<tr>
+											<td><strong>Keeps missing the boring requirements</strong></td>
+											<td>Checklist–Operator, severity-grouped</td>
+										</tr>
+										<tr>
+											<td><strong>The plan has never met a real person</strong></td>
+											<td>Simulator–Strategist, with a fully specified persona</td>
+										</tr>
+										<tr>
+											<td><strong>You find yourself agreeing with it too easily</strong></td>
+											<td>Anything blind. That feeling is the symptom.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ── Takeaway ── -->
+							<p class="eyebrow">The whole thing, compressed</p>
+							<p
+								style="
+									font-family: var(--serif);
+									font-size: 23px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.38;
+									letter-spacing: -0.015em;
+									margin: 0 0 18px;
+								"
+							>
+								Two models help exactly as much as they differ.
+							</p>
+							<p class="body-text">Differ by role and you get division of labor: each half at full attention, and a handoff that forces the implicit to become explicit. Differ by task and you get quality control: judgment converted into bounded checks, where being wrong is finally visible. Differ by draw and you get diversity: more than one sample before you choose, with the disagreements as the signal. Differ by stance and you get perspective: a named role with real incentives, surfacing what the helpful default never volunteers.</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								All four collapse the moment the second model reads the first one’s answer and inherits its frame. So hand
+								over the goal, the material and the criteria, hold back the conclusion, then read both and decide
+								yourself. Two models agreeing is not a chain of custody, and it was never going to be.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you want a second set of eyes.</h2>
+								<p class="section-sub">Which is, admittedly, the argument of the guide applied to the guide.</p>
+							</div>
+
+							<p class="body-text">Most of this came out of watching setups that were nearly right fail for one small reason: a reviewer told who wrote the thing, criteria nobody wrote down, a verifier working from a summary instead of the source. The patterns are easy. The handoff is where it goes wrong, and it’s hard to see the flaw in your own, for exactly the reason this guide is about.</p>
+							<p class="body-text" style="margin-bottom: 22px">So I’m doing a small number of informal reviews. Send me a workflow you’re running, the actual prompts or just a description of what you’ve got two models doing, and I’ll tell you where the independence is leaking and which of the ten I’d use instead. No pressure; everything above is yours to run with regardless.</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Two-Model%20Review">hi@davecto.com</a> with the subject
+									line <strong>“Two-Model Review”</strong> and a couple of sentences about what you’re running.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>A note on sourcing: there are no survey figures in this one. The ten pairings and the four-family grouping are working practice rather than published research, and the explanations of model behavior are given in plain language rather than cited. Every claim here is something you can check yourself in an afternoon, with two chat windows and one document you care about, and I’d rather you did than took my word for it.</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>

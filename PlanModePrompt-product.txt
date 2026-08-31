@@ -1,0 +1,8 @@
+MAKE IT ASK BEFORE IT BUILDS
+The plan mode prompt that stops your AI from writing the wrong document.
+
+---
+
+When you ask an AI for something long, the usual failure isn't bad writing. It's a well written document that answers a question you never asked, because a model cannot leave a gap open. Every detail you didn't specify gets filled with an invisible default, and you only see those choices once they're baked into every paragraph. This one-pager gives you the fix: a block of text you paste above any real request that forces the model to restate the job, declare its assumptions, ask you ten ranked questions with defaults already filled in, stop and wait, and show you an outline before it writes a word. The prompt is included in full, along with a breakdown of what each of the six steps prevents, the three questions doing most of the work, and an honest note on when the whole thing is overhead you should skip. Three minutes of answering, one look at a plan, and you get the document you actually meant to ask for.
+
+Free. PDF, reads on a screen and prints cleanly.

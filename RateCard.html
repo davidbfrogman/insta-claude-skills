@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>@davecto rate card</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 18px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+			.row h4 {
+				font-family: var(--serif);
+				font-size: 17.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 8px;
+				line-height: 1.3;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+				text-align: right;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.data-table tr.total td {
+				border-bottom: none;
+				border-top: 1px solid var(--ink);
+				padding-top: 14px;
+			}
+			.data-table tr.total td,
+			.data-table tr.total td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 40px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.pull,
+				.strip,
+				.row {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">Helping Professionals grow with AI Tools</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 40px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.08;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Small following. Serious engagement.
+							</h1>
+							<p class="lead">
+								@davecto covers AI enablement and career strategy for working professionals. What a sponsored Reel includes, what it
+								costs, and the terms that come with it.
+							</p>
+							<p class="meta" style="margin-top: 22px">Media kit &amp; rate card</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 32px"></div>
+
+							<p class="body-text">
+								This is a small, deliberately built account. It exists for one reason: to help professionals actually use AI at work
+								instead of being intimidated by it. That focus is why the audience sticks around, and it's why the number below is
+								unusual.
+							</p>
+
+							<div class="pull">
+								<p>3.9K people who stop scrolling beats 100K who don't.</p>
+							</div>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">3.9K</p>
+									<p class="stat-label">followers on Instagram</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">21.57%</p>
+									<p class="stat-label">average engagement rate, likes + comments ÷ followers</p>
+								</div>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								For scale: most Instagram accounts run somewhere in the 1&ndash;3% engagement range. This one is running 7 to 20 times
+								that, on a topic (AI at work) that audiences are actively searching for right now.
+							</p>
+
+							<!-- ══════════ THE OFFER ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">The offer</p>
+								<h2>One sponsored Reel, story shares included.</h2>
+							</div>
+
+							<div class="row" style="border-top: 0; padding-top: 0">
+								<h4>Sponsored Reel</h4>
+								<p class="body-text">
+									A single Reel built around the product or offer, in the same voice and format as the rest of the feed &mdash; not
+									a straight ad read. Includes concept and script collaboration, filming, editing, publishing, and a caption with
+									the required sponsorship disclosure.
+								</p>
+							</div>
+
+							<!-- ══════════ PRICING ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Pricing</p>
+								<h2>$400 base, two add-ons if you need them.</h2>
+								<p class="section-sub">
+									The base price covers a standard organic post. The add-ons exist for brands that want to do more with the content
+									after it's live.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th>Item</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<strong>Sponsored Reel</strong> &mdash; concept, filming, editing, publishing, Story shares included
+											</td>
+											<td>$400</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>+ Extended usage rights</strong> &mdash; brand may repost the content on its own channels for
+												90 days instead of 30
+											</td>
+											<td>+$100</td>
+										</tr>
+										<tr>
+											<td><strong>+ Whitelisting</strong> &mdash; brand runs the Reel as a paid ad from the @davecto handle</td>
+											<td>Let's Chat</td>
+										</tr>
+										<tr class="total">
+											<td><strong>Reel & Extended Usage</strong></td>
+											<td><strong>$500</strong></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- ══════════ TERMS ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Terms</p>
+							</div>
+
+							<ul class="brand" style="margin-bottom: 26px">
+								<li>
+									<strong>Turnaround.</strong> Delivered within 5-7 business days of receiving the brief and product. Unless we've
+									agreed otherwise
+								</li>
+								<li><strong>Revisions.</strong> One round of revisions is included before the Reel goes live.</li>
+								<li><strong>Payment.</strong> 50% deposit to book the date, remaining 50% due on the day the Reel publishes.</li>
+								<li>
+									<strong>Creative control.</strong> Final creative approval stays with @davecto, to keep the post consistent with
+									what this audience actually responds to. The brand reviews before anything goes live.
+								</li>
+								<li><strong>Disclosure.</strong> Sponsored content is tagged in line with FTC guidelines (#ad).</li>
+								<li>
+									<strong>Usage rights.</strong> The base package covers 30 days of organic reposting rights for the brand. Longer
+									usage or paid amplification are the add-ons above.
+								</li>
+								<li>
+									<strong>Exclusivity.</strong> Not included by default. Category exclusivity is available &mdash; ask for a custom
+									quote.
+								</li>
+							</ul>
+
+							<hr class="hair" />
+
+							<!-- ── Contact ── -->
+							<p class="kicker">Get in touch</p>
+							<p class="body-text" style="margin-bottom: 0">
+								Email <a href="mailto:hi@davecto.com?subject=Partnership%20Inquiry">hi@davecto.com</a> or DM
+								<a href="https://www.instagram.com/davecto">@davecto</a> on Instagram to book a date or ask about something outside
+								this menu.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
