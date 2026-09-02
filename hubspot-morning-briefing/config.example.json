@@ -1,0 +1,13 @@
+{
+  "_comment": "Reference only — this is what `node collect.js setup` generates for you. config.json is gitignored and never contains a HubSpot credential; auth lives entirely in the HubSpot CLI's own config.",
+  "account": null,
+  "ownerId": "12345678",
+  "ownerName": "Jane Rep",
+  "timezone": "America/New_York",
+  "thresholds": {
+    "staleContactDays": 14,
+    "longInStageDays": 21,
+    "closeDateSoonDays": 7,
+    "lookbackDays": 60
+  }
+}

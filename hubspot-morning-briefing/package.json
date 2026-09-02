@@ -1,0 +1,7 @@
+{
+  "name": "hubspot-morning-briefing",
+  "private": true,
+  "type": "commonjs",
+  "description": "Read-only HubSpot morning briefing collector (MVP). No dependencies — Node built-ins only.",
+  "engines": { "node": ">=18" }
+}
