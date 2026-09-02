@@ -1,0 +1,328 @@
+{
+  "generatedAt": "2026-08-31T13:05:00.000Z",
+  "timezone": "America/New_York",
+  "owner": { "id": "999001", "name": "Sample Rep" },
+  "summary": {
+    "activeDealCount": 14,
+    "activePipelineValue": 742500,
+    "closingNext14Days": 168000,
+    "meetingsToday": 3,
+    "overdueTasks": 4,
+    "stalledDeals": 4,
+    "dealsWithNoNextActivity": 6
+  },
+  "deals": [
+    {
+      "id": "d-1001",
+      "name": "Acme Corp / Security Review",
+      "amount": 82000,
+      "stage": { "id": "presentationscheduled", "label": "Proposal Sent", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-04T00:00:00.000Z",
+      "daysInStage": 11,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-14T15:00:00.000Z",
+      "daysSinceLastContact": 17,
+      "nextActivityAt": null,
+      "nextStep": null,
+      "description": "Enterprise security suite deal. Champion is Sarah Kim (VP Security).",
+      "signals": ["MEETING_TODAY", "STALE_CONTACT", "NO_NEXT_ACTIVITY", "CLOSE_DATE_SOON", "MISSING_NEXT_STEP"],
+      "overdueTasks": [],
+      "basePriorityScore": 78,
+      "scoreBreakdown": { "urgency": 23, "economic": 25, "risk": 15, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "MEETING", "at": "2026-08-12T14:00:00.000Z", "summary": "Product demo. Sarah asked about SOC 2 report and said she needed IT approval before proceeding.", "meta": null },
+        { "type": "EMAIL", "at": "2026-08-13T10:15:00.000Z", "summary": "Sent SOC 2 report and security documentation package to Sarah.", "meta": "EMAIL" },
+        { "type": "EMAIL", "at": "2026-08-14T15:00:00.000Z", "summary": "Sarah replied: \"Got it, passing this to our IT team for review.\"", "meta": "INCOMING_EMAIL" }
+      ]
+    },
+    {
+      "id": "d-1002",
+      "name": "Contoso / Platform Expansion",
+      "amount": 54000,
+      "stage": { "id": "presentationscheduled", "label": "Proposal Sent", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-01T00:00:00.000Z",
+      "daysInStage": 9,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-22T18:00:00.000Z",
+      "daysSinceLastContact": 9,
+      "nextActivityAt": null,
+      "nextStep": "Send updated pricing",
+      "description": "Expansion of existing seats plus add-on module.",
+      "signals": ["NO_NEXT_ACTIVITY", "CLOSE_DATE_SOON"],
+      "overdueTasks": [],
+      "basePriorityScore": 66,
+      "scoreBreakdown": { "urgency": 18, "economic": 20, "risk": 13, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "CALL", "at": "2026-08-20T16:00:00.000Z", "summary": "Jamie asked whether pricing could include the analytics add-on at a bundled rate.", "meta": "CONNECTED" },
+        { "type": "NOTE", "at": "2026-08-22T18:00:00.000Z", "summary": "Drafted bundled pricing proposal, need to send by EOW.", "meta": null }
+      ]
+    },
+    {
+      "id": "d-1003",
+      "name": "Initech / Core Platform Renewal",
+      "amount": 145000,
+      "stage": { "id": "decisionmakerboughtin", "label": "Negotiation", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-08-10T00:00:00.000Z",
+      "daysInStage": 34,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-07-29T12:00:00.000Z",
+      "daysSinceLastContact": 33,
+      "nextActivityAt": null,
+      "nextStep": null,
+      "description": "Renewal + upsell for existing enterprise customer. Historically a strong relationship.",
+      "signals": ["STALE_CONTACT", "NO_NEXT_ACTIVITY", "LONG_IN_STAGE", "CLOSE_DATE_PAST", "MISSING_NEXT_STEP", "STALLED"],
+      "overdueTasks": [{ "subject": "Follow up on redlines", "priority": "HIGH", "due": "2026-08-25T17:00:00.000Z" }],
+      "basePriorityScore": 91,
+      "scoreBreakdown": { "urgency": 25, "economic": 25, "risk": 25, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "EMAIL", "at": "2026-07-25T09:00:00.000Z", "summary": "Sent redlined MSA back to legal contact Priya for review.", "meta": "EMAIL" },
+        { "type": "CALL", "at": "2026-07-29T12:00:00.000Z", "summary": "Priya said legal was backed up and would circle back \"next week.\" No date given.", "meta": "CONNECTED" }
+      ]
+    },
+    {
+      "id": "d-1004",
+      "name": "Globex / New Logo",
+      "amount": 31000,
+      "stage": { "id": "appointmentscheduled", "label": "Discovery", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-10-15T00:00:00.000Z",
+      "daysInStage": 4,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-29T14:00:00.000Z",
+      "daysSinceLastContact": 2,
+      "nextActivityAt": "2026-09-05T15:00:00.000Z",
+      "nextStep": "Technical deep-dive call",
+      "description": "Early-stage new logo opportunity from inbound demo request.",
+      "signals": [],
+      "overdueTasks": [],
+      "basePriorityScore": 34,
+      "scoreBreakdown": { "urgency": 0, "economic": 12, "risk": 7, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "MEETING", "at": "2026-08-29T14:00:00.000Z", "summary": "Discovery call. Strong interest, evaluating against one competitor.", "meta": null }
+      ]
+    },
+    {
+      "id": "d-1005",
+      "name": "Umbrella Inc / Data Sync Add-on",
+      "amount": 6500,
+      "stage": { "id": "qualifiedtobuy", "label": "Qualified", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-07-01T00:00:00.000Z",
+      "daysInStage": 61,
+      "stageAgeEstimated": true,
+      "lastContactedAt": null,
+      "daysSinceLastContact": null,
+      "nextActivityAt": null,
+      "nextStep": null,
+      "description": null,
+      "signals": ["STALE_CONTACT", "NO_NEXT_ACTIVITY", "LONG_IN_STAGE", "CLOSE_DATE_PAST", "MISSING_NEXT_STEP", "NO_ASSOCIATED_CONTACT", "STALLED"],
+      "overdueTasks": [],
+      "basePriorityScore": 42,
+      "scoreBreakdown": { "urgency": 5, "economic": 3, "risk": 22, "actionability": 5 },
+      "recentTimeline": []
+    },
+    {
+      "id": "d-1006",
+      "name": "Wayne Enterprises / Security Suite Upsell",
+      "amount": 98000,
+      "stage": { "id": "presentationscheduled", "label": "Proposal Sent", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-20T00:00:00.000Z",
+      "daysInStage": 3,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-30T17:00:00.000Z",
+      "daysSinceLastContact": 1,
+      "nextActivityAt": "2026-08-31T15:30:00.000Z",
+      "nextStep": "Vendor security questionnaire call",
+      "description": "Upsell to existing customer. Lucius Fox is economic buyer.",
+      "signals": ["MEETING_TODAY"],
+      "overdueTasks": [],
+      "basePriorityScore": 63,
+      "scoreBreakdown": { "urgency": 15, "economic": 24, "risk": 0, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "CALL", "at": "2026-08-30T17:00:00.000Z", "summary": "Lucius confirmed budget approved, wants a walkthrough of the vendor security questionnaire before signing.", "meta": "CONNECTED" }
+      ]
+    },
+    {
+      "id": "d-1007",
+      "name": "Stark Industries / Analytics Trial Conversion",
+      "amount": 21000,
+      "stage": { "id": "decisionmakerboughtin", "label": "Negotiation", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-02T00:00:00.000Z",
+      "daysInStage": 6,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-28T20:00:00.000Z",
+      "daysSinceLastContact": 3,
+      "nextActivityAt": "2026-09-01T16:00:00.000Z",
+      "nextStep": "Contract signature follow-up",
+      "description": "Trial-to-paid conversion. Verbal yes received.",
+      "signals": [],
+      "overdueTasks": [{ "subject": "Send final contract", "priority": "HIGH", "due": "2026-08-30T17:00:00.000Z" }],
+      "basePriorityScore": 58,
+      "scoreBreakdown": { "urgency": 18, "economic": 10, "risk": 0, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "EMAIL", "at": "2026-08-28T20:00:00.000Z", "summary": "Pepper confirmed verbal approval, waiting on final contract to sign.", "meta": "INCOMING_EMAIL" }
+      ]
+    },
+    {
+      "id": "d-1008",
+      "name": "Oscorp / Pilot Program",
+      "amount": 12500,
+      "stage": { "id": "appointmentscheduled", "label": "Discovery", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-11-01T00:00:00.000Z",
+      "daysInStage": 45,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-07-10T13:00:00.000Z",
+      "daysSinceLastContact": 52,
+      "nextActivityAt": null,
+      "nextStep": null,
+      "description": "Went quiet after initial discovery call.",
+      "signals": ["STALE_CONTACT", "NO_NEXT_ACTIVITY", "LONG_IN_STAGE", "MISSING_NEXT_STEP", "STALLED"],
+      "overdueTasks": [],
+      "basePriorityScore": 38,
+      "scoreBreakdown": { "urgency": 0, "economic": 5, "risk": 22, "actionability": 8 },
+      "recentTimeline": [
+        { "type": "MEETING", "at": "2026-07-10T13:00:00.000Z", "summary": "Discovery call, mild interest, no clear pain point identified.", "meta": null }
+      ]
+    },
+    {
+      "id": "d-1009",
+      "name": "Hooli / Team Plan Expansion",
+      "amount": 44000,
+      "stage": { "id": "qualifiedtobuy", "label": "Qualified", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-10T00:00:00.000Z",
+      "daysInStage": 8,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-27T11:00:00.000Z",
+      "daysSinceLastContact": 4,
+      "nextActivityAt": "2026-09-03T10:00:00.000Z",
+      "nextStep": "Send seat expansion quote",
+      "description": null,
+      "signals": [],
+      "overdueTasks": [],
+      "basePriorityScore": 30,
+      "scoreBreakdown": { "urgency": 0, "economic": 17, "risk": 0, "actionability": 13 },
+      "recentTimeline": [
+        { "type": "CALL", "at": "2026-08-27T11:00:00.000Z", "summary": "Requested quote for 25 additional seats.", "meta": "CONNECTED" }
+      ]
+    },
+    {
+      "id": "d-1010",
+      "name": "Massive Dynamic / API Access Meeting",
+      "amount": 67000,
+      "stage": { "id": "presentationscheduled", "label": "Proposal Sent", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-08T00:00:00.000Z",
+      "daysInStage": 5,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-29T09:00:00.000Z",
+      "daysSinceLastContact": 2,
+      "nextActivityAt": "2026-08-31T11:00:00.000Z",
+      "nextStep": "Pricing negotiation call",
+      "description": "Negotiating multi-year term for a discount.",
+      "signals": ["MEETING_TODAY"],
+      "overdueTasks": [],
+      "basePriorityScore": 55,
+      "scoreBreakdown": { "urgency": 15, "economic": 22, "risk": 0, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "EMAIL", "at": "2026-08-29T09:00:00.000Z", "summary": "Asked for a 3-year term in exchange for 15% discount; wants to discuss live.", "meta": "INCOMING_EMAIL" }
+      ]
+    },
+    {
+      "id": "d-1011",
+      "name": "Cyberdyne / Support Tier Upgrade",
+      "amount": 9000,
+      "stage": { "id": "qualifiedtobuy", "label": "Qualified", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-25T00:00:00.000Z",
+      "daysInStage": 2,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-30T10:00:00.000Z",
+      "daysSinceLastContact": 1,
+      "nextActivityAt": "2026-09-02T10:00:00.000Z",
+      "nextStep": "Confirm upgrade timing",
+      "description": null,
+      "signals": [],
+      "overdueTasks": [],
+      "basePriorityScore": 22,
+      "scoreBreakdown": { "urgency": 0, "economic": 4, "risk": 0, "actionability": 15 },
+      "recentTimeline": []
+    },
+    {
+      "id": "d-1012",
+      "name": "Soylent Corp / Renewal",
+      "amount": 118000,
+      "stage": { "id": "decisionmakerboughtin", "label": "Negotiation", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-09-15T00:00:00.000Z",
+      "daysInStage": 19,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-18T12:00:00.000Z",
+      "daysSinceLastContact": 13,
+      "nextActivityAt": null,
+      "nextStep": "Await procurement sign-off",
+      "description": "Large renewal, blocked on customer's internal procurement process.",
+      "signals": ["STALE_CONTACT", "NO_NEXT_ACTIVITY"],
+      "overdueTasks": [{ "subject": "Check in with procurement", "priority": "MEDIUM", "due": "2026-08-29T17:00:00.000Z" }],
+      "basePriorityScore": 68,
+      "scoreBreakdown": { "urgency": 10, "economic": 25, "risk": 10, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "EMAIL", "at": "2026-08-18T12:00:00.000Z", "summary": "Customer said contract was \"in procurement's queue,\" no committed date.", "meta": "INCOMING_EMAIL" }
+      ]
+    },
+    {
+      "id": "d-1013",
+      "name": "Aperture Science / Trial Extension",
+      "amount": 4200,
+      "stage": { "id": "appointmentscheduled", "label": "Discovery", "pipeline": "Sales Pipeline" },
+      "closeDate": "2026-08-05T00:00:00.000Z",
+      "daysInStage": 70,
+      "stageAgeEstimated": true,
+      "lastContactedAt": null,
+      "daysSinceLastContact": null,
+      "nextActivityAt": null,
+      "nextStep": null,
+      "description": null,
+      "signals": ["STALE_CONTACT", "NO_NEXT_ACTIVITY", "LONG_IN_STAGE", "CLOSE_DATE_PAST", "MISSING_NEXT_STEP", "NO_ASSOCIATED_CONTACT", "STALLED"],
+      "overdueTasks": [],
+      "basePriorityScore": 24,
+      "scoreBreakdown": { "urgency": 5, "economic": 2, "risk": 22, "actionability": 5 },
+      "recentTimeline": []
+    },
+    {
+      "id": "d-1014",
+      "name": "Tyrell Corp / Replicant Fleet Analytics",
+      "amount": 61000,
+      "stage": { "id": "qualifiedtobuy", "label": "Qualified", "pipeline": "Enterprise Pipeline" },
+      "closeDate": "2026-10-01T00:00:00.000Z",
+      "daysInStage": 15,
+      "stageAgeEstimated": false,
+      "lastContactedAt": "2026-08-25T16:00:00.000Z",
+      "daysSinceLastContact": 6,
+      "nextActivityAt": "2026-09-04T09:00:00.000Z",
+      "nextStep": "Technical validation with IT security",
+      "description": "Enterprise-pipeline deal, separate custom pipeline from core Sales Pipeline.",
+      "signals": [],
+      "overdueTasks": [],
+      "basePriorityScore": 32,
+      "scoreBreakdown": { "urgency": 0, "economic": 21, "risk": 0, "actionability": 15 },
+      "recentTimeline": [
+        { "type": "CALL", "at": "2026-08-25T16:00:00.000Z", "summary": "IT security wants a validation session before proceeding to negotiation.", "meta": "CONNECTED" }
+      ]
+    }
+  ],
+  "tasks": [
+    { "id": "t-1", "subject": "Follow up on redlines", "status": "NOT_STARTED", "priority": "HIGH", "due": "2026-08-25T17:00:00.000Z" },
+    { "id": "t-2", "subject": "Send final contract", "status": "NOT_STARTED", "priority": "HIGH", "due": "2026-08-30T17:00:00.000Z" },
+    { "id": "t-3", "subject": "Check in with procurement", "status": "NOT_STARTED", "priority": "MEDIUM", "due": "2026-08-29T17:00:00.000Z" },
+    { "id": "t-4", "subject": "Update Q3 forecast notes", "status": "NOT_STARTED", "priority": "LOW", "due": "2026-08-20T17:00:00.000Z" },
+    { "id": "t-5", "subject": "Prep vendor security questionnaire answers", "status": "NOT_STARTED", "priority": "HIGH", "due": "2026-08-31T14:00:00.000Z" }
+  ],
+  "meetingsToday": [
+    { "id": "m-1", "title": "Acme Corp / Security Review", "startTime": "2026-08-31T14:30:00.000Z", "endTime": "2026-08-31T15:15:00.000Z", "dealIds": ["d-1001"] },
+    { "id": "m-2", "title": "Wayne Enterprises / Vendor Security Questionnaire", "startTime": "2026-08-31T19:30:00.000Z", "endTime": "2026-08-31T20:00:00.000Z", "dealIds": ["d-1006"] },
+    { "id": "m-3", "title": "Massive Dynamic / Pricing Negotiation", "startTime": "2026-08-31T15:00:00.000Z", "endTime": "2026-08-31T15:30:00.000Z", "dealIds": ["d-1010"] }
+  ],
+  "capabilities": {
+    "stageEntryDateAvailable": true,
+    "nextStepPropertyAvailable": true,
+    "lastContactedAvailable": true
+  },
+  "warnings": [
+    "This is bundled sample data (--sample). No live HubSpot connection was made."
+  ]
+}
