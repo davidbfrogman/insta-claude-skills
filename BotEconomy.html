@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Free for humans, metered for machines</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each idea ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row,
+				.spec,
+				.std-item,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Free for humans, metered for machines.
+							</h1>
+							<p class="lead">
+								Cloudflare built a toll booth for AI crawlers and left the pricing logic empty on purpose. Eleven
+								businesses that could grow in that gap, what each one actually requires to work, and the specific
+								reason each one might not.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								For about thirty years the commercial internet ran on one bargain. Humans read for free, publishers
+								got traffic, advertisers paid for access to the humans. Nobody signed it, everybody honored it, and
+								the crawler was the least controversial participant in the whole arrangement, because a crawler that
+								indexed you also sent people back.
+							</p>
+							<p class="body-text">
+								AI crawlers broke the return leg. They read enormously and refer almost nothing, and the product
+								built on top of what they read frequently answers the reader’s question without the reader ever
+								arriving. That is not a moral complaint; it is an accounting one. The cost side of serving a
+								publisher’s content went up and the revenue side went away.
+							</p>
+
+							<div class="pull">
+								<p>The interesting part isn’t that a toll booth exists. It’s that nobody has decided what anything costs.</p>
+							</div>
+
+							<p class="body-text">
+								Cloudflare’s answer is <strong>Pay Per Crawl</strong>, which resurrects HTTP status code 402 —
+								“Payment Required,” a code that has sat unused in the spec since 1997. A crawler either arrives with
+								payment intent in its headers and gets the page, or it gets a 402 with a price attached and decides
+								for itself. Cloudflare handles the money. Publishers set allow, block, or charge.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								The mechanism is genuinely new. What follows is a set of businesses that could exist around it, and
+								a serious effort not to oversell any of them. Every idea in here gets a matching paragraph on why it
+								might fail, because the honest state of this market is that a real primitive shipped into a demand
+								environment nobody has measured yet.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">402</p>
+									<p class="stat-label">the HTTP code doing the work, unused for nearly thirty years</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">~20%</p>
+									<p class="stat-label">of global web traffic sits behind the company running the toll booth</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">50,000:1</p>
+									<p class="stat-label">worst reported crawl-to-referral ratio for a major AI bot</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">11</p>
+									<p class="stat-label">businesses here, each with the reason it might not work</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								One framing note before the list. The temptation is to look at pay-per-crawl and see Stripe in 2011:
+								a payment rail that will grow a hundred companies on top of it. That analogy is useful and it is also
+								doing a lot of load-bearing work it hasn’t earned. Stripe launched into a market where the
+								transactions already existed and were merely painful. Pay-per-crawl launched into a market where
+								nobody has yet demonstrated that the buyer wants to transact at all. Hold both of those thoughts.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										What actually shipped. <span>Separating the live mechanism from the pitch deck around it.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">The empty hook. <span>Why the pricing layer is the interesting part, and where that argument strains.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">Sell side. <span>Five businesses aimed at publishers trying to earn from machines.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">Buy side. <span>Three aimed at the companies that suddenly have a new cost line.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">Trust and format. <span>Two that only matter if the market gets big enough to cheat.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">The strange one. <span>A publisher whose actual customer is the bot.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">07</span>
+									<p class="what">What has to be true. <span>Four conditions, and the case against each idea surviving.</span></p>
+								</div>
+								<div class="contents-item">
+									<span class="num">08</span>
+									<p class="what">Signposts and a cheap test. <span>What to watch, and thirty days that beat a business plan.</span></p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The setup</p>
+								<h2>A real mechanism shipped. The market around it is still hypothetical.</h2>
+								<p class="section-sub">
+									Most writing about this shift blurs together things that are running in production, things that are
+									in closed beta, and things that are somebody’s guess. Worth pulling apart before you build on any
+									of it.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Here is the sequence, with the confidence level attached to each item, because the confidence level
+								is the part that changes what you should do about it.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 20%">When</th>
+											<th style="width: 44%">What happened</th>
+											<th>How solid</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>July 2025</strong></td>
+											<td>Cloudflare launches Pay Per Crawl in private beta. HTTP 402, publisher sets one flat per-request price for the whole domain, Cloudflare acts as merchant of record.</td>
+											<td>Announced publicly, still closed beta. Participation numbers not published.</td>
+										</tr>
+										<tr>
+											<td><strong>Through 2026</strong></td>
+											<td>Advanced configuration: exempt URL patterns from charging, and set a per-URL price by returning a <code>crawler-price</code> response header from your origin or computing it in a Worker.</td>
+											<td>This is the load-bearing detail for most of what follows.</td>
+										</tr>
+										<tr>
+											<td><strong>2026</strong></td>
+											<td>A Discovery API lets verified crawlers find domains participating in pay-per-crawl. An x402 payment-gated proxy template ships as a reference implementation.</td>
+											<td>Real, and worth noticing: two of the “startup ideas” people pitch are already Cloudflare templates.</td>
+										</tr>
+										<tr>
+											<td><strong>September 2026</strong></td>
+											<td>Default behavior changes. Crawlers that blend search, training, and agent use get blocked by default on pages carrying ads, for new customers, new sites, and existing free accounts.</td>
+											<td>The forcing function. Defaults move markets far harder than features do.</td>
+										</tr>
+										<tr>
+											<td><strong>Ongoing</strong></td>
+											<td>Competing rails: the RSL licensing standard, IETF work on machine-readable AI preferences, other CDNs, and direct bulk licensing contracts between labs and large publishers.</td>
+											<td>The reason “Cloudflare owns this” is not a safe assumption in either direction.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								Two numbers get quoted constantly in coverage of this, and both deserve a caveat before you build a
+								thesis on them.
+							</p>
+
+							<ul class="brand" style="margin-bottom: 20px">
+								<li><strong>“Bots are more than half of web traffic.”</strong> True in the broad sense, and mostly irrelevant here. That figure counts every automated request on the internet — scrapers, monitors, vulnerability scanners, credential stuffers, ad verification, uptime checks. The slice that is an AI crawler with a budget and a willingness to pay is much smaller, and nobody outside the labs and the CDNs knows how much smaller.</li>
+								<li><strong>“Crawl-to-referral ratios run to 50,000:1.”</strong> Also broadly true, and it proves the old bargain is dead. It does not prove the new one pays. A ratio is not a revenue number. Fifty thousand crawls at a tenth of a cent is fifty dollars, and that is the entire argument of the skeptics in one sentence.</li>
+							</ul>
+
+							<div class="callout">
+								<p class="callout-label">The one fact that matters most</p>
+								<p>
+									Cloudflare built the toll booth, the payment rails, and the merchant-of-record relationship — and
+									then deliberately left price as an empty hook. <code>crawler-price</code> is a header they are
+									happy to let somebody else compute. That is an open socket in front of a fifth of the web’s
+									traffic, and almost nothing is plugged into it.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								That is the real opening. Everything in Part three flows from it. It is also, as Part seven will
+								argue at some length, an opening that assumes the socket ever carries meaningful current.
+							</p>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The thesis</p>
+								<h2>Every payment rail eventually grows a pricing layer.</h2>
+								<p class="section-sub">
+									The pattern is consistent enough to be worth betting on, and specific enough to be worth checking
+									whether the conditions that produced it are actually present here.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Google shipped AdWords with manual bids. Within a few years, bid management, attribution, and yield
+								optimization were their own industry, and some of those companies were worth more than the ad
+								products they optimized. Airlines shipped seats at a fixed fare and grew revenue management
+								departments that now decide the price of the aircraft. Stripe made the transaction easy and did not
+								eliminate a single company doing subscriptions, dunning, fraud scoring, tax, or analytics. It created
+								them.
+							</p>
+							<p class="body-text">
+								The mechanism is always the same. A platform ships crude monetization because crude monetization is
+								what you can ship. The market then discovers that the margin lives in the pricing decision, not the
+								payment. Specialists move into the pricing decision. Eventually the specialists are load-bearing.
+							</p>
+							<p class="body-text">
+								Pay-per-crawl is unambiguously at the crude stage. A flat per-request price across a whole domain is
+								the same as charging one rate for a Super Bowl spot and a 3 a.m. infomercial. Today’s investigative
+								piece that took three reporters six months and a 2013 high school basketball recap are not worth the
+								same to a model, and pricing them identically is leaving the entire interesting problem on the floor.
+							</p>
+
+							<div class="pull">
+								<p>The business isn’t “we’ll let you price your pages.” Cloudflare already does that. It’s “we’ll tell Cloudflare what every page should cost.”</p>
+							</div>
+
+							<p class="body-text">
+								A pricing engine would look at signals a flat fee ignores entirely: freshness and velocity, whether
+								you are the only source and for how long, existing ad yield on the page — charge machines
+								<em>less</em> where humans already monetize well and more where they don’t — depth and originality,
+								byline authority, how scarce the topic is in the training corpus, and crucially which crawler is
+								asking, because a frontier training run and a comparison-shopping agent have wildly different
+								willingness to pay for the same paragraph.
+							</p>
+
+							<p class="body-text">
+								Now the part most versions of this argument skip. The AdWords analogy holds only because three
+								conditions were true there: there were millions of buyers, the buyers were demonstrably price
+								sensitive, and there was an auction producing a continuous demand curve. Pay-per-crawl currently has
+								perhaps a dozen buyers that matter, no public evidence of price sensitivity, and a take-it-or-leave-it
+								posted price rather than an auction. A dozen buyers is not a market, it is a negotiation.
+							</p>
+							<p class="body-text" style="margin-bottom: 26px">
+								That does not kill the thesis. It does mean the honest version of it is conditional, and the
+								conditions are worth stating up front rather than in a disclaimer at the end. They are in Part seven.
+							</p>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Sell side</p>
+								<h2>Five businesses aimed at publishers.</h2>
+								<p class="section-sub">
+									These share one buyer — a publisher trying to convert machine traffic into money — and therefore
+									one structural weakness. Publishers are broke, slow to buy, and have been sold four consecutive
+									waves of technology that were going to save them.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 24px">
+								Each entry below has the same shape: what it is, who buys it, and the specific way it dies. The last
+								part is not decoration. For most of these the failure mode is more likely than the success case, and
+								knowing which one you are betting against is the whole job.
+							</p>
+
+							<div class="tip">
+								<span class="tip-num">Idea 01</span>
+								<h3 class="tip-title">The pricing engine.</h3>
+								<p class="body-text">
+									The anchor. A service that sits behind the <code>crawler-price</code> hook and answers one question
+									for every URL, continuously: what should this machine pay to read this right now? Start with rules
+									a publisher would agree with on sight — new is worth more than old, original reporting is worth
+									more than a wire rewrite, a page with no ads on it should charge machines more than a page with
+									good ad yield. Then add experimentation, abandonment measurement, elasticity estimates, and
+									demand forecasting.
+								</p>
+								<p class="body-text">
+									You need to own none of the hard infrastructure. Not payments, not crawler authentication, not the
+									edge. Cloudflare built exactly the primitive this requires and left it addressable. You are
+									airline revenue management, except instead of optimizing seat 14C from Boston to Chicago you are
+									optimizing article #8,174 against a crawler with a budget.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Mid-size and large publishers with archives worth differentiating</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">SaaS plus a share of incremental crawl revenue</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Medium — adjacent to the rail, but it is a data business, not a feature</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										You would be optimizing a variable nobody has shown is elastic. If crawlers treat price as a
+										binary — pay anything under my ceiling, refuse everything above it — there is no yield curve to
+										manage and the entire product collapses to a rules engine a competent publisher writes in a
+										Worker in an afternoon. Before writing a line of code, the question to answer is whether
+										crawler behavior actually changes between $0.001 and $0.01. If it doesn’t, there is no company
+										here.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 02</span>
+								<h3 class="tip-title">Analytics for a revenue line that didn’t exist last year.</h3>
+								<p class="body-text">
+									Publishers measure page views, sessions, ad impressions, subscription conversions, referral
+									sources. None of that describes machine revenue. A bot-funded page needs a different stack
+									entirely: revenue per URL, per crawler, per section, per author, per content age. Bot RPM.
+									Revenue decay curves after publication. Crawl abandonment when price changes.
+								</p>
+								<p class="body-text">
+									The version that matters isn’t the dashboard, it’s the sentence the dashboard eventually produces
+									for an editor: <em>your technology desk earns four times more machine revenue per article than
+									entertainment does.</em> That is the moment analytics stops being reporting and starts changing
+									what gets commissioned. It is also the moment it becomes hard to displace.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Publisher revenue ops, then editorial leadership</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Seat-based SaaS, upsold from the pricing engine</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">High — a dashboard is the cheapest retention feature a platform can ship</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										Analytics on a revenue line worth forty dollars a month is a hobby, not a purchase. This
+										product has no independent right to exist until crawl revenue is material to somebody’s P&amp;L.
+										Worse, Cloudflare holds the underlying data and has every incentive to ship the dashboard free,
+										because the dashboard is what makes publishers keep the feature turned on. Building analytics
+										on top of somebody else’s data, for a metric they also want to report, is a well-documented way
+										to lose.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 03</span>
+								<h3 class="tip-title">Crawl yield optimization, or SEO for machines.</h3>
+								<p class="body-text">
+									An entire twenty-five-year-old discipline exists to make content findable and attractive to a
+									human via a search ranking. The mirror discipline is making content legible, complete, and
+									genuinely worth paying for to a machine: clean structure, resolvable entities, explicit dates and
+									provenance, tables that survive extraction, internal linking that an agent doing multi-hop
+									reasoning can actually follow, formats that don’t require a headless browser and 4,000 lines of
+									CSS to parse.
+								</p>
+								<p class="body-text">
+									The consultancy version bills a retainer starting next week. The software version is an audit tool
+									that scores a site’s machine-readability and tells you what to fix. Historically the consultancy
+									version funds the software version, and the people who did that in 2004 for search did fine.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Publishers, then anyone whose content is an asset</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Retainer first, product second</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Low — services are unpleasant enough that platforms leave them alone</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										The optimization target is set by counterparties who publish nothing. Google, for all its
+										faults, documented what it wanted; frontier labs document almost nothing about how they value a
+										page, and they change it without notice. You would be selling advice about a black box you
+										cannot query. And the incentive gradient here runs somewhere ugly: the fastest way to raise
+										crawl yield is to fragment articles into more billable requests and pad thin pages, which is
+										fraud with better branding and gets audited out the moment anyone is checking. Sell the honest
+										version and you are competing against people selling the other one, cheaper.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 04</span>
+								<h3 class="tip-title">The 402 layer for the four fifths of the web that isn’t behind Cloudflare.</h3>
+								<p class="body-text">
+									Roughly 80% of the web sits somewhere else and still has the same crawler problem, minus the
+									tooling. There are two shapes here. The middleware version packages bot detection, 402 handling,
+									and payment collection as a WordPress plugin, an edge function, an nginx module, a Shopify app —
+									distribution through the platforms the long tail already runs on. The broker version doesn’t ask
+									anyone to move: you route only crawler traffic through infrastructure that negotiates payment on
+									the publisher’s behalf and remits the revenue net of a cut. “Keep your stack, get the toll booth.”
+								</p>
+								<p class="body-text">
+									The broker shape has a good precedent. Most merchants never touch the card networks directly; they
+									use a payment facilitator that aggregates them into something the network will talk to. Individual
+									small publishers are beneath the notice of a frontier lab’s procurement process. Two hundred
+									thousand of them behind one endpoint are not.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">The long tail, via plugin marketplaces and hosts</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Percentage of collected crawl revenue</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Medium — Cloudflare already publishes a reference proxy for exactly this</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										The 402 is the easy part, and Cloudflare gives away a template that does it. The hard parts are
+										bot verification you can trust at the edge and being merchant of record for millions of
+										sub-cent cross-border transactions, which is a compliance and accounting problem long before
+										it is a revenue stream. There is also a brutal cold-start issue: a lone site with a toll booth
+										on it does not get paid, it gets skipped. Nothing about this works until crawlers have a reason
+										to look for your endpoint, which means you need publisher density before you have a single
+										dollar of GMV.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 05</span>
+								<h3 class="tip-title">A licensing collective for the long tail.</h3>
+								<p class="body-text">
+									A niche site is a rounding error to a frontier lab and has precisely zero negotiating leverage.
+									Forty thousand niche sites in the same vertical are a corpus, and a corpus can be licensed. Build
+									the ASCAP of crawl: aggregate the rights, negotiate one deal, meter usage, distribute royalties on
+									some defensible basis.
+								</p>
+								<p class="body-text">
+									This is also the direct answer to the strongest criticism of the whole model — that per-crawl
+									pennies cannot replace reader revenue for a small publisher. That criticism is correct at the
+									level of the individual site and much weaker at the level of the pool. Aggregation is the
+									mechanism by which pennies become a check, and it is how every previous rights market for small
+									creators eventually got built.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Labs buy the license; publishers join the pool</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Administrative percentage of distributed royalties</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Low — Cloudflare structurally will not represent publishers against buyers</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										Collective price-setting by competitors is antitrust exposure, not a business model detail.
+										ASCAP and BMI operate under federal consent decrees for exactly this reason, and the recent
+										news-bargaining regimes in Australia and the EU exist because ordinary competition law does not
+										permit publishers to set a price together without a statutory carve-out. Any credible version
+										of this needs real counsel before it needs a landing page. The second problem is quieter:
+										long-tail content is, almost by definition, the least scarce content on the internet.
+										Aggregating forty thousand sites that all cover the same commodity topics can aggregate to zero
+										leverage, because the buyer can walk away from all of them at once.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · Buy side</p>
+								<h2>Three businesses aimed at the companies now facing a bill.</h2>
+								<p class="section-sub">
+									Every transaction has two ends, and the underserved end is usually the one that has to pay. These
+									are structurally more interesting than the sell-side ideas, because the buyers are solvent and
+									because Cloudflare will not build them.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 24px">
+								Cloudflare represents publishers. That is the whole positioning of the product, and it means an
+								entire category of tooling — anything that helps a crawler pay less, or decide not to pay — is
+								something the platform is structurally prevented from shipping. That is the most durable moat in this
+								entire document, and it belongs to the buy side.
+							</p>
+
+							<div class="tip">
+								<span class="tip-num">Idea 06</span>
+								<h3 class="tip-title">Crawl FinOps.</h3>
+								<p class="body-text">
+									An AI company that crawls at scale just acquired a cost line that did not exist eighteen months
+									ago, sitting next to compute and inference, with no tooling around it whatsoever. Today they
+									optimize GPU hours obsessively and content acquisition not at all, because until recently content
+									acquisition was free.
+								</p>
+								<p class="body-text">
+									What they will need looks exactly like cloud FinOps did in 2016. Deduplication so you never pay
+									twice for a URL you already hold. Per-crawler price ceilings and budget caps. Shared caches across
+									teams so the retrieval group and the training group aren’t buying the same archive separately.
+									Spend attribution by product and by query. And the decision layer underneath all of it: is this
+									page worth $0.003, $0.03, or $3.00 for this purpose, right now? Policies like <em>refresh
+									financial data every ten minutes and restaurant reviews every seven days</em> are trivial to state
+									and nontrivial to enforce across a crawling fleet.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Labs, agent startups, RAG-heavy products, data teams</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Platform fee, or a share of demonstrated savings</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Low from Cloudflare. High from the customer building it themselves.</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										The spend has to exist before the tooling can. If labs respond to tolls by routing around them,
+										signing bulk licenses, or simply crawling less, this cost line never gets large enough to
+										justify a vendor. And the customers here are the most build-versus-buy-hostile buyers on earth:
+										they have world-class infrastructure engineers, this touches their cost structure and their
+										data pipeline, and “which sources are we paying for” is competitively sensitive in a way that
+										makes external tooling a hard sell. The realistic path is probably to start as the neutral
+										dedup-and-cache layer between many buyers, where being external is the feature, rather than as
+										a dashboard any of them could write.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 07</span>
+								<h3 class="tip-title">Demand intelligence, and the clearing price nobody publishes.</h3>
+								<p class="body-text">
+									Publishers spend enormous sums to learn what humans want — Trends, Semrush, Ahrefs, keyword
+									research, social listening. There is no equivalent for what machines want, and machine demand is
+									a fundamentally different signal. It is not “what are people searching for,” it is “what are
+									agents repeatedly trying and failing to find.”
+								</p>
+								<p class="body-text">
+									Two products live here and they reinforce each other. The first is a demand feed: requests for
+									commercial HVAC pricing up sharply this month, heavy agent interest in regional zoning records
+									with almost no authoritative source available. That is not analytics, it is a content opportunity
+									detector, and it tells a publisher what to commission. The second is the benchmark: what are
+									crawlers actually paying, by vertical, by content type, by buyer? Nobody knows, and the two
+									parties who do know have no incentive to say. Whoever aggregates that becomes the reference rate
+									for the market, which is a position with genuine network effects — the benchmark improves with
+									every participant.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Publishers, agencies, and eventually both sides of the trade</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Free appraisal tool as the wedge, subscription data product as the business</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Low — cross-platform neutrality is the product</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										This is the coldest cold start in the document. The data is worthless below a certain scale and
+										you cannot reach that scale without data. Worse, the incentives are asymmetric: published
+										clearing prices help buyers negotiate down at least as much as they help sellers price up, so
+										the sell side may not contribute even when asked nicely. Every benchmark business in history
+										solved this the same way — by being credibly independent for years while barely making money —
+										and that is a long time to be unprofitable in a market that might not materialize.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 08</span>
+								<h3 class="tip-title">The licensed cache, and the marketplace above it.</h3>
+								<p class="body-text">
+									Pay-per-crawl charges again when a crawler retrieves the same unchanged content again. Buyers do
+									not want that and publishers do not benefit from serving it. That gap is a business: a
+									publisher-approved cache holding one canonical licensed copy, distributed to buyers, invalidated
+									automatically when the publisher updates the article. The publisher sheds infrastructure load, the
+									buyer stops paying repeatedly for a page that hasn’t changed, the intermediary takes a cut. Less a
+									CDN than a content wholesaler.
+								</p>
+								<p class="body-text">
+									One layer up sits the marketplace. Today an agent discovers a site and then discovers whether it
+									can afford it. Reverse the order: let a buyer query available inventory before crawling anything —
+									<em>authoritative sources on commercial construction wages in Ohio, published in the last thirty
+									days</em> — and get back sources with freshness, reputation, price, and license terms attached.
+									Purchase what maximizes confidence inside a budget. Cloudflare’s Discovery API gestures at this at
+									the domain level; the real version is cross-provider and works at the level of the content.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Buy side pays; sell side supplies</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Transaction fee, tiered access windows, cache rights</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">High for the cache, medium for the marketplace</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										The cache is arbitrage against a pricing inefficiency the platform can close with one line of
+										product: a cache-hit discount, or a flat subscription tier, and the spread is gone. It is also
+										not really an infrastructure position — you are holding and redistributing other people’s
+										copyrighted work, which is a rights posture, and one publisher who decides your license didn’t
+										cover redistribution is an existential problem rather than a support ticket. The marketplace
+										has the ordinary two-sided cold start on top of that, made worse by the fact that the small
+										number of buyers can credibly threaten to go around you and deal direct, which is exactly what
+										they have been doing with large publishers already.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Trust and format</p>
+								<h2>Two that only matter once there is enough money to be worth cheating for.</h2>
+								<p class="section-sub">
+									Which is a real caveat and also a real signal: if these ever become urgent, the market got big.
+									Building them early is a bet on timing more than on the idea.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 09</span>
+								<h3 class="tip-title">Identity, reputation, and the audit that runs both ways.</h3>
+								<p class="body-text">
+									Every ad market grows a fraud market within about eighteen months and an audit layer shortly
+									after. Here the fraud runs in both directions, which is unusual and makes neutrality the actual
+									product.
+								</p>
+								<p class="body-text">
+									Against buyers: are publishers inflating crawl counts, splitting articles to multiply billable
+									requests, serving thin pages at premium prices? Against sellers: are crawlers spoofing user
+									agents, laundering requests through residential proxies, running under a hundred identities to
+									avoid the toll? And underneath both, the reputation question — does this client pay reliably,
+									respect caching rules, honor the license terms it agreed to? A publisher would happily configure
+									instant access for a trusted crawler, prepayment for an unknown one, and a block for a known
+									abuser, if something existed to tell them which was which.
+								</p>
+								<p class="body-text">
+									There is a specific integrity problem worth naming separately, because it is the one that could
+									poison the whole market. Once machines pay and humans don’t, publishers acquire a brand-new
+									incentive to serve machines something different from what humans see: stripped text to save
+									bandwidth, keyword filler, or deliberately corrupted content. Verifying that a paying crawler
+									receives what a human reader receives is the audit bureau of circulation for the machine web, and
+									somebody has to be it. The dark twin of that business — poisoning as a service — will also exist.
+									Worth naming as a market force; not worth building.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Both sides, which is the point</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Certification and per-verification fees</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">High on identity, low on independent audit</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										The identity half is being standardized for free. Verified bot programs, Web Bot Auth, and IETF
+										work on signed HTTP requests are all moving toward cryptographic crawler identity as
+										infrastructure rather than as a product, and competing with a standard is a bad trade. The
+										audit half has the older problem every rating agency has: somebody pays you, and it is usually
+										one side. Neutrality is easy to claim and structurally difficult to hold, and the moment your
+										revenue concentrates on the buy side your certifications stop meaning anything to the sell
+										side. Also, plainly: fraud detection is only a business after there is real money to defraud.
+										Today there isn’t.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Idea 10</span>
+								<h3 class="tip-title">Sell the API, not the HTML.</h3>
+								<p class="body-text">
+									The highest-leverage move for a publisher isn’t charging more per scraped page. It is making
+									scraping the worse option. Bots do not want your navigation, your newsletter modal, your cookie
+									banner, or your carousel; they want the text, the entities, the tables, the dates, the byline, and
+									the provenance. Give them that as a product.
+								</p>
+								<p class="body-text">
+									The human gets <code>article.html</code>. The machine gets a clean structured representation —
+									an MCP server, a licensed feed, precomputed embeddings, real terms attached, no parsing required.
+									Then price it above the crawl rate and let the buyer choose convenience. <em>Don’t crawl me, query
+									me.</em> You can even sell it in tiers: raw text cheap, structured with extracted entities more,
+									structured plus revision history and source metadata more again. The business is doing this
+									conversion for the overwhelming majority of publishers who will never build it themselves.
+								</p>
+								<p class="body-text">
+									Taken further, this is a CMS thesis. Twenty years of publishing software was built around the web
+									page. A CMS built around information products sold simultaneously to two very different customers
+									would put machine metadata, provenance, crawler permissions, pricing, license terms, and freshness
+									windows in the same editor as the headline. That is a much bigger and much slower company than the
+									conversion-service version.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Who buys</p>
+										<p class="spec-v">Publishers with archives; anyone sitting on structured data</p>
+									</div>
+									<div>
+										<p class="spec-k">Revenue model</p>
+										<p class="spec-v">Setup fee plus revenue share on the feed</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform risk</p>
+										<p class="spec-v">Low — this has nothing to do with the toll booth</p>
+									</div>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">The risk</p>
+									<p>
+										This is the idea most likely to be real, and it is a services business wearing a software
+										costume. Every implementation is bespoke, margins behave accordingly, and the buyer is a
+										publisher with a hiring freeze. The deeper issue is that when a large buyer genuinely wants
+										your archive, they would rather sign a licensing contract with a lawyer than integrate with
+										your feed — the bulk deals already happening between labs and major publishers are evidence
+										that the preferred transaction shape at the top of the market is a contract, not an endpoint.
+										That leaves you selling infrastructure to the tail, which is the segment with the least money.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<h3 class="tip-title">Four more worth naming, thinly.</h3>
+								<p class="body-text" style="margin-bottom: 18px">
+									Each of these is a real gap and none of them is obviously a company yet. Listed because if the
+									market grows, these are where the second wave forms.
+								</p>
+								<div class="row">
+									<p class="body-text">
+										<strong>Proof of humanity as a service.</strong> If ad-bearing pages become the trigger for
+										default blocking, the cost of a false positive is a real reader hitting a toll booth. Somebody
+										has to make sure humans never do.
+									</p>
+								</div>
+								<div class="row">
+									<p class="body-text">
+										<strong>Agent checkout for consumers.</strong> When your personal agent reads on your behalf,
+										whose card is on file? There is a wallet-and-consent problem here that nobody has built, and it
+										is the one piece that could make this market consumer-scale rather than enterprise-scale.
+									</p>
+								</div>
+								<div class="row">
+									<p class="body-text">
+										<strong>Revenue recognition and tax tooling.</strong> Millions of international sub-cent
+										transactions are an accounting problem well before they are a revenue stream. Unglamorous,
+										mandatory, and historically a good business.
+									</p>
+								</div>
+								<div class="row">
+									<p class="body-text">
+										<strong>Rights resolution.</strong> Paying to retrieve a page does not tell you what you may do
+										with it — quote, summarize, cache for a day, embed, retain, fine-tune, train. Those permissions
+										need to become machine-readable, and a crawl worth a cent and a training license worth fifty
+										dollars are not the same transaction at all. This is a standards fight before it is a product.
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · The strange one</p>
+								<h2>A publication whose actual customer is the bot.</h2>
+								<p class="section-sub">
+									Every other idea here adds machine monetization to something that already exists. This one starts
+									from the machine and works backward, which makes it either the most interesting item on the list
+									or the most reckless.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Don’t retrofit a publisher. Start one where machines are the paying audience from day one. Humans
+								read everything free — no paywall, possibly no ads. The entire editorial operation is funded by
+								machine consumption.
+							</p>
+							<p class="body-text">
+								The workflow is genuinely different from journalism as practiced. You study machine demand to find
+								what agents repeatedly need and cannot find: municipal zoning records, regional construction costs,
+								obscure regulatory updates, industrial equipment pricing, structured local government proceedings.
+								Then you commission authoritative original work in that gap, structure it perfectly for machine
+								consumption, and charge for access. You are not competing for attention. You are competing to be the
+								best available answer in a category where the current best available answer is nothing.
+							</p>
+
+							<div class="pull">
+								<p>You’re not building an audience. You’re building the source a model reaches for when it has no good option.</p>
+							</div>
+
+							<p class="body-text">
+								What makes this compelling is that it inverts the constraint that has strangled digital publishing
+								for two decades. You no longer need scale, virality, or an SEO strategy. You need to be
+								authoritative and unique in a narrow domain that machines demonstrably need and humans were never
+								going to make profitable on ad impressions. There are thousands of those domains.
+							</p>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">The risk, and it is severe</p>
+								<p>
+									You would be building a business whose only revenue channel is a closed beta run by a single
+									vendor, selling to perhaps four to eight buyers with genuine monopsony power. Single-buyer markets
+									do not have prices, they have terms, and the terms are set by the buyer. If the labs decide your
+									vertical isn’t worth paying for, you have no consumer brand, no subscriber list, and no
+									advertiser relationships to fall back on — you have a website nobody visits and a cost base.
+								</p>
+								<p>
+									The survivable version hedges: pick a vertical where the same research is sellable to human
+									professionals too, so the machine revenue is upside on a business that already works rather than
+									the whole thesis. That is a less exciting company and a considerably more likely one.
+								</p>
+							</div>
+
+							<!-- ══════════ PART SEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part seven · What has to be true</p>
+								<h2>Four conditions, and none of them is settled.</h2>
+								<p class="section-sub">
+									Ignoring these makes the whole thesis read like a pitch deck. Handling them is the difference
+									between a market map and a guess with numbers on it.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 20px">
+								Everything above rests on four assumptions. They are load-bearing in the sense that if any one of
+								them fails, most of the list fails with it.
+							</p>
+
+							<div class="row">
+								<p class="body-text">
+									<strong>One. Enough of the web has to charge that routing around is expensive.</strong> A 402 the
+									crawler declines is a block with extra steps. Content is duplicated, syndicated, aggregated, and
+									reposted constantly; if the same information is free three hops away, the toll booth collects
+									nothing and merely removes you from the answer. This condition favors genuinely scarce content and
+									punishes everything else, which is an uncomfortable finding for the long-tail ideas.
+								</p>
+							</div>
+							<div class="row">
+								<p class="body-text">
+									<strong>Two. Crawlers have to be price sensitive, not binary.</strong> Yield management requires a
+									demand curve. If buyers set one ceiling and treat everything under it as free and everything over
+									it as blocked, there is no curve, and the pricing engine — the anchor idea of this entire
+									document — degrades into an if-statement. This is the single most testable assumption on the list
+									and the one with the least public evidence behind it.
+								</p>
+							</div>
+							<div class="row">
+								<p class="body-text">
+									<strong>Three. Payment has to buy rights, not just bytes.</strong> A cent for retrieval does not
+									settle whether the content can be used for training, and the litigation determining what a lab may
+									do with material it lawfully accessed is unresolved. Until that clarifies, the largest buyers will
+									prefer negotiated contracts with indemnities over a header that says a price. That preference
+									pulls the top of the market away from per-request pricing entirely.
+								</p>
+							</div>
+							<div class="row">
+								<p class="body-text">
+									<strong>Four. The revenue has to clear a floor where tooling is worth buying.</strong> Nobody
+									purchases a pricing engine, an analytics suite, and a compliance layer to optimize $200 a month.
+									Most of the sell-side businesses here need crawl revenue to be a meaningful line on a publisher’s
+									P&amp;L before they are purchases rather than experiments, and there is currently no public
+									evidence of a single publisher for whom that is true.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin: 26px 0 6px">
+								And here are the four objections that come up every time this thesis is presented, with the most
+								honest available response to each. Two of them have decent answers. Two do not.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 34%">The objection</th>
+											<th>The honest response</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>The pennies problem.</strong> Per-crawl fees cannot approach ad or reader revenue, and the platform sets the payout terms with no room to negotiate.</td>
+											<td>Largely correct, and the rebuttal is not volume. It is aggregation (idea 05) and premium pricing on genuinely scarce content (idea 01). If your content is neither scarce nor poolable, the skeptics are right about you specifically.</td>
+										</tr>
+										<tr>
+											<td><strong>Cloudflare just builds all of it.</strong> They went from flat pricing to dynamic pricing in months and they ship reference implementations of the middleware.</td>
+											<td>Fair, and it disqualifies several of these. Anything trivially adjacent to the toll booth is a feature. What survives is what they structurally will not build: buy-side tooling, neutral auditing, collective bargaining against buyers, and cross-platform benchmarks.</td>
+										</tr>
+										<tr>
+											<td><strong>The crawlers simply refuse.</strong> If paying is optional and skipping is free, most will skip.</td>
+											<td>No good answer yet. This is a coordination problem the market has not solved, and the September default change is essentially an attempt to solve it by force. Whether that works is the most important open question in this whole space.</td>
+										</tr>
+										<tr>
+											<td><strong>The old bargain is already dead anyway.</strong> At these crawl-to-referral ratios there is no traffic to protect.</td>
+											<td>True, and it is the strongest argument for publishers participating even at bad prices — but notice it is an argument about the alternative being worse, not about this being good. Those produce very different businesses.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin: 24px 0 6px">
+								Scored against all of that, the list separates fairly cleanly. The column that matters most is the
+								last one.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">Idea</th>
+											<th style="width: 22%">Platform risk</th>
+											<th>The thing that has to break your way</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>01 · Pricing engine</strong></td>
+											<td>Medium</td>
+											<td>Crawlers turn out to be price sensitive</td>
+										</tr>
+										<tr>
+											<td><strong>02 · Bot analytics</strong></td>
+											<td>High</td>
+											<td>Crawl revenue becomes material to a P&amp;L</td>
+										</tr>
+										<tr>
+											<td><strong>03 · Crawl yield optimization</strong></td>
+											<td>Low</td>
+											<td>Buyers publish enough for “optimization” to mean something</td>
+										</tr>
+										<tr>
+											<td><strong>04 · 402 for everyone else</strong></td>
+											<td>Medium</td>
+											<td>You reach publisher density before you run out of money</td>
+										</tr>
+										<tr>
+											<td><strong>05 · Licensing collective</strong></td>
+											<td>Low</td>
+											<td>Antitrust structure holds, and the pool has real leverage</td>
+										</tr>
+										<tr>
+											<td><strong>06 · Crawl FinOps</strong></td>
+											<td>Low / customer-build risk</td>
+											<td>The buy-side cost line gets big enough to manage</td>
+										</tr>
+										<tr>
+											<td><strong>07 · Demand intelligence</strong></td>
+											<td>Low</td>
+											<td>You survive the cold start long enough to be the benchmark</td>
+										</tr>
+										<tr>
+											<td><strong>08 · Licensed cache and marketplace</strong></td>
+											<td>High</td>
+											<td>The platform doesn’t close the spread; rights hold up</td>
+										</tr>
+										<tr>
+											<td><strong>09 · Identity and audit</strong></td>
+											<td>High on identity</td>
+											<td>There is enough money in the market to be worth defrauding</td>
+										</tr>
+										<tr>
+											<td><strong>10 · Sell the API</strong></td>
+											<td>Low</td>
+											<td>Nothing, really — this works even if pay-per-crawl doesn’t</td>
+										</tr>
+										<tr>
+											<td><strong>11 · Bot-first publisher</strong></td>
+											<td>Low</td>
+											<td>A handful of buyers stay willing to pay, indefinitely</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								Idea 10 is the outlier and it is worth saying plainly. Publishing your archive as a clean,
+								machine-native, properly licensed product is good business whether or not anyone ever pays a 402. It
+								makes you easier to cite, easier to license directly, and cheaper to serve. If you want one thing off
+								this list that does not require the thesis to be correct, it is that one.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The part that isn’t speculative</p>
+								<p>
+									Four things here are true regardless of whether pay-per-crawl works. Machine traffic is real and
+									expensive to serve. Blocking is already deployed at scale and increasingly on by default. Direct
+									licensing deals between labs and large publishers are real money changing hands right now. And the
+									ad-funded model for written content is eroding for reasons that have nothing to do with any of
+									this. A business that is useful under those four facts alone, with pay-per-crawl as upside rather
+									than as the thesis, is a substantially better-shaped bet than one that needs the toll booth to
+									succeed.
+								</p>
+							</div>
+
+							<!-- ══════════ PART EIGHT ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part eight · Signposts and a cheap test</p>
+								<h2>You can find out whether this is real in about thirty days.</h2>
+								<p class="section-sub">
+									For considerably less than the cost of being wrong about it for a year. The point of this section
+									is to replace the market map with evidence you gathered yourself.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 18px">
+								First, the indicators. These are the things that would move this from an interesting mechanism to an
+								actual market, roughly in the order they would have to happen.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 46%">If you see this</th>
+											<th>It means</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>A second major CDN or host ships 402 handling</strong></td>
+											<td>It is becoming a protocol rather than a vendor feature. This is the single most important signal on the list.</td>
+										</tr>
+										<tr>
+											<td><strong>A named publisher discloses actual crawl revenue</strong></td>
+											<td>There is a floor, and you can finally do arithmetic instead of estimates. Watch for a real number, not a press release.</td>
+										</tr>
+										<tr>
+											<td><strong>A lab publishes or leaks a crawl budget or a max-price policy</strong></td>
+											<td>Buyers are treating this as procurement. That is the precondition for every buy-side idea here.</td>
+										</tr>
+										<tr>
+											<td><strong>Prices start varying by content type across publishers</strong></td>
+											<td>Price discovery has begun and idea 01 has a customer.</td>
+										</tr>
+										<tr>
+											<td><strong>Crawl volumes fall measurably after the default change</strong></td>
+											<td>Blocking works as leverage. Crawlers that route around instead means it doesn’t.</td>
+										</tr>
+										<tr>
+											<td><strong>Someone files the first cloaking or crawl-inflation complaint</strong></td>
+											<td>Perversely, good news. Fraud follows money, and there is no fraud in markets worth nothing.</td>
+										</tr>
+										<tr>
+											<td><strong>A regulator opens a look at default blocking or collective pricing</strong></td>
+											<td>The market is large enough to matter, and idea 05 just got harder.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin: 26px 0 6px">
+								Second, the test. If you are seriously considering building one of these, this sequence produces
+								better information than any amount of market sizing, and it fits in a month of evenings.
+							</p>
+
+							<div class="tip" style="margin-top: 18px">
+								<span class="tip-num">Week one</span>
+								<h3 class="tip-title">Read your own logs before you read anyone’s report.</h3>
+								<p class="body-text">
+									Pull crawler traffic on any site you control or can get access to. Separate AI crawlers from
+									search crawlers from everything else. Count requests, bytes, repeat fetches of unchanged URLs, and
+									which sections get hit hardest. You are answering one question: on this specific site, is machine
+									traffic a cost problem, a revenue opportunity, or a rounding error? Most people arguing about this
+									publicly have never done it once.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week two</span>
+								<h3 class="tip-title">Test the assumption everything depends on.</h3>
+								<p class="body-text">
+									Put a price on a slice of content and change it. Same content, different prices across comparable
+									URLs, and watch whether crawler behavior differs. You are looking for exactly one thing: evidence
+									of elasticity. If crawlers pay $0.001 and $0.01 at identical rates, or refuse both at identical
+									rates, you have learned that idea 01 does not exist yet, which is worth far more than a quarter
+									spent building it.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">Be honest about what this proves</p>
+									<p>
+										A test on one site with one content type over two weeks is a signal, not a finding. Sample
+										size is genuinely a problem here, and crawler behavior varies enormously by operator. Treat a
+										negative result as strong evidence and a positive result as a reason to run it again somewhere
+										else.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week three</span>
+								<h3 class="tip-title">Talk to ten publishers and two buyers.</h3>
+								<p class="body-text">
+									The publishers will tell you whether crawl revenue is a real line item or a curiosity, and how
+									they decided their price — the answer is almost always “we guessed,” which is either your opening
+									or your warning. The two buyers are harder to reach and worth ten times more. Ask what they
+									actually do when they hit a 402, who owns that decision internally, and whether anyone has a
+									budget for it. If nobody owns it, the buy-side ideas are early rather than wrong.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Week four</span>
+								<h3 class="tip-title">Write down what would make you stop.</h3>
+								<p class="body-text">
+									Before you commit, name the specific result that would kill it: no elasticity, no budget holder on
+									the buy side, revenue below a threshold you set in advance, or the platform shipping the feature
+									you were going to sell. Write the numbers down. The failure mode in emerging markets isn’t picking
+									the wrong idea, it’s never defining what disconfirmation looks like and spending three years
+									interpreting ambiguity favorably.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The reframe worth keeping</p>
+									<p>
+										Being early to a market is only valuable if the market arrives. Most of the money in previous
+										platform shifts went to people who were early by about eighteen months, not five years. If your
+										thirty days say the demand is not there yet, the correct move is usually to build the version
+										that is useful today — idea 10 — and stay close enough to move when the signals in the table
+										above start landing.
+									</p>
+								</div>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								So: a genuinely new mechanism shipped, a default is about to change in a way that forces the question,
+								and the pricing layer on top of it is empty. That much is real. What is not yet real is a
+								demonstrated buyer, a clearing price, an elasticity curve, or a single public example of a publisher
+								for whom this revenue matters.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								The pattern says a pricing layer forms above every payment rail and often ends up worth more than the
+								rail. The pattern also says most people who arrive at the very beginning of one spend their capital
+								waiting. The useful position is the one that pays for itself while you find out which of those you
+								are in — which, unhelpfully and accurately, is the actual answer.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you’re sitting on crawler logs and want a second read.</h2>
+								<p class="section-sub">Which is, admittedly, week one of the test performed by somebody who isn’t you.</p>
+							</div>
+
+							<p class="body-text">
+								The most interesting thing about this whole shift is that almost nobody arguing about it has looked
+								at real numbers, because the real numbers are sitting in server logs that nobody has bothered to
+								segment. Ten minutes with a log file settles more of this than a week of thinkpieces, and the answer
+								is different for every site.
+							</p>
+							<p class="body-text" style="margin-bottom: 22px">
+								So I’m doing a small number of informal reads. Send me what your crawler traffic actually looks like
+								— volume, which bots, which sections, whether anything is being paid — and I’ll tell you which of the
+								eleven ideas above your data supports and which one it quietly rules out. No pressure; everything
+								here is yours to use either way.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Bot%20Economy">hi@davecto.com</a> with the subject
+									line <strong>“Bot Economy”</strong> and a couple of sentences about what you’re seeing in your
+									logs.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing: the mechanism described here — HTTP 402, the <code>crawler-price</code> header,
+								Worker-computed pricing, the Discovery API, and the change to default blocking — comes from
+								Cloudflare’s own announcements and changelog, and product details in a closed beta move faster than
+								any guide can. Verify current behavior against Cloudflare’s documentation before building on it. The
+								traffic figures are widely reported industry estimates rather than audited numbers, and I have tried
+								to flag where a statistic is being asked to carry more weight than it can. The eleven ideas, the
+								scoring, and the thirty-day test are argument rather than research: no company described here exists
+								as far as I know, no revenue figures have been disclosed by anyone in a position to know them, and
+								the honest summary of the whole space is that a real primitive shipped into a demand environment
+								nobody has measured. I’d rather you ran the test than took my word for it.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
