@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>You probably don't need the bigger plan</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each idea ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label::after {
+				content: '';
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.75;
+				margin: 0;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Script lines ── */
+			.script {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				color: var(--ink);
+				line-height: 1.45;
+				margin: 0 0 6px;
+			}
+			.script-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.row,
+				.spec,
+				.std-item,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								You probably don’t need the bigger plan.
+							</h1>
+							<p class="lead">
+								Ten things to check before you upgrade, in the order I’d check them. Most people running out of tokens
+								are not doing too much work. They are carrying too much furniture into every single message.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								I’ve built two seven-figure software companies, and I shipped one of my mobile apps on a single $20
+								subscription. So when someone tells me they’re hitting limits by lunchtime and the fix is a plan four
+								times the price, my first question isn’t <em>how much do you code.</em> It’s <em>what are you dragging
+								along behind you.</em>
+							</p>
+							<p class="body-text">
+								Almost always the answer is: a lot. And almost always they have never looked.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The mechanic everything else follows from</p>
+								<p>
+									These tools are stateless. Every time you hit enter, the entire conversation is sent again from
+									scratch — your prompts, every response, every file it read, every tool result, plus your
+									instruction files, your skill definitions, and the description of every MCP tool you have
+									installed. It is not reading a log or remembering where it left off. It is re-processing the whole
+									pile, on every turn.
+								</p>
+								<p>
+									So a 2,000-token file you loaded forty messages ago isn’t a one-time cost of 2,000 tokens. It is
+									2,000 tokens times every message you’ve sent since.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 26px">
+								Caching softens this and it does not remove it. On Anthropic’s published API pricing a cached token
+								still bills at roughly 10% of the normal input rate, and writing to the cache costs about 25% more than
+								a plain token the first time. Subscription plans don’t publish their internal weighting, so I won’t
+								pretend to quote you a number there. But the shape holds: cheap is not free, and 10% of an enormous
+								number is still a large number.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">10%</p>
+									<p class="stat-label">What a cached input token still costs on the API. Discounted, not free.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">5×</p>
+									<p class="stat-label">Input-price gap between Haiku 4.5 and Opus 5. Same dollar, five times the volume.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">Every turn</p>
+									<p class="stat-label">How often your skills, instructions and tool list get resent. Not once. Every turn.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">~30 min</p>
+									<p class="stat-label">The one-time audit in Part two. It’s the highest-return half hour here.</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Everything below applies whether you’re on Claude Code or Codex, since the underlying economics are the
+								same. Where a command or file path is specific to Claude Code I’ve said so, and I’ve checked each one
+								against a current install rather than repeating what circulates on social. Two items that show up on
+								nearly every list like this one are wrong; I’ve flagged both where they come up.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										The audit. <span>Three things to measure and cut before you change a single habit. This is where the
+										money is.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										The habits. <span>Five working patterns that stop refilling the window you just emptied.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										The two commands. <span>Both underused, one of them almost unknown.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										What doesn’t work. <span>Including the trick half the internet recommends, and why I don’t.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										If you’ve done all ten. <span>When a second subscription genuinely beats a bigger one.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The audit</p>
+								<h2>Three things you are paying for on every message, whether you use them or not.</h2>
+								<p class="section-sub">
+									This is a one-time cleanup with a permanent payoff, which makes it the only part of this document I’d
+									call urgent. Do it once and every conversation you have afterwards starts lighter.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">Audit your skills, and tighten every trigger.</h3>
+								<p class="body-text">
+									This is the single biggest hidden cost I see, and it’s gotten worse as skill marketplaces filled up.
+									You installed thirty of them over a few months. You actively use four. The other twenty-six are still
+									being described to the model on every turn so it can decide whether they’re relevant.
+								</p>
+								<p class="body-text">
+									A well-built skill costs you around a hundred tokens to have sitting there — a name and a tight
+									description, with the real content loaded only when it fires. A badly-built one can pull in thousands
+									before you’ve seen a single word of response. The worst offenders are consistently the
+									<em>“my voice”</em> and <em>“content coach”</em> genre, because their trigger conditions are written so
+									broadly that the model concludes it needs the full skill loaded to shape almost any output. You ask a
+									one-line question about a config file and you’ve paid for a 4,000-token essay on your brand tone.
+								</p>
+								<p class="body-text">
+									So go through them. For each one, read the trigger description and ask whether it fires exactly when
+									you’d expect and never otherwise. Tighten anything vague. Delete anything you haven’t used in a month —
+									you can always reinstall it. Progressive loading is a genuinely good design, but if a skill
+									progressively loads on every turn, you are paying full price for a feature you think is saving you
+									money.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Where to look</p>
+										<p class="spec-v"><code>~/.claude/skills/</code> and <code>.claude/skills/</code> in each project</p>
+									</div>
+									<div>
+										<p class="spec-k">The test</p>
+										<p class="spec-v">Would this fire on “fix the typo on line 12”? If yes, the trigger is too broad.</p>
+									</div>
+									<div>
+										<p class="spec-k">Effort</p>
+										<p class="spec-v">Fifteen minutes, once. The largest single win on this list.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">Put CLAUDE.md on a diet, then split it up.</h3>
+								<p class="body-text">
+									Your instruction file — <code>CLAUDE.md</code>, or <code>AGENTS.md</code> depending on the tool — is
+									loaded in full, every message, forever. It is the most expensive real estate you own, and it is
+									usually the least curated.
+								</p>
+								<p class="body-text">
+									The specific way these explode is worth naming, because almost nobody notices it happening. Somebody
+									sets up a rule along the lines of <em>“any time I correct you, write it down in CLAUDE.md so you don’t
+									do it again.”</em> That sounds like excellent hygiene. Six weeks later the file is nine hundred lines
+									of accumulated micro-corrections, most of them contradictory, most of them about a file you deleted,
+									and all of them being resent on every single turn.
+								</p>
+								<p class="body-text">
+									The fix is two moves. First, cut it hard: a short, sharp root file with the things that are true
+									everywhere — how to run the tests, the conventions that actually matter, what not to touch. Second,
+									push the specifics down. Both Claude Code and Codex will pick up instruction files in subdirectories
+									and load them only when work moves into that directory, which is how you get detail without paying for
+									it constantly. Frontend conventions live in the frontend folder. They do not need to be in context
+									while you’re editing a database migration.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The number you’ve probably seen, with the caveat attached</p>
+									<p>
+										A developer write-up that circulated widely reported cutting always-loaded context from 42,200
+										tokens to 1,900 — a 94% reduction — and extrapolated that to roughly 1.2 million tokens a day at
+										thirty conversations. I’ve seen no independent verification of either figure and the daily number
+										assumes a very particular usage pattern, so treat it as an illustration of the shape rather than a
+										benchmark. The shape is right regardless: a bloated instruction file is a fixed tax multiplied by
+										every message you will ever send.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Target</p>
+										<p class="spec-v">Root file under ~100 lines. If it’s longer, something belongs in a subdirectory.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Auto-append rules. They’re the mechanism that inflates the file invisibly.</p>
+									</div>
+									<div>
+										<p class="spec-k">Effort</p>
+										<p class="spec-v">Ten minutes, plus a quarterly re-read.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Run <code>/context</code> before you change anything.</h3>
+								<p class="body-text">
+									This is the one I want people to run first, and it’s the reason the two items above are worth doing
+									rather than guessing at. <code>/context</code> shows you what is actually sitting in your context
+									window right now, broken out by what put it there: system prompt, instruction files, skills, MCP tool
+									definitions, the conversation itself.
+								</p>
+								<p class="body-text">
+									Run it in a brand-new session, before you’ve typed anything real. That number — whatever it is, before
+									you’ve done a minute of work — is your floor. It is what every message you send today will carry.
+									Most people are genuinely startled by it, and the startle is useful, because it tells you which of
+									these ten items is <em>your</em> problem rather than somebody else’s.
+								</p>
+								<p class="body-text">
+									It costs nothing to run and it turns this entire guide from advice into arithmetic. Do it before the
+									cleanup and after, so you know what the cleanup bought you.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Related</p>
+										<p class="spec-v"><code>/usage</code> shows where you stand against your plan’s limits</p>
+									</div>
+									<div>
+										<p class="spec-k">When</p>
+										<p class="spec-v">Fresh session, before work. Then again after you’ve cut.</p>
+									</div>
+									<div>
+										<p class="spec-k">Effort</p>
+										<p class="spec-v">Five seconds. There is no excuse for skipping this one.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="pull">
+								<p>
+									A fresh session that opens at 40,000 tokens isn’t a fresh session. It’s a bill you agreed to before you
+									started working.
+								</p>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The habits</p>
+								<h2>Five ways to stop refilling the window you just emptied.</h2>
+								<p class="section-sub">
+									The audit is a one-time fix. These are working patterns, which makes them harder — they only pay if they
+									become automatic. The good news is that every one of them also makes the output better, so you’re not
+									trading quality for cost.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">Match the model to the task. Stop defaulting to the big one.</h3>
+								<p class="body-text">
+									The published API rates make the case better than I can. Opus 5 runs $5 per million input tokens and
+									$25 per million output. Sonnet 5 is $2 and $10. Haiku 4.5 is $1 and $5. That is a five-to-one spread on
+									input between the top and the bottom, for work where the bottom is frequently indistinguishable.
+								</p>
+								<p class="body-text">
+									Writing documentation for code that already exists. Renaming things across a repo. Formatting, boilerplate,
+									test scaffolds, commit messages, turning notes into prose. None of that needs the most expensive
+									reasoning model on the market, and if you’re on a subscription the same logic applies to your limits
+									even though you never see a dollar figure.
+								</p>
+								<p class="body-text">
+									The pattern that works best is a split: plan with the strong model, execute with the cheap one. Use plan
+									mode to think the problem through properly, get a specific written plan out of it, then hand that plan
+									to a smaller model to implement. The expensive tokens go where judgment is required. The cheap tokens do
+									the typing. A well-specified plan is exactly the thing that makes a smaller model reliable, which is why
+									this works rather than just being cheaper.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Strong model</p>
+										<p class="spec-v">Architecture, debugging something genuinely stuck, planning, security-sensitive work</p>
+									</div>
+									<div>
+										<p class="spec-k">Cheap model</p>
+										<p class="spec-v">Docs, renames, tests, boilerplate, anything with a written spec in front of it</p>
+									</div>
+									<div>
+										<p class="spec-k">Switch with</p>
+										<p class="spec-v"><code>/model</code>, mid-session, as often as the work changes shape</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">05</span>
+								<h3 class="tip-title">MCP servers aren’t Pokémon. You don’t have to catch ’em all.</h3>
+								<p class="body-text">
+									This is the collection problem. Supabase ships an MCP server — installed. GitHub — installed. Chrome
+									DevTools, Figma, Sentry, Linear, Notion — all installed, over a few months, each one for a specific
+									afternoon’s task that ended six weeks ago.
+								</p>
+								<p class="body-text">
+									Every one of those servers contributes a full description of every tool it exposes — names, parameters,
+									usage notes — to the model on every turn, because the model can’t know whether it needs the tool
+									without knowing the tool exists. A single mid-sized server can run to several thousand tokens of
+									definitions. A dozen of them is a second instruction file you didn’t write and never read.
+								</p>
+								<p class="body-text">
+									Run <code>/mcp</code>, look at what’s connected, and be ruthless. Better still, scope them per project
+									rather than globally: the Figma server belongs in the project with the design work in it, not in every
+									terminal you open. Reconnecting one takes under a minute on the day you need it.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Check with</p>
+										<p class="spec-v"><code>/mcp</code>, and the MCP section of <code>/context</code></p>
+									</div>
+									<div>
+										<p class="spec-k">Rule of thumb</p>
+										<p class="spec-v">Global config gets what you use weekly. Everything else is project-scoped.</p>
+									</div>
+									<div>
+										<p class="spec-k">Effort</p>
+										<p class="spec-v">Five minutes, and it stays fixed until you start collecting again.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">06</span>
+								<h3 class="tip-title">Point at the file. Don’t make it go looking.</h3>
+								<p class="body-text">
+									“Find where we handle password resets and fix the redirect” and “fix the redirect in
+									<code>src/auth/reset.ts</code>” produce roughly the same edit. They do not produce remotely the same
+									bill.
+								</p>
+								<p class="body-text">
+									The first version runs a search, which returns matches from a dozen files. It reads several of them to
+									work out which is the right one. Nine of those reads were wrong guesses — and all nine are now in the
+									context window, permanently, getting resent on every subsequent message for the rest of the session.
+									You paid to read them once and you’ll keep paying to carry them.
+								</p>
+								<p class="body-text">
+									So spend the ten seconds. Tell it the path. Tell it the function name. Paste the error with the file and
+									line number already in it. If you genuinely don’t know where something lives, that’s a fine reason to
+									let it search — but then start a fresh session once you’ve found the answer, so the search debris
+									doesn’t follow you into the actual work.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Cheapest input</p>
+										<p class="spec-v">A file path. Second cheapest: an error message with a stack trace.</p>
+									</div>
+									<div>
+										<p class="spec-k">Most expensive</p>
+										<p class="spec-v">A vague description of behaviour in a large unfamiliar repo</p>
+									</div>
+									<div>
+										<p class="spec-k">Side benefit</p>
+										<p class="spec-v">Precision also cuts the odds it edits a file you didn’t mean</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">07</span>
+								<h3 class="tip-title">Fence off the directories it should never read.</h3>
+								<p class="body-text">
+									Some directories have no business being searched, ever: <code>node_modules</code>, build output,
+									<code>dist</code>, vendored dependencies, fixture data, anything generated. A single stray read inside
+									one of them can dump a minified bundle into your context and end the session’s usefulness on the spot.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">Correcting something you’ll see repeated everywhere</p>
+									<p>
+										Nearly every list like this tells you to create a <code>.claudeignore</code> file. I checked the
+										current Claude Code build and there is no such thing — the string doesn’t appear anywhere in the
+										binary. If you’ve created one, it is doing nothing, which is worse than doing nothing because you
+										think you’re covered.
+									</p>
+									<p>
+										The mechanism that does work is a deny rule in settings. In
+										<code>.claude/settings.json</code>, under <code>permissions.deny</code>, add entries like
+										<code>"Read(./node_modules/**)"</code> and <code>"Read(./dist/**)"</code>. That is enforced by the
+										harness rather than suggested to the model, which is the distinction that matters. Your
+										<code>.gitignore</code> also does useful work here already, since ignored files are excluded from
+										most search paths by default.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">File</p>
+										<p class="spec-v"><code>.claude/settings.json</code> — project, or user-level for global rules</p>
+									</div>
+									<div>
+										<p class="spec-k">Syntax</p>
+										<p class="spec-v"><code>"permissions": { "deny": ["Read(./node_modules/**)"] }</code></p>
+									</div>
+									<div>
+										<p class="spec-k">Verify</p>
+										<p class="spec-v">Ask it to read a denied path. It should refuse, not comply.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">08</span>
+								<h3 class="tip-title">Plan in one session. Build in another. Compact on purpose.</h3>
+								<p class="body-text">
+									The most expensive session you will ever run is the one you’ve been in all day. You planned in it,
+									explored three dead ends in it, read a dozen files you ended up not touching, and now every message
+									carries all of that. The work you’re doing at 4pm is paying for the wrong turn you took at 10am.
+								</p>
+								<p class="body-text">
+									Two habits fix this. The first is to treat the end of a phase as the end of a session. When planning is
+									done, take the plan — written down, in the repo, as a file — and open something new to build it in. The
+									plan is the only thing worth carrying forward, and a file carries it better than eighty messages of
+									deliberation do.
+								</p>
+								<p class="body-text">
+									The second is <code>/compact</code>, used deliberately rather than as an emergency measure. Auto-compaction
+									will eventually fire on its own when the window fills, but by then you’ve already paid full freight for
+									everything it’s about to discard. Compacting at a natural boundary — feature done, bug fixed, tests
+									green — keeps the summary while dropping the deliberation, and you choose what survives instead of
+									finding out afterwards.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Compact when</p>
+										<p class="spec-v">A unit of work just finished, not when the window is already full</p>
+									</div>
+									<div>
+										<p class="spec-k">Start fresh when</p>
+										<p class="spec-v">The topic changes, a plan is written, or you just backed out of a dead end</p>
+									</div>
+									<div>
+										<p class="spec-k">Carry forward with</p>
+										<p class="spec-v">A file in the repo, not the conversation history</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · The two commands</p>
+								<h2>One is underused. The other one almost nobody knows exists.</h2>
+								<p class="section-sub">
+									Both of these attack the same thing from different directions: the cost of saying the same thing over and
+									over, and the cost of interrupting work that was going fine.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">09</span>
+								<h3 class="tip-title">Turn repeated instructions into slash commands.</h3>
+								<p class="body-text">
+									If you find yourself typing the same four-step instruction every few days — run the tests, check the
+									types, review the diff against main, write the commit — you are paying for that paragraph every time,
+									plus the tokens spent working out what you meant by it.
+								</p>
+								<p class="body-text">
+									A custom slash command is a markdown file in <code>.claude/commands/</code>. The filename becomes the
+									command, and the contents are the instructions. Typing <code>/review</code> then pulls in a
+									precise, pre-written sequence instead of your best improvised description of it.
+								</p>
+								<p class="body-text">
+									The token saving is real but honestly secondary. The bigger win is that natural language is
+									probabilistic — the same request phrased slightly differently gets interpreted slightly differently,
+									and the variance costs you retries. A command is the same words every time, which means the same
+									behaviour every time, which means fewer runs that you throw away and do again. Retries are where the
+									tokens actually go.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Where</p>
+										<p class="spec-v"><code>.claude/commands/name.md</code> — project, or <code>~/.claude/commands/</code> for global</p>
+									</div>
+									<div>
+										<p class="spec-k">Good candidates</p>
+										<p class="spec-v">Review sequences, release checklists, your standard debugging opener</p>
+									</div>
+									<div>
+										<p class="spec-k">Real payoff</p>
+										<p class="spec-v">Determinism. Fewer retries beats fewer tokens per attempt.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">10</span>
+								<h3 class="tip-title"><code>/btw</code> — stop interrupting it.</h3>
+								<p class="body-text">
+									This is the one I almost never see mentioned, and it addresses a genuinely expensive habit.
+								</p>
+								<p class="body-text">
+									It’s working on something. Halfway through, you think of a question — <em>wait, does this thing even use
+									Redis?</em> — and you interrupt to ask. That question and its answer are now permanently in the main
+									conversation, resent on every future turn, and worse, you’ve derailed a run that was going fine and
+									will now need re-orienting.
+								</p>
+								<p class="body-text">
+									<code>/btw</code> opens a side channel instead. It answers against the current session’s knowledge and
+									your codebase, but the exchange is never injected into the main conversation history, and the task in
+									progress continues undisturbed. You get the answer; the main thread pays nothing and loses nothing.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">One limitation worth knowing</p>
+									<p>
+										<code>/btw</code> can’t run tools. It answers from what’s already in the session and the model’s own
+										knowledge, so it won’t go read a file or run a command to check. If any tool calls appear in its
+										output, they weren’t executed and may not reflect your actual files. For “what did we decide about
+										X” and “does this approach have an obvious problem” it’s ideal. For “go check whether that file
+										exists,” ask in the main conversation.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Use for</p>
+										<p class="spec-v">Side questions, sanity checks, “what does this even do” — while work continues</p>
+									</div>
+									<div>
+										<p class="spec-k">Not for</p>
+										<p class="spec-v">Anything requiring a file read, a command, or a real edit</p>
+									</div>
+									<div>
+										<p class="spec-k">The alternative</p>
+										<p class="spec-v">Holding the thought. Free, though historically unreliable.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · What doesn’t work</p>
+								<h2>The trick that gets recommended constantly, and why I’m not convinced.</h2>
+								<p class="section-sub">
+									Every thread on this topic eventually surfaces a prompting style meant to compress the model’s output.
+									It has several names. The reasoning behind all of them has the same hole in it.
+								</p>
+							</div>
+
+							<p class="body-text">
+								The idea is that you instruct the model to drop articles, skip pleasantries, and answer in clipped
+								fragments — “caveman speak,” or one of its cousins. Fewer words out, fewer tokens billed. It feels like
+								a free win, and people report dramatic-sounding savings.
+							</p>
+							<p class="body-text">
+								The hole is that it optimises the wrong number. In a coding session the overwhelming majority of your
+								token spend is <em>input</em> — the full conversation, your instruction files, your skill and tool
+								definitions, and every file that’s been read, all resent on every turn. Output is the small side of the
+								ledger. Compressing it is like negotiating your coffee budget while the lease renews itself every hour.
+							</p>
+							<p class="body-text">
+								And it isn’t free, because there are two costs that don’t show up in a token counter. The instruction
+								itself lives in your context permanently, on every turn, working against you. And terse output means
+								less explanation of what the model did and why, which means more misunderstandings, which means more
+								rounds of correction — and a retry costs you the entire conversation again, wiping out a great many
+								saved articles and prepositions.
+							</p>
+							<p class="body-text" style="margin-bottom: 24px">
+								I’ll happily be talked out of this by measurement. Run <code>/context</code> and look at where your tokens
+								actually sit before you spend effort here. My honest read is that anyone with the headroom to fuss over
+								output style has not yet done items 1 through 3, where the real money is.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 32%">The lever</th>
+											<th style="width: 24%">Honest size</th>
+											<th>Why it lands where it does</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>01 · Skill audit</strong></td>
+											<td>Large, permanent</td>
+											<td>Fixed cost on every turn, and the one most people have never looked at</td>
+										</tr>
+										<tr>
+											<td><strong>02 · CLAUDE.md diet</strong></td>
+											<td>Large, permanent</td>
+											<td>Same mechanic, and these files inflate silently over months</td>
+										</tr>
+										<tr>
+											<td><strong>03 · <code>/context</code></strong></td>
+											<td>Zero on its own</td>
+											<td>Saves nothing directly. Tells you which of the other nine is your problem.</td>
+										</tr>
+										<tr>
+											<td><strong>04 · Model matching</strong></td>
+											<td>Large, ongoing</td>
+											<td>Up to a 5× input spread. Requires you to actually switch, which is the hard part.</td>
+										</tr>
+										<tr>
+											<td><strong>05 · MCP pruning</strong></td>
+											<td>Medium to large</td>
+											<td>Scales with how much of a collector you’ve been</td>
+										</tr>
+										<tr>
+											<td><strong>06 · Point at the file</strong></td>
+											<td>Medium, compounding</td>
+											<td>Avoided reads never enter the window, so they’re never resent</td>
+										</tr>
+										<tr>
+											<td><strong>07 · Deny rules</strong></td>
+											<td>Small, occasionally huge</td>
+											<td>Insurance. Most days nothing; the day it catches a bundle it pays for itself</td>
+										</tr>
+										<tr>
+											<td><strong>08 · Session hygiene</strong></td>
+											<td>Medium, ongoing</td>
+											<td>Hardest to make habitual, which is why it’s usually the one still undone</td>
+										</tr>
+										<tr>
+											<td><strong>09 · Slash commands</strong></td>
+											<td>Small directly</td>
+											<td>Pays through determinism. Retries cost far more than verbosity does.</td>
+										</tr>
+										<tr>
+											<td><strong>10 · <code>/btw</code></strong></td>
+											<td>Small to medium</td>
+											<td>Keeps side questions out of the permanent history, and out of the model’s way</td>
+										</tr>
+										<tr>
+											<td><strong>Output compression</strong></td>
+											<td>Marginal, possibly negative</td>
+											<td>Targets the small side of the ledger and buys you extra rounds of clarification</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · If you’ve done all ten</p>
+								<h2>Then the honest answer might be two subscriptions, not a bigger one.</h2>
+								<p class="section-sub">
+									This is the mildly controversial part, and it only applies once the ten above are genuinely done rather
+									than skimmed.
+								</p>
+							</div>
+
+							<p class="body-text">
+								If you’ve run the audit, cut the files, pruned the servers, and you are still hitting limits doing real
+								work, then you have a capacity problem rather than a hygiene problem, and it’s worth solving. But before
+								you quadruple your spend on a single provider, do the arithmetic on a second $20 subscription instead —
+								either a second one with your provider of choice, or one with a different provider entirely.
+							</p>
+							<p class="body-text">
+								Two independent limits at $40 is often more usable capacity than one larger limit at a higher price, and
+								it buys you something a bigger plan can’t: a second opinion. Different models fail differently. When one
+								is stuck in a loop on a bug, handing the same problem to a different family frequently unsticks it in one
+								turn, which is a token saving in its own right.
+							</p>
+							<p class="body-text">
+								The thing that makes or breaks this is switching friction. If moving between models means reconfiguring
+								your environment, you will not do it, and you’ll have bought a subscription you use twice. Pick a harness
+								that makes switching trivial — <a href="https://conductor.build">conductor.build</a> is what I use, and it
+								also lets you run several agents in parallel, which changes the calculus again. Whatever you pick, test
+								the switching flow before you commit to the second subscription.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The order I’d actually do this in</p>
+								<p>
+									Run <code>/context</code> in a fresh session and write the number down. Audit skills, then
+									<code>CLAUDE.md</code>, then MCP servers. Run <code>/context</code> again and compare. Work for a week
+									pointing directly at files and switching models by task. If you are still constrained after that, and
+									only then, buy the second subscription — at which point you’ll know precisely what you’re buying and
+									why, instead of guessing.
+								</p>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								Running out of tokens feels like a capacity problem, which is why the pitch for a bigger plan lands so
+								easily. Most of the time it’s a carrying problem. You are moving the same furniture into every room and
+								being surprised that it’s heavy.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								The whole audit takes about half an hour and costs nothing. A plan upgrade takes thirty seconds and costs
+								you every month from here on. It seems worth doing them in that order.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you run the audit and the number still doesn’t make sense.</h2>
+								<p class="section-sub">
+									Sometimes the floor is high for a reason that isn’t on this list, and it’s hard to spot from inside your
+									own setup.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Send me your <code>/context</code> breakdown from a fresh session — just the numbers, no code, nothing
+								proprietary — along with roughly what you’re building and which plan you’re on. I’ll tell you which of the
+								ten above is eating your budget and whether upgrading would actually fix it. Often it wouldn’t, which is a
+								cheaper answer than finding out in a month.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Token%20Diet">hi@davecto.com</a> with the subject line
+									<strong>“Token Diet”</strong> and paste the breakdown.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing: per-token prices and the caching multipliers are Anthropic’s published API rates as of
+								writing, and they describe API billing rather than subscription-plan limits, which aren’t published in
+								comparable terms — the ratios are the useful part, not the dollar figures. Commands, file paths and settings
+								syntax were checked against a current Claude Code install (2.1.x) rather than taken from secondary write-ups;
+								that is also how I established that <code>.claudeignore</code> is not a real feature, and it’s worth
+								re-checking after major releases since this surface moves. The 42,200-to-1,900-token figure is one
+								developer’s self-reported result, repeated here with that caveat and not independently verified. The
+								relative sizing in the Part four table is my judgement from my own usage, not measurement across a
+								population — your <code>/context</code> output is better evidence about your setup than my table is. I have
+								no commercial relationship with Anthropic or OpenAI. I do use Conductor and recommend it on that basis;
+								it’s named because switching friction is the thing that decides whether a second subscription pays, not
+								because anyone paid for the mention.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
