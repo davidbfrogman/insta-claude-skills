@@ -1,0 +1,1320 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Read this before you hit Submit for Review</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			.tip-cite {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 14px;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each item ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.tip-cite,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A pre-flight checklist</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Read this before you hit Submit for Review.
+							</h1>
+							<p class="lead">
+								Twelve things to check the night before your first App Store submission. Three of them are mine, learned
+								by arguing with Apple. The other nine are the ones that catch everybody else.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Nobody gets rejected for the thing they were worried about. You spend six months on the hard part, the
+								sync engine, the offline mode, the thing that actually took skill, and the rejection comes back about a
+								button that was four pixels under the home indicator on an iPad nobody on your team owns.
+							</p>
+							<p class="body-text">
+								I’ve been through this. Two of the items below cost me a round trip with App Review each, and in both
+								cases I’d have called the problem obvious if it had been someone else’s app. That’s the part worth
+								internalising: these aren’t hard. They’re just invisible from the inside, because you know what your app
+								is for and the reviewer doesn’t.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The mental model everything else follows from</p>
+								<p>
+									One person will open your app. They have a queue behind them. They did not read your landing page,
+									your pitch deck, or your onboarding copy, and they will not give you the benefit of the doubt on
+									anything ambiguous, because giving people the benefit of the doubt is how bad apps get through and
+									that’s the mistake that costs them, not yours.
+								</p>
+								<p>
+									So the question to ask about every screen isn’t <em>is this fair</em> or <em>is this technically
+									compliant.</em> It’s <em>could a tired stranger with no context misread this in a way that ends
+									badly for me.</em> Nuance is a luxury of people who already understand the product.
+								</p>
+							</div>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">One</p>
+									<p class="stat-label">Reviewer, one pass, working from whatever is on screen and in your review notes.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">90%</p>
+									<p class="stat-label">Of submissions reviewed within 24 hours, per Apple. Rejections are cheap in money, expensive in days.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">5.1.1(v)</p>
+									<p class="stat-label">The guideline number for account deletion. Memorise it; it’s the one that got me.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">iPad</p>
+									<p class="stat-label">The device they’ll test on that you almost certainly haven’t.</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Two housekeeping notes. First, I’ve put the guideline number on each item, because a rejection arrives as
+								a number and a paragraph of boilerplate, and knowing which number maps to which real-world mistake saves
+								you an afternoon of squinting. Second, account deletion appears once, at the top, rather than twice. It’s
+								both my hardest-won lesson and one of the most common rejections going, and repeating it wouldn’t make it
+								more true.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										The three that got me. <span>Deleting data, the iPad, and explaining permissions like the reader
+										is five.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										The nine they reject everybody for. <span>Completeness, crashes, privacy policy, metadata,
+										paywalls, UI, login walls, permission priming, and originality.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Submit day. <span>A review-notes template you can paste, and a one-page table to run down before
+										you click the button.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The three that got me</p>
+								<h2>Nothing clever here. Just the three I’d check first, in order.</h2>
+								<p class="section-sub">
+									Two of these I went back and forth with Apple on personally. The third is the one I now check before
+									anything else, because it takes ten minutes and it is the single most common way a perfectly good app
+									looks broken to a stranger.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">A delete button a tired stranger can find in ten seconds.</h3>
+								<p class="tip-cite">Guideline 5.1.1(v) · Account Deletion</p>
+								<p class="body-text">
+									If your app lets someone create an account, it has to let them delete it from inside the app, without
+									emailing you, without a web form, without a support ticket, and without a phone call. That much is
+									widely known. What actually gets people rejected is the distance. The flow exists, but it’s behind
+									Settings, then Privacy, then Advanced, then a screen called <em>Manage your information.</em>
+								</p>
+								<p class="body-text">
+									Put it where a reviewer looking for it will look: Profile or Settings, top level, one screen deep, and
+									call it <strong>Delete Account</strong>. Not “Manage data.” Not “Privacy options.” The label is the
+									whole test. If someone has to read three words of explanatory copy to know that’s the button, you’ve
+									already failed the ten-second version of this.
+								</p>
+								<p class="body-text">
+									On your side, do a soft delete. Set a <code>deleted_at</code>, cut the account out of every read path
+									immediately, and keep the rows for a disclosed window, usually thirty days, so you can
+									recover an account for someone who fat-fingered it at 1am, and so your fraud, billing and accounting
+									history doesn’t develop holes. That is compatible with the guideline. What isn’t compatible is a soft
+									delete that never becomes a hard one.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The distinction people get wrong</p>
+									<p>
+										Deactivation is not deletion. If your button sets <code>active = false</code> and that’s the end of
+										the story, you are out of compliance no matter what the button says, and if a reviewer or a user
+										ever pokes at it you’ll deserve what happens. The rule I’d hold yourself to: the screen tells the
+										user plainly what goes away and when, the grace window is stated, and something in your system
+										actually purges at the end of it. Write the purge job before you ship the button, not after.
+									</p>
+									<p>
+										One more that catches people: if you offer <strong>Sign in with Apple</strong>, deleting an account
+										also means revoking that user’s token through Apple’s revocation endpoint. Apple requires it, it’s
+										a server-side call most teams have never made, and it isn’t optional just because your app
+										otherwise behaves.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Where it lives</p>
+										<p class="spec-v">Profile or Settings, top level. One tap from a screen they’ll definitely open.</p>
+									</div>
+									<div>
+										<p class="spec-k">The test</p>
+										<p class="spec-v">Hand your phone to someone who’s never seen the app: “delete your account.” Time them.</p>
+									</div>
+									<div>
+										<p class="spec-k">Also required</p>
+										<p class="spec-v">Full account deletion, not just in-app data. Plus SIWA token revocation if you use it.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">Open your app on an iPad before Apple does.</h3>
+								<p class="tip-cite">Guideline 2.1 · App Completeness · and 4.0 Design</p>
+								<p class="body-text">
+									You built on an iPhone simulator, you tested on your own phone, and your whole team has the same
+									three devices. Review does not. If your app is marked as supporting iPad, they will run it on an
+									iPad, and if it isn’t, there’s still a good chance it gets opened there in scaled mode. Either way,
+									the first time anyone sees your app on a 13-inch screen should not be the person deciding whether
+									it ships.
+								</p>
+								<p class="body-text">
+									The failure is almost always the same one, and it’s almost always at the bottom of the screen. A
+									primary button pinned with a hardcoded offset instead of the safe area, so on iPad it sits under the
+									home indicator, or just off the edge entirely. Your Continue button. Your Sign Up button. The one
+									thing the reviewer needs to press to see the rest of the app, unreachable, which from their side is
+									indistinguishable from an app that doesn’t work.
+								</p>
+								<p class="body-text">
+									Ten minutes in the simulator covers most of it: launch on the largest iPad and the smallest, rotate
+									both to landscape, and walk the flows a reviewer walks: onboarding, sign-up, the paywall, the
+									settings screen with the delete button in it. Open every modal and sheet. Then look specifically at
+									the bottom hundred points of each screen, because that’s where the bodies are. If you declare iPad
+									support you’ll also need real iPad screenshots in App Store Connect, and screenshots that are
+									obviously stretched iPhone captures are their own small rejection waiting to happen.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Test on</p>
+										<p class="spec-v">Largest iPad and smallest iPad, portrait and landscape, plus one older small iPhone</p>
+									</div>
+									<div>
+										<p class="spec-k">Look at</p>
+										<p class="spec-v">The bottom of every screen. Safe areas, sheets, keyboard-avoidance, split view.</p>
+									</div>
+									<div>
+										<p class="spec-k">Effort</p>
+										<p class="spec-v">Ten minutes, once, and again after any layout change</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Explain every permission like the reader has never used your app. Because they haven’t.</h3>
+								<p class="tip-cite">Guideline 5.1.1 · Data Collection and Storage</p>
+								<p class="body-text">
+									Every permission you request carries a purpose string, the line of text in the system dialog that you
+									wrote months ago in a hurry and never looked at again. Mine said something like “We need access to your
+									photos.” That is a sentence describing what I want, not why, and it reads to a reviewer as an app
+									hoovering up data for reasons it won’t say out loud.
+								</p>
+								<p class="body-text">
+									Be more explicit than feels necessary. Name the feature, name what happens to the data, and say when.
+									<em>“Photo access lets you attach an image to a job report. Photos are uploaded only to the report you
+									choose and are never scanned or shared.”</em> That feels like over-explaining to you because you know
+									what a job report is. The reviewer does not, and there is no mechanism by which they can ask you.
+									Assume zero nuance, zero context, and zero charity, and write for that reader.
+								</p>
+								<p class="body-text">
+									Two things that go with it. Ask for the permission at the moment the feature needs it, not in a wall of
+									dialogs at launch. A cold-start permission gauntlet reads as a data grab and frequently gets flagged
+									on its own. And make sure the feature the string describes is actually findable in the build you
+									submitted. If your string promises background location for trip tracking and the reviewer can’t locate
+									trip tracking, you’ve handed them a reason to reject that isn’t even about permissions any more.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The one people forget until the day of</p>
+									<p>
+										Your App Privacy answers in App Store Connect, the nutrition label, have to match reality,
+										including whatever your SDKs are doing. Analytics, crash reporting, ads and attribution libraries
+										all collect things, and “I didn’t know my analytics SDK collected a device identifier” is a true
+										statement that will not help you. Go through the list one library at a time before you fill that
+										form in, not after it gets flagged.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Rewrite</p>
+										<p class="spec-v">Every <code>NS…UsageDescription</code> string in your Info.plist. All of them, out loud.</p>
+									</div>
+									<div>
+										<p class="spec-k">The test</p>
+										<p class="spec-v">Read the string to someone who’s never seen the app. Can they say what feature it’s for?</p>
+									</div>
+									<div>
+										<p class="spec-k">Timing</p>
+										<p class="spec-v">At the point of use. Never a stack of prompts on first launch.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="pull">
+								<p>
+									The reviewer isn’t hostile and isn’t on your team. They’re a stranger with a queue, and everything
+									ambiguous resolves against you.
+								</p>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The nine they reject everybody for</p>
+								<h2>The rest of the list, in the order they tend to bite.</h2>
+								<p class="section-sub">
+									None of these are obscure. All of them are things you can check tonight. The reason they still catch
+									people is that every one of them is invisible from inside your own build.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">Finish the app. All of it, including the boring corners.</h3>
+								<p class="tip-cite">Guideline 2.1 · App Completeness</p>
+								<p class="body-text">
+									Placeholder text, dead links, a Terms of Service link that 404s, a settings row that does nothing, a
+									“coming soon” section, a support email that bounces. Any one of these is enough. Reviewers are
+									specifically trained to poke at the parts of an app that look unloved, because that’s where the
+									dishonest ones hide things.
+									Tap every row in Settings. Follow every link, including the ones in your footer and your paywall.
+								</p>
+								<p class="body-text">
+									The commonest version of a 2.1 rejection isn’t even in the app, though. It’s the demo account. If
+									anything sits behind a login, App Review needs working credentials in the review notes, and they need
+									to still work a week later. Not your personal account. Not one that gets rate-limited after three
+									logins. A dedicated review account, with realistic data already in it, that you don’t touch. If your
+									app needs hardware, a specific region, or a physical device to demonstrate, say so and attach a video.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">05</span>
+								<h3 class="tip-title">Crashes on the paths you never walk.</h3>
+								<p class="tip-cite">Guideline 2.1 · App Completeness</p>
+								<p class="body-text">
+									Your app doesn’t crash for you because you always use it the same way: signed in, with data, on good
+									wifi, having granted every permission the first time you were asked. The reviewer does the opposite of
+									all four, which is why the crash they find is one you’ve genuinely never seen.
+								</p>
+								<p class="body-text">
+									Four paths worth walking deliberately before you submit. A fresh install with an empty account, where
+									every list is empty and something is dividing by zero. Airplane mode, and then the more evil version,
+									a very slow connection that times out halfway. Every permission <em>denied</em>: tap “Don’t Allow” on
+									each one and see whether the app recovers gracefully or sits on a spinner forever, which is the one I’d
+									bet on. And a background-and-return in the middle of a flow, especially anything with a timer, a camera
+									or a payment in it. Run it on the newest OS beta while you’re at it; review often is.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">06</span>
+								<h3 class="tip-title">A privacy policy that actually loads.</h3>
+								<p class="tip-cite">Guideline 5.1.1(i) · Privacy Policies</p>
+								<p class="body-text">
+									You need one in two places: a URL in App Store Connect, and a link inside the app itself that a user can
+									reach without an account. Both get checked, and the in-app one is the one people forget. It belongs
+									somewhere obvious: Settings, and on your sign-up screen next to the Terms.
+								</p>
+								<p class="body-text">
+									Then click your own link from a device that isn’t yours. The rejections here are almost never about the
+									contents of the policy; they’re about a link that 404s, a page behind a login, a Notion doc that isn’t
+									publicly shared, or a staging URL nobody remembered to swap. The policy itself needs to name what you
+									collect, who you share it with, how long you keep it, and how someone deletes it, which should match,
+									word for word, what item 01 actually does.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">07</span>
+								<h3 class="tip-title">Your screenshots are a promise. Keep it.</h3>
+								<p class="tip-cite">Guideline 2.3 · Accurate Metadata</p>
+								<p class="body-text">
+									Everything on your product page is treated as a claim about the binary you submitted. Screenshots
+									showing a feature that’s behind a feature flag. A description mentioning integrations you haven’t
+									built. A title stuffed with keywords. Marketing imagery that’s mostly text and lifestyle photography
+									rather than the actual app. Each of those is a metadata rejection, and they sting, because the app is
+									fine. The page around it isn’t.
+								</p>
+								<p class="body-text">
+									The check is mechanical: put your screenshots on one side of the screen and the running app on the
+									other, and confirm a stranger could find every single thing pictured. Same for the description. If a
+									feature is real but hard to reach, tell them where it is in the review notes rather than hoping.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">08</span>
+								<h3 class="tip-title">The paywall is the most scrutinised screen in your app.</h3>
+								<p class="tip-cite">Guideline 3.1.1 · In-App Purchase · and 3.1.2 Subscriptions</p>
+								<p class="body-text">
+									It’s where the money is, so it’s where the attention is. Three things get people. First, pricing
+									presented to flatter rather than inform: the annual plan advertised as a monthly-looking number with
+									the real charge in grey text underneath. If a user could be surprised by the amount that leaves their
+									account, rewrite it. State the actual charge, the actual period, and that it renews automatically.
+								</p>
+								<p class="body-text">
+									Second, the required furniture: a subscription paywall needs a visible <strong>Restore Purchases</strong>
+									control and links to your Terms of Use and Privacy Policy, on the paywall itself, not three screens
+									away. Third, routing digital purchases outside Apple’s system. If the thing being bought is consumed
+									inside your app, it goes through In-App Purchase, and a button that quietly opens Safari to your
+									Stripe checkout is the version of this that gets found.
+								</p>
+								<p class="body-text">
+									Test the whole thing in sandbox: buy, cancel, restore on a second device, and buy again. Reviewers do
+									press restore.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">09</span>
+								<h3 class="tip-title">“It works” and “it looks finished” are different bars.</h3>
+								<p class="tip-cite">Guideline 4.0 · Design</p>
+								<p class="body-text">
+									Apple rejects apps that feel unfinished even when nothing is technically broken: default system
+									styling everywhere, inconsistent spacing, a stretched icon, text truncating at the largest accessibility
+									size, tap targets too small to hit, no empty states, no loading states, an error that shows the raw
+									server message to the user.
+								</p>
+								<p class="body-text">
+									This one is subjective and people resent it for that reason, but the underlying standard is reasonable:
+									does this look like someone cared. Two cheap wins that move the needle more than a redesign: draw a
+									real empty state for every list, and crank the system font size to maximum and fix whatever breaks.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">10</span>
+								<h3 class="tip-title">Don’t put a login wall in front of things that don’t need one.</h3>
+								<p class="tip-cite">Guideline 5.1.1(ii) · Permissible Uses</p>
+								<p class="body-text">
+									If a feature doesn’t depend on an account, it can’t require one. A recipe app that shows nothing until
+									you sign up, a calculator gated behind an email capture, a browse-only catalogue demanding a phone
+									number. All rejectable, and all of it reads to Apple as harvesting contact details in exchange for
+									content you were going to give away anyway.
+								</p>
+								<p class="body-text">
+									The fix is usually a guest mode or a browsable core with sign-in prompted at the first genuinely
+									account-shaped action: saving, syncing, purchasing, posting. This has a second benefit, which is that
+									your activation rate goes up. If your whole app genuinely requires an account, that’s fine. Say why in
+									the review notes and make sure the demo credentials work.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">11</span>
+								<h3 class="tip-title">Your permission priming screen can’t say “Enable Notifications.”</h3>
+								<p class="tip-cite">Guideline 5.1.1 · with a nod to the Human Interface Guidelines</p>
+								<p class="body-text">
+									This one is genuinely obscure and it catches good teams. The pattern everyone uses, a custom screen
+									before the system dialog explaining why you want the permission, is fine and encouraged. What’s not
+									fine is a button on that screen labelled “Enable Notifications” or “Allow Location,” because the user
+									taps it believing they’ve made the choice, and then the real system dialog appears and they’re answering
+									the same question twice. Worse, some implementations only offer the yes button, so the screen is a
+									gate rather than an explanation.
+								</p>
+								<p class="body-text">
+									Use a neutral label, <strong>Continue</strong> or <strong>Next</strong>, and always provide a way
+									past without granting: “Not now,” and it has to actually work. Explain freely, decide nowhere. The
+									system dialog is the only place the decision gets made.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">12</span>
+								<h3 class="tip-title">Be an app, not a website in a jacket.</h3>
+								<p class="tip-cite">Guideline 4.2 · Minimum Functionality · and 4.3 Spam</p>
+								<p class="body-text">
+									A web view pointed at your existing site, with no native functionality, is not an app, and Apple has
+									said so for years. Neither is a near-identical resubmission of something already on the store, nor five
+									thin variants of your own app published under different names for different niches. That’s the 4.3
+									spam rule, and it also covers “we made one app per client” business models, which surprises agencies
+									every single time.
+								</p>
+								<p class="body-text">
+									If a chunk of your app is genuinely a web view, that’s survivable, but earn the install around it:
+									notifications, offline behaviour, camera, share sheet, widgets, biometrics, something the browser
+									can’t do. And if you’re shipping variants, consolidate them into one app with configuration, or be
+									prepared to make the case in writing.
+								</p>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Submit day</p>
+								<h2>Write the review notes like you’re handing over a job, because you are.</h2>
+								<p class="section-sub">
+									The review notes field is the only channel you have to a human before the decision gets made. Most
+									people leave it blank. It is the cheapest insurance on this entire list.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Fill in the teal parts, delete what doesn’t apply, and keep it short and factual. You’re not selling
+								here. You’re removing every reason for someone to get stuck and write “unable to locate” in a box.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="notes">Copy</button>
+								</p>
+								<pre class="prompt-body" id="notes">DEMO ACCOUNT
+Email: <span class="fill">review@yourdomain.com</span>
+Password: <span class="fill">••••••••</span>
+This account is dedicated to App Review, is pre-populated with sample data,
+and is not rate-limited.
+
+WHAT THE APP DOES
+<span class="fill">[Two sentences, plain language. What it is and who it's for.]</span>
+
+WHERE TO FIND THINGS
+- Account deletion: <span class="fill">Profile tab → Settings → Delete Account</span>
+  (Deletes the account and all associated data. A <span class="fill">30</span>-day recovery window is
+  disclosed in-app, after which data is permanently purged.)
+- Privacy policy: in-app at <span class="fill">Settings → Privacy Policy</span>, and at <span class="fill">https://…</span>
+- Subscription paywall: <span class="fill">[where it appears, and what triggers it]</span>
+- Restore Purchases: <span class="fill">[where the control lives]</span>
+
+PERMISSIONS AND WHY
+- <span class="fill">Camera: used only to attach a photo to a report. Requested at the point of use.</span>
+- <span class="fill">Notifications: used only for reminders the user schedules themselves.</span>
+The app functions without granting any of these.
+
+NOTES
+- <span class="fill">[Anything needing hardware, a specific region, or setup, plus a video link if so.]</span>
+- <span class="fill">[Anything that looks unusual and has a good reason.]</span>
+
+Contact for anything blocking: <span class="fill">name, email, timezone</span></pre>
+							</div>
+
+							<p class="prompt-note" style="margin-bottom: 26px">
+								Teal marks what you replace. The “where to find things” block is doing the real work. Most rejections I’ve
+								seen in the wild are a reviewer failing to find something that was right there.
+							</p>
+
+							<p class="body-text">
+								And the run-down, for the night before. If you can’t honestly tick a row, that’s tomorrow’s work rather
+								than tonight’s submission.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">The check</th>
+											<th style="width: 22%">Guideline</th>
+											<th>What you actually do</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>01 · Delete account</strong></td>
+											<td>5.1.1(v)</td>
+											<td>Stranger finds it in ten seconds. Soft delete with a disclosed purge. SIWA token revoked.</td>
+										</tr>
+										<tr>
+											<td><strong>02 · iPad</strong></td>
+											<td>2.1 / 4.0</td>
+											<td>Both iPad sizes, both orientations. Look at the bottom of every screen.</td>
+										</tr>
+										<tr>
+											<td><strong>03 · Permission strings</strong></td>
+											<td>5.1.1</td>
+											<td>Rewrite every one. Name the feature and the benefit. Ask at point of use.</td>
+										</tr>
+										<tr>
+											<td><strong>04 · Completeness</strong></td>
+											<td>2.1</td>
+											<td>Tap every row, follow every link. Working demo account in the notes.</td>
+										</tr>
+										<tr>
+											<td><strong>05 · Crashes</strong></td>
+											<td>2.1</td>
+											<td>Empty account, no network, all permissions denied, backgrounded mid-flow.</td>
+										</tr>
+										<tr>
+											<td><strong>06 · Privacy policy</strong></td>
+											<td>5.1.1(i)</td>
+											<td>In-app and in App Store Connect. Open both links from a device that isn’t yours.</td>
+										</tr>
+										<tr>
+											<td><strong>07 · Metadata</strong></td>
+											<td>2.3</td>
+											<td>Every screenshot and claim findable in the submitted build.</td>
+										</tr>
+										<tr>
+											<td><strong>08 · Paywall</strong></td>
+											<td>3.1.1 / 3.1.2</td>
+											<td>Real price stated plainly. Restore, Terms, Privacy on the screen. Sandbox-tested.</td>
+										</tr>
+										<tr>
+											<td><strong>09 · Design quality</strong></td>
+											<td>4.0</td>
+											<td>Empty states, loading states, largest font size, no raw error strings.</td>
+										</tr>
+										<tr>
+											<td><strong>10 · Login wall</strong></td>
+											<td>5.1.1(ii)</td>
+											<td>Anything not account-dependent works without signing up.</td>
+										</tr>
+										<tr>
+											<td><strong>11 · Priming screens</strong></td>
+											<td>5.1.1 / HIG</td>
+											<td>Neutral button label, a working “Not now,” decision made only in the system dialog.</td>
+										</tr>
+										<tr>
+											<td><strong>12 · Originality</strong></td>
+											<td>4.2 / 4.3</td>
+											<td>Native value beyond a web view. One app, not five variants.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								A rejection isn’t a judgement and it isn’t the end of anything. It’s a few days, a polite reply, and a
+								resubmission. If you do get one, answer it in Resolution Center like a colleague rather than a
+								defendant. Say what you changed, or say why the thing they’re describing isn’t what’s happening and point
+								them to the screen. Attach a screenshot. People on the other end are reasonable when you make it easy for
+								them to be.
+							</p>
+							<p class="body-text" style="margin-bottom: 34px">
+								But launch week is the one week where days actually cost you something, and every item above takes minutes
+								tonight. That trade has never once looked close to me.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you got rejected and the reason doesn’t make sense.</h2>
+								<p class="section-sub">
+									Apple’s rejection text is a guideline number and a paragraph of boilerplate. Translating it into the
+									specific thing in your specific app is the hard part, and it’s hard mostly because you’re too close to it.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Send me the rejection message and a sentence about what your app does. I’ll tell you what I think they’re
+								actually looking at and how I’d respond. No code and nothing proprietary needed. The guideline number and
+								their wording is usually enough.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=App%20Store%20Checklist">hi@davecto.com</a> with the
+									subject line <strong>“App Store Checklist.”</strong>
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to ship software without embarrassing themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing: guideline numbers are from Apple’s App Store Review Guidelines as of writing, and that
+								document gets renumbered and rewritten more often than people expect, so check the current text before you
+								quote a number back at anyone. The 24-hour review figure is Apple’s own published claim about typical
+								turnaround, not a promise, and first submissions from new accounts routinely take longer. Items 01 and 03
+								come from rejections on my own apps; the rest are drawn from the rejection reasons that recur most often
+								across developer write-ups and forums, filtered through what I’ve seen myself, which makes them a well-founded
+								ordering rather than a measured one. Everything here is about the public App Store on iOS and iPadOS.
+								Enterprise distribution, TestFlight and the alternative-marketplace rules in the EU work differently. I have
+								no relationship with Apple beyond being a developer who has argued with them.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Three prompts for your Instagram account</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28;
+				--muted: #6b655c;
+				--quiet: #f1ede6;
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(20px, 5vw, 0.75in) 88px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 48px 0 24px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 8px;
+			}
+
+			/* ── Spec strip: what the prompt is for ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 16px 0;
+				margin: 18px 0 4px;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 18px 22px 20px;
+				margin: 20px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 14px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0 0 12px;
+			}
+
+			/* ── Pull quote ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Callout ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 8px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.pull,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				/* Prompt blocks are taller than a page; let them flow rather
+				   than shoving a page-tall block onto the next sheet. */
+				.prompt,
+				.prompt-body {
+					break-inside: auto;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+			<!-- ── Masthead ── -->
+			<p class="eyebrow">Three prompts</p>
+			<h1
+				style="
+					font-family: var(--serif);
+					font-size: 42px;
+					font-weight: 400;
+					color: var(--ink);
+					line-height: 1.06;
+					letter-spacing: -0.025em;
+					margin: 0;
+				"
+			>
+				Point an AI at your own Instagram.
+			</h1>
+			<p class="lead">
+				Copy these three prompts into muse.ai once your Instagram account is connected. One reads your competitors, one audits your last
+				twenty posts, one takes apart how your videos end. Paste them as-is. (You can also try these with claude or chatgpt, but you'll need a
+				connector in the middle for it to pull stats. You can also have it use the browser, but just be careful, it can get very slow. and you
+				don't want to be rate limited by instagram)
+			</p>
+			<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+			<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+			<p class="body-text">
+				Most AI content advice is generic because most people ask generic questions. These prompts are long and bossy on purpose. They tell
+				the model to pull real numbers, cite specific posts, compare every post to your own baseline rather than to strangers, and admit when
+				it can't get a metric instead of inventing one.
+			</p>
+			<p class="body-text">
+				That last rule matters more than the rest. A model with account access will happily estimate a retention figure it never saw. Every
+				prompt here forbids it, and you should still spot-check anything that surprises you.
+			</p>
+
+			<div class="pull">
+				<p>Every claim needs a post and a number attached to it. That single rule is what separates a useful audit from a horoscope.</p>
+			</div>
+
+			<div class="contents">
+				<p class="rule-label" style="margin-bottom: 18px">What's in here</p>
+				<div class="contents-item">
+					<span class="num">01</span>
+					<p class="what">
+						Competitor teardown. <span>Five accounts your size, their outliers, and what the pack does that nothing rewards.</span>
+					</p>
+				</div>
+				<div class="contents-item">
+					<span class="num">02</span>
+					<p class="what">
+						Tactical audit. <span>Your last twenty posts ranked by shares and saves, with the hook patterns behind the top five.</span>
+					</p>
+				</div>
+				<div class="contents-item">
+					<span class="num">03</span>
+					<p class="what">
+						Ending forensics. <span>The final eight seconds of thirty videos, classified and ranked, then three rewrites.</span>
+					</p>
+				</div>
+			</div>
+
+			<!-- ── Before you start ── -->
+			<div class="section-hdr">
+				<p class="eyebrow eyebrow-quiet">Before you paste anything</p>
+				<h2>Two minutes of setup, then the prompts do the rest.</h2>
+			</div>
+
+			<ol class="brand">
+				<li>Log into <strong>muse.ai</strong> and connect to your instagram account.</li>
+				<li>
+					<strong>Swap in your handle</strong> wherever a prompt names one, and fill the bracketed context block with a few lines about your
+					account, your goals, and who you're for. Having the AI draft that paragraph for you is fine.
+				</li>
+				<li>
+					<strong>Run them one at a time</strong>, in a fresh conversation each. They are long, and stacking them in one thread makes the
+					model cut corners on the later ones.
+				</li>
+			</ol>
+
+			<div class="callout callout-risk">
+				<p class="callout-label">A note on what you'll get back</p>
+				<p>
+					These prompts are tuned to be blunt. They ask for what's underperforming and why, with your own posts named as evidence. If you
+					want encouragement, this is the wrong document.
+				</p>
+			</div>
+
+			<!-- ── 01 ── -->
+			<div class="section-hdr">
+				<span class="tip-num">Prompt 01</span>
+				<h2>Competitor research</h2>
+				<p class="section-sub">
+					Profiles your account, finds five accounts doing the same job at one to ten times your size, and pulls their outliers from the
+					last thirty days.
+				</p>
+			</div>
+
+			<div class="spec">
+				<div>
+					<p class="spec-k">Use it when</p>
+					<p class="spec-v">You're not sure what's actually working in your niche right now</p>
+				</div>
+				<div>
+					<p class="spec-k">You get back</p>
+					<p class="spec-v">Winning hook styles, decaying formats, and five post ideas with evidence</p>
+				</div>
+				<div>
+					<p class="spec-k">Before you run it</p>
+					<p class="spec-v">Nothing. This one works straight out of the box</p>
+				</div>
+			</div>
+
+			<div class="prompt">
+				<p class="prompt-label">
+					<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p1">Copy</button>
+				</p>
+				<pre class="prompt-body" id="p1">
+You have access to my Instagram account. Run a competitor teardown for me.
+
+STEP 1 — Profile me
+Look at my account: bio, last ~20 posts, formats I use (Reels/carousels/statics),
+topics, hooks, posting cadence, and which of my posts over- and under-performed
+relative to my own median. State my niche and target audience in one line.
+
+STEP 2 — Find competitors
+Identify 5 accounts in that same niche and audience — not the biggest accounts in
+the category, but ones 1–10x my size doing the same job I'm doing. Skip accounts
+that are famous for something other than this content. List each with follower
+count and a one-line description of their angle.
+
+STEP 3 — Analyze their last 30 days
+For each competitor, look at recent posts and separate outliers from the pack:
+- Top 3 posts by engagement relative to that account's own median
+
+For each outlier, record: format, hook (first line / on-screen text), topic,
+length, CTA, and your best guess at WHY it worked or didn't. Ignore raw like
+counts across accounts — only compare a post to its own account's baseline.
+
+STEP 4 — Find the patterns
+Across all five accounts, answer:
+- Which hook styles consistently outperform?
+- Which formats are winning right now in this niche, and which are decaying?
+- Which topics are saturated (everyone posting, mediocre performance) vs.
+  underserved (rare, but performs when someone does it)?
+- What does the pack all do that nobody's outliers actually reward?
+
+STEP 5 — Tactical advice for me
+Compare those patterns against my own content from Step 1 and give me:
+- 3 things my competitors do that I should start doing, with specifics
+- 2 things I'm doing that the data says to stop or cut back
+- 5 concrete post ideas for my next two weeks, each with a proposed hook,
+  format, and the competitor evidence it's based on
+- 1 gap nobody in this niche is covering that I'm positioned to own
+
+Rules: cite specific posts (account + description + date) as evidence for every
+claim. If the data is thin or you're inferring, say so. No generic advice —
+if it would apply to any account in any niche, cut it.</pre
+				>
+			</div>
+
+			<p class="prompt-note">
+				The step that earns its keep is the last question in step four. Asking what the whole pack does that no outlier rewards is how you
+				find the habits everyone copies and nobody checks.
+			</p>
+
+			<!-- ── 02 ── -->
+			<div class="section-hdr">
+				<span class="tip-num">Prompt 02</span>
+				<h2>Tactical audit of your last 20 posts</h2>
+				<p class="section-sub">
+					Ranks your posts by shares and saves rather than views, then reads the first three seconds of the best five and the worst five.
+				</p>
+			</div>
+
+			<div class="spec">
+				<div>
+					<p class="spec-k">Use it when</p>
+					<p class="spec-v">You want to know what's true about your account specifically</p>
+				</div>
+				<div>
+					<p class="spec-k">You get back</p>
+					<p class="spec-v">Hook patterns, format winners per pillar, and three ranked changes</p>
+				</div>
+				<div>
+					<p class="spec-k">Before you run it</p>
+					<p class="spec-v">Replace the handle and fill in the context block</p>
+				</div>
+			</div>
+
+			<div class="prompt">
+				<p class="prompt-label">
+					<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p2">Copy</button>
+				</p>
+				<pre class="prompt-body" id="p2">You have access to my Instagram account, <span class="fill">@davecto</span>. Analyze my last 20 posts
+and give me a tactical audit. Be specific and evidence-based, not encouraging.
+
+CONTEXT
+<span class="fill">[Give some context about your account, goals, who you are. Having Claude or
+ChatGPT write this paragraph for you is fine.]</span>
+
+WHAT TO DO
+1. Pull the actual numbers for each of the 20 posts: views, reach, likes,
+   comments, shares, saves, follows-from-post, and average watch time or
+   retention if available. Include the date and format (Reel, carousel, static).
+2. Rank the posts by shares and saves first, then follows. Treat views as a
+   secondary signal — I care about what makes people keep and forward, not scroll.
+3. For the top 5 and bottom 5, transcribe or describe the first 3 seconds:
+   the spoken hook, the on-screen text, and the opening visual.
+4. If you see the same or very similar video most likely it's a trial reel.
+   Keep that in mind for your statistics.
+
+WHAT TO TELL ME
+- Hook patterns: what do my top performers open with that the bottom performers
+  don't? Name the pattern, quote the actual hooks, cite the numbers.
+- Format: which format wins per pillar, and where retention drops off in my
+  worst Reels.
+- Pillar performance: which of my four pillars over- and under-performs, and
+  whether that's the pillar itself or my execution of it.
+- Mechanics: length, caption structure, CTA placement, posting time, hashtags —
+  only where the data actually shows a difference. Say so if it doesn't.
+- One adjacent format or topic I'm not doing that my top-performing posts suggest
+  would land, with the reasoning tied to specific posts.
+
+RULES
+- Every claim needs a post and a number attached to it. If you can't retrieve a
+  metric, say "not available" — do not estimate or infer it
+- 20 posts is a small sample. Flag when a pattern rests on one or two posts.
+- Skip praise and general best practices I could get anywhere. I want what's
+  true about my account specifically.
+- End with the 3 highest-leverage changes, ranked, each phrased as something I
+  do differently on my next post.</pre>
+			</div>
+
+			<p class="prompt-note">
+				Teal marks the parts you replace. If you don't organize your content into pillars, either name your usual topics in the context block
+				or cut that line from the prompt.
+			</p>
+
+			<!-- ── 03 ── -->
+			<div class="section-hdr">
+				<span class="tip-num">Prompt 03</span>
+				<h2>How your videos end</h2>
+				<p class="section-sub">
+					Classifies the final five to eight seconds of thirty videos, ranks the ending types by performance, and rewrites your three worst.
+				</p>
+			</div>
+
+			<div class="spec">
+				<div>
+					<p class="spec-k">Use it when</p>
+					<p class="spec-v">Your hooks land but people don't share, save, or comment</p>
+				</div>
+				<div>
+					<p class="spec-k">You get back</p>
+					<p class="spec-v">Five to seven rules you can apply to the video you're editing today</p>
+				</div>
+				<div>
+					<p class="spec-k">Before you run it</p>
+					<p class="spec-v">Fill in the context block. Needs about 30 video posts</p>
+				</div>
+			</div>
+
+			<div class="prompt">
+				<p class="prompt-label">
+					<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p3">Copy</button>
+				</p>
+				<pre class="prompt-body" id="p3">You have access to my Instagram account. I want a forensic analysis of how I END my videos.
+
+CONTEXT ON MY ACCOUNT
+<span class="fill">[Give some context about your account, goals, who you are. Having Claude or
+ChatGPT write this paragraph for you is fine.]</span>
+
+I care about retention and engagement, not follower vanity.
+
+STEP 1 — PULL THE DATA
+Look at my last 30 video posts. For each one, record:
+- Post date, topic, and a one-line description of the content
+- Total views
+- Shares / Comments / Likes and View Count
+
+If you cannot access any of these metrics, say so explicitly and tell me
+which ones are missing. Do not estimate or infer numbers you don't have.
+I would rather have a thin analysis of real data than a rich analysis of
+invented data.
+
+STEP 2 — CLASSIFY THE ENDINGS
+Transcribe or describe the final 5-8 seconds of each video. Then classify
+each ending into a type. Build the categories from what you actually see
+in my content rather than a preset list — but examples of the kind of
+distinction I mean: keyword CTA, follow-ask, open loop/cliffhanger, hard
+summary, emotional landing line, abrupt cut, question to the audience,
+teaser for a next post.
+
+Also note for each: how long the ending runs in seconds, whether the
+on-screen text at the end matches or extends the spoken line, and whether
+the video loops cleanly back to the first frame.
+
+STEP 3 — FIND THE PATTERN
+Rank the ending types by performance. For each type, give me:
+- Which posts used it (name them by date and topic)
+- The average end-completion rate and engagement rate for that group
+- The single best and single worst performer in that group, and your
+  read on why they diverged
+
+Then answer these specifically:
+- Do my keyword-CTA endings out- or under-perform my non-CTA endings on
+  retention? On saves and shares?
+- Is there a length threshold where my endings start losing people? At
+  what second mark does the drop-off usually begin?
+- Do my worst-performing endings share a structural trait — a wind-down,
+  a summary, a slowdown in pacing, a change in energy?
+- Which endings produced comments that were substantive versus one-word
+  keyword drops? Are those different endings?
+
+STEP 4 — GIVE ME RULES, NOT VIBES
+Output 5-7 tactical rules I can apply to my next video today. Each rule
+must be:
+- Stated as an instruction, not an observation
+- Backed by a specific post from my account, named, with its numbers
+- Concrete enough that a person editing a video knows exactly what to do
+
+Then give me three rewritten endings: take my three worst-performing
+endings from these 30 posts, quote what I actually said, and rewrite each
+one applying your rules.
+
+CONSTRAINTS
+- Cite the specific post for every claim. If you can't cite one, delete
+  the claim.
+- Do not give me advice that would apply to any Instagram account. I want
+  advice that only makes sense for mine.
+- If the data contradicts conventional short-form advice, say so and side
+  with the data.
+- Flag anything where the sample is too small to conclude from.</pre>
+			</div>
+
+			<p class="prompt-note">
+				Endings are the least examined part of most accounts and the part that decides whether a view becomes a share. Step four is the
+				payoff. Everything before it exists to make those rules specific to you.
+			</p>
+
+			<hr class="hair" />
+
+			<p class="body-text">
+				Run the audit first, then the endings analysis, then the competitor teardown once you know your own baseline. Each one takes the model
+				a few minutes and gives you something you can act on before your next post.
+			</p>
+			<p class="body-text" style="margin-bottom: 34px">
+				If a result contradicts what you believed about your account, check the underlying posts before you believe it. These prompts are
+				built to reduce invented numbers, not to eliminate them.
+			</p>
+
+			<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+				<p class="kicker">Get in touch</p>
+				<p class="body-text" style="margin-bottom: 0">
+					Tried one of these and got something interesting back? Email
+					<a href="mailto:hi@davecto.com?subject=Instagram%20Prompts">hi@davecto.com</a> with the subject line
+					<strong>"Instagram Prompts"</strong>.
+				</p>
+			</div>
+
+			<div style="text-align: center; padding: 44px 0 0">
+				<p
+					style="
+						font-family: var(--serif);
+						font-size: 21px;
+						font-weight: 400;
+						color: var(--ink);
+						line-height: 1.35;
+						letter-spacing: -0.015em;
+						margin: 0 auto 10px;
+						max-width: 26em;
+					"
+				>
+					More guides like this one, for people trying to use AI without embarrassing themselves.
+				</p>
+				<p style="font-family: var(--sans); font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 16px">
+					Weekly, plain-language breakdowns on Instagram.
+				</p>
+				<a
+					href="https://www.instagram.com/davecto"
+					style="
+						font-family: var(--sans);
+						font-size: 15px;
+						font-weight: 500;
+						color: var(--accent);
+						letter-spacing: 0.05em;
+						text-decoration: none;
+						border-bottom: 1px solid var(--accent);
+						padding-bottom: 3px;
+					"
+					>@davecto</a
+				>
+			</div>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>
