@@ -1,0 +1,2120 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Three tabs, one command</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			h4.sub-head {
+				font-family: var(--serif);
+				font-size: 16.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.01em;
+				line-height: 1.35;
+				margin: 24px 0 8px;
+			}
+
+			/* ── Hairline list rows ── */
+			.row {
+				border-top: 1px solid var(--rule);
+				padding: 20px 0 4px;
+			}
+			.row:first-child {
+				border-top: 0;
+				padding-top: 0;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each idea ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0 0 12px;
+			}
+
+			/* ── Terminal / file blocks: bordered, no fill, no accent ── */
+			.term {
+				border: 1px solid var(--rule);
+				padding: 16px 18px 18px;
+				margin: 18px 0 16px;
+				overflow-x: auto;
+			}
+			.term-label {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 12px;
+			}
+			.term pre {
+				font-family: var(--mono);
+				font-size: 12px;
+				line-height: 1.6;
+				color: var(--body);
+				margin: 0;
+				white-space: pre;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.data-table code {
+				font-size: 0.88em;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.term,
+				.pull,
+				.strip,
+				.row,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label,
+				.term-label {
+					break-after: avoid;
+				}
+				.copy-btn {
+					display: none !important;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A build guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Three tabs, one command.
+							</h1>
+							<p class="lead">
+								How to build a command-line tool that reads the systems your business actually runs on, with the worked
+								example I built against HubSpot, QuickBooks and Gmail, the seven prompts that produce it, and the part
+								everyone gets stuck on: getting the tokens.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Before a customer call I used to open three tabs. HubSpot for the deals, QuickBooks for what they owe,
+								Gmail for what was actually said. Then I built a small thing that turns all three into one line of typing:
+							</p>
+
+							<div class="term">
+								<p class="term-label">terminal</p>
+								<pre>recon "Acme Glass"</pre>
+							</div>
+
+							<p class="body-text">
+								It is about 1,400 lines of TypeScript with three runtime dependencies. No database, no server, no web app,
+								nothing deployed anywhere. The code was the quick part. Most of the work was authentication.
+							</p>
+							<p class="body-text">
+								This guide is in two halves. The first half is that specific tool: what it does, how it is put together,
+								and the decisions I would make again. The second half is the general case: what a CLI is, when it is the
+								right shape for a problem, how to get OAuth tokens out of Google and HubSpot without losing a morning, and
+								seven prompts you can hand to an AI agent to build your own version against whatever systems you happen
+								to live in.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">~1,400</p>
+									<p class="stat-label">Lines of TypeScript in the source. Tests add a few hundred more.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">3</p>
+									<p class="stat-label">Runtime dependencies. Everything else is the standard library.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">0</p>
+									<p class="stat-label">Servers, databases, containers, or things that can be down at 8am.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">1</p>
+									<p class="stat-label">Word you have to remember to use it.</p>
+								</div>
+							</div>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										What a CLI actually is.
+										<span>Why this shape beats an app for a certain class of problem, and when it doesn’t.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										The worked example.
+										<span>Three systems, one screen, and the design decisions worth copying.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										OAuth without the fog.
+										<span>What it is, why it’s awkward for a CLI, and step-by-step token setup for Google and HubSpot.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										The seven prompts.
+										<span>Copy-ready, with the technical decisions already made so the agent doesn’t improvise.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										Make it yours.
+										<span>The adaptation prompt, and a list of tools worth building for other jobs.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">
+										What breaks first.
+										<span>The things I got wrong, and the two features I’d add next.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The shape</p>
+								<h2>A CLI is a program you talk to by typing its name.</h2>
+								<p class="section-sub">
+									No window, no login screen, no URL. You type a word and some arguments, it does one job, it prints text,
+									it exits. That constraint is the whole point.
+								</p>
+							</div>
+
+							<p class="body-text">
+								If you have ever typed <code>git status</code> or <code>npm install</code>, you have used one. The category
+								covers everything from one-line shell scripts to tools with thirty subcommands, but the good ones share a
+								shape: a verb, some input, text out, done. They don’t run in the background. They don’t hold state between
+								runs beyond a config file. They don’t have users, in the plural. They have you.
+							</p>
+							<p class="body-text">
+								That sounds like a limitation. It is mostly a gift. A tool with no interface has no interface to design, no
+								frontend to build, no hosting bill, no session handling, no responsive breakpoints, no uptime. The entire
+								surface area you have to get right is: what does it take in, and what does it print.
+							</p>
+
+							<h4 class="sub-head">Three things can type your command.</h4>
+							<p class="body-text">
+								This is the argument that actually matters in 2026, and it’s the reason I keep building these instead of
+								little web apps.
+							</p>
+							<ul class="brand">
+								<li>
+									<strong>You can.</strong> Before a call, in a terminal you already have open. No tab switching, no
+									waiting for a dashboard to load the thing you needed one number from.
+								</li>
+								<li>
+									<strong>A script can.</strong> Loop it over a list of accounts, pipe the output to a file, run it from
+									cron on Monday morning. Anything that speaks text can drive it.
+								</li>
+								<li>
+									<strong>An AI agent can.</strong> Give Claude Code a tool called <code>recon</code> and one line
+									explaining it, and it can pull a customer brief without you handing it your OAuth tokens, your API docs,
+									or any knowledge of HubSpot’s object model. The CLI is the permission boundary and the vocabulary at the
+									same time.
+								</li>
+							</ul>
+							<p class="body-text">
+								That third one changes the economics of building small tools. A year ago a script that only you could run
+								was worth exactly what it saved you. Now every script you write is also a capability you can hand to an
+								agent, which means the same afternoon of work compounds.
+							</p>
+
+							<div class="pull">
+								<p>
+									A tiny surface over messy systems is worth more than a big one. One word plus a company name beats a
+									dashboard with forty filters.
+								</p>
+							</div>
+
+							<h4 class="sub-head">When a CLI is the wrong answer.</h4>
+							<p class="body-text">
+								I would rather name the trade-off than pretend this shape wins everywhere. Don’t build a CLI when:
+							</p>
+							<ul class="brand">
+								<li>
+									<strong>Non-technical people need to use it daily.</strong> A terminal is a real barrier. If your sales
+									team is the audience, you are building an internal web app or a Slack command, not this.
+								</li>
+								<li>
+									<strong>It needs to be always on.</strong> Anything that reacts to a webhook, watches a queue, or sends
+									the 8am digest without someone typing is a scheduled job or a service. A CLI can be the thing cron calls,
+									but the schedule lives elsewhere.
+								</li>
+								<li>
+									<strong>The output is genuinely visual.</strong> Charts, images, anything you want to point at in a
+									meeting. Terminals are a text medium and fighting that is a waste of a week.
+								</li>
+								<li>
+									<strong>Multiple people need their own logins.</strong> The moment you need per-user accounts and a token
+									store that isn’t “a file in my home directory,” you have crossed into building a product.
+								</li>
+							</ul>
+							<p class="body-text">
+								Everything else is CLI-shaped: “I keep looking the same thing up in three places,” “I need this data in a
+								format I can paste,” “I want an agent to be able to check this.”
+							</p>
+
+							<h4 class="sub-head">The five rules I hold myself to.</h4>
+							<ol class="brand">
+								<li>
+									<strong>Read-only until proven otherwise.</strong> A tool that only reads can be run by anyone, scripted
+									by anything, and handed to an agent without a second thought. The blast radius is zero. Add writes later,
+									deliberately, behind a flag.
+								</li>
+								<li>
+									<strong>One command, one job.</strong> If you need a second job, that’s a second subcommand, and if you
+									need eight subcommands you probably needed a different tool.
+								</li>
+								<li>
+									<strong>Never die halfway.</strong> Three integrations means three things that can be down. Two working
+									sections plus one honest error beats a stack trace every time.
+								</li>
+								<li>
+									<strong>Errors name the fix.</strong> Not “401 Unauthorized.” “Gmail authorization has expired. Run:
+									<code>recon auth google</code>.”
+								</li>
+								<li>
+									<strong>Text out, no surprises.</strong> Colour and layout when a human is watching, plain text when the
+									output is piped. The tool should behave when something else is reading it.
+								</li>
+							</ol>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · The worked example</p>
+								<h2>What <code style="font-size: 0.85em">recon</code> does, and how it is put together.</h2>
+								<p class="section-sub">
+									One command finds the same company in three systems that have never heard of each other, and prints a
+									single brief. Every line of it is a link back to the source.
+								</p>
+							</div>
+
+							<div class="term">
+								<p class="term-label">recon "Acme Glass"</p>
+								<pre>
+🔍  Looking up Acme Glass...
+
+  ✅  HubSpot
+  ✅  QuickBooks
+  ✅  Gmail
+
+╭────────────────────────────────────────────────╮
+│ 🏢  ACME GLASS                                 │
+│ 🌐  acmeglass.com                              │
+╰────────────────────────────────────────────────╯
+
+📊  HUBSPOT
+
+  Acme Glass ↗
+  👤  Owner: Sarah Miller
+  📈  Open deals: 2
+  💰  Pipeline: $84,000
+
+  🤝  Enterprise Renewal ↗
+      $64,000
+      Contract Sent
+      📅  Closes Sep 30
+
+💰  QUICKBOOKS
+
+  Acme Glass ↗
+  💵  Balance: $14,820
+  🧾  Open invoices: 3
+
+  🔴  #10492      $5,100    Overdue Aug 1 ↗
+
+📬  RECENT EMAIL
+
+  📅  Sep 16, 2:14 PM
+  👤  Sarah Jones &lt;sarah@acmeglass.com&gt;
+  📨  Re: Expansion proposal ↗
+      "Looks good. I have one question about the renewal
+       term before I send it to our CFO..."</pre
+								>
+							</div>
+
+							<p class="body-text">
+								Every <code>↗</code> is a real hyperlink. Click the invoice, land on that invoice in QuickBooks. Click the
+								subject, land on that thread in Gmail. Nothing is written to any system. The tool has no capability to
+								write at all.
+							</p>
+
+							<h4 class="sub-head">What happens when you press enter.</h4>
+							<ol class="brand">
+								<li>
+									HubSpot and QuickBooks are searched <strong>in parallel</strong>, by name. They only need the string you
+									typed, so there is no reason to do them in sequence.
+								</li>
+								<li>
+									Gmail waits, because it searches far better with a domain than with a company name. It uses the domain
+									HubSpot returned, falls back to an email address from QuickBooks, falls back to the quoted name. If the
+									domain search comes back empty, it retries by name rather than showing you an empty inbox.
+								</li>
+								<li>
+									Each of the three returns a small tagged value: <em>data</em>, <em>no match</em>, or <em>failure</em>.
+									The renderer looks at the tag and prints the right thing, including, for a failure, the exact command
+									that reconnects that system.
+								</li>
+							</ol>
+
+							<h4 class="sub-head">The stack, and why each piece.</h4>
+							<p class="body-text">
+								These are the decisions I would hand to an agent up front, which is exactly what the prompts in part four
+								do. Unmade decisions are where agents improvise, and improvisation is where you get a Postgres dependency
+								in a tool that reads three APIs.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">Decision</th>
+											<th>Why</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>TypeScript, strict</strong></td>
+											<td>
+												API payloads are the messiest input you’ll handle. Types at the boundary mean the renderer can
+												trust what it’s given. <code>strict: true</code> from line one. Retrofitting it is miserable.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Node 20+, ESM, NodeNext</strong></td>
+											<td>
+												Global <code>fetch</code> without a polyfill. <code>"type": "module"</code> with
+												<code>module</code> and <code>moduleResolution</code> both set to <code>NodeNext</code>, which
+												means relative imports end in <code>.js</code> even though the files are <code>.ts</code>. Odd
+												the first time, correct forever after.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Commander</strong></td>
+											<td>
+												Arguments, subcommands, <code>--help</code>, <code>--version</code>. Thirty lines of wiring
+												instead of a hand-rolled parser you’ll get wrong.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Plain <code>fetch</code>, no SDKs</strong></td>
+											<td>
+												Vendor SDKs are large, opinionated, and hide the request you’re actually making. Three APIs, three
+												files, every call visible. The one exception is Google’s auth library, because token refresh is
+												the one place I don’t want a clever homegrown version.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>dotenv</strong></td>
+											<td>
+												Config from <code>.env</code> in the project and <code>~/.recon/.env</code> once installed
+												globally. Real environment variables always win.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Vitest</strong></td>
+											<td>
+												Fast, TypeScript-native, and stubbing <code>fetch</code> is one line. Tests run against canned API
+												payloads, never the live APIs.
+											</td>
+										</tr>
+										<tr>
+											<td><strong><code>tsc</code> to <code>dist/</code>, <code>bin</code> + <code>npm link</code></strong></td>
+											<td>
+												No bundler. <code>dist/index.js</code> starts with a shebang, <code>package.json</code> declares
+												<code>"bin": { "recon": "dist/index.js" }</code>, and <code>npm link</code> puts the word on your
+												PATH. <code>npm run dev</code> runs the TypeScript directly while you’re building.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>No database</strong></td>
+											<td>
+												The tool has no state worth keeping. Credentials go in <code>~/.recon/</code> as JSON at mode 600.
+												That is the entire persistence layer.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<h4 class="sub-head">Four design choices worth stealing.</h4>
+
+							<div class="tip" style="margin-top: 18px">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">One normalized shape, defined before any integration exists.</h3>
+								<p class="body-text">
+									<code>src/types/company.ts</code> describes the handful of fields the report prints (a company, a deal, a
+									customer, an invoice, an email) and nothing else. It is deliberately not a faithful mirror of anybody’s
+									API. Each integration file is responsible for turning its own vendor’s payload into that shape, so the
+									renderer never learns that HubSpot calls it <code>dealname</code> and QuickBooks calls it
+									<code>DocNumber</code>.
+								</p>
+								<p class="body-text">
+									Write this file first. It is the contract that lets you add a fourth system later without touching the
+									output code.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">A tagged result type, so nothing can die halfway.</h3>
+								<p class="body-text">
+									Every section is one of three things, and TypeScript makes you handle all three:
+								</p>
+								<div class="term">
+									<p class="term-label">src/types/company.ts</p>
+									<pre>
+export type SectionResult&lt;T&gt; =
+  | { status: "ok"; data: T }
+  | { status: "empty"; message: string }
+  | { status: "error"; message: string; fix?: string };</pre
+									>
+								</div>
+								<p class="body-text">
+									A broken integration renders as its own section with the command that fixes it, while the other two print
+									normally. This is the single highest-value pattern in the whole tool, because a customer brief that is
+									two-thirds right at 8:55am is worth a great deal and a stack trace is worth nothing.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Errors you are happy to show a person.</h3>
+								<p class="body-text">
+									One custom error class, <code>FriendlyError</code>, carrying a short sentence and an optional fix command.
+									Anything that isn’t a <code>FriendlyError</code> is a bug, and bugs only print in full behind
+									<code>--debug</code>. The user-facing failure looks like this:
+								</p>
+								<div class="term">
+									<p class="term-label">output</p>
+									<pre>
+📬  RECENT EMAIL
+
+  🚨  Gmail authorization has expired.
+
+      Run:
+        recon auth google</pre
+									>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">Build links from the API, not from memory.</h3>
+								<p class="body-text">
+									HubSpot record URLs need the portal id <em>and</em> the region-specific UI domain, both of which come
+									back from <code>/account-info/v3/details</code>. My portal is on <code>na2</code>. A hardcoded
+									<code>app.hubspot.com</code> would have produced a dead link on every single record, and I would have
+									found out in front of someone.
+								</p>
+								<p class="body-text">
+									Same instinct applies to QuickBooks, where sandbox and production are different hostnames for both the API
+									and the UI, and to anything else with a region in it. If the vendor will tell you the base URL, ask them
+									for it.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The pattern</p>
+										<p class="spec-v">Fetch the account/tenant details once, derive every URL from it.</p>
+									</div>
+									<div>
+										<p class="spec-k">The fallback</p>
+										<p class="spec-v">If that call fails, drop the links and print the report anyway.</p>
+									</div>
+								</div>
+							</div>
+
+							<h4 class="sub-head">The layout, in full.</h4>
+							<div class="term">
+								<p class="term-label">src/</p>
+								<pre>
+src/
+  index.ts                        CLI wiring (Commander), top-level error handling
+  env.ts                          .env loading, config dir, redirect URI
+  errors.ts                       FriendlyError + describeError
+  match.ts                        deliberately dumb company-name matching
+  commands/company.ts             orchestrates the three lookups
+  commands/auth.ts                auth google | quickbooks | status
+  integrations/hubspot.ts         one file per API, returns normalized data
+  integrations/quickbooks.ts
+  integrations/gmail.ts
+  auth/google.ts                  OAuth flow + token refresh
+  auth/quickbooks.ts              OAuth flow + realm id + token refresh
+  auth/local-server.ts            the throwaway localhost callback server
+  auth/token-store.ts             ~/.recon/*.json at mode 600
+  formatting/company-report.ts    renders the brief
+  formatting/style.ts             colour, emoji widths, OSC 8 hyperlinks
+  types/company.ts                the normalized shapes
+tests/                            22 tests, all against stubbed payloads</pre
+								>
+							</div>
+							<p class="body-text">
+								No repositories, no dependency injection, no plugin architecture. Each file is one you can read top to
+								bottom in under a minute, which is the only architectural goal I had.
+							</p>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Authentication</p>
+								<h2>OAuth without the fog.</h2>
+								<p class="section-sub">
+									This is the part that stops people. Not the code. It’s the twenty minutes in a console you’ve never opened,
+									clicking through screens that assume you’re shipping a product to strangers.
+								</p>
+							</div>
+
+							<h4 class="sub-head">What OAuth is, in one paragraph.</h4>
+							<p class="body-text">
+								OAuth is how you let a program act on your behalf <strong>without giving it your password</strong>. You go
+								to the provider yourself, in your own browser, log in as you always do, and approve a specific, limited
+								request: <em>this program may read my Gmail</em>. The provider hands your program a token. The token is
+								scoped, it expires, and you can revoke it from a settings page without changing your password or affecting
+								anything else.
+							</p>
+							<p class="body-text">
+								The valet key analogy is old and still the best one. Your password is the key to everything. An OAuth token
+								is the key that drives the car but doesn’t open the trunk, stops working on Tuesday, and can be cancelled
+								from your phone.
+							</p>
+
+							<h4 class="sub-head">The vocabulary, once.</h4>
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 26%">Term</th>
+											<th>What it actually is</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Client ID / secret</strong></td>
+											<td>
+												Your program’s username and password with the provider, not yours. Created once in their
+												developer console. The secret goes in <code>.env</code> and never in git.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Scope</strong></td>
+											<td>
+												The specific permission being asked for, as a string. <code>gmail.readonly</code> is a different
+												thing from full Gmail access, and users see the difference on the consent screen.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Redirect URI</strong></td>
+											<td>
+												Where the provider sends the browser after you approve. It must be registered in advance and
+												matched character for character. This is the bit that makes CLIs awkward.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Authorization code</strong></td>
+											<td>
+												A short-lived string that arrives on the redirect. Useless on its own: it has to be exchanged,
+												server-side, using the client secret.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Access token</strong></td>
+											<td>
+												The thing you actually put in the <code>Authorization: Bearer</code> header. Typically good for
+												about an hour.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Refresh token</strong></td>
+											<td>
+												The long-lived one that buys you new access tokens without another browser trip. This is the
+												token that matters, and the one providers are stingiest about issuing.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>State</strong></td>
+											<td>
+												A random string you send out and check on the way back. It proves the response belongs to the
+												request you made. Sixteen random bytes, compared on return, rejected if it doesn’t match.
+											</td>
+										</tr>
+										<tr>
+											<td><strong>Tenant id</strong></td>
+											<td>
+												Whatever the provider calls the account you just connected: <code>realmId</code> at Intuit,
+												<code>portalId</code> at HubSpot. Store it alongside the tokens; most API calls need it.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<h4 class="sub-head">Why it’s awkward for a CLI specifically.</h4>
+							<p class="body-text">
+								OAuth was designed for websites. A website has an address to redirect back to and a server to keep secrets
+								on. A command-line tool has neither. Three problems follow, and each has a standard answer.
+							</p>
+
+							<div class="tip" style="margin-top: 18px">
+								<span class="tip-num">Problem 01</span>
+								<h3 class="tip-title">There is nowhere to redirect to.</h3>
+								<p class="body-text">
+									The answer is to briefly become a website. The tool starts an HTTP server on
+									<code>127.0.0.1:8787</code>, opens your browser at the provider’s consent URL, waits for the redirect to
+									land on <code>/callback</code>, reads the query parameters, serves a small “you can close this tab” page,
+									and shuts the server down. It exists for about fifteen seconds.
+								</p>
+								<p class="body-text">
+									One function handles this for both providers, with a five-minute timeout, a state check, and a clear error
+									if the port is already in use. It is roughly eighty lines and it is the same eighty lines in every CLI
+									that does OAuth.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Problem 02</span>
+								<h3 class="tip-title">There is nowhere safe to put the tokens.</h3>
+								<p class="body-text">
+									Not the repo. Not a <code>.env</code> you might commit. Credentials go in
+									<code>~/.recon/google.json</code> and <code>~/.recon/quickbooks.json</code>, with the directory at mode
+									700 and the files at mode 600, readable by you and nobody else on the machine. Two lines of
+									<code>fs</code>, and it is the right amount of sophistication for a personal tool.
+								</p>
+								<p class="body-text">
+									The client secret is a different thing from the tokens: it lives in <code>.env</code>, which is in
+									<code>.gitignore</code>, with a committed <code>.env.example</code> listing the variable names and nothing
+									else. If you are ever unsure whether you committed a secret, assume you did and rotate it.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Problem 03</span>
+								<h3 class="tip-title">Everything expires, on different schedules.</h3>
+								<p class="body-text">
+									Access tokens last about an hour, so the tool refreshes before every run rather than discovering the
+									expiry mid-report. It refreshes a minute early, because a token that expires between your check and your
+									request produces a 401 that looks like a bug.
+								</p>
+								<p class="body-text">
+									Refresh tokens expire too, and the rules differ per provider. Google kills them after seven days while
+									your app is in testing, Intuit rotates them on every exchange and expires them after about a hundred days.
+									Whatever comes back from a refresh, write it down. The recovery path for all of it is the same: a
+									<code>FriendlyError</code> that says authorization expired and names the reconnect command.
+								</p>
+							</div>
+
+							<!-- ── Google ── -->
+							<div class="section-hdr" style="margin-top: 40px">
+								<p class="eyebrow eyebrow-quiet">Step by step</p>
+								<h2>Getting a Google token for Gmail.</h2>
+								<p class="section-sub">
+									Twenty minutes the first time, five minutes every time after. The console has been renamed and rearranged
+									more than once, so trust the nouns below more than the exact menu names.
+								</p>
+							</div>
+
+							<ol class="brand">
+								<li>
+									<strong>Create a project.</strong> In the Google Cloud console, use the project picker in the top bar and
+									create a new one. Name it after your tool. Everything below happens inside it.
+								</li>
+								<li>
+									<strong>Enable the Gmail API.</strong> APIs &amp; Services → Library → search “Gmail API” → Enable. Skip
+									this and every call fails with a long message about the API not having been used in your project, which
+									reads like an outage and isn’t one.
+								</li>
+								<li>
+									<strong>Configure the consent screen.</strong> This lives under the Google Auth Platform section:
+									branding, audience, data access, clients. If you have Google Workspace, choose
+									<strong>Internal</strong>: no verification, no seven-day token expiry, and only people in your
+									organisation can consent. If you’re on a personal Gmail account, your only option is
+									<strong>External</strong>, left in <strong>Testing</strong>.
+								</li>
+								<li>
+									<strong>Add yourself as a test user.</strong> On an External app in Testing, only listed test users can get
+									through the consent screen. Add the Gmail address whose mail you want to read.
+								</li>
+								<li>
+									<strong>Add the scope.</strong> Under data access, add
+									<code>https://www.googleapis.com/auth/gmail.readonly</code>. Read-only is genuinely all a brief needs, and
+									it is the difference between a tool that can embarrass you and one that can’t.
+								</li>
+								<li>
+									<strong>Create the OAuth client.</strong> Clients → Create client → application type
+									<strong>Web application</strong> → under authorized redirect URIs add
+									<code>http://localhost:8787/callback</code> exactly. Save, then copy the client ID and client secret.
+								</li>
+								<li>
+									<strong>Put them in <code>.env</code>.</strong> <code>GOOGLE_CLIENT_ID</code> and
+									<code>GOOGLE_CLIENT_SECRET</code>. Confirm <code>.env</code> is in <code>.gitignore</code> before you paste
+									anything.
+								</li>
+								<li>
+									<strong>Run the auth command.</strong> <code>recon auth google</code> opens your browser, you approve, the
+									browser hits your localhost server, the tool exchanges the code and writes
+									<code>~/.recon/google.json</code>. Verify with <code>recon auth status</code>.
+								</li>
+							</ol>
+
+							<div class="callout">
+								<p class="callout-label">Two flags that decide whether this works at all</p>
+								<p>
+									The authorization URL needs <code>access_type=offline</code> to get a refresh token in the first place,
+									and <code>prompt=consent</code> to get one again on a second authorization. Without the second flag,
+									Google issues a refresh token on your first consent and silently withholds it on every subsequent one,
+									which produces the single most common OAuth bug there is: it worked when you built it, and it stopped
+									working the first time you re-authorized.
+								</p>
+							</div>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">The other four things that will trip you</p>
+								<p>
+									<strong>“Google hasn’t verified this app.”</strong> Expected on an unverified app. Advanced → Go to
+									(unsafe). You are the developer and the user; you know exactly what you approved.
+								</p>
+								<p>
+									<strong>Seven-day refresh tokens.</strong> While an External app sits in Testing, Google expires refresh
+									tokens after seven days and you get <code>invalid_grant</code>. For a personal tool, re-running
+									<code>recon auth google</code> once a week is the honest answer. Publishing to production removes the
+									limit, but <code>gmail.readonly</code> is a <em>restricted</em> scope, so publishing means Google’s
+									verification process and, for restricted scopes, a third-party security assessment. That is a real
+									project, not a checkbox. Workspace users should just use an Internal app and skip the whole thing.
+								</p>
+								<p>
+									<strong><code>redirect_uri_mismatch</code>.</strong> The registered URI and the one your code sends must
+									be identical strings. <code>http://localhost:8787/callback</code> is not
+									<code>http://localhost:8787/callback/</code>, and it is not <code>http://127.0.0.1:8787/callback</code>.
+									Localhost is the one place plain <code>http</code> is allowed.
+								</p>
+								<p>
+									<strong>Adding a scope later doesn’t upgrade an existing token.</strong> Change the scopes, and you have to
+									re-consent to get a token that carries them.
+								</p>
+							</div>
+
+							<p class="body-text">
+								A note on client type: Google recommends the <strong>Desktop app</strong> type for installed applications,
+								which lets you use a loopback address on any available port. That’s the better choice if you want the tool to
+								grab whatever port is free. I pinned the port and registered it against a Web application client because an
+								exact, visible redirect URI is easier to debug. When it fails, the error tells you precisely which string
+								didn’t match. Either is defensible; pick one and be consistent.
+							</p>
+
+							<!-- ── HubSpot ── -->
+							<div class="section-hdr" style="margin-top: 40px">
+								<p class="eyebrow eyebrow-quiet">Step by step</p>
+								<h2>Getting a HubSpot token.</h2>
+								<p class="section-sub">
+									Much easier, because for a tool that only ever touches your own portal, HubSpot lets you skip OAuth
+									entirely.
+								</p>
+							</div>
+
+							<p class="body-text">
+								HubSpot has two ways in. A <strong>public app</strong> is the full OAuth dance, and it’s what you build if
+								other companies will install your integration into their portals. A <strong>private app</strong> is a token
+								scoped to one portal (yours) that you generate in the settings UI and paste into your environment. No
+								browser flow, no refresh, no expiry until you rotate it. For a personal CLI, private app every time.
+							</p>
+
+							<ol class="brand">
+								<li>
+									<strong>Check you’re a Super Admin</strong> on the portal. Private apps are an admin-level setting and the
+									menu simply won’t be there otherwise.
+								</li>
+								<li>
+									<strong>Settings (the gear) → Integrations → Private apps → Create a private app.</strong> Name it after
+									your tool.
+								</li>
+								<li>
+									<strong>On the Scopes tab, add exactly what you need.</strong> For this brief:
+									<code>crm.objects.companies.read</code>, <code>crm.objects.deals.read</code>, and
+									<code>crm.objects.owners.read</code>. That last one is what turns an opaque owner id into “Sarah Miller.”
+									Search by name; the list is long and almost everything in it is a write scope you don’t want.
+								</li>
+								<li>
+									<strong>Create the app and copy the token.</strong> It’s behind a “show token” click and looks like
+									<code>pat-na1-…</code> or <code>pat-na2-…</code> depending on your region. Treat it exactly like a
+									password: it is a bearer token with no second factor in front of it.
+								</li>
+								<li>
+									<strong>Paste it into <code>.env</code></strong> as <code>HUBSPOT_ACCESS_TOKEN</code> and run the tool.
+									That’s the whole setup.
+								</li>
+							</ol>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">Things worth knowing before you get a 403</p>
+								<p>
+									<strong>Missing scopes fail loudly and specifically.</strong> HubSpot returns a message naming the scope it
+									wanted. Add it to the private app’s scope list and the existing token picks it up. You don’t need to
+									generate a new one.
+								</p>
+								<p>
+									<strong>Your portal may not live on <code>app.hubspot.com</code>.</strong>
+									<code>/account-info/v3/details</code> returns both the portal id and the region-specific UI domain, and
+									that endpoint needs the <code>oauth</code> scope, which private-app tokens carry. Build record URLs from
+									what it returns. This is the bug I actually shipped and had to fix.
+								</p>
+								<p>
+									<strong>Batch your reads.</strong> HubSpot meters requests in short windows, so fetching twenty-five deals
+									means one batch-read call, not twenty-five calls in a loop. Association endpoints give you the ids; the
+									batch endpoint turns them into records.
+								</p>
+								<p>
+									<strong>A private app token only works in the portal that made it.</strong> The day you want to run this
+									against a client’s portal, you are building a public app with a real OAuth install flow: the same dance
+									as Google, with an install URL in place of a consent screen.
+								</p>
+							</div>
+
+							<h4 class="sub-head">QuickBooks, in one paragraph, because it’s the third pattern.</h4>
+							<p class="body-text">
+								Intuit is full OAuth like Google, plus one wrinkle: the callback carries a <code>realmId</code>, the id of
+								the company file you picked during consent, and every API call needs it, so it gets stored alongside the
+								tokens rather than derived later. Sandbox and production are separate hostnames for both the API and the UI,
+								so the environment is config, not a constant. And Intuit <em>rotates</em> the refresh token on every
+								exchange: whatever comes back from a refresh is what you must save, or you’ll be re-authorizing far sooner
+								than you expected. Between them, those three systems cover most of what you’ll meet: a static token, a
+								standard OAuth flow, and an OAuth flow with a tenant id attached.
+							</p>
+
+							<h4 class="sub-head">The security floor.</h4>
+							<ul class="brand">
+								<li><strong>Read-only scopes</strong> unless you have a specific reason not to.</li>
+								<li><strong><code>.env</code> in <code>.gitignore</code></strong>, with a committed <code>.env.example</code> that names variables and holds no values.</li>
+								<li><strong>Tokens at mode 600</strong> in a mode 700 directory under your home folder, never in the project.</li>
+								<li><strong>A <code>state</code> parameter</strong> on every authorization request, checked on the way back.</li>
+								<li><strong>Know the revoke path</strong> for each provider before you need it: Google account permissions, HubSpot private app settings, Intuit connected apps.</li>
+								<li><strong>Never print a token</strong>, not even under <code>--debug</code>. Log the status code and the URL, not the header.</li>
+							</ul>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · The prompts</p>
+								<h2>Seven prompts, in order, with the decisions already made.</h2>
+								<p class="section-sub">
+									Run them one at a time in an empty folder with Claude Code or the agent of your choice, reading what comes
+									back between each. They are long and specific on purpose. Every decision you don’t make is one the model
+									will make for you, differently each time.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Before you start: make a directory, run <code>git init</code>, and open your agent there. Anything in square
+								brackets and teal is yours to fill in. The examples name HubSpot, QuickBooks and Gmail because that’s the
+								tool I built; part five has the version where you swap in your own systems.
+							</p>
+
+							<p class="body-text">
+								One habit that matters more than any individual prompt: <strong>stop at the end of each one and actually
+								read the code.</strong> Seven prompts run back-to-back gives you something that compiles and that you don’t
+								understand. Seven prompts read one at a time gives you a tool you can fix at 8:55am.
+							</p>
+
+							<!-- Prompt 1 -->
+							<div class="tip" style="margin-top: 30px">
+								<span class="tip-num">Prompt 01</span>
+								<h3 class="tip-title">The scaffold and the contract.</h3>
+								<p class="prompt-note">
+									Sets every technical decision, defines the normalized shapes, and explicitly forbids writing any
+									integration yet. Ending a prompt with “stop and show me” is what keeps an agent from building four files
+									you didn’t ask for.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p1">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p1">Build me the skeleton of a TypeScript CLI called <span class="fill">recon</span>.
+
+WHAT IT WILL EVENTUALLY DO
+One command, <span class="fill">recon "Acme Glass"</span>, looks the same company up in
+<span class="fill">HubSpot, QuickBooks Online and Gmail</span> and prints a single brief to the
+terminal. Read-only. It never writes to any of those systems.
+
+STACK (these are decided, do not substitute anything)
+- TypeScript 5.7+, "strict": true, target ES2022
+- Node 20+, ESM ("type": "module"), with "module" and "moduleResolution" both
+  set to "NodeNext", so relative imports end in .js even though files are .ts
+- Commander for argument parsing and subcommands
+- dotenv for config
+- Plain global fetch for every HTTP call. No axios, no vendor SDKs. The only
+  allowed exception is an official auth library where token refresh would
+  otherwise be hand-rolled
+- Vitest for tests
+- tsc compiles src/ to dist/. package.json declares
+  "bin": { "<span class="fill">recon</span>": "dist/index.js" } and src/index.ts starts with
+  #!/usr/bin/env node. npm link is how it gets on my PATH
+- No database, no server, no framework, no DI container, no plugin system,
+  no class where a function will do
+
+ARCHITECTURE RULES
+- Each external system gets exactly one file in src/integrations/ that returns
+  a normalized shape. The renderer must never see a raw API payload.
+- src/types/company.ts defines those shapes and this generic:
+    export type SectionResult&lt;T&gt; =
+      | { status: "ok"; data: T }
+      | { status: "empty"; message: string }
+      | { status: "error"; message: string; fix?: string };
+- src/errors.ts defines a FriendlyError carrying a short message and an
+  optional `fix` string (the command that resolves it). Anything that is not
+  a FriendlyError is a bug and only prints in full behind --debug.
+- src/env.ts loads .env from the working directory and from ~/.<span class="fill">recon</span>/.env,
+  with real environment variables winning, and exports helpers for reading
+  required and optional variables.
+
+WHAT TO BUILD NOW
+1. package.json, tsconfig.json, .gitignore (.env ignored, dist ignored),
+   and .env.example listing variable names with no values.
+2. src/types/company.ts with SectionResult plus the normalized shapes for
+   <span class="fill">a company with deals, a customer with invoices, and an email message</span>.
+   Only the fields the report will actually print.
+3. src/errors.ts, src/env.ts.
+4. src/index.ts: Commander wiring for the main command, a --debug flag,
+   --version, help text, and a top-level catch that prints a FriendlyError
+   as one red sentence plus its fix command.
+5. A stub command that builds one of these briefs from hardcoded fake data
+   and console.logs it as JSON.
+
+DO NOT write any integration or any authentication yet. When you are done,
+show me the file tree and the contents of src/types/company.ts, and stop.</pre>
+							</div>
+
+							<!-- Prompt 2 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 02</span>
+								<h3 class="tip-title">The easy integration: a static token.</h3>
+								<p class="prompt-note">
+									Always start with the system that authenticates with a single environment variable. You get a real API call
+									working before you’ve introduced OAuth, which means when OAuth breaks you know it’s OAuth.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p2">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p2">Add the first integration: <span class="fill">HubSpot</span>, in src/integrations/<span class="fill">hubspot</span>.ts.
+
+AUTH
+A single environment variable, <span class="fill">HUBSPOT_ACCESS_TOKEN</span>, sent as
+`Authorization: Bearer &lt;token&gt;`. No OAuth for this one. Export an
+`is<span class="fill">HubSpot</span>Configured()` that just checks whether the variable is set.
+
+WHAT IT DOES
+Given a company name, return the normalized shape from src/types/company.ts,
+or undefined if nothing matches. Specifically:
+<span class="fill">1. Search companies by name and pick the best match.
+2. Fetch that company's associated deals, batched into a single request,
+   not one request per deal.
+3. Resolve opaque ids into labels: the deal stage id into a stage name via
+   the pipelines endpoint, the owner id into a person's name.
+4. Sort deals open-first, then largest first.</span>
+
+MATCHING
+Put name matching in its own file, src/match.ts, and keep it deliberately
+dumb: lowercase, strip punctuation, drop trailing company suffixes
+(inc, llc, ltd, co, corp, gmbh, plc), then score exact &gt; starts-with &gt;
+contains. Export a bestMatch() that takes candidates and a name accessor.
+Write unit tests for this file. It is pure and it is where subtle bugs live.
+
+LINKS
+Every record in the output needs a URL back to the source system. Fetch the
+account/tenant details from the API and build URLs from what it returns.
+<span class="fill">HubSpot's /account-info/v3/details returns both the portal id and a
+region-specific UI domain; my portal is not on app.hubspot.com.</span> If that
+call fails, return records without URLs rather than failing the lookup.
+
+ERRORS
+- Missing token, 401 or 403 → FriendlyError naming the variable to set.
+- Any other non-2xx → FriendlyError with the status code.
+- Never log or print the token itself, including under --debug.
+
+Wire it into the main command so the real data replaces the stub, and show
+me one real run before you write anything else.</pre>
+							</div>
+
+							<!-- Prompt 3 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 03</span>
+								<h3 class="tip-title">The OAuth flow and the callback server.</h3>
+								<p class="prompt-note">
+									The prompt that saves the most time. It specifies the loopback server, the state check, the storage
+									location, the file permissions, and the two Google flags: all the things an agent will otherwise get
+									three-quarters right.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p3">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p3">Now add OAuth 2.0 for <span class="fill">Google (Gmail, read-only)</span>, in src/auth/.
+
+THREE FILES
+
+1. src/auth/local-server.ts, one reusable localhost callback server used by
+   every provider I add later:
+   - starts an http server on 127.0.0.1 at OAUTH_PORT (default 8787)
+   - resolves with the callback's query parameters, rejects on an `error`
+     parameter, on a `state` mismatch, or after a 5 minute timeout
+   - always closes the server, on every path
+   - serves a small styled HTML page saying the tab can be closed
+   - if the port is in use, a FriendlyError naming OAUTH_PORT
+   - also exports openBrowser(url), best-effort per platform, because the
+     URL is always printed to the terminal as a fallback
+
+2. src/auth/token-store.ts, with saveTokens(name, data) and readTokens(name):
+   JSON at ~/.<span class="fill">recon</span>/&lt;name&gt;.json, directory created at mode 0o700, files
+   written at mode 0o600. readTokens returns undefined on a missing or
+   unparseable file rather than throwing.
+
+3. src/auth/<span class="fill">google</span>.ts, the provider flow:
+   - scopes: <span class="fill">https://www.googleapis.com/auth/gmail.readonly</span> only
+   - redirect URI http://localhost:8787/callback, read from env so it can be
+     overridden, and used identically in the auth URL and the token exchange
+   - generate a random 16-byte hex `state` and verify it on return
+   - the authorization URL must include access_type=offline AND
+     prompt=consent, or a second authorization returns no refresh token
+   - exchange the code for tokens, persist them via token-store
+   - export an accessToken() that returns a live token, refreshing and
+     re-saving when the stored one is within a minute of expiry
+   - if there is no refresh token or the refresh fails, throw a FriendlyError:
+     "<span class="fill">Google</span> authorization has expired." with fix "<span class="fill">recon</span> auth <span class="fill">google</span>"
+
+THEN
+Add an `auth` subcommand group: `<span class="fill">recon</span> auth <span class="fill">google</span>` runs the flow and confirms
+where the credentials were written; `<span class="fill">recon</span> auth status` lists every system
+and whether it is connected, with the exact command to fix each one that
+isn't.
+
+Do not print, log, or write tokens anywhere except the token store. Do not
+add a second provider yet.</pre>
+							</div>
+
+							<!-- Prompt 4 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 04</span>
+								<h3 class="tip-title">The second data source, and the search order.</h3>
+								<p class="prompt-note">
+									The interesting logic in a multi-system tool isn’t the API calls, it’s deciding what to search with. This
+									prompt makes that decision explicit instead of leaving it to whatever the model thinks is reasonable.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p4">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p4">Add src/integrations/<span class="fill">gmail</span>.ts, using the OAuth token from the previous step,
+and then fix the orchestration in the main command.
+
+THE INTEGRATION
+<span class="fill">Search messages, take the most recent 5, and for each one fetch only the
+metadata headers (From, To, Subject, Date) plus the snippet, not the full
+body. Decode HTML entities in snippets. Build a URL to the thread.</span>
+Return the normalized shape. Map 401/403 to a FriendlyError with the
+reconnect command.
+
+THE SEARCH ORDER (this is the part that matters)
+<span class="fill">Gmail</span> searches badly on a company name and well on a domain, so:
+1. Run the two name-only lookups <span class="fill">(HubSpot and QuickBooks)</span> in parallel with
+   Promise.all. They need nothing but the string I typed.
+2. Build the <span class="fill">Gmail</span> query from the best identifier available, in this order:
+   the domain returned by <span class="fill">HubSpot</span>, then an email address from <span class="fill">QuickBooks</span>,
+   then the quoted company name. Strip a leading www.
+3. If a domain-based search returns zero results, retry once with the
+   name-based query before reporting an empty section.
+
+Put the query construction in its own exported pure function and unit test
+it: domain only, email only, both, neither.
+
+ORCHESTRATION
+Every lookup goes through one helper that turns success, no-match, and
+failure into a SectionResult. One integration throwing must never stop the
+others. I want two good sections and one honest error, never a stack trace.
+Print a one-line status per system as each resolves, then the report.</pre>
+							</div>
+
+							<!-- Prompt 5 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 05</span>
+								<h3 class="tip-title">The output layer.</h3>
+								<p class="prompt-note">
+									Terminal formatting is where agents produce the most generic work, so this prompt is the most prescriptive.
+									The emoji-width rule and the Apple Terminal fallback are both things I only learned by shipping them
+									broken.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p5">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p5">Write the rendering layer: src/formatting/style.ts and
+src/formatting/<span class="fill">company-report</span>.ts. It takes the brief and returns a string.
+It must be pure: no console.log inside the renderer.
+
+style.ts
+- Small ANSI helpers (bold, dim, red, green, cyan, plus a few 256-colour
+  ones roughly matching each product's brand colour).
+- Colour is disabled entirely when process.stdout.isTTY is false or NO_COLOR
+  is set. Piping this tool must produce clean text.
+- OSC 8 hyperlinks so a label itself is clickable, with a hard rule: Apple
+  Terminal ignores OSC 8, so when TERM_PROGRAM is Apple_Terminal, or when
+  output is piped, print the raw URL on its own line instead. Never show a
+  label whose link silently does nothing.
+- Emoji occupy two terminal columns. One icon() helper appends exactly two
+  spaces after every glyph, and a displayWidth() counts wide characters as
+  two so padded columns actually line up. Every icon in the report goes
+  through icon(); nothing hand-spaces.
+- A greedy word wrap with a max line count and an ellipsis, for long
+  snippets.
+- Currency and date formatters: whole dollars when the value is whole,
+  "Sep 30" for dates, "Sep 16, 2:14 PM" for timestamps.
+
+the report
+- A boxed header with the company name and domain.
+- One section per system, each with a heading, in a fixed order.
+- For a status of "empty", one muted line. For "error", the message plus an
+  indented "Run: &lt;fix&gt;" block. Never a stack trace.
+- <span class="fill">Overdue invoices print in red, decided by comparing the due date to today.
+  Colour carries meaning here. It is not decoration.</span>
+- Every record (<span class="fill">company, deal, customer, invoice, email thread</span>) is a link
+  back to its source system.
+
+Then show me the output for a brief where one system is connected, one
+returns no match, and one has failed.</pre>
+							</div>
+
+							<!-- Prompt 6 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 06</span>
+								<h3 class="tip-title">Tests that don’t touch the network.</h3>
+								<p class="prompt-note">
+									Twenty-odd tests is the right number for a tool this size. The one that earns its keep is the last one:
+									proof that a dead integration still produces a full report.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p6">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p6">Write the test suite with Vitest. No test may make a real network call or
+read my real credentials.
+
+APPROACH
+Stub global fetch with a small table of [RegExp, payload] routes so each
+test declares the API responses it expects, and throw on any unmatched URL.
+An unexpected request should fail the test loudly, not return undefined.
+Mock the auth modules to hand back a fixed token.
+
+COVER
+1. match.ts: exact, prefix, substring, suffix-stripping, and no-match.
+2. The <span class="fill">Gmail</span> query builder: domain only, email only, both, neither.
+3. Each integration against a realistic canned payload, asserting the
+   normalized shape, including the awkward cases: <span class="fill">a deal with no amount, an
+   invoice with a zero balance, a message missing a Subject header.</span>
+4. The "not configured" path for each system: the right FriendlyError with
+   the right fix command.
+5. Argument parsing: no arguments prints help and exits non-zero; --debug is
+   picked up.
+6. The one that matters: a brief where one integration throws still renders
+   a full report containing the other two sections and the reconnect command
+   for the broken one.
+
+Then add npm scripts: build (tsc), dev (tsx src/index.ts), test (vitest run),
+typecheck (tsc --noEmit). Make sure all four pass and paste the test output.</pre>
+							</div>
+
+							<!-- Prompt 7 -->
+							<div class="tip" style="margin-top: 26px">
+								<span class="tip-num">Prompt 07</span>
+								<h3 class="tip-title">Ship it, and make it callable by an agent.</h3>
+								<p class="prompt-note">
+									The <code>--json</code> flag is the step most people skip, and it’s the one that turns a personal tool into
+									something an agent or a script can use without parsing your box-drawing characters.
+								</p>
+							</div>
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p7">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p7">Finish the tool.
+
+1. A --json flag that prints the brief as JSON and nothing else: no status
+   lines, no colour, no emoji, no spinner. Exit code 0 when at least one
+   system returned data, 1 when every system failed. This is the mode a
+   script or an AI agent will use, so the shape must be stable and documented.
+
+2. A README with: what it does, a real sample of the output, install
+   (npm install, npm run build, npm link), the environment variables in a
+   table, the auth commands, and a short "layout" section listing each source
+   file with a one-line description.
+
+3. An AGENTS.md (and a CLAUDE.md that points at it) recording the rules an
+   agent needs to not break this later: read-only, no database, no framework,
+   one file per integration returning normalized shapes, FriendlyErrors with
+   fix commands, stack traces only behind --debug.
+
+4. Check .gitignore covers .env, .env.* except .env.example, dist, and
+   node_modules. Confirm nothing in the working tree contains a real token.
+   Grep for the token prefixes and for "client_secret".
+
+5. Tell me, in plain language, the three most likely ways this breaks in
+   production and what the failure looks like from the terminal.</pre>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Make it yours</p>
+								<h2>The same tool, pointed at whatever you happen to live in.</h2>
+								<p class="section-sub">
+									HubSpot, QuickBooks and Gmail are just the three tabs I had open. The shape (one word, several systems,
+									one screen) transfers to almost any job where you look the same thing up in more than one place.
+								</p>
+							</div>
+
+							<h4 class="sub-head">Three questions, answered before you prompt anything.</h4>
+							<ol class="brand">
+								<li>
+									<strong>What do you look up more than once a week, in more than one place?</strong> Not what would be
+									impressive to build. What you actually do. If nothing comes to mind, watch yourself for two days and count
+									tabs.
+								</li>
+								<li>
+									<strong>What is the one argument?</strong> A company name, a ticket number, an order id, an email address.
+									If you need three arguments to describe the job, the job isn’t defined yet.
+								</li>
+								<li>
+									<strong>What is on the one screen of output?</strong> Write it out by hand first: literally type the
+									terminal output you want into a text file. That fake output is the best specification you will ever hand an
+									agent, and it takes four minutes.
+								</li>
+							</ol>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 22%">If you’re a…</th>
+											<th style="width: 30%">The command</th>
+											<th>The three systems behind it</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Support lead</strong></td>
+											<td><code>who "jane@acme.com"</code></td>
+											<td>Helpdesk tickets, order history, shipping status: the three tabs every escalation opens.</td>
+										</tr>
+										<tr>
+											<td><strong>Founder</strong></td>
+											<td><code>monday</code></td>
+											<td>Bank balance, open invoices, pipeline changed since Friday, calendar for the week.</td>
+										</tr>
+										<tr>
+											<td><strong>Recruiter</strong></td>
+											<td><code>cand "Priya S"</code></td>
+											<td>ATS record, last email thread, interview feedback docs, calendar history.</td>
+										</tr>
+										<tr>
+											<td><strong>Engineering manager</strong></td>
+											<td><code>ship</code></td>
+											<td>Open PRs, failing builds, on-call incidents, issues that changed overnight.</td>
+										</tr>
+										<tr>
+											<td><strong>Agency owner</strong></td>
+											<td><code>client "Acme"</code></td>
+											<td>Time logged this month, invoice status, active project tasks, last client email.</td>
+										</tr>
+										<tr>
+											<td><strong>Consultant</strong></td>
+											<td><code>pipe</code></td>
+											<td>Proposals out, follow-ups overdue, contracts unsigned, money not yet collected.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								The prompt below is prompt 01 with the specifics pulled out. Fill the teal parts, run it, then continue with
+								prompts 02 through 07 substituting your own systems as you go. If one of your systems authenticates with a
+								single API key, do that one second, before any OAuth, for the reason in part four.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>The adaptation prompt</span><span class="spacer"></span
+									><button class="copy-btn" type="button" data-copy="p8">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p8">Build me the skeleton of a TypeScript CLI called <span class="fill">[one short word]</span>.
+
+WHAT IT WILL EVENTUALLY DO
+One command, <span class="fill">[tool] "[the one argument]"</span>, looks up <span class="fill">[the thing]</span> across
+<span class="fill">[system A], [system B] and [system C]</span> and prints one brief to the terminal.
+Read-only. It never writes to any of those systems.
+
+THE OUTPUT I WANT
+<span class="fill">[Paste the terminal output you hand-wrote. Fake numbers are fine. This is
+the specification. Everything else serves it.]</span>
+
+WHAT I ALREADY KNOW ABOUT THE APIS
+<span class="fill">[System A]: auth is [an API key in an env var / OAuth 2.0 / OAuth plus a
+tenant id]. The lookup I need is [search by name, then fetch related records].
+[System B]: ...
+[System C]: ...
+[If you don't know, say so and ask the agent to check the current docs before
+writing any client code, and to tell you which endpoints and scopes it plans
+to use before it uses them.]</span>
+
+STACK (these are decided, do not substitute anything)
+- TypeScript 5.7+, "strict": true, target ES2022
+- Node 20+, ESM ("type": "module"), "module" and "moduleResolution" both
+  "NodeNext", so relative imports end in .js
+- Commander for arguments, dotenv for config, plain global fetch for HTTP.
+  No axios, no vendor SDKs except an official auth library where token
+  refresh would otherwise be hand-rolled
+- Vitest for tests. tsc builds src/ to dist/. package.json declares a "bin"
+  entry; src/index.ts starts with #!/usr/bin/env node
+- No database, no server, no framework, no DI container, no plugin system
+
+ARCHITECTURE RULES
+- One file per external system in src/integrations/, each returning a
+  normalized shape defined in src/types/. The renderer never sees a raw payload.
+- A SectionResult&lt;T&gt; union of ok / empty / error, so one dead system still
+  produces a full report with a reconnect command in place of that section.
+- A FriendlyError carrying a message and the command that fixes it. Raw
+  errors only behind --debug.
+- Credentials in ~/.<span class="fill">[tool]</span>/ at mode 0600. Secrets in .env, which is gitignored.
+
+WHAT TO BUILD NOW
+The project files, the types, the errors, the env loader, the Commander
+wiring with --debug, and a stub command that prints the brief from hardcoded
+fake data. No integrations, no auth yet. Then show me the file tree and the
+types file, and stop.</pre>
+							</div>
+
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · Afterwards</p>
+								<h2>What breaks first, and what I’d add next.</h2>
+								<p class="section-sub">
+									Everything below is from running the thing, not from planning it. This is the list I’d want handed to me
+									before I started.
+								</p>
+							</div>
+
+							<div class="row">
+								<p class="kicker">Breaks first</p>
+								<p class="body-text">
+									<strong>Name matching.</strong> “Acme Glass Inc” in one system and “Acme Glass” in another is the normal
+									case, not the edge case. My matcher strips suffixes and scores exact over prefix over substring, and it
+									still guesses wrong occasionally. Keep it dumb, keep it in one tested file, and print the name you matched
+									so a wrong guess is visible rather than silent.
+								</p>
+							</div>
+							<div class="row">
+								<p class="kicker">Breaks second</p>
+								<p class="body-text">
+									<strong>Token expiry, on whatever schedule you weren’t thinking about.</strong> Google’s seven-day testing
+									limit caught me on a Monday. The fix isn’t clever refresh logic, it’s making the failure legible: one
+									sentence, one command, no stack trace, and the other two sections still printing.
+								</p>
+							</div>
+							<div class="row">
+								<p class="kicker">Breaks third</p>
+								<p class="body-text">
+									<strong>Rate limits, the moment you loop.</strong> A tool run by hand makes a dozen calls. The same tool
+									looped over four hundred accounts in a shell script hits the limit in under a minute. Batch reads where the
+									API offers them, and if you plan to loop, add a delay flag before you need it.
+								</p>
+							</div>
+							<div class="row">
+								<p class="kicker">Would add next</p>
+								<p class="body-text">
+									<strong>A cache with a short life.</strong> Thirty seconds of caching on a per-company basis turns a
+									four-hundred-company loop from cruel to routine, and costs nothing when you’re typing the command by hand.
+								</p>
+							</div>
+							<div class="row">
+								<p class="kicker">Would add next</p>
+								<p class="body-text">
+									<strong>Writes, narrowly and behind a flag.</strong> Logging a call note back to the CRM is the obvious
+									one. But I’d keep the read path and the write path visibly separate, and I would not let an agent call the
+									writing version without me watching.
+								</p>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								The honest summary: the code was the easy part and an agent can write most of it in an afternoon. The value
+								was in three decisions (one normalized shape, one tagged result type, one error class that names its own
+								fix) and in the twenty minutes of console clicking that nobody writes down. That’s what this document is
+								for.
+							</p>
+							<p class="body-text">
+								I now type <code>recon</code> before calls instead of opening three tabs, and the same command sits in my
+								agent’s toolbox where it can answer questions I haven’t thought to ask yet. My golden retriever remains
+								unimpressed, which feels like the correct amount of impressed.
+							</p>
+
+							<!-- ── Closing ── -->
+							<div
+								style="
+									border-top: 1px solid var(--rule);
+									margin-top: 44px;
+									padding-top: 34px;
+									text-align: center;
+								"
+							>
+								<p class="eyebrow" style="margin-bottom: 14px">More like this</p>
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 22px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to use AI without embarrassing themselves.
+								</p>
+								<p style="font-family: var(--sans); font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 16px">
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>
