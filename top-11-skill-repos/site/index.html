@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top 11 Skill Repos for Claude Code + Codex</title>
+<meta name="description" content="The 11 most-starred skill repos for Claude Code and Codex, ranked by GitHub stars. What each one does, why it made the list, and the exact command to install it.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Top 11 Skill Repos for Claude Code + Codex">
+<meta property="og:description" content="Ranked by GitHub stars. What each one does and the command to install it.">
+<meta property="og:image" content="assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
+<style>html, body { margin: 0; padding: 0; background: #FEFEFE; }</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     TOP 11 SKILL REPOS · portable block
+     Everything from BEGIN to END is self-contained: copy it into any page on
+     your site, and copy the assets/ folder next to that page. All CSS is
+     scoped to .t11 so it won't touch the rest of your site.
+     ========================================================================== -->
+<!-- BEGIN T11 -->
+<style>
+/* ---------- fonts (bundled in assets/fonts, no Google request) ---------- */
+@font-face { font-family: "T11 Inter Tight"; src: url("assets/fonts/inter-tight.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "T11 JetBrains Mono"; src: url("assets/fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+@font-face { font-family: "T11 VT323"; src: url("assets/fonts/vt323.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+/* ---------- tokens ---------- */
+.t11 {
+  --ink: #1E1E1E; --ink-86: rgba(30,30,30,.86); --ink-55: rgba(30,30,30,.55);
+  --paper: #FEFEFE; --win: #DEDEDE; --win-2: #C4C4C4; --boot: #E2E2E2; --green: #03AA5C;
+  --pink: #F386A1; --teal: #09AEA1; --sage: #ABBAB9;
+  --f-display: "T11 Inter Tight", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --f-pixel: "T11 VT323", "VT323", "Courier New", monospace;
+  --f-mono: "T11 JetBrains Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --bg: var(--paper); --fg: var(--ink-86); --knock: var(--paper);
+  font-family: var(--f-display); font-size: 17px; line-height: 1.3; letter-spacing: .01em;
+  color: var(--ink-86); background: var(--paper);
+  -webkit-font-smoothing: antialiased; text-align: left;
+}
+.t11 *, .t11 *::before, .t11 *::after { box-sizing: border-box; }
+.t11 :where(h1, h2, h3, h4, p, ul, ol, pre, figure) { margin: 0; padding: 0; }
+.t11 :where(ul, ol) { list-style: none; }
+:where(.t11) img { display: block; max-width: 100%; height: auto; }
+:where(.t11) a { color: inherit; }
+:where(.t11) code { font-family: var(--f-mono); font-size: .88em; background: rgba(30,30,30,.1); padding: 1px 4px; }
+
+/* ---------- worlds: hard-cut full-bleed color zones ---------- */
+.t11-world { background: var(--bg); color: var(--fg); border-top: 1px solid var(--ink); position: relative; }
+.t11-world--ink { --bg: var(--ink); --fg: var(--paper); --knock: var(--ink); }
+.t11-wrap { max-width: 1180px; margin: 0 auto; padding: 72px 32px; position: relative; }
+.t11-dots { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%231e1e1e' fill-opacity='.5'/%3E%3C/svg%3E"); background-size: 4px 4px; }
+.t11-corners { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 16px; font: 300 12px/1 var(--f-mono); letter-spacing: .05em; pointer-events: none; }
+.t11-corners::before { content: "\2235\00a0\2A46"; }
+.t11-corners::after  { content: "\2A46\00a0\2235"; }
+
+/* ---------- type ---------- */
+.t11-display { font-family: var(--f-display); font-weight: 600; font-size: clamp(60px, 12vw, 172px); line-height: .8; letter-spacing: -.05em; text-transform: capitalize; }
+.t11-h2 { font-family: var(--f-display); font-weight: 600; font-size: clamp(44px, 7vw, 96px); line-height: .84; letter-spacing: -.045em; }
+.t11-h3 { font-family: var(--f-display); font-weight: 600; font-size: clamp(30px, 3.4vw, 44px); line-height: .9; letter-spacing: -.035em; text-transform: capitalize; }
+.t11-lead { font-size: clamp(20px, 2.1vw, 26px); line-height: 1.18; letter-spacing: -.005em; }
+.t11-micro { font: 400 12px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: capitalize; }
+.t11-pixel { font-family: var(--f-pixel); font-size: 22px; line-height: 1; }
+
+/* ---------- micrographics ---------- */
+.t11-rule { border-left: 1px solid currentColor; padding: 0 0 2px 12px; display: flex; flex-direction: column; gap: 14px; }
+.t11-crop { --c: currentColor; position: relative; padding: 22px 26px 26px;
+  background:
+    linear-gradient(var(--c),var(--c)) top left/14px 1px, linear-gradient(var(--c),var(--c)) top left/1px 14px,
+    linear-gradient(var(--c),var(--c)) top right/14px 1px, linear-gradient(var(--c),var(--c)) top right/1px 14px,
+    linear-gradient(var(--c),var(--c)) bottom left/14px 1px, linear-gradient(var(--c),var(--c)) bottom left/1px 14px,
+    linear-gradient(var(--c),var(--c)) bottom right/14px 1px, linear-gradient(var(--c),var(--c)) bottom right/1px 14px;
+  background-repeat: no-repeat; }
+.t11-inv { display: inline-block; background: var(--ink); color: var(--knock); font: 400 24px/1 var(--f-pixel); padding: 3px 6px 5px; white-space: nowrap; }
+.t11-world--ink .t11-inv { background: var(--paper); color: var(--ink); }
+.t11-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--win-2); color: var(--ink); font: 400 21px/1 var(--f-pixel); padding: 3px 8px 5px 5px; }
+.t11-chip::before { content: "\2723"; font-size: .8em; }
+.t11-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.t11-bar { --v: .5; position: relative; height: 14px; background: linear-gradient(90deg, var(--ink) calc(var(--v) * 100%), transparent 0), var(--win); }
+.t11-bar::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), var(--paper) calc(25% - 2px) 25%); }
+.t11-world--ink .t11-bar { background: linear-gradient(90deg, var(--paper) calc(var(--v) * 100%), transparent 0), #4a4a4a; }
+.t11-world--ink .t11-bar::after { background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), var(--ink) calc(25% - 2px) 25%); }
+
+/* ---------- window ---------- */
+.t11-win { background: var(--paper); border: 1px solid var(--ink); box-shadow: 3px 3px 0 var(--ink-55); color: var(--ink); display: flex; flex-direction: column; min-width: 0; }
+.t11-world--ink .t11-win { border-color: var(--paper); box-shadow: 3px 3px 0 rgba(254,254,254,.3); }
+.t11-win__bar { background: var(--ink); color: var(--paper); font: 400 22px/1 var(--f-pixel); padding: 2px 8px 4px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.t11-win__body { margin: 2px; border: 1px solid var(--ink); background: var(--win); padding: 14px 16px; flex: 1 0 auto; }
+.t11-win--paper .t11-win__body { background: var(--paper); }
+
+/* ---------- buttons ---------- */
+.t11-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.t11-btn { display: inline-block; font: 400 24px/1 var(--f-pixel); background: var(--ink); color: var(--paper); border: 0; padding: 6px 12px 8px; text-decoration: none; cursor: pointer; }
+.t11-btn:hover, .t11-btn:focus-visible { background: var(--paper); color: var(--ink); outline: 1px solid var(--ink); }
+.t11-btn--ghost { background: transparent; color: inherit; outline: 1px solid currentColor; }
+.t11-world--ink .t11-btn { background: var(--paper); color: var(--ink); }
+.t11-world--ink .t11-btn:hover { background: var(--ink); color: var(--paper); outline-color: var(--paper); }
+.t11-copy { font: 400 18px/1 var(--f-pixel); background: var(--paper); color: var(--ink); border: 0; padding: 2px 7px 3px; cursor: pointer; }
+.t11-copy:hover { background: var(--green); color: var(--paper); }
+
+/* ---------- code ---------- */
+.t11-code { font: 500 14px/1.55 var(--f-mono); white-space: pre; overflow-x: auto; color: var(--ink); }
+.t11-code .c { opacity: .5; }
+.t11-code + .t11-code { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(30,30,30,.35); }
+
+/* ---------- hero ---------- */
+.t11-hero .t11-wrap { padding-top: 88px; padding-bottom: 64px; }
+.t11-hero__top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+.t11-hero__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: end; margin-top: 40px; }
+.t11-hero .t11-crop { background-color: var(--bg); }
+.t11-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--ink); margin-top: 56px; }
+.t11-stat { padding: 16px 16px 4px 0; }
+.t11-stat + .t11-stat { border-left: 1px solid var(--ink); padding-left: 16px; }
+.t11-stat__n { font-weight: 600; font-size: clamp(44px, 6vw, 80px); line-height: .9; letter-spacing: -.05em; }
+.t11-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 28px; }
+.t11-nav a { background: var(--paper); color: var(--ink-86); text-decoration: none; font-weight: 500; font-size: 16px; padding: 7px 8px 8px; line-height: 1; }
+.t11-nav a:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- index ---------- */
+.t11-index { border-top: 1px solid var(--ink); margin-top: 36px; }
+.t11-row { display: grid; grid-template-columns: 64px minmax(160px, 1.1fr) 2fr 150px; gap: 20px; align-items: center; padding: 14px 0 15px; border-bottom: 1px dashed rgba(30,30,30,.4); text-decoration: none; color: inherit; }
+.t11-row:hover { background: var(--ink); color: var(--paper); --win: #4a4a4a; }
+.t11-row:hover .t11-bar { background: linear-gradient(90deg, var(--paper) calc(var(--v) * 100%), transparent 0), #4a4a4a; }
+.t11-row:hover .t11-bar::after { background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), var(--ink) calc(25% - 2px) 25%); }
+.t11-row__n { font: 400 30px/1 var(--f-pixel); padding-left: 6px; }
+.t11-row__name { font-weight: 600; font-size: 24px; letter-spacing: -.03em; line-height: 1; }
+.t11-row__what { font-size: 16px; line-height: 1.2; opacity: .85; }
+.t11-row__stars { display: grid; gap: 6px; padding-right: 8px; }
+.t11-row__stars b { font: 400 22px/1 var(--f-pixel); }
+
+/* ---------- primer ---------- */
+.t11-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+.t11-three .t11-win__body { font-size: 17px; line-height: 1.3; }
+.t11-three p + p { margin-top: 10px; }
+.t11-paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+.t11-paths .t11-micro { display: block; margin-bottom: 8px; color: var(--ink-86); }
+
+/* ---------- repo sections ---------- */
+.t11-repo .t11-wrap { display: grid; grid-template-columns: minmax(220px, 330px) 1fr; gap: 56px; align-items: start; }
+.t11-repo__card { position: sticky; top: 24px; }
+.t11-repo__card img { width: 100%; border: 1px solid var(--ink); box-shadow: 6px 6px 0 var(--ink-55); }
+.t11-world--ink .t11-repo__card img { border-color: var(--paper); box-shadow: 6px 6px 0 rgba(254,254,254,.3); }
+.t11-repo__card figcaption { margin-top: 14px; }
+.t11-repo__main { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.t11-repo__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.t11-repo__handle { font: 400 24px/1 var(--f-pixel); text-decoration: none; background: var(--ink); color: var(--knock); padding: 3px 8px 5px; display: inline-block; word-break: break-all; }
+.t11-repo__handle:hover { background: var(--paper); color: var(--ink); }
+.t11-world--ink .t11-repo__handle { background: var(--paper); color: var(--ink); }
+.t11-starline { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; align-items: end; }
+.t11-starline__n { font-weight: 600; font-size: clamp(64px, 8vw, 112px); line-height: .8; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
+.t11-starline__meta { display: grid; gap: 8px; padding-bottom: 6px; }
+.t11-starline__meta .t11-micro { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.t11-repo__pitch { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.25; }
+.t11-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; font-size: 16px; line-height: 1.28; }
+.t11-list li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; }
+.t11-list li::before { content: "\2723"; font-family: var(--f-pixel); font-size: 18px; line-height: 1.1; }
+.t11-install { display: grid; gap: 14px; min-width: 0; }
+.t11-repo__main > * { min-width: 0; }
+.t11-try { font-size: 17px; line-height: 1.3; }
+.t11-try b { font-weight: 600; }
+
+/* ---------- where to start ---------- */
+.t11-picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+.t11-pick .t11-win__body { display: grid; gap: 12px; align-content: start; }
+.t11-pick h3 { font-weight: 600; font-size: 24px; letter-spacing: -.025em; line-height: 1.02; }
+.t11-pick p { font-size: 16px; line-height: 1.28; }
+.t11-pick a { font: 400 22px/1 var(--f-pixel); text-decoration: none; background: var(--ink); color: var(--paper); padding: 2px 6px 4px; display: inline-block; margin: 0 4px 4px 0; }
+.t11-pick a:hover { background: var(--green); }
+
+/* ---------- safety ---------- */
+.t11-rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 40px; margin-top: 40px; }
+.t11-rules .t11-rule p { font-size: 17px; line-height: 1.3; opacity: .92; }
+.t11-rules h3 { font-weight: 600; font-size: 24px; letter-spacing: -.025em; line-height: 1.05; }
+
+/* ---------- footer ---------- */
+.t11-foot .t11-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: end; }
+.t11-b64 { font: 400 10px/1.2 var(--f-mono); letter-spacing: .02em; word-break: break-all; opacity: .7; margin-top: 36px; }
+.t11-b64::before { content: "[B.64]"; display: block; margin-bottom: 8px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .t11-wrap { padding: 56px 20px; }
+  .t11-hero__grid, .t11-list, .t11-foot .t11-wrap, .t11-three, .t11-paths, .t11-rules { grid-template-columns: minmax(0, 1fr); }
+  .t11-repo .t11-wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .t11-repo__card { position: static; max-width: 260px; }
+  .t11-row { grid-template-columns: 48px 1fr 96px; gap: 12px; }
+  .t11-row__what { display: none; }
+  .t11-stats { grid-template-columns: 1fr 1fr 1fr; }
+  .t11-starline { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .t11-row { grid-template-columns: 40px 1fr; }
+  .t11-row__stars { grid-column: 2; }
+  .t11-stat__n { font-size: 38px; }
+}
+</style>
+
+<div class="t11" id="top-11-skill-repos">
+
+  <!-- ============================== HERO ============================== -->
+  <header class="t11-world t11-hero t11-dots" style="--bg: var(--pink); --knock: var(--pink); border-top: 0">
+    <div class="t11-corners"></div>
+    <div class="t11-wrap">
+      <div class="t11-hero__top t11-micro">
+        <span>The Full List · From The Reel</span>
+        <span>Ranked By GitHub Stars · Sep 29, 2026</span>
+      </div>
+      <div class="t11-crop">
+        <span class="t11-inv">Claude Code + Codex</span>
+        <h1 class="t11-display" style="margin-top: 22px">Top 11 Skill Repos</h1>
+      </div>
+      <div class="t11-hero__grid">
+        <p class="t11-lead" style="background: var(--bg); padding: 4px 8px 6px 0">You commented, so here it is. These are the 11 most-starred skill repos for AI coding agents, ranked by GitHub stars. For each one you get what it does, what makes it good, and the exact command to install it.</p>
+        <div class="t11-rule">
+          <span class="t11-micro">How To Use This Page</span>
+          <p style="font-size: 17px; background: var(--bg)">New to skills? Read <a href="#t11-primer">Skills 101</a> first, it takes a minute. Otherwise go straight to <a href="#t11-list">the list</a>, or jump to <a href="#t11-start">Where To Start</a> if you only have time to try one.</p>
+        </div>
+      </div>
+      <div class="t11-stats">
+        <div class="t11-stat"><div class="t11-stat__n">11</div><div class="t11-micro">Repos</div></div>
+        <div class="t11-stat"><div class="t11-stat__n">1.28M</div><div class="t11-micro">Combined GitHub Stars</div></div>
+        <div class="t11-stat"><div class="t11-stat__n">$0</div><div class="t11-micro">Every One Is Free</div></div>
+      </div>
+      <nav class="t11-nav" aria-label="Sections">
+        <a href="#t11-list">The List</a><a href="#t11-primer">Skills 101</a><a href="#t11-matt">Deep Dives</a><a href="#t11-start">Where To Start</a><a href="#t11-safety">Before You Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================== INDEX ============================== -->
+  <section class="t11-world" id="t11-list" style="--bg: var(--boot)">
+    <div class="t11-wrap">
+      <span class="t11-inv" style="--knock: var(--boot)">The List</span>
+      <h2 class="t11-h2" style="margin-top: 18px">All 11, At A Glance</h2>
+      <p class="t11-lead" style="margin-top: 18px; max-width: 720px">Click any row for the full breakdown. The bar shows stars relative to No.01.</p>
+      <div class="t11-index">
+        <a class="t11-row" href="#t11-matt"><span class="t11-row__n">01</span><span class="t11-row__name">Matt Pocock Skills</span><span class="t11-row__what">Small, composable skills for real engineering. Not vibe coding.</span><span class="t11-row__stars"><b>★ 272k</b><i class="t11-bar" style="--v: 1"></i></span></a>
+        <a class="t11-row" href="#t11-ponytail"><span class="t11-row__n">02</span><span class="t11-row__name">Ponytail</span><span class="t11-row__what">Makes your agent code like the laziest senior dev in the room.</span><span class="t11-row__stars"><b>★ 148k</b><i class="t11-bar" style="--v: .545"></i></span></a>
+        <a class="t11-row" href="#t11-uupm"><span class="t11-row__n">03</span><span class="t11-row__name">UI UX Pro Max</span><span class="t11-row__what">Design intelligence for pro UI/UX, across every platform.</span><span class="t11-row__stars"><b>★ 132k</b><i class="t11-bar" style="--v: .484"></i></span></a>
+        <a class="t11-row" href="#t11-graphify"><span class="t11-row__n">04</span><span class="t11-row__name">Graphify</span><span class="t11-row__what">Turns any codebase into a knowledge graph you can query.</span><span class="t11-row__stars"><b>★ 122k</b><i class="t11-bar" style="--v: .45"></i></span></a>
+        <a class="t11-row" href="#t11-caveman"><span class="t11-row__n">05</span><span class="t11-row__name">Caveman</span><span class="t11-row__what">Why use many token when few token do trick.</span><span class="t11-row__stars"><b>★ 108k</b><i class="t11-bar" style="--v: .398"></i></span></a>
+        <a class="t11-row" href="#t11-addy"><span class="t11-row__n">06</span><span class="t11-row__name">Addy Osmani Skills</span><span class="t11-row__what">Senior-engineer workflows your agent follows every time.</span><span class="t11-row__stars"><b>★ 99.9k</b><i class="t11-bar" style="--v: .367"></i></span></a>
+        <a class="t11-row" href="#t11-taste"><span class="t11-row__n">07</span><span class="t11-row__name">Taste Skill</span><span class="t11-row__what">Gives your AI good taste. No more boring, generic slop.</span><span class="t11-row__stars"><b>★ 91.2k</b><i class="t11-bar" style="--v: .335"></i></span></a>
+        <a class="t11-row" href="#t11-understand"><span class="t11-row__n">08</span><span class="t11-row__name">Understand Anything</span><span class="t11-row__what">Turns any code into a graph you can explore and question.</span><span class="t11-row__stars"><b>★ 84.7k</b><i class="t11-bar" style="--v: .311"></i></span></a>
+        <a class="t11-row" href="#t11-awesome"><span class="t11-row__n">09</span><span class="t11-row__name">Awesome Claude Skills</span><span class="t11-row__what">A curated list of the best Claude Skills, tools and resources.</span><span class="t11-row__stars"><b>★ 75.9k</b><i class="t11-bar" style="--v: .279"></i></span></a>
+        <a class="t11-row" href="#t11-archify"><span class="t11-row__n">10</span><span class="t11-row__name">Archify</span><span class="t11-row__what">Beautiful, verifiable architecture diagrams from your agent.</span><span class="t11-row__stars"><b>★ 74.2k</b><i class="t11-bar" style="--v: .273"></i></span></a>
+        <a class="t11-row" href="#t11-impeccable"><span class="t11-row__n">11</span><span class="t11-row__name">Impeccable</span><span class="t11-row__what">A design language that makes your AI better at design.</span><span class="t11-row__stars"><b>★ 72.5k</b><i class="t11-bar" style="--v: .267"></i></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== PRIMER ============================== -->
+  <section class="t11-world" id="t11-primer" style="--bg: var(--teal); --knock: var(--teal)">
+    <div class="t11-wrap">
+      <span class="t11-inv">Skills 101</span>
+      <h2 class="t11-h2" style="margin-top: 18px">Skills In 60 Seconds</h2>
+      <div class="t11-three">
+        <div class="t11-win"><div class="t11-win__bar">What.Is.It</div><div class="t11-win__body">
+          <p>A skill is a folder with a <code>SKILL.md</code> file in it: a name, a one-line description, and a set of instructions. Some also ship scripts, templates, or reference docs.</p>
+          <p>Think of it as a playbook your agent picks up when the job calls for it.</p>
+        </div></div>
+        <div class="t11-win"><div class="t11-win__bar">Why.Its.Cheap</div><div class="t11-win__body">
+          <p>At the start of a session your agent only sees each skill's name and description, roughly 100 tokens apiece.</p>
+          <p>The full instructions load only when your task needs them, so installing a few skills doesn't bloat every conversation.</p>
+        </div></div>
+        <div class="t11-win"><div class="t11-win__bar">Where.It.Runs</div><div class="t11-win__body">
+          <p>The same format works in Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, OpenCode and a long tail of other agents.</p>
+          <p>Most repos on this list support several of them. Check each README for your tool.</p>
+        </div></div>
+      </div>
+      <h3 class="t11-h3" style="margin-top: 56px">Three Ways To Install Almost Anything Here</h3>
+      <div class="t11-paths">
+        <div class="t11-win t11-win--paper"><div class="t11-win__bar">1 · Any.Agent <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+          <span class="t11-micro">The open skills CLI</span>
+          <pre class="t11-code">npx skills add owner/repo</pre>
+        </div></div>
+        <div class="t11-win t11-win--paper"><div class="t11-win__bar">2 · Claude.Code <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+          <span class="t11-micro">As a plugin, inside a session</span>
+          <pre class="t11-code">/plugin marketplace add owner/repo
+/plugin install name@marketplace</pre>
+        </div></div>
+        <div class="t11-win t11-win--paper"><div class="t11-win__bar">3 · By.Hand <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+          <span class="t11-micro">Copy the folder yourself</span>
+          <pre class="t11-code">cp -r skill-name ~/.claude/skills/</pre>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 01 ============================== -->
+  <section class="t11-world t11-repo" id="t11-matt" style="--bg: #F386A1; --knock: #F386A1">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-01.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.01 Matt Pocock Skills: 272k GitHub stars, small composable skills for real engineering.">
+        <figcaption class="t11-micro">Card 01 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.01</span><span class="t11-micro">MIT · Shell</span></div>
+        <h2 class="t11-h2">Matt Pocock Skills</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/mattpocock/skills" target="_blank" rel="noopener">▶ mattpocock/skills</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">272k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: 1"></i><span class="t11-micro"><span>★ 272,010 Stars</span><span>The Top Repo</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">Matt Pocock's own skills, pulled straight from the <code>.agents</code> folder he uses every day. Each one targets a specific way coding agents fail: building the wrong thing, rambling, shipping code that doesn't run, and piling up a ball of mud. They're small, they work with any model, and they're built for you to edit.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span><code>/grill-me</code> makes the agent interview you before it writes a line. These grilling skills are his most popular.</span></li>
+            <li><span><code>/grill-with-docs</code> builds a shared project glossary as it goes, so the agent stops using 20 words where 1 will do.</span></li>
+            <li><span><code>/tdd</code> enforces red-green-refactor, and <code>/diagnosing-bugs</code> runs a phase-by-phase debugging loop.</span></li>
+            <li><span><code>/improve-codebase-architecture</code> scans for design problems and hands you a visual HTML report.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Claude Code</span>
+claude plugins install mattpocock-skills</pre>
+              <pre class="t11-code"><span class="c"># Codex and other agents</span>
+npx skills@latest add mattpocock/skills</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> run <code>/setup-matt-pocock-skills</code> once per repo, then <code>/grill-me</code> before your next feature.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Real Engineering</span><span class="t11-chip">Any Model</span><span class="t11-chip">Your Own Workflow</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/mattpocock/skills" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://aihero.dev/skills" target="_blank" rel="noopener">aihero.dev/skills ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 02 ============================== -->
+  <section class="t11-world t11-repo" id="t11-ponytail" style="--bg: #F4894B; --knock: #F4894B">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-02.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.02 Ponytail: 148k GitHub stars, makes your agent code like the laziest senior dev in the room.">
+        <figcaption class="t11-micro">Card 02 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.02</span><span class="t11-micro">MIT · JavaScript</span></div>
+        <h2 class="t11-h2">Ponytail</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/DietrichGebert/ponytail" target="_blank" rel="noopener">▶ DietrichGebert/ponytail</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">148k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .545"></i><span class="t11-micro"><span>★ 148,137 Stars</span><span>Vs. No.01 · 54%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">You know the guy. Long ponytail, oval glasses, been at the company longer than version control. You show him fifty lines and he replaces them with one. Ponytail puts him inside your agent: before it writes anything, it has to ask whether the code needs to exist at all.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>A 7-step ladder: skip it, reuse what's in the codebase, use the stdlib, use a native platform feature, use an installed dependency, write one line. Only then, the minimum that works.</span></li>
+            <li><span>On a real FastAPI + React repo, the README reports 54% less code, 22% fewer tokens and 20% lower cost than no skill.</span></li>
+            <li><span>Ask for a date picker and you get <code>&lt;input type="date"&gt;</code> instead of a new library and a wrapper component.</span></li>
+            <li><span>Lazy, not negligent: validation, security, error handling and accessibility never get cut.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Claude Code: send these as two separate prompts</span>
+/plugin marketplace add DietrichGebert/ponytail
+/plugin install ponytail@ponytail</pre>
+              <pre class="t11-code"><span class="c"># Codex</span>
+codex plugin marketplace add DietrichGebert/ponytail
+codex plugin add ponytail@ponytail</pre>
+            </div></div>
+            <p class="t11-try"><b>Heads up:</b> the plugin runs two tiny Node.js hooks, so <code>node</code> needs to be on your PATH. Also ships for Copilot CLI, Gemini CLI, OpenCode and more.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Less Code</span><span class="t11-chip">Simpler Fixes</span><span class="t11-chip">20 Agents</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/DietrichGebert/ponytail" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://ponytail.dev" target="_blank" rel="noopener">ponytail.dev ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 03 ============================== -->
+  <section class="t11-world t11-repo" id="t11-uupm" style="--bg: #D45BB6; --knock: #D45BB6">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-03.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.03 UI UX Pro Max: 132k GitHub stars, design intelligence for pro UI/UX across every platform.">
+        <figcaption class="t11-micro">Card 03 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.03</span><span class="t11-micro">MIT · Python</span></div>
+        <h2 class="t11-h2">UI UX Pro Max</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank" rel="noopener">▶ nextlevelbuilder/ui-ux-pro-max-skill</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">132k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .484"></i><span class="t11-micro"><span>★ 131,574 Stars</span><span>Vs. No.01 · 48%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">A searchable design database your agent consults before it builds UI. Say "build a landing page for my beauty spa" and it generates a full design system first: page pattern, visual style, color palette, font pairing, effects, the anti-patterns to avoid for that industry, and a pre-launch checklist.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>79 searchable UI styles, from glassmorphism and brutalism to bento grids and AI-native UI.</span></li>
+            <li><span>192 industry-specific rules, each with a matching palette. Banking gets told to skip the purple AI gradients.</span></li>
+            <li><span>74 font pairings with Google Fonts imports, plus 25 chart types for dashboards.</span></li>
+            <li><span>Covers 22 stacks: React, Next.js, Vue, Svelte, SwiftUI, Flutter, Tailwind, shadcn/ui and more.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Claude Code</span>
+/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+/plugin install ui-ux-pro-max@ui-ux-pro-max-skill</pre>
+              <pre class="t11-code"><span class="c"># Any agent, via the CLI</span>
+npm install -g ui-ux-pro-max-cli
+uipro init --ai claude   <span class="c"># or cursor, codex, windsurf…</span></pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> just ask for UI in plain English, like "Build a landing page for my SaaS product." The skill kicks in on its own.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">79 UI Styles</span><span class="t11-chip">192 UX Rules</span><span class="t11-chip">Any Platform</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://www.uupm.cc/" target="_blank" rel="noopener">uupm.cc ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 04 ============================== -->
+  <section class="t11-world t11-repo" id="t11-graphify" style="--bg: #09AEA1; --knock: #09AEA1">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-04.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.04 Graphify: 122k GitHub stars, turns any codebase into a knowledge graph you can query.">
+        <figcaption class="t11-micro">Card 04 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.04</span><span class="t11-micro">Apache-2.0 · Python</span></div>
+        <h2 class="t11-h2">Graphify</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/Graphify-Labs/graphify" target="_blank" rel="noopener">▶ Graphify-Labs/graphify</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">122k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .45"></i><span class="t11-micro"><span>★ 122,424 Stars</span><span>Vs. No.01 · 45%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">Type <code>/graphify</code> and it maps your whole project into a knowledge graph: code, docs, SQL schemas, configs, even PDFs. From then on your agent queries the graph instead of grepping through files, and you get a clickable map of how everything connects.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>Code is parsed locally with tree-sitter across about 40 languages. No LLM involved, and nothing leaves your machine.</span></li>
+            <li><span>Every connection is tagged EXTRACTED or INFERRED, so you know what was read directly and what was worked out.</span></li>
+            <li><span>No embeddings or vector store. It's a real graph you can query, trace a path through, or ask to explain one concept.</span></li>
+            <li><span>You get three files: a clickable <code>graph.html</code>, a <code>GRAPH_REPORT.md</code> of highlights, and the full <code>graph.json</code>.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># note the double y in graphifyy</span>
+uv tool install graphifyy
+graphify install</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> open your agent in any repo and type <code>/graphify .</code> then open <code>graphify-out/graph.html</code> in your browser.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Codebase Context</span><span class="t11-chip">Docs + SQL + PDFs</span><span class="t11-chip">No Vector Store</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/Graphify-Labs/graphify" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://www.graphify.com" target="_blank" rel="noopener">graphify.com ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 05 ============================== -->
+  <section class="t11-world t11-repo" id="t11-caveman" style="--bg: #E8B53E; --knock: #E8B53E">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-05.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.05 Caveman: 108k GitHub stars, why use many token when few token do trick.">
+        <figcaption class="t11-micro">Card 05 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.05</span><span class="t11-micro">MIT Skill · BSL-1.1 Proxy · Go</span></div>
+        <h2 class="t11-h2">Caveman</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener">▶ JuliusBrussee/caveman</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">108k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .398"></i><span class="t11-micro"><span>★ 108,370 Stars</span><span>Vs. No.01 · 40%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">Why use many token when few token do trick. Caveman makes your agent answer like it just discovered fire: same diagnosis, same fix, none of the throat-clearing. Code, commands, file paths and error messages never get cavemanned, only the prose around them. It started as a Friday joke in April 2026.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>The repo claims about 65% fewer tokens. You pay for every word your agent writes, so shorter answers cost less.</span></li>
+            <li><span>Turn it up or down: <code>/caveman lite</code> for tight but polite, <code>/caveman ultra</code> for grunts.</span></li>
+            <li><span>Extras: <code>/caveman-commit</code>, <code>/caveman-review</code>, and <code>/caveman-compress CLAUDE.md</code> to slim your memory files.</span></li>
+            <li><span>An optional local proxy also shrinks what the agent reads: logs, test output, JSON and diffs.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># The skill: one command, works in 30+ agents</span>
+npx skills add JuliusBrussee/caveman -g</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> ask any coding question and watch the preamble disappear. Say <code>stop caveman</code> to get normal prose back.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">65% Fewer Tokens</span><span class="t11-chip">Cheaper Runs</span><span class="t11-chip">Coding Agents</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://docs.caveman.so/docs/quickstart" target="_blank" rel="noopener">docs.caveman.so ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 06 ============================== -->
+  <section class="t11-world t11-repo" id="t11-addy" style="--bg: #6FA3E0; --knock: #6FA3E0">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-06.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.06 Addy Osmani Skills: 99.9k GitHub stars, senior-engineer workflows your agent follows every time.">
+        <figcaption class="t11-micro">Card 06 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.06</span><span class="t11-micro">MIT · JavaScript</span></div>
+        <h2 class="t11-h2">Addy Osmani Skills</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">▶ addyosmani/agent-skills</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">99.9k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .367"></i><span class="t11-micro"><span>★ 99,896 Stars</span><span>Vs. No.01 · 37%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">The workflows and quality gates a senior engineer uses, packaged so your agent follows them every time. It covers the whole lifecycle in six stages: define, plan, build, verify, review, ship. Each stage has its own slash command.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>9 commands: <code>/spec</code>, <code>/plan</code>, <code>/build</code>, <code>/test</code>, <code>/review</code>, <code>/ship</code>, plus <code>/constraints</code>, <code>/webperf</code> and <code>/code-simplify</code>.</span></li>
+            <li><span>25 skills that also switch on by themselves. Design an API and the API design skill loads. Build UI and the frontend skill loads.</span></li>
+            <li><span><code>/build auto</code>: approve the plan once, and it implements every task in a single pass.</span></li>
+            <li><span>Installs into 70+ agents through the open skills CLI.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Any agent: all 25 skills</span>
+npx skills add addyosmani/agent-skills</pre>
+              <pre class="t11-code"><span class="c"># Claude Code plugin</span>
+/plugin marketplace add addyosmani/agent-skills
+/plugin install agent-skills@addy-agent-skills</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> run <code>/spec</code> on the next feature you're about to build, then <code>/plan</code>.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Specs + Plans</span><span class="t11-chip">Testing</span><span class="t11-chip">Code Review</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://skills.addy.ie" target="_blank" rel="noopener">skills.addy.ie ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 07 ============================== -->
+  <section class="t11-world t11-repo" id="t11-taste" style="--bg: #AE98E6; --knock: #AE98E6">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-07.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.07 Taste Skill: 91.2k GitHub stars, gives your AI good taste.">
+        <figcaption class="t11-micro">Card 07 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.07</span><span class="t11-micro">MIT · JavaScript</span></div>
+        <h2 class="t11-h2">Taste Skill</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/Leonxlnx/taste-skill" target="_blank" rel="noopener">▶ Leonxlnx/taste-skill</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">91.2k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .335"></i><span class="t11-micro"><span>★ 91,213 Stars</span><span>Vs. No.01 · 34%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">The anti-slop frontend framework. If your AI keeps shipping the same boilerplate landing page, this fixes the layout, typography, motion and spacing so it stops looking AI-made. It comes as a set of skills that each do one job, so you only install what you need.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>Three 1–10 dials at the top of the file: design variance, motion intensity and visual density.</span></li>
+            <li><span>Style add-ons when you know the look you want: soft and premium, minimalist (Notion/Linear), or brutalist.</span></li>
+            <li><span>A redesign skill that audits an existing UI before touching it, and an output skill that stops half-finished placeholder code.</span></li>
+            <li><span>Image-generation skills for website comps, mobile screens and brand kits you can hand to your coding agent.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Everything</span>
+npx skills add https://github.com/Leonxlnx/taste-skill</pre>
+              <pre class="t11-code"><span class="c"># Just the default skill</span>
+npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> install the default skill, then ask your agent to rebuild a page it made last week. Compare the two.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Frontends</span><span class="t11-chip">Premium UI</span><span class="t11-chip">Anti-Slop</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/Leonxlnx/taste-skill" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://tasteskill.dev" target="_blank" rel="noopener">tasteskill.dev ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 08 ============================== -->
+  <section class="t11-world t11-repo" id="t11-understand" style="--bg: #A6C94B; --knock: #A6C94B">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-08.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.08 Understand Anything: 84.7k GitHub stars, turns any code into a graph you can explore and question.">
+        <figcaption class="t11-micro">Card 08 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.08</span><span class="t11-micro">MIT · TypeScript</span></div>
+        <h2 class="t11-h2">Understand Anything</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/Egonex-AI/Understand-Anything" target="_blank" rel="noopener">▶ Egonex-AI/Understand-Anything</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">84.7k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .311"></i><span class="t11-micro"><span>★ 84,688 Stars</span><span>Vs. No.01 · 31%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">You just joined a new team and the codebase is 200,000 lines. Where do you start? A team of agents reads the whole project and builds an interactive graph of every file, function and class, with plain-English summaries, guided tours, and a chat you can ask questions. Their motto: graphs that teach beat graphs that impress.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span><code>/understand-dashboard</code> opens a clickable graph, color-coded by architectural layer.</span></li>
+            <li><span><code>/understand-chat</code> answers questions like "How does the payment flow work?"</span></li>
+            <li><span><code>/understand-diff</code> shows the impact of your current changes. <code>/understand-onboard</code> writes an onboarding guide for new teammates.</span></li>
+            <li><span>A domain view maps code to real business processes, and re-runs only re-analyze files that changed.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Claude Code</span>
+/plugin marketplace add Egonex-AI/Understand-Anything
+/plugin install understand-anything</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> <code>/understand</code> then <code>/understand-dashboard</code>. The first run on a big repo uses a lot of tokens, so do it on a subscription plan.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Onboarding</span><span class="t11-chip">Code Q&amp;A</span><span class="t11-chip">Search</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/Egonex-AI/Understand-Anything" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://understand-anything.com/demo/" target="_blank" rel="noopener">Live Demo ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 09 ============================== -->
+  <section class="t11-world t11-repo" id="t11-awesome" style="--bg: #EF6B5B; --knock: #EF6B5B">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-09.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.09 Awesome Claude Skills: 75.9k GitHub stars, a curated list of the best Claude Skills, tools and resources.">
+        <figcaption class="t11-micro">Card 09 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.09</span><span class="t11-micro">Curated List · Python</span></div>
+        <h2 class="t11-h2">Awesome Claude Skills</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank" rel="noopener">▶ ComposioHQ/awesome-claude-skills</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">75.9k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .279"></i><span class="t11-micro"><span>★ 75,877 Stars</span><span>Vs. No.01 · 28%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">The directory. A hand-curated list of Claude skills, plugins and resources, sorted by what you're trying to get done. When nothing else on this page fits your job, this is where to look next.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>10 categories: documents, dev tools, data, business and marketing, writing, creative, productivity, collaboration, security and app automation.</span></li>
+            <li><span>Anthropic's official skills (Word, PDF, PowerPoint, Excel) listed right next to the best community picks.</span></li>
+            <li><span>A plain-English primer on how skills differ from MCP servers and tools.</span></li>
+            <li><span>Includes a connect-apps plugin that links Claude to 1,000+ apps like Gmail, Slack, GitHub and Notion through Composio.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># Nothing to install. Browse, then copy</span>
+<span class="c"># the skill folder you want:</span>
+cp -r skill-name ~/.claude/skills/</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> open the list and search for your job title or the tool you use most.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Finding Skills</span><span class="t11-chip">Workflows</span><span class="t11-chip">Resources</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank" rel="noopener">View On GitHub ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 10 ============================== -->
+  <section class="t11-world t11-repo" id="t11-archify" style="--bg: #ABBAB9; --knock: #ABBAB9">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-10.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.10 Archify: 74.2k GitHub stars, beautiful, verifiable architecture diagrams from your agent.">
+        <figcaption class="t11-micro">Card 10 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.10</span><span class="t11-micro">MIT · JavaScript</span></div>
+        <h2 class="t11-h2">Archify</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">▶ tt-a1i/archify</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">74.2k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .273"></i><span class="t11-micro"><span>★ 74,188 Stars</span><span>Vs. No.01 · 27%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">Describe a system in one sentence, or point it at a repo, and your agent draws a clean, interactive architecture diagram. The result is a single HTML file with motion, light and dark themes, and sharp exports. You don't need a repository to start.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>Architecture, workflow, sequence, data-flow and lifecycle diagrams.</span></li>
+            <li><span>Point it at a repo and every box links back to the source it came from.</span></li>
+            <li><span>Trace a route through the diagram, then export it as a PNG share card.</span></li>
+            <li><span>The output is standalone HTML. Send it to anyone and they can open it, no install needed.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code">npx skills add tt-a1i/archify -g</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> "Use Archify to diagram a web request: Browser calls the API, the API checks Redis, and a cache miss queries PostgreSQL and fills the cache."</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Architecture</span><span class="t11-chip">Sequences</span><span class="t11-chip">Data Flow</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://tt-a1i.github.io/archify/gallery.html" target="_blank" rel="noopener">Example Gallery ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 11 ============================== -->
+  <section class="t11-world t11-world--ink t11-repo" id="t11-impeccable">
+    <div class="t11-wrap">
+      <figure class="t11-repo__card">
+        <img src="assets/cards/card-11.png" width="1080" height="1920" loading="lazy" alt="Reel card for No.11 Impeccable: 72.5k GitHub stars, a design language that makes your AI better at design.">
+        <figcaption class="t11-micro">Card 11 / 11</figcaption>
+      </figure>
+      <div class="t11-repo__main">
+        <div class="t11-repo__head"><span class="t11-inv">No.11</span><span class="t11-micro">Apache-2.0 · JavaScript</span></div>
+        <h2 class="t11-h2">Impeccable</h2>
+        <div><a class="t11-repo__handle" href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener">▶ pbakaus/impeccable</a></div>
+        <div class="t11-starline">
+          <span class="t11-starline__n">72.5k</span>
+          <div class="t11-starline__meta"><i class="t11-bar" style="--v: .267"></i><span class="t11-micro"><span>★ 72,511 Stars</span><span>Vs. No.01 · 27%</span></span></div>
+        </div>
+        <div class="t11-rule"><span class="t11-micro">What It Is</span>
+          <p class="t11-repo__pitch">A shared design vocabulary between you and your agent. It started from Anthropic's frontend-design skill and adds commands for exactly what you want changed, plus a checker that catches the tells of AI-made UI: Inter everywhere, purple gradients, cards nested in cards, gray text on color.</p>
+        </div>
+        <div class="t11-win"><div class="t11-win__bar">Why.It.Hits</div><div class="t11-win__body"><ul class="t11-list">
+            <li><span>24 commands like <code>polish</code>, <code>audit</code>, <code>critique</code>, <code>distill</code>, <code>bolder</code>, <code>quieter</code>, <code>typeset</code> and <code>harden</code>.</span></li>
+            <li><span>61 detector rules that run without an LLM or API key.</span></li>
+            <li><span><code>/impeccable init</code> writes a <code>PRODUCT.md</code> so every later command knows your audience and voice.</span></li>
+            <li><span><code>/impeccable live</code> lets you iterate on elements right in the browser.</span></li>
+          </ul></div></div>
+        <div class="t11-install">
+            <div class="t11-win t11-win--paper"><div class="t11-win__bar">Install.sh <button class="t11-copy" type="button">Copy</button></div><div class="t11-win__body">
+              <pre class="t11-code"><span class="c"># From your project root</span>
+npx impeccable install</pre>
+              <pre class="t11-code"><span class="c"># Then, inside your agent</span>
+/impeccable init</pre>
+            </div></div>
+            <p class="t11-try"><b>Try this first:</b> <code>/impeccable audit</code> on your homepage and see how many AI tells it flags.</p>
+        </div>
+        <div class="t11-chips"><span class="t11-chip">Design Audits</span><span class="t11-chip">24 Commands</span><span class="t11-chip">UI Polish</span></div>
+        <div class="t11-btns"><a class="t11-btn" href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener">View On GitHub ↗</a><a class="t11-btn t11-btn--ghost" href="https://impeccable.style" target="_blank" rel="noopener">impeccable.style ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== WHERE TO START ============================== -->
+  <section class="t11-world" id="t11-start" style="--bg: var(--sage); --knock: var(--sage)">
+    <div class="t11-wrap">
+      <span class="t11-inv">Where To Start</span>
+      <h2 class="t11-h2" style="margin-top: 18px">Only Have Time For One?</h2>
+      <p class="t11-lead" style="margin-top: 18px; max-width: 760px">Don't install all eleven. Pick the problem you have right now and start there.</p>
+      <div class="t11-picks">
+        <div class="t11-win t11-pick"><div class="t11-win__bar">If.You.Code.Daily</div><div class="t11-win__body">
+          <h3>Your agent builds the wrong thing, or the right thing badly.</h3>
+          <p>Start with Matt Pocock's grilling skills so the agent understands the job, then add Addy Osmani's lifecycle commands for the quality gates.</p>
+          <div><a href="#t11-matt">01 Matt Pocock</a><a href="#t11-addy">06 Addy Osmani</a></div>
+        </div></div>
+        <div class="t11-win t11-pick"><div class="t11-win__bar">If.You.Ship.UI</div><div class="t11-win__body">
+          <h3>Everything you build looks like every other AI site.</h3>
+          <p>Taste Skill fixes the default look. Impeccable gives you words for what to change. UI UX Pro Max picks the palette and fonts before you start.</p>
+          <div><a href="#t11-taste">07 Taste</a><a href="#t11-impeccable">11 Impeccable</a><a href="#t11-uupm">03 UI UX Pro Max</a></div>
+        </div></div>
+        <div class="t11-win t11-pick"><div class="t11-win__bar">If.Its.Not.Your.Code</div><div class="t11-win__body">
+          <h3>You just inherited a codebase and have no idea how it works.</h3>
+          <p>Graphify maps it fast and locally. Understand Anything walks you through it. Archify draws the diagram you'll show your team.</p>
+          <div><a href="#t11-graphify">04 Graphify</a><a href="#t11-understand">08 Understand</a><a href="#t11-archify">10 Archify</a></div>
+        </div></div>
+        <div class="t11-win t11-pick"><div class="t11-win__bar">If.The.Bill.Hurts</div><div class="t11-win__body">
+          <h3>Your agent talks too much and writes too much.</h3>
+          <p>Caveman cuts the words and Ponytail cuts the code. They tackle different halves of the same bill.</p>
+          <div><a href="#t11-caveman">05 Caveman</a><a href="#t11-ponytail">02 Ponytail</a></div>
+        </div></div>
+        <div class="t11-win t11-pick"><div class="t11-win__bar">If.You.Want.More</div><div class="t11-win__body">
+          <h3>None of these fit your job.</h3>
+          <p>The awesome list sorts skills by use case: documents, marketing, data, writing, security and more.</p>
+          <div><a href="#t11-awesome">09 Awesome Claude Skills</a></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== SAFETY ============================== -->
+  <section class="t11-world t11-world--ink" id="t11-safety">
+    <div class="t11-wrap">
+      <span class="t11-inv">Before You Install</span>
+      <h2 class="t11-h2" style="margin-top: 18px">Four Rules Worth 30 Seconds</h2>
+      <div class="t11-rules">
+        <div class="t11-rule"><span class="t11-micro">Rule 01</span><h3>Read the SKILL.md first.</h3><p>A skill is instructions your agent follows with your permissions. The file is plain Markdown, so skim it before you install. It takes two minutes.</p></div>
+        <div class="t11-rule"><span class="t11-micro">Rule 02</span><h3>Look before you trust hooks.</h3><p>Some of these, like Ponytail, Caveman's full installer and Impeccable, run small scripts or hooks. When your agent asks you to approve them, open them and read what they do.</p></div>
+        <div class="t11-rule"><span class="t11-micro">Rule 03</span><h3>Pick one install path per repo.</h3><p>Plugin or <code>npx skills</code>, not both. Installing a repo twice gives you every skill twice.</p></div>
+        <div class="t11-rule"><span class="t11-micro">Rule 04</span><h3>Start with one or two.</h3><p>Skills that give overlapping advice can fight each other, especially design skills. Add one, use it for a week, then add the next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="t11-world t11-foot t11-dots" style="--bg: var(--pink); --knock: var(--pink)">
+    <div class="t11-wrap">
+      <div>
+        <span class="t11-inv">Thanks For Commenting</span>
+        <h2 class="t11-h2" style="margin-top: 18px; background: var(--bg); display: inline-block; padding-right: 10px">Now Go Install One.</h2>
+        <p class="t11-lead" style="margin-top: 18px; background: var(--bg); padding: 4px 8px 6px 0">Know someone still prompting from scratch every time? Send them this page.</p>
+        <!-- EDIT: point these at your own Instagram / site -->
+        <div class="t11-btns" style="margin-top: 24px">
+          <a class="t11-btn" href="#top-11-skill-repos">Back To Top ▲</a>
+          <button class="t11-btn t11-btn--ghost" type="button" data-t11-share>Copy Page Link</button>
+        </div>
+      </div>
+      <div class="t11-rule" style="background: var(--bg); padding-top: 4px">
+        <span class="t11-micro">Methodology</span>
+        <p style="font-size: 15px; line-height: 1.3">Ranked by GitHub stars, pulled from the GitHub API on Sep 29, 2026. Stars move every day, so the order may shift. Descriptions, numbers and install commands come from each repo's own README. Benchmark figures are the maintainers' claims, not independent tests. Check the repo before you install.</p>
+        <div class="t11-b64">VG9wIDExIFNraWxsIFJlcG9zIC0gcmFua2VkIGJ5IEdpdEh1YiBzdGFycyAtIFNlcCAyOSwgMjAyNiAtIGdvIGluc3RhbGwgb25lLg==</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* Copy buttons + share link. Optional: the page works fine without it. */
+(function () {
+  var root = document.getElementById("top-11-skill-repos");
+  if (!root) return;
+  function copy(text, btn) {
+    var done = function () { var t = btn.textContent; btn.textContent = "Copied ✓"; setTimeout(function () { btn.textContent = t; }, 1400); };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done); return; }
+    var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove();
+  }
+  root.querySelectorAll(".t11-copy").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var win = btn.closest(".t11-win");
+      var text = Array.prototype.map.call(win.querySelectorAll(".t11-code"), function (pre) {
+        var clone = pre.cloneNode(true);
+        clone.querySelectorAll(".c").forEach(function (c) { c.remove(); });
+        return clone.textContent.split("\n").map(function (l) { return l.replace(/\s+$/, ""); }).filter(Boolean).join("\n");
+      }).join("\n");
+      copy(text, btn);
+    });
+  });
+  var share = root.querySelector("[data-t11-share]");
+  if (share) share.addEventListener("click", function () { copy(location.href.split("#")[0], share); });
+})();
+</script>
+<!-- END T11 -->
+
+</body>
+</html>
