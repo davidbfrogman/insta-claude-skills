@@ -1,0 +1,1658 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Eleven businesses you could build on a decision model</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			.tip-cite {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 14px;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each item ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.tip-cite,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A field guide to build ideas</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Eleven businesses you could build on a model that only makes decisions.
+							</h1>
+							<p class="lead">
+								Jev doesn’t write for you. You hand it context and a set of options, and it hands back a classification,
+								a score, or a probability. That’s a narrower product than a chatbot, and the narrowness is the entire
+								opportunity. Eleven places I’d look, and four questions that generate more of them than any list.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Almost everything built on language models in the last three years was built around generation. Write the
+								email, draft the post, summarise the meeting, produce the paragraph. That’s the part that demos well,
+								which is why it’s the part that got built, and it’s also the part where every product now looks like every
+								other product.
+							</p>
+							<p class="body-text">
+								A decision model points somewhere else. It points at the layer of software nobody demos: the thousands of
+								small judgments a product makes before it shows anybody anything. Is this listing spam. Is this lead worth
+								a call. Is this customer about to leave. Is this paragraph relevant. Which link do I click next. Every
+								piece of software has that layer, and in most companies it’s one of three things: rules somebody wrote in
+								2014 and nobody has touched since, a person clicking through a queue, or a frontier model being handed a
+								thousand tokens of context to eventually produce the word <strong>yes</strong>.
+							</p>
+							<p class="body-text">
+								There are two capabilities worth holding in your head. The first is that Jev classifies at volume and
+								returns probabilities rather than verdicts. The second is that Jev-Ultrafast turns those decisions into
+								browser actions, which in plain terms means it’s good at using your browser to do things. The first
+								capability attacks judgment work. The second attacks clicking work. Most of what follows is one or the
+								other, and the two ideas I’d start with sit at opposite ends of that split.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The mental model everything else follows from</p>
+								<p>
+									Stop asking what you can build <em>with</em> a decision model and start asking where a decision is
+									currently too expensive to make often. That’s a different search, and it turns up businesses instead
+									of features. Expensive has three forms: a person doing it by hand, a rule doing it badly, or a big
+									model doing it correctly at a price that forces you to sample.
+								</p>
+								<p>
+									Sampling is the tell. Any time a company reviews 1% of its calls, spot-checks a fraction of its
+									listings, or scores leads on four fields because scoring them on forty was never affordable, there is a
+									product in the gap between what they check and what they’d check if checking were free.
+								</p>
+							</div>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">YES</p>
+									<p class="stat-label">The entire useful output of an enormous number of frontier-model calls running in production right now.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">1% → all</p>
+									<p class="stat-label">Sampled review becomes complete review. That change, not the model, is what customers buy.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">73%</p>
+									<p class="stat-label">A probability instead of a verdict. Thresholds are how software acts on uncertainty without a human in every loop.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">Browser</p>
+									<p class="stat-label">Jev-Ultrafast’s second act: decisions that become clicks, on the thousands of sites that never shipped an API.</p>
+								</div>
+							</div>
+
+							<p class="body-text">
+								Two notes on how to read this. First, none of these ideas are secret, and the idea was never the hard
+								part, so for each one I’ve tried to name where the defensibility actually sits, because in every case it’s
+								somewhere other than the model. Second, I’ve deliberately quoted no prices, no latency figures and no
+								accuracy numbers. The argument for these businesses is an economic one, the economics move monthly, and a
+								number I write today is a liability by the time you read it. Check the current pricing yourself and run
+								your own evaluation before you build a company on a cost assumption.
+							</p>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										The shape of the opportunity. <span>Two capabilities, four categories, and the one product not to
+										build with this.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										Seven ideas that use the model differently. <span>Shopping, browser labour, document search, agent
+										safety, marketplace quality, churn, and competitive intelligence.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Four more, kept short. <span>Lead scoring, an injection firewall, a model router, and the
+										inbox.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										Finding your own. <span>Four questions, a one-page spec to fill in before you build anything, and a
+										table of all eleven.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										Where I’d be skeptical. <span>The three ways this category of business dies, said plainly.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The shape of the opportunity</p>
+								<h2>Two capabilities, four categories, and one thing not to build.</h2>
+								<p class="section-sub">
+									Worth five minutes before the list, because the categories are what let you tell a real idea from a
+									demo. Every idea further down is one of these four moves applied to a specific industry.
+								</p>
+							</div>
+
+							<p class="body-text">
+								The first capability is mass classification with calibrated output. You give it context and the possible
+								answers; it gives you back which one, and how sure. The second is that the same decision loop can drive a
+								browser: look at the page, decide the next action, take it, look again. Neither is a new idea. What’s new
+								is the price of doing it a million times, and price is what determines whether something is a feature in
+								somebody’s roadmap or a company.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 24%">Category</th>
+											<th style="width: 36%">What the model is actually doing</th>
+											<th>What you’re replacing</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Browser automation</strong></td>
+											<td>One decision per page state, turned into one click. Repeat a few hundred times.</td>
+											<td>A person with forty tabs open, doing the same route through the same ugly portals every morning.</td>
+										</tr>
+										<tr>
+											<td><strong>Classification at volume</strong></td>
+											<td>A judgment per chunk, per message, per listing, precomputed and stored as metadata.</td>
+											<td>Search that only matches words, or a room of reviewers, or a rule set nobody trusts.</td>
+										</tr>
+										<tr>
+											<td><strong>Customer and market intelligence</strong></td>
+											<td>The same few judgments applied to every interaction instead of a sample of them.</td>
+											<td>A quarterly spreadsheet, a sentiment average, and somebody’s intuition about why people left.</td>
+										</tr>
+										<tr>
+											<td><strong>Safety and routing</strong></td>
+											<td>A cheap decision placed in front of an expensive one, or in front of an irreversible one.</td>
+											<td>A frontier model used as a bouncer, a hand-maintained rule table, or nothing at all.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								The fourth row is the one I’d point at hardest. A decision model is unusually well suited to sitting in
+								front of other software: deciding which model handles a request, whether an action is safe to execute,
+								whether a piece of retrieved text should be trusted. That position is valuable and uncomfortable in equal
+								measure, and I come back to why further down.
+							</p>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">The thing not to build</p>
+								<p>
+									Don’t build a product whose value is prose. If your demo ends with a paragraph on screen, you’ve picked
+									the wrong model, and you’ll spend a year explaining why your writing is worse than the thing everyone
+									already has a subscription to. The output of these businesses is a decision, a score, a queue, a
+									filled-in cart, a filtered list, an alert. Nothing you’d read for pleasure.
+								</p>
+								<p>
+									And don’t build “an AI that uses the internet.” That’s a capability, not a business. Every version of
+									that pitch I’ve seen dies in the gap between a good demo and one specific customer’s messy workflow. The
+									narrow version, one industry, one route, one artifact delivered every morning, is less exciting and
+									considerably more likely to get paid.
+								</p>
+							</div>
+
+							<div class="pull">
+								<p>
+									If the expensive part of your product is producing the word yes, you don’t have a language problem. You
+									have a pricing problem, and pricing problems are the ones that turn into companies.
+								</p>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · Seven that show the range</p>
+								<h2>Seven ideas that use the model differently, not seven flavours of one idea.</h2>
+								<p class="section-sub">
+									Ordered roughly by how quickly a small team could get to something a customer would pay for. Each one
+									has a wedge, a buyer, and a hard part, and the hard part is never the model.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">Let people shop by describing the thing, and let the model do the clicking.</h3>
+								<p class="tip-cite">Browser automation · Consumer · Jev-Ultrafast</p>
+								<p class="body-text">
+									A conversational layer over ecommerce sites that the merchant never agreed to integrate with. The
+									customer says “I need something for a wedding,” then “less formal,” then “green,” then “under $100,” and
+									the system actually operates the site: runs the search, clicks the filters, opens products, picks
+									variants, changes sizes, compares two options, keeps going when the answer isn’t right yet.
+								</p>
+								<p class="body-text">
+									Navigating a store is a stream of very small decisions. Which filter next. Which result to open. Which
+									variant matches what they said. Is this a better fit than the last one. Should I keep looking. Ask a
+									frontier model each of those and a single shopping session can cost more than the merchant’s margin on
+									the sale, which is the real reason these assistants have stayed demos. Change the cost of one decision
+									and the session becomes affordable.
+								</p>
+								<p class="body-text">
+									I’d start as a browser extension in one category rather than a universal shopping agent, because the
+									refinement language is domain-specific (“less formal” means something precise in apparel and nothing at
+									all in building supplies), and because variants are where generic agents fall over. Sizes, colours,
+									stock, the difference between a product that exists and a product page that exists. Get one vertical
+									genuinely good and the second is mostly a new vocabulary, not new software.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">What makes this harder than it looks</p>
+									<p>
+										Shopping isn’t search. A lot of what people want is taste, and taste is the part a filter-clicking
+										agent has least access to. The honest early version is a very good narrowing tool that hands a human
+										three candidates, not a system that decides.
+									</p>
+									<p>
+										Then the business model. Affiliate revenue is the obvious answer and it’s fragile, because you’re dependent
+										on attribution surviving a session your own software drove. Stop before checkout in version one:
+										fill the cart, hand it back. Paying with someone else’s card on a site that never agreed to any of
+										this is a different product with a different risk profile, and it can wait.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Extension, one category, no merchant integration. Narrowing, not deciding.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Affiliate at consumer scale, or a merchant who wants it on their own site as a licensed search layer.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Variants, stock accuracy, bot defences, and attribution surviving an agent-driven session.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">Pick one job that is mostly clicking, and sell that job done.</h3>
+								<p class="tip-cite">Browser automation · B2B · Jev-Ultrafast</p>
+								<p class="body-text">
+									The filter I’d use: find an expensive employee who spends an unreasonable share of the day clicking
+									around websites. Checking a hundred supplier sites for price and stock. Searching government portals for
+									relevant tenders. Pulling claim statuses out of insurance portals. Matching twenty buyer requirements
+									against new listings every morning. Chasing permit records through municipal sites that look like they
+									were built in 2003, because they were.
+								</p>
+								<p class="body-text">
+									Each of those runs is hundreds of trivial decisions: click this, search that, take this result, skip
+									this page, copy this field, move to the next site. Historically a model-driven agent made each of those
+									decisions slowly and at a cost that ruled out the whole workflow. That’s the constraint being relaxed,
+									and this is the category where I’d expect the first unglamorous, profitable companies.
+								</p>
+								<p class="body-text">
+									The mistake is selling an agent. Nobody wants an agent; they want the sheet. Sell the artifact: the
+									pricing table in their inbox at 7am, the queue of new tenders that match their capability statement, the
+									daily status file that used to take a coordinator until lunch. The agent is your implementation detail,
+									and keeping it that way also means a broken portal is a delivery problem you absorb rather than a
+									feature the customer watches fail.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Where the defensibility actually sits</p>
+									<p>
+										Not in the model, and not in your prompts. It’s in the accumulated map of two hundred badly built
+										portals: which ones paginate strangely, which ones rate-limit, which ones log you out at midnight,
+										which field is the one that actually matters. That map takes months to build and nobody who buys
+										from you will ever rebuild it. Around it sit the boring things enterprises pay for: credential
+										handling, an audit trail of every page touched, and a number you commit to for freshness.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">One workflow, one industry, delivered as a file or a queue on a schedule.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">The manager of the person doing it now. Price against the fraction of a salary, not per API call.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Logins, MFA, terms of service, and silent breakage. You need to know you failed before the customer does.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Search what a document means, by deciding what it means in advance.</h3>
+								<p class="tip-cite">Classification at volume · B2B · Precomputed judgments</p>
+								<p class="body-text">
+									Semantic search is good at finding related words. Ask for “car” and you’ll get “automobile.” It’s much
+									weaker when the question requires interpretation: <em>show me every paragraph describing something that
+									could cause this car to break down.</em> No embedding of that sentence reliably finds the paragraph about
+									a coolant seal.
+								</p>
+								<p class="body-text">
+									So classify first. Run every chunk of the corpus against a set of questions (does this discuss pricing,
+									does this create legal exposure, does this name a competitor, does this contain a deadline, does this
+									contradict something said elsewhere, does this describe a defect), and store the answers as searchable
+									metadata. Now a user searches judgments instead of words. When somebody invents a new question six
+									months in, you rerun the corpus against that one question rather than rebuilding anything.
+								</p>
+								<p class="body-text">
+									The markets are the obvious ones: discovery, diligence, regulatory review, research libraries, call
+									transcripts, whatever a company calls its knowledge base. The product, though, is the question library.
+									A firm’s hundred and forty questions, refined over two years of matters, versioned, with a measured
+									accuracy per question, is a real asset and a very sticky one. An index is not.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The number you have to be able to say out loud</p>
+									<p>
+										In discovery and compliance, a missed paragraph isn’t a worse search result, it’s an exposure. That
+										means recall, per question, measured against a labelled set, plus the ability to tell a partner or a
+										regulator what your recall was and how you know. Precision keeps users happy; recall is what makes
+										the product usable in the rooms where the money is. Budget for the labelling work from day one,
+										because it’s the part that can’t be bought cheaply and the part competitors can’t copy from your
+										marketing site.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">One corpus type with a painful recurring question set. Diligence and regulatory beat “all documents.”</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Whoever is currently paying people by the hour to read for one specific thing.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Measured recall per question, chunking that doesn’t split the meaning, and reruns that stay affordable.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">A permission layer between an agent and the real world.</h3>
+								<p class="tip-cite">Safety and routing · Infrastructure · Every tool call</p>
+								<p class="body-text">
+									An agent is about to do something consequential: issue a refund, cancel an account, delete a table,
+									change billing, send a sensitive email, alter permissions, approve a purchase. Put a cheap decision in
+									front of it. Is this financially consequential. Is it reversible. Is the user’s intent clear enough to
+									justify it. Does it conflict with a stated policy. Is the agent unusually uncertain right now. Then act
+									on the answer: execute, ask a clarifying question, require a human, or block.
+								</p>
+								<p class="body-text">
+									The reason this needs a cheap decider is arithmetic. Agent systems make a great many calls, and using a
+									frontier model to check each one doubles your latency and adds a cost that scales with exactly the thing
+									you were trying to automate. A safety layer that costs as much as the work isn’t a safety layer, it’s a
+									tax nobody pays.
+								</p>
+								<p class="body-text">
+									The pitch writes itself, which should make you suspicious rather than confident. You’re asking to sit in
+									the hot path of somebody else’s product, which means you own their latency and, on your worst day, their
+									outage. Worse, a false block is far more damaging to adoption than a false allow: one blocked legitimate
+									refund and an engineer turns you off permanently.
+								</p>
+								<div class="callout">
+									<p class="callout-label">How I’d actually sequence it</p>
+									<p>
+										Ship as observability first. Score every action, block nothing, and give the team a weekly list of
+										the riskiest things their agents did while nobody was watching. That report is easy to say yes to,
+										it produces the labelled data you need, and it earns you the right to be in the path later. Selling a
+										blocking product on day one means arguing about your false-positive rate before you have one to
+										quote.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Passive scoring and an audit log. Enforcement only after the customer trusts the scores.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Teams whose agents already touch money, customer records, or infrastructure in production.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Being in the hot path, false blocks, and the fact that frameworks may ship a version of this for free.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">05</span>
+								<h3 class="tip-title">Moderation that returns a probability, with thresholds you can move on a Tuesday.</h3>
+								<p class="tip-cite">Classification at volume · Marketplaces · Probability output</p>
+								<p class="body-text">
+									Any platform with user-generated listings (marketplaces, job boards, real estate, events, directories,
+									creator platforms) needs two things from every submission. Is it allowed, and is it any good. Prohibited,
+									fraudulent, misleading, policy-violating on one side; enough detail, clear title, useful description,
+									appropriate images, not spam, not a duplicate on the other.
+								</p>
+								<p class="body-text">
+									What changes the workflow is the probability. Instead of <strong>good / bad</strong>, you get <strong>92%
+									likely to meet the quality bar</strong>, and thresholds become a business decision rather than an
+									engineering one. Above 95%, publish. Between 70 and 95, ask the seller to improve it. Below 70, route to
+									a human. When the platform raises its standards, you move the numbers and rescore the catalogue rather
+									than retraining anything.
+								</p>
+								<p class="body-text">
+									A note on who to sell to. Trust and safety is a cost centre with an incumbent vendor and a procurement
+									process. Listing quality belongs to whoever owns conversion, and that person has a revenue number they’re
+									measured on and far more freedom to try something. Same engine, same classifications, dramatically
+									different sales cycle. Lead with quality, and let safety be the thing you expand into once you’re already
+									scoring every listing.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Quality scoring for one marketplace vertical, sold on conversion rather than compliance.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Mid-sized marketplaces past the point where founders read listings and short of a T&amp;S org.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Calibration you can defend, appeals, and the fact that thresholds without measurement are guesses.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">06</span>
+								<h3 class="tip-title">Score every turn of the conversation, then look at what happened just before it went bad.</h3>
+								<p class="tip-cite">Customer intelligence · B2B · Per-message classification</p>
+								<p class="body-text">
+									Ingest every customer interaction (tickets, chats, emails, call transcripts, sales and success calls)
+									and classify each turn rather than each conversation. Frustration, confusion, satisfaction, escalation
+									risk, churn risk, purchase intent, urgency. One number per customer tells you almost nothing. A
+									trajectory tells you a lot: 10% frustrated, 18, 31, 68, 87.
+								</p>
+								<p class="body-text">
+									The question that trajectory lets you ask is the valuable one. <strong>What happened immediately before
+									customers got angry?</strong> Aggregate that across every conversation you hold and the answers stop
+									being opinions: a support macro that reliably makes things worse, a billing screen that confuses
+									everyone, a feature that produces the same complaint in five different accents, the conversations that
+									should have been escalated four replies earlier. Per-message scoring only becomes reasonable when a
+									judgment is cheap; that’s why companies sample 1% today and why the pattern is invisible to them.
+								</p>
+								<p class="body-text">
+									Every version of this that I’ve watched fail, failed by being a dashboard. Sentiment charts get looked at
+									twice and then live in a tab nobody opens. The output has to do something: a queue of conversations for a
+									human to rescue today, a message to the account owner while the customer is still annoyed, a weekly list
+									of frustration triggers that lands in front of whoever owns the product area. Insight nobody acts on isn’t
+									worth a line item.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">Two things to get right early</p>
+									<p>
+										Calibrate against outcomes. A frustration score that hasn’t been checked against which accounts
+										actually left is astrology with a nice chart. You need the churn events, joined to the conversations,
+										before you claim to predict anything.
+									</p>
+									<p>
+										And be careful with the recordings. Call transcripts and support logs are some of the most sensitive
+										data a company holds, consent rules for recording vary by jurisdiction, and “we classify every
+										sentence your customers say” is a question you’ll be asked in every security review. Have the answer
+										written down before the first one.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">One channel, one outcome. Start with support tickets and the accounts-at-risk queue.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">A head of support or success with a retention number and no visibility past the sample.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Calibration against real churn, data access, and shipping an action rather than a chart.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">07</span>
+								<h3 class="tip-title">One competitor ad is noise. Fifty thousand classified ads is a strategy map.</h3>
+								<p class="tip-cite">Market intelligence · Marketing · Structure from unstructured</p>
+								<p class="body-text">
+									Continuously collect competitors’ marketing (paid social, video ads, search copy, landing pages, email
+									campaigns, website changes) and classify every piece of it along the dimensions a marketer actually
+									argues about. Hook. Target customer. Pain point. Promised outcome. Offer. Price. Discount. Proof.
+									Emotional angle. Urgency. Call to action. Positioning. The objection being pre-empted.
+								</p>
+								<p class="body-text">
+									Analysing five ads is a Tuesday afternoon. Analysing fifty thousand over eighteen months is a product,
+									because the value isn’t any single ad, it’s the change: this competitor has started addressing enterprise
+									buyers, three of them have converged on the same pain point this quarter, that one’s messaging has shifted
+									heavily toward price, annual contracts are suddenly in 40% of their creative. Those are sentences a
+									marketing leader will forward to their CEO, and nobody can produce them by browsing an ad library.
+								</p>
+								<p class="body-text">
+									Be clear-eyed that the model is the cheap part here. The work and the risk are both in acquisition:
+									collecting the ads, the landing pages and the emails, continuously, legally, without depending on one
+									platform’s goodwill. Sell the weekly change digest rather than a searchable archive. Archives get
+									cancelled; the email that says what your competitors changed while you were shipping does not.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">One category with loud, high-volume advertisers. A weekly change digest, not a library.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Performance marketing leads and agencies who are already screenshotting competitor ads by hand.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Durable, defensible data collection, and a taxonomy that stays stable enough to trend against.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="pull">
+								<p>
+									Every one of these is the same move: take a judgment somebody currently makes by sampling, by feel, or
+									not at all, and make it cheap enough to make every single time.
+								</p>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Four more, kept short</p>
+								<h2>Four more, shorter, because they’re variations on the move you’ve now seen.</h2>
+								<p class="section-sub">
+									Useful less as businesses to copy than as evidence of how wide the same pattern goes. Each is a
+									judgment somebody currently makes with rules, a sample, or a much larger model.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">08</span>
+								<h3 class="tip-title">Lead scoring where the ideal customer is described in sentences, not rules.</h3>
+								<p class="tip-cite">Classification at volume · Sales · Fuzzy signals</p>
+								<p class="body-text">
+									Most CRM scoring is arithmetic on form fields. Has email, plus ten. Has a phone number, plus ten. Fifty
+									employees, plus twenty. It’s scoring what’s easy to store rather than what predicts a sale. The
+									alternative is a few hundred fuzzy questions answered from unstructured evidence: does this company appear
+									to have a real engineering team, does its site suggest security matters to it, does it sell into regulated
+									industries, is there evidence of fast growth, is there anyone here who plausibly owns this problem, does
+									the messaging suggest enterprise ambitions. Each one gets its own probability, and you combine them into a
+									score you can explain.
+								</p>
+								<p class="body-text">
+									The compounding part isn’t the first score. It’s that when a rep notices a pattern in the deals that
+									closed, they can add that question and rescore the entire database this afternoon. That’s the product:
+									an ICP that’s editable in language, not a ticket to an ops team. The hard part is distribution and
+									behaviour: scores that don’t change which accounts appear at the top of somebody’s morning queue change
+									nothing at all.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Rescoring an existing stale database on day one. The demo is their own list, reordered.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Outbound-heavy teams burning rep hours on accounts that were never going to buy.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Living inside the CRM, and proving lift against the score they already have.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">09</span>
+								<h3 class="tip-title">One API call in front of every piece of text your agent didn’t write.</h3>
+								<p class="tip-cite">Safety and routing · Infrastructure · Security filter</p>
+								<p class="body-text">
+									Anything an AI application pulls in from outside (user input, fetched web pages, documents, emails, tool
+									results) can carry instructions aimed at the model rather than the reader. Ignore your previous
+									instructions. A fake system prompt buried in a page. A line in a PDF trying to talk the agent into
+									revealing a key or calling a tool it shouldn’t. Detecting that is a classification problem, and running a
+									frontier model over every scrap of retrieved context to do the detecting is exactly the cost profile that
+									stops teams from doing it at all.
+								</p>
+								<p class="body-text">
+									The product is one question, asked cheaply, in a lot of places: <em>is this content safe to put in front
+									of my agent?</em> Two honest cautions. Your adversary adapts, so this is a detection business with the
+									maintenance obligations of one, closer to spam filtering than to a library you ship and forget. And
+									security buyers want evidence: a benchmark, a false-positive rate, and a clear story about what happens
+									when you’re wrong. This is also the idea on the list most likely to arrive as a free platform feature, so
+									the version worth building is broader than injection alone: policy enforcement, data-exfiltration checks,
+									and a log somebody can audit after an incident.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">A single endpoint plus a dashboard of what it caught. Easy to try, easy to rip out.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Teams whose agents read untrusted content at volume: email, web, customer uploads.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Adversarial drift, publishable accuracy numbers, and platform vendors giving it away.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">10</span>
+								<h3 class="tip-title">Decide which model should answer before you pay a model to answer.</h3>
+								<p class="tip-cite">Safety and routing · Infrastructure · AI FinOps</p>
+								<p class="body-text">
+									Not every request needs the largest model. Classify the request first (is it simple, does it need
+									reasoning, is it code, is there sensitive data in it, will it need tools, is there enough context to
+									answer at all, how hard is this actually), and route accordingly. Trivial classification to something
+									tiny, ordinary generation to something cheap, genuine reasoning to a frontier model, high-risk to a
+									person. The router only makes sense if the router is dramatically cheaper than what it’s routing between,
+									which is the entire reason a decision model belongs in this position.
+								</p>
+								<p class="body-text">
+									Sold as cost control, this gets meetings immediately, because most companies running AI in production have
+									a bill that grew faster than anyone forecast. The thing to be careful about is that quality regressions
+									from bad routing are invisible until a customer finds one. Which means the real product is evaluation
+									infrastructure with routing attached, because you cannot credibly move someone’s traffic to a cheaper model
+									without showing them, continuously, that the answers didn’t get worse.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Shadow mode: score real traffic, show the savings you would have made, change nothing.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Whoever owns a model bill large enough to have been asked about it by finance.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Proving quality held. Without evals, you’re asking for trust you haven’t earned.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">11</span>
+								<h3 class="tip-title">An inbox that knows a message can be twelve things at once.</h3>
+								<p class="tip-cite">Classification at volume · Productivity · Overlapping labels</p>
+								<p class="body-text">
+									Folders are a single-label system for a multi-label problem. One message is simultaneously a customer
+									complaint, a churn signal, an invoice question, urgent, and something legal should see. Classify along
+									dozens of dimensions instead of sorting into three boxes, and let the user invent a new dimension whenever
+									they need one: <em>find me the emails where somebody sounded interested and nobody followed up.</em> That
+									question can’t be answered with keywords, and with cheap classification it can be answered against the
+									whole archive rather than the last week.
+								</p>
+								<p class="body-text">
+									Consumer email is a famously unforgiving market, a graveyard of good clients that couldn’t get paid, so
+									the version I’d back is infrastructural. Sell the classification layer to the products that already own a
+									queue: CRM, support desks, recruiting tools, shared team inboxes. Same engine, a buyer with a budget, and
+									none of the burden of convincing a person to change where they read their mail.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">The wedge</p>
+										<p class="spec-v">Shared team inboxes where a missed message has a named cost. Not personal email.</p>
+									</div>
+									<div>
+										<p class="spec-k">Who pays first</p>
+										<p class="spec-v">Products with an inbox inside them, or teams running sales and support out of one mailbox.</p>
+									</div>
+									<div>
+										<p class="spec-k">The hard part</p>
+										<p class="spec-v">Mailbox access, privacy review, and label sets that stay meaningful as they grow.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · Finding your own</p>
+								<h2>Four questions that generate more of these than any list can.</h2>
+								<p class="section-sub">
+									The list above is eleven answers. These are the questions that produced them, and they work better than
+									the list, because you know an industry I don’t.
+								</p>
+							</div>
+
+							<p class="body-text">
+								I keep a folder of these. Most of them stay in the folder, and the four prompts below are how things get
+								into it. Ask them about a business you already understand rather than about technology in general.
+							</p>
+
+							<ol class="brand" style="margin-top: 18px">
+								<li>
+									<strong>Where are humans making thousands of tiny judgments?</strong> Moderation, lead qualification,
+									support triage, underwriting, quality assurance, compliance review, resume screening, categorising
+									anything. These jobs are already decisions; they’re just decisions with a salary attached.
+								</li>
+								<li>
+									<strong>Where is somebody paying a frontier model to answer a tiny question?</strong> If a thousand tokens
+									of context go in and one word comes back, that call is a candidate for replacement, and the person paying
+									for it can see their own bill.
+								</li>
+								<li>
+									<strong>Where do people click around websites all day?</strong> Procurement, insurance, logistics,
+									government portals, travel, real estate, vendor research, competitive monitoring. Look for industries where
+									the systems of record have no API and never will.
+								</li>
+								<li>
+									<strong>Where would a probability be more useful than a verdict?</strong> Anywhere a binary answer forces
+									either a human review of everything or a rule that’s wrong at the edges. Confidence bands let software
+									automate the easy middle and escalate the rest, which is how this becomes a judgment layer inside
+									existing products rather than a replacement for them.
+								</li>
+							</ol>
+
+							<p class="body-text" style="margin-top: 22px">
+								Then write the spec before you write any code. One page, filled in honestly, kills about half of the ideas
+								I’ve been excited about, usually at the line where I have to say what the customer does today and what it
+								costs them.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="spec">Copy</button>
+								</p>
+								<pre class="prompt-body" id="spec">THE JUDGMENT
+<span class="fill">[One sentence. The single decision this product makes, over and over.]</span>
+Made today by: <span class="fill">[a person / a rule from 2014 / a frontier model / nobody]</span>
+Volume: <span class="fill">[how many times a day, at one customer]</span>
+
+THE QUESTIONS
+<span class="fill">1. [A question answerable from the context you'll actually have]
+2. …
+3. …</span>
+(If you can't write five, this is a feature. If you write forty, pick the
+five that would change what somebody does tomorrow.)
+
+THE BANDS
+&gt;95%     <span class="fill">[automate: what happens with no human involved]</span>
+70-95%   <span class="fill">[review later: whose queue, and how fast]</span>
+40-70%   <span class="fill">[ask: what question gets asked, of whom]</span>
+&lt;40%     <span class="fill">[reject or escalate: to where]</span>
+
+THE BASELINE
+Cost today: <span class="fill">[hours, salary, model spend, or errors shipped]</span>
+Coverage today: <span class="fill">[what fraction gets checked at all]</span>
+
+THE MEASUREMENT
+Labelled set: <span class="fill">[how many examples, labelled by whom, by when]</span>
+Per-question target: <span class="fill">[precision and recall you must hit to be usable]</span>
+Cost per decision: <span class="fill">[and the volume at which it stops working]</span>
+
+THE ARTIFACT
+What the customer receives: <span class="fill">[a file, a queue, an alert, a blocked action]</span>
+Where it lands: <span class="fill">[inbox, CRM, Slack, their existing tool]</span>
+
+WHAT BREAKS IT
+<span class="fill">[The site changes / the platform ships this free / accuracy isn't
+enough for the regulated version / the buyer has no budget line]</span></pre>
+							</div>
+
+							<p class="prompt-note" style="margin-bottom: 26px">
+								Teal marks what you replace. The two sections that do the real work are <strong>the baseline</strong> and
+								<strong>what breaks it</strong>. If the baseline has no number in it, you have an interest rather than a
+								business, and if nothing plausible goes in the last box, you haven’t looked hard enough yet.
+							</p>
+
+							<p class="body-text">
+								And the eleven in one place, for scanning. The right-hand column is the one to read first, because it’s
+								where the year of your life actually goes.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 26%">The idea</th>
+											<th style="width: 20%">Category</th>
+											<th>The hard part</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>01 · Talk-to-Shop</strong></td>
+											<td>Browser · Consumer</td>
+											<td>Variants and stock, bot defences, and an affiliate model that survives an agent-driven session.</td>
+										</tr>
+										<tr>
+											<td><strong>02 · Vertical browser worker</strong></td>
+											<td>Browser · B2B</td>
+											<td>Logins and MFA, silent breakage, and knowing you failed before the customer notices.</td>
+										</tr>
+										<tr>
+											<td><strong>03 · Classified document search</strong></td>
+											<td>Classification</td>
+											<td>Measured recall per question, and chunking that doesn’t cut the meaning in half.</td>
+										</tr>
+										<tr>
+											<td><strong>04 · Agent action safety layer</strong></td>
+											<td>Safety · Infra</td>
+											<td>Sitting in the hot path, false blocks, and frameworks shipping a free version.</td>
+										</tr>
+										<tr>
+											<td><strong>05 · Marketplace quality engine</strong></td>
+											<td>Classification</td>
+											<td>Calibration you can defend, appeals, and thresholds that aren’t just guesses.</td>
+										</tr>
+										<tr>
+											<td><strong>06 · Churn and frustration intelligence</strong></td>
+											<td>Customer intel</td>
+											<td>Joining scores to real churn events, data access, and shipping an action not a chart.</td>
+										</tr>
+										<tr>
+											<td><strong>07 · Competitor ad intelligence</strong></td>
+											<td>Market intel</td>
+											<td>Durable data collection, and a taxonomy stable enough to trend against for years.</td>
+										</tr>
+										<tr>
+											<td><strong>08 · Intelligent lead scoring</strong></td>
+											<td>Classification</td>
+											<td>Living inside the CRM, and proving lift over the score they already ignore.</td>
+										</tr>
+										<tr>
+											<td><strong>09 · Prompt injection firewall</strong></td>
+											<td>Safety · Infra</td>
+											<td>An adversary who adapts, publishable accuracy, and platforms giving it away.</td>
+										</tr>
+										<tr>
+											<td><strong>10 · AI model router</strong></td>
+											<td>Safety · Infra</td>
+											<td>Proving quality held after you moved somebody’s traffic to a cheaper model.</td>
+										</tr>
+										<tr>
+											<td><strong>11 · Communication classification</strong></td>
+											<td>Classification</td>
+											<td>Mailbox access, privacy review, and label sets that stay meaningful as they grow.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Where I’d be skeptical</p>
+								<h2>Three ways a business like this dies, said plainly.</h2>
+								<p class="section-sub">
+									I’d rather you hear these from me than from an investor, and all three are survivable if you plan around
+									them from the first week.
+								</p>
+							</div>
+
+							<p class="body-text">
+								<strong>The first is that a decision layer is a feature until you make it a product.</strong> Every idea here
+								can be built in an afternoon as a thin wrapper, and thin wrappers get absorbed by whoever already owns the
+								workflow. The defensible part is never the classifier. It’s the map of two hundred portals, the question
+								library refined over two years, the labelled set nobody else has, the audit trail a regulated buyer needs,
+								the fact that you land in the tool they already have open. Decide in week one which of those you’re
+								accumulating, and treat the model as the interchangeable part it is.
+							</p>
+							<p class="body-text">
+								<strong>The second is that cheap only changes anything if you measure.</strong> The whole premise is doing a
+								million judgments instead of a thousand, and a million slightly wrong judgments is worse than a thousand
+								careful ones, because now the error is systematic and invisible. You need a labelled set, per-question
+								accuracy, and the discipline to report it. This is unglamorous work that founders skip, and it’s the exact
+								thing an enterprise buyer will ask about in the second meeting.
+							</p>
+							<p class="body-text">
+								<strong>The third is that browser work breaks and verification costs money.</strong> Sites redesign, add
+								defences, and change flows without telling you, so the browser businesses carry a permanent maintenance
+								load. And in anything regulated or financial, a decision that’s right 96% of the time still needs a human
+								for the remaining 4%, which means your margin story has a person in it. Neither is fatal. Both belong in
+								your pricing rather than in a surprise six months in.
+							</p>
+
+							<div class="pull">
+								<p>
+									The good news is that all three are execution problems. This is a category where being boring and
+									careful is the competitive advantage.
+								</p>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text" style="margin-bottom: 34px">
+								One last framing, and it’s the one I’d actually build on. You are not selling artificial intelligence to
+								anybody. You are selling a judgment that used to be made by sampling, by a rule, or by a tired person at
+								4pm, and is now made every time, consistently, with a number attached. That’s a sentence a buyer
+								understands without believing anything about the future.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you’re weighing one of these and want a second read.</h2>
+								<p class="section-sub">
+									The useful conversation is never about the model. It’s about which judgment you’ve picked, who feels the
+									pain, and what you’re accumulating that a competitor can’t copy in a weekend.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Send me the judgment your product currently makes badly, or the idea from this list you can’t stop thinking
+								about, plus a sentence on who you think pays for it. I’ll tell you where I think it’s strong, where I think
+								it’s a feature rather than a company, and what I’d build first. No code and nothing proprietary needed.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Jev%20Startup%20Ideas">hi@davecto.com</a> with the subject
+									line <strong>“Jev Startup Ideas.”</strong>
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to build software without fooling themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing. Jev is new, and the description of it here is deliberately limited to two claims: that
+								it is built for classification and decision-making and returns probabilities rather than prose, and that
+								Jev-Ultrafast can use those decisions to operate a browser. Those claims come from how the model is being
+								positioned, not from benchmarking I’ve done myself. I have quoted no prices, no latency figures and no
+								accuracy numbers anywhere in this guide, on purpose: every argument here is economic, the economics change
+								monthly, and a figure printed today would mislead you in November. Check current pricing and run your own
+								evaluation on your own data before committing to a cost assumption, and treat any claim that a workflow
+								“becomes affordable” as a hypothesis you test in a week rather than a fact. The ideas themselves are not
+								original or proprietary. Several are obvious enough that other people are already building them, which is
+								information rather than a reason to stop. Where I’ve said what the hard part is, that’s my judgment from
+								watching this kind of product get built and sold, not a measured claim. I have no relationship with the
+								makers of any model mentioned here.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>

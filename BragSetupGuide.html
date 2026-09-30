@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>How to set up /brag — a one-page guide</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			.tip-cite {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 14px;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each item ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.tip-cite,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+			</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A one-page setup guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 40px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.07;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Turn the thing you just shipped into a twenty-second launch video.
+							</h1>
+							<p class="lead">
+								<code>/brag</code> is an open-source Claude Code skill that reads your project&rsquo;s actual code, writes a
+								storyboard, scores it, renders an MP4, and hands you the caption to post with it. Two commands to install,
+								one word to run. Here&rsquo;s the setup, then five things worth knowing before your first run.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								The usual way to show somebody what you built is a screenshot, or a two-minute screen recording nobody
+								watches to the end. <code>/brag</code> exists because the format that actually travels &mdash; a short,
+								cut, scored video &mdash; costs an evening in an editor, so most people never make one.
+							</p>
+							<p class="body-text">
+								What makes it work is that it never asks you for assets. It opens the repo, pulls the real colours from your
+								stylesheet, the real headline from your hero, the real numbers from your data files, and builds the video
+								out of those. You don&rsquo;t write a brief. You type <code>/brag</code> and read what it decided.
+							</p>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">15&ndash;25s</p>
+									<p class="stat-label">The hard ceiling. A creative law in the skill, not a suggestion &mdash; long enough to land, short enough to autoplay.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">7</p>
+									<p class="stat-label">Tone presets, from <code>polished</code> to <code>chaotic</code>, plus freeform direction that overrides any of them.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">4</p>
+									<p class="stat-label">Files you get back: the plan, the composition, <code>brag.mp4</code>, and share copy written in the video&rsquo;s tone.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">0</p>
+									<p class="stat-label">Screenshots, URLs or design assets you need to supply. It reads the source.</p>
+								</div>
+							</div>
+
+							<!-- ══════════ INSTALL ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Step one · Install</p>
+								<h2>Two commands in Claude Code, then restart.</h2>
+								<p class="section-sub">
+									<code>/brag</code> ships as a plugin with its own marketplace. Add the marketplace, install the plugin,
+									and the skill is available in every project you open.
+								</p>
+							</div>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="install">Copy</button>
+								</p>
+								<pre class="prompt-body" id="install">/plugin marketplace add latent-spaces/brag
+/plugin install brag@brag</pre>
+							</div>
+
+							<p class="body-text">
+								Not in Claude Code? The same skill installs into Cursor, Codex, Gemini CLI, opencode and anything else that
+								reads Agent Skills, through Vercel&rsquo;s <code>skills</code> CLI. Add <code>-g</code> to install it
+								globally rather than into the current project.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Any other agent</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="install-cli">Copy</button>
+								</p>
+								<pre class="prompt-body" id="install-cli">npx skills add https://github.com/latent-spaces/brag --skill brag</pre>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">You need</th>
+											<th style="width: 26%">Check it with</th>
+											<th>If it&rsquo;s missing</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Node.js 22+</strong></td>
+											<td><code>node -v</code></td>
+											<td>Install from nodejs.org, or <code>brew install node</code>.</td>
+										</tr>
+										<tr>
+											<td><strong>FFmpeg on your PATH</strong></td>
+											<td><code>ffmpeg -version</code></td>
+											<td><code>brew install ffmpeg</code>. Nothing renders without it.</td>
+										</tr>
+										<tr>
+											<td><strong>The Hyperframes CLI</strong></td>
+											<td><code>npx hyperframes doctor</code></td>
+											<td>It downloads on first use. Run <code>doctor</code> once before your first brag so the failure, if there is one, happens in five seconds rather than five minutes.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">One thing that surprises people</p>
+								<p>
+									There are two skills in the box. <code>/brag</code> hands the rendering to Hyperframes;
+									<code>/brag-slim</code> builds the whole video itself with whatever is already on the machine, and needs
+									no bundled assets. On Opus&nbsp;5.5 <code>/brag</code> hands off to the slim version automatically and
+									tells you it did. Type <code>/brag --full</code> if you want the classic Hyperframes path anyway.
+								</p>
+							</div>
+
+							<!-- ══════════ RUN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Step two · Run it</p>
+								<h2>From the project directory, say <span style="font-family: var(--mono); font-size: 0.8em">let&rsquo;s /brag</span>.</h2>
+								<p class="section-sub">
+									That&rsquo;s the whole invocation. Everything after it is optional steering. The run moves through four
+									gates, and each one produces a file you can read.
+								</p>
+							</div>
+
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What happens, in order</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										<strong>Inspect.</strong> <span>It reads your main page, stylesheet, README, routes and data files, and answers nine questions about the product before it plans anything.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										<strong>Plan.</strong> <span>It writes <code>brag-output/brag-plan.md</code> &mdash; the angle, the hook, the highlights, the punchline, and a scene-by-scene storyboard with durations. This is the file to read.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										<strong>Compose.</strong> <span>The storyboard becomes a real composition, with music, sound effects on the moments that move, and a check pass that has to come back clean before anything renders.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										<strong>Deliver.</strong> <span><code>brag.mp4</code>, a poster frame picked from a settled moment and baked in as frame zero, and <code>share-copy.txt</code>.</span>
+									</p>
+								</div>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">Option</th>
+											<th style="width: 30%">Values</th>
+											<th>Default</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><code>--tone</code></td>
+											<td>A preset, or any sentence you like</td>
+											<td>Inferred from the project</td>
+										</tr>
+										<tr>
+											<td><code>--format</code></td>
+											<td><code>landscape</code> · <code>vertical</code> · <code>square</code></td>
+											<td><code>landscape</code>, 1920&times;1080</td>
+										</tr>
+										<tr>
+											<td><code>--duration</code></td>
+											<td>Seconds</td>
+											<td>Auto, inside 15&ndash;25s</td>
+										</tr>
+										<tr>
+											<td><code>--voice</code></td>
+											<td>Flag &mdash; turns narration on</td>
+											<td>Off. Opt in per run.</td>
+										</tr>
+										<tr>
+											<td><code>--no-music</code> · <code>--no-sfx</code></td>
+											<td>Flags</td>
+											<td>Both on</td>
+										</tr>
+										<tr>
+											<td><code>--title</code></td>
+											<td>String</td>
+											<td>Inferred from the project</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- ══════════ TIPS ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Step three · Getting a good one</p>
+								<h2>Five things that separate a postable brag from a generic one.</h2>
+								<p class="section-sub">
+									The defaults are good. These are the five places where thirty seconds of input changes the result more
+									than anything else you could do.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Tip 01</span>
+								<h3 class="tip-title">Give it an angle, not a style.</h3>
+								<p class="body-text">
+									Presets set pacing. What makes a video feel made is a premise, and freeform direction beats a preset
+									every time &mdash; the skill maps your sentence to the nearest preset for timing but keeps your direction
+									all the way into the composition. One line is enough: <em>a fake Series&nbsp;A launch from 2016</em>, or
+									<em>a museum exhibit</em>, or the one I used, which was that the site&rsquo;s own brand guide forbids
+									noticeable animation, so the video should be the most restrained launch video possible and pay the joke
+									off in a footnote.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Tip 02</span>
+								<h3 class="tip-title">Point it at one thing, and prefer the app over the landing page.</h3>
+								<p class="body-text">
+									If you just shipped a feature, say so in the invocation &mdash; the skill will make that the subject
+									instead of averaging the whole project into twenty seconds. And when there&rsquo;s a choice between the
+									marketing page and the product doing its job, the product wins. One of the skill&rsquo;s own laws is to
+									show the real thing: entry, key action, result. A video of software working is more convincing than a
+									video of software being described.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Tip 03</span>
+								<h3 class="tip-title">Argue with the plan, not with the render.</h3>
+								<p class="body-text">
+									<code>brag-plan.md</code> is written before a single frame exists, and it is specific enough to judge
+									&mdash; scene by scene, with the exact on-screen text and the timings. Read it and push back there. Fixing
+									a hook in the plan costs a sentence; fixing it after the render costs the render. A second run writes to a
+									timestamped folder rather than overwriting the first, so you can keep both and choose.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Worth asking for by name</p>
+									<p>
+										&ldquo;Show me the plan before you compose.&rdquo; Then check one thing: does the first two seconds
+										work as a still, with no context and no sound? That is the only part of the video most people will see.
+									</p>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Tip 04</span>
+								<h3 class="tip-title">Pick the format for the feed, then look at the poster.</h3>
+								<p class="body-text">
+									<code>vertical</code> for stories, Reels and TikTok; <code>landscape</code> for X, LinkedIn and Discord;
+									<code>square</code> when you genuinely don&rsquo;t know. Then open <code>brag.jpg</code>. The skill picks
+									the strongest <em>settled</em> frame &mdash; text fully arrived, nothing mid-transition &mdash; and bakes
+									it in as frame zero so every platform&rsquo;s thumbnail shows it. If that frame isn&rsquo;t the one you
+									would have chosen, say which moment you want instead. It&rsquo;s a cheap fix and it&rsquo;s the image your
+									post actually leads with.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">Tip 05</span>
+								<h3 class="tip-title">Assume muted, then check the loudness anyway.</h3>
+								<p class="body-text">
+									Every feed autoplays silent, so the video has to read with no sound &mdash; which is why the skill holds
+									every line long enough to be read rather than flashing it. But when somebody does unmute, level matters.
+									My first render came back at &minus;31.4&nbsp;LUFS, which on a phone reads as
+									&ldquo;this video has no audio.&rdquo; Platforms normalise to around &minus;14. Ask for a loudness
+									measurement, and if it&rsquo;s quiet, scale the whole mix at once &mdash; music and effects together
+									&mdash; so the balance somebody designed survives the fix.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">First render</p>
+										<p class="spec-v">&minus;31.4 LUFS &mdash; inaudible on a phone speaker</p>
+									</div>
+									<div>
+										<p class="spec-k">After scaling &times;2.3</p>
+										<p class="spec-v">&minus;24.2 LUFS &mdash; quiet, but present</p>
+									</div>
+									<div>
+										<p class="spec-k">Platform target</p>
+										<p class="spec-v">Roughly &minus;14 LUFS is where normalisation sits</p>
+									</div>
+								</div>
+							</div>
+
+							<hr class="hair" />
+
+							<!-- ══════════ WORKED EXAMPLE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">What a good plan sounds like</p>
+								<h2>One real example, so you know what you&rsquo;re reading.</h2>
+								<p class="section-sub">
+									I ran it on davecto.com. The site&rsquo;s motion guide opens with a rule &mdash; <em>if an animation is
+									noticeable as an animation, it&rsquo;s wrong</em> &mdash; so the plan committed to a launch video for a
+									site whose design philosophy forbids launch videos.
+								</p>
+							</div>
+
+							<div class="pull">
+								<p>Motion is a whisper.</p>
+							</div>
+
+							<p class="body-text">
+								Four words, quoted from the brand guide, on empty paper, with a single hairline rule drawing underneath.
+								From there: the real hero rebuilt, three r&eacute;sum&eacute; rows arriving one per beat, the site&rsquo;s
+								own theme toggle firing on screen to flip the video into dark, three real outcome figures counting up, and
+								the closing line the site already uses. Then, small and teal, at the very bottom:
+								<em>no animations were noticed in the making of this video.</em>
+							</p>
+							<p class="body-text">
+								Nothing in it was invented. Every number came out of <code>data/projects.ts</code>, every line of type was
+								already published somewhere on the site. That&rsquo;s the thing to look for when you read your own plan:
+								not whether it sounds impressive, but whether any of it could have been written about somebody
+								else&rsquo;s project.
+							</p>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If your first brag comes out generic, send it to me.</h2>
+								<p class="section-sub">
+									Nine times out of ten the fix is in the angle rather than the render, and it takes one sentence to find.
+								</p>
+							</div>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Brag%20Setup">hi@davecto.com</a> with the subject line
+									<strong>&ldquo;/brag.&rdquo;</strong> Paste the plan, not the video &mdash; the plan is where the problem is.
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to build software without fooling themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing. Everything here about how <code>/brag</code> behaves &mdash; the install commands, the
+								options table, the four steps, the 15&ndash;25 second ceiling, the tone presets and the automatic handoff to
+								<code>/brag-slim</code> on Opus&nbsp;5.5 &mdash; comes from the skill and its README as published at
+								<a href="https://github.com/latent-spaces/brag">github.com/latent-spaces/brag</a>. It&rsquo;s an actively
+								developed open-source project, so check the README before you copy a flag out of here. The loudness figures
+								in Tip&nbsp;05 are measurements from one run on one project, not a benchmark; treat them as an illustration
+								of why to check, not as numbers to aim at. <code>/brag</code> is not mine &mdash; I have no relationship with
+								the people who make it, or with Hyperframes. I just use it.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>
