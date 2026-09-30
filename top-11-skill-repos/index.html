@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top 11 Claude/Codex Skill Repos · Reel Cards</title>
+<link rel="stylesheet" href="../retro-os-style-guide/retro-os.css">
+<style>
+  /* ---------- gallery page (not part of the cards) ---------- */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--boot); color: var(--ink-86); font-family: var(--f-body); -webkit-font-smoothing: antialiased; }
+  .head { padding: 48px 40px 34px; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+  .head .t-display { font-size: clamp(48px, 7vw, 104px); margin: 0; }
+  .head .rule-col { max-width: 560px; }
+  .head .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { font-family: var(--f-pixel); font-size: 22px; background: var(--ink); color: var(--paper); border: 0; padding: 4px 10px 6px; cursor: pointer; text-decoration: none; line-height: 1; }
+  .btn:hover { background: var(--paper); color: var(--ink); outline: 1px solid var(--ink); }
+  .gallery { display: flex; flex-wrap: wrap; gap: 44px 34px; padding: 10px 40px 90px; --s: .3; }
+  .item { display: flex; flex-direction: column; gap: 10px; }
+  .item-meta { display: flex; gap: 6px; align-items: center; }
+  .cell { width: calc(1080px * var(--s)); height: calc(1920px * var(--s)); overflow: hidden; outline: 1px solid var(--ink); cursor: pointer; flex: none; }
+
+  /* present mode: one card at a time, scaled to fit, for screen recording */
+  body.present { background: #0d0d0d; overflow: hidden; }
+  body.present .head, body.present .item-meta { display: none; }
+  body.present .gallery { --s: var(--ps, 1); padding: 0; }
+  body.present .item { position: fixed; inset: 0; display: grid; place-items: center; visibility: hidden; }
+  body.present .item.active { visibility: visible; }
+  body.present .cell { outline: 0; cursor: none; }
+
+  /* ---------- the card (1080 × 1920 reel) ---------- */
+  .card { background: var(--bg); color: var(--fg); }
+  .card [data-at]:not(.in), .card .hid { visibility: hidden; }
+  .card .top-meta { position: absolute; top: 118px; left: 40px; right: 40px; display: flex; justify-content: space-between; font-size: 25px !important; }
+  .card .frame { position: absolute; left: 40px; right: 40px; top: 200px; height: 1360px; border: 2px solid currentColor; }
+  .card .frame > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .card .layer { position: absolute; inset: 0; z-index: 2; }
+  .card .pan { background: var(--bg); }
+
+  .card .rank { position: absolute; top: 0; left: 0; font-size: 46px; }
+  .card .prog { position: absolute; top: 20px; right: 22px; display: flex; gap: 8px; }
+  .card .prog i { width: 24px; height: 24px; border: 2px solid currentColor; background: var(--bg); }
+  .card .prog i.on { background: currentColor; }
+
+  .card .name { position: absolute; left: 40px; top: 90px; width: 880px; height: 300px; }
+  .card .name-in { position: absolute; inset: 14px; background: var(--bg); display: flex; align-items: flex-end; padding: 18px 22px 30px; }
+  .card .nm { margin: 0; line-height: .82; }
+
+  .card .handle { position: absolute; left: 40px; top: 408px; }
+  .card .hd { font-size: 46px; min-width: 40px; min-height: 58px; }
+
+  .card .stars { position: absolute; left: 40px; top: 496px; width: 880px; }
+  .card .st-top { font-size: 26px !important; padding: 2px 8px 4px 0; display: inline-block; }
+  .card .st-n { display: inline-block; font-family: var(--f-display); font-weight: 600; font-size: 250px; line-height: .8;
+                letter-spacing: -.055em; font-variant-numeric: tabular-nums; padding: 18px 22px 12px 4px; margin-top: 6px; }
+  .card .st-bar { margin-top: 18px; height: 28px; }
+  .card .st-foot { display: flex; justify-content: space-between; margin-top: 12px; font-size: 24px !important; }
+  .card .st-foot span { padding: 2px 6px 4px 0; }
+
+  .card .pitch { position: absolute; left: 40px; top: 862px; width: 880px; gap: 16px; background: var(--bg); padding: 8px 20px 12px 18px; }
+  .card .pitch .t-micro { font-size: 25px; }
+  .card .pitch p { margin: 0; font-family: var(--f-body); font-size: 48px; line-height: 1.1; letter-spacing: -.01em; }
+
+  .card .helps { position: absolute; left: 40px; top: 1060px; width: 370px; }
+  .card .motif { position: absolute; left: 440px; top: 1060px; width: 460px; }
+  .card .helps .win__body { height: 196px; display: grid; gap: 12px; justify-items: start; align-content: center; }
+  .card .m-body { height: 196px; padding: 10px 12px !important; position: relative; overflow: hidden; font-size: 30px !important; line-height: 1.1 !important; }
+
+  .card .foot { position: absolute; left: 40px; right: 40px; top: 1596px; }
+  .card .foot .b64 { max-width: none; font-size: 18px; }
+
+  /* dark (ink) world overrides */
+  .world-ink.card .kn { background: var(--paper); color: var(--ink); }
+  .world-ink.card .st-bar { background: linear-gradient(90deg, var(--paper) calc(var(--v) * 100%), transparent 0), #4a4a4a; }
+  .world-ink.card .st-bar::after { background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), var(--ink) calc(25% - 2px) 25%); }
+  .world-ink.card .win { border-color: var(--paper); box-shadow: 5px 5px 0 rgba(254, 254, 254, .3); }
+
+  /* ---------- motifs: one small process per card ---------- */
+  .m-term { margin: 0; font-family: var(--f-pixel); font-size: 30px; line-height: 1.1; white-space: pre; }
+
+  .d-row { font-family: var(--f-pixel); font-size: 29px; line-height: 33px; white-space: pre; padding-left: 4px; }
+  .d-row.x { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .38; }
+  .d-add { background: var(--green); color: var(--paper); }
+  .m-chip { position: absolute; right: 12px; bottom: 10px; font-size: 28px !important; }
+
+  .sw-grid { display: grid; grid-template-columns: repeat(7, 50px); gap: 6px; }
+  .sw-grid i { height: 50px; border: 2px solid var(--ink); }
+
+  .m-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .m-svg line { stroke: var(--ink); stroke-width: 2.5; }
+  .m-svg rect { fill: var(--ink); stroke: var(--ink); stroke-width: 2; }
+  .m-svg rect.o { fill: var(--paper); }
+  .m-svg text { font-family: var(--f-pixel); font-size: 24px; fill: var(--ink); }
+  .m-svg polygon { fill: var(--ink); }
+
+  .cv-s { font-family: var(--f-pixel); font-size: 29px; line-height: 1.05; }
+  .cv-s span.x { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .35; }
+  .cv-o { font-family: var(--f-pixel); font-size: 36px; margin-top: 6px; }
+  .cv-m { display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 28px; }
+  .cv-m .seg-bar { flex: 1; height: 22px; }
+
+  .pl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pl { border: 2px solid var(--ink); background: var(--paper); font-size: 32px; text-align: center; padding: 12px 0 15px; }
+  .pl.on { background: var(--ink); color: var(--paper); }
+  .pl.ship.on { background: var(--green); }
+  .pl-bar { margin-top: 14px; height: 22px !important; }
+
+  .ts-read { font-family: var(--f-pixel); font-size: 64px; line-height: 1; margin: 6px 0 22px; }
+  .ts-lab { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 22px; margin-top: 12px; }
+
+  .ak { font-family: var(--f-pixel); font-size: 28px; line-height: 1.08; white-space: pre; }
+  .ak .hit { background: var(--ink); color: var(--paper); }
+
+  .ls-row { display: flex; justify-content: space-between; padding: 1px 10px 4px; font-size: 32px; border-bottom: 2px dashed rgba(30, 30, 30, .35); }
+  .ls-row.hl2 { background: var(--ink); color: var(--paper); }
+
+  .mk { position: absolute; inset: 10px 12px; }
+  .mk > * { position: absolute; left: 0; right: 0; }
+  .mk-nav { top: 0; height: 18px; background: var(--ink); opacity: .75; }
+  .mk-hero { top: 28px; height: 64px; background: var(--pink); padding: 12px 14px; display: grid; gap: 8px; align-content: start; }
+  .mk-hero i { display: block; height: 9px; background: #9a9a9a; }
+  .mk-hero i:nth-child(2) { width: 60%; }
+  .mk-cards { top: 102px; height: 72px; display: flex; gap: 8px; }
+  .mk-cards i { flex: 1; border: 2px solid var(--ink); background: var(--paper); position: relative; }
+  .mk-cards i b { position: absolute; inset: 10px; border: 2px solid var(--ink); }
+  .mk-scan { position: absolute; left: 0; right: 0; height: 4px; background: var(--ink); z-index: 2; }
+  .mk-flag { position: absolute; right: 18px; z-index: 3; font-size: 26px !important; }
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div>
+    <span class="t-micro" style="font-size:13px">Reel Cards · 1080 × 1920 · Retro OS</span>
+    <h1 class="t-display" style="margin-top:14px">Top 11 Skill Repos</h1>
+  </div>
+  <div class="rule-col rule-col--tight">
+    <span class="t-micro" style="font-size:12px">How To Use</span>
+    <p class="t-body" style="margin:0">Click a card to replay it. <b>Present</b> shows one card at a time scaled to your screen:
+      <code>→</code> / space next, <code>←</code> back, <code>R</code> replay, <code>A</code> auto-advance every 2s, <code>Esc</code> exit.
+      <b>1:1</b> opens a single card. Add <code>&amp;still</code> to the URL to skip straight to the finished frame.</p>
+    <div class="btns">
+      <button class="btn" id="replay-all">Replay All</button>
+      <a class="btn" href="?present">Present ▶▶▶</a>
+      <a class="btn" href="?present&amp;auto">Present + Auto</a>
+      <button class="btn" onclick="document.body.classList.toggle('ig-safe')">Safe Zones</button>
+    </div>
+  </div>
+</header>
+
+<main class="gallery" id="gallery"></main>
+
+<script src="../retro-os-style-guide/retro-os.js"></script>
+<script>
+/* ==========================================================================
+   DATA: one entry per repo. Stars pulled from GitHub on Sep 29, 2026.
+   Every pitch and chip comes from the repo's own description or README.
+   ========================================================================== */
+const ASOF = "Sep 29, 2026";
+const CARDS = [
+  { name: "Matt Pocock Skills", gh: "mattpocock/skills", stars: 272010, bg: "#F386A1",
+    pitch: "Small, composable skills for real engineering. Not vibe coding.",
+    helps: ["Real Engineering", "Any Model", "Your Own Workflow"], win: "Term.1.1", m: "term", msg: "skills for real engineers" },
+  { name: "Ponytail", gh: "DietrichGebert/ponytail", stars: 148137, bg: "#F4894B",
+    pitch: "Makes your agent code like the laziest senior dev in the room.",
+    helps: ["Less Code", "Simpler Fixes", "20 Agents"], win: "Diff.Tool", m: "diff", msg: "the best code is the code you never wrote" },
+  { name: "UI UX Pro Max", gh: "nextlevelbuilder/ui-ux-pro-max-skill", stars: 131574, bg: "#D45BB6",
+    pitch: "Design intelligence for pro UI/UX, across every platform.",
+    helps: ["79 UI Styles", "192 UX Rules", "Any Platform"], win: "Style.Lib", m: "swatch", msg: "79 styles and 192 rules" },
+  { name: "Graphify", gh: "Graphify-Labs/graphify", stars: 122424, bg: "#09AEA1",
+    pitch: "Turns any codebase into a knowledge graph you can query.",
+    helps: ["Codebase Context", "Docs + SQL + PDFs", "No Vector Store"], win: "Graph.View", m: "graph", msg: "every edge explained" },
+  { name: "Caveman", gh: "JuliusBrussee/caveman", stars: 108370, bg: "#E8B53E",
+    pitch: "Why use many token when few token do trick.",
+    helps: ["65% Fewer Tokens", "Cheaper Runs", "Coding Agents"], win: "Tok.Meter", m: "cave", msg: "few token do trick" },
+  { name: "Addy Osmani Skills", gh: "addyosmani/agent-skills", stars: 99896, bg: "#6FA3E0",
+    pitch: "Senior-engineer workflows your agent follows every time.",
+    helps: ["Specs + Plans", "Testing", "Code Review"], win: "Pipeline", m: "pipe", msg: "spec plan build test review ship" },
+  { name: "Taste Skill", gh: "Leonxlnx/taste-skill", stars: 91213, bg: "#AE98E6",
+    pitch: "Gives your AI good taste. No more boring, generic slop.",
+    helps: ["Frontends", "Premium UI", "Anti-Slop"], win: "Taste.Meter", m: "taste", msg: "stop the slop" },
+  { name: "Understand Anything", gh: "Egonex-AI/Understand-Anything", stars: 84688, bg: "#A6C94B",
+    pitch: "Turns any code into a graph you can explore and question.",
+    helps: ["Onboarding", "Code Q&amp;A", "Search"], win: "Ask.Code", m: "ask", msg: "graphs that teach beat graphs that impress" },
+  { name: "Awesome Claude Skills", gh: "ComposioHQ/awesome-claude-skills", stars: 75877, bg: "#EF6B5B",
+    pitch: "A curated list of the best Claude Skills, tools and resources.",
+    helps: ["Finding Skills", "Workflows", "Resources"], win: "awesome.md", m: "list", msg: "curated by hand" },
+  { name: "Archify", gh: "tt-a1i/archify", stars: 74188, bg: "#ABBAB9",
+    pitch: "Beautiful, verifiable architecture diagrams from your agent.",
+    helps: ["Architecture", "Sequences", "Data Flow"], win: "Seq.Diagram", m: "seq", msg: "diagrams with motion" },
+  { name: "Impeccable", gh: "pbakaus/impeccable", stars: 72511, bg: "#1E1E1E", dark: true,
+    pitch: "A design language that makes your AI better at design.",
+    helps: ["Design Audits", "24 Commands", "UI Polish"], win: "Audit.Scan", m: "audit", msg: "61 detector rules" },
+];
+const MAX = CARDS[0].stars;
+const pad = n => String(n).padStart(2, "0");
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const fmt = v => v >= 100000 ? Math.round(v / 1000) + "k" : v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v);
+
+/* ==========================================================================
+   MOTIFS: each card's own animation, inside its motif window.
+   at(ms, fn) schedules a step. Motion is stepped only; nothing eases.
+   ========================================================================== */
+const MOTIFS = {
+  // 01: skills typed into a terminal
+  term(b, at) {
+    b.innerHTML = '<pre class="m-term"></pre>';
+    const pre = b.firstChild;
+    const lines = ["$ /grill-me", "$ /to-spec", "$ /tdd", "$ /code-review", "$ /handoff"];
+    let t = 680, done = "";
+    lines.forEach((ln, i) => {
+      for (let c = 3; c < ln.length; c += 2) { const s = done + ln.slice(0, c); at(t, () => pre.textContent = s); t += 26; }
+      const s2 = done + ln + (i < lines.length - 1 ? "  ✓\n" : "");
+      at(t, () => pre.textContent = s2); done = s2; t += 40;
+    });
+    at(t, () => pre.classList.add("cursor"));
+  },
+
+  // 02: five lines of code struck out, one line added
+  diff(b, at) {
+    const del = ["if (user && user.name) {", "  return user.name;", "}", "return 'anon';"];
+    b.innerHTML = del.map(l => `<div class="d-row d-del">- ${esc(l)}</div>`).join("") +
+      `<div class="d-row d-add hid">+ return user?.name ?? 'anon';</div>` +
+      `<span class="chip-inv chip-inv--paper m-chip hid" style="top:10px; bottom:auto">−4 +1</span>`;
+    b.querySelectorAll(".d-del").forEach((r, i) => at(820 + i * 110, () => r.classList.add("x")));
+    at(1300, () => b.querySelector(".d-add").classList.remove("hid"));
+    at(1420, () => b.querySelector(".m-chip").classList.remove("hid"));
+  },
+
+  // 03: style swatches shuffling through the library
+  swatch(b, at) {
+    const P = ["#1E1E1E", "#FEFEFE", "#F386A1", "#09AEA1", "#D45BB6", "#E8B53E", "#6FA3E0", "#EF6B5B", "#A6C94B", "#AE98E6", "#ABBAB9", "#F4894B", "#3D6CB9", "#03AA5C", "#C4C4C4"];
+    b.innerHTML = '<div class="sw-grid">' + "<i></i>".repeat(21) + '</div><span class="chip-inv chip-inv--paper m-chip">Style 00/79</span>';
+    const cells = b.querySelectorAll(".sw-grid i"), chip = b.querySelector(".m-chip");
+    for (let k = 0; k <= 12; k++) {
+      const r = RetroOS.rng(40 + k), cols = [...cells].map(() => P[Math.floor(r() * P.length)]);
+      const label = "Style " + pad(Math.round(79 * k / 12)) + "/79";
+      at(660 + k * 70, () => { cells.forEach((c, i) => c.style.background = cols[i]); chip.textContent = label; });
+    }
+  },
+
+  // 04: knowledge graph, nodes then edges
+  graph(b, at) {
+    const N = [[34, 34, "README"], [196, 22, "auth.ts"], [388, 46, "schema.sql"], [60, 146, "api/"], [220, 108, "user.ts"], [372, 158, "config.yml"]];
+    const E = [[0, 1], [1, 4], [4, 2], [3, 4], [1, 3], [4, 5], [0, 3], [2, 5]];
+    let s = '<svg class="m-svg" viewBox="0 0 436 176">';
+    E.forEach(([a, c], k) => s += `<line class="hid" x1="${N[a][0]}" y1="${N[a][1]}" x2="${N[c][0]}" y2="${N[c][1]}"${k % 3 === 2 ? ' stroke-dasharray="8 6"' : ""}/>`);
+    N.forEach(([x, y, l], k) => {
+      const right = x > 300;
+      s += `<g class="hid"><rect x="${x - 8}" y="${y - 8}" width="16" height="16"${k % 2 ? ' class="o"' : ""}/>` +
+           `<text x="${right ? x - 16 : x + 16}" y="${y + 7}" text-anchor="${right ? "end" : "start"}">${l}</text></g>`;
+    });
+    b.innerHTML = s + "</svg>";
+    b.querySelectorAll("g").forEach((g, k) => at(660 + k * 60, () => g.classList.remove("hid")));
+    b.querySelectorAll("line").forEach((l, k) => at(1020 + k * 55, () => l.classList.remove("hid")));
+  },
+
+  // 05: a polite sentence loses its filler words
+  cave(b, at) {
+    const words = "Sure! I would be happy to help you refactor this function.".split(" ");
+    const keep = new Set([8, 10]);
+    b.innerHTML = `<div class="cv-s">${words.map(w => `<span>${w}</span>`).join(" ")}</div>` +
+      `<div class="cv-o hid">▶ refactor function. done.</div>` +
+      `<div class="cv-m"><span>Tokens</span><div class="seg-bar" style="--v:1"></div><span class="cv-p">100%</span></div>`;
+    const spans = [...b.querySelectorAll(".cv-s span")].filter((_, i) => !keep.has(i));
+    const bar = b.querySelector(".seg-bar"), pct = b.querySelector(".cv-p");
+    spans.forEach((sp, k) => {
+      const v = 1 - .65 * (k + 1) / spans.length, label = Math.round(v * 100) + "%";
+      at(720 + k * 70, () => { sp.classList.add("x"); bar.style.setProperty("--v", v); pct.textContent = label; });
+    });
+    at(720 + spans.length * 70 + 60, () => b.querySelector(".cv-o").classList.remove("hid"));
+  },
+
+  // 06: the six-stage lifecycle lighting up
+  pipe(b, at) {
+    const st = ["/spec", "/plan", "/build", "/test", "/review", "/ship"];
+    b.innerHTML = `<div class="pl-grid">${st.map((s, i) => `<div class="pl${i === 5 ? " ship" : ""}">${s}</div>`).join("")}</div>` +
+      `<div class="seg-bar pl-bar" style="--v:0"></div>`;
+    const cells = b.querySelectorAll(".pl"), bar = b.querySelector(".pl-bar");
+    cells.forEach((c, i) => at(700 + i * 120, () => { c.classList.add("on"); bar.style.setProperty("--v", (i + 1) / 6); }));
+  },
+
+  // 07: the needle walks from slop to taste
+  taste(b, at) {
+    const words = ["Generic", "Bland", "Okay", "Good", "Premium"];
+    b.innerHTML = `<div class="ts-read">Generic</div><div class="slider"><i style="--p:0"></i></div>` +
+      `<div class="ts-lab"><span>Slop</span><span>Taste</span></div>`;
+    const read = b.querySelector(".ts-read"), th = b.querySelector(".slider i");
+    for (let k = 0; k <= 10; k++) {
+      const w = words[Math.min(4, Math.floor(k * 5 / 11))], p = k / 10;
+      at(680 + k * 75, () => { th.style.setProperty("--p", p); read.textContent = w + (k === 10 ? " ✓" : ""); });
+    }
+  },
+
+  // 08: ask a question, the code tree opens to the answer
+  ask(b, at) {
+    const q = "? how does auth work";
+    const rows = ["▾ src/", "  ▾ auth/", "    session.ts", "    guard.ts"];
+    b.innerHTML = `<div class="ak"><div class="ak-q"></div>${rows.map(r => `<div class="hid">${r}</div>`).join("")}</div>` +
+      `<span class="chip-inv chip-inv--paper m-chip hid">2 Files · 1 Flow</span>`;
+    const qe = b.querySelector(".ak-q");
+    for (let c = 2; c <= q.length; c += 2) { const s = q.slice(0, c); at(660 + c * 12, () => qe.textContent = s); }
+    const rs = b.querySelectorAll(".ak > div.hid");
+    rs.forEach((r, i) => at(960 + i * 90, () => r.classList.remove("hid")));
+    at(1360, () => { rs[2].innerHTML = '    <span class="hit">session.ts ◀</span>'; b.querySelector(".m-chip").classList.remove("hid"); });
+  },
+
+  // 09: a cursor walks down the curated list, checking each row
+  list(b, at) {
+    const rows = ["Skills", "Resources", "Tools", "Workflows"];
+    b.innerHTML = rows.map(r => `<div class="ls-row"><span>✣ ${r}</span><span class="ck"></span></div>`).join("");
+    const rs = b.querySelectorAll(".ls-row");
+    rs.forEach((r, i) => {
+      at(700 + i * 150, () => { rs.forEach(x => x.classList.remove("hl2")); r.classList.add("hl2"); });
+      at(700 + i * 150 + 110, () => r.querySelector(".ck").textContent = "✓");
+    });
+    at(700 + rs.length * 150, () => rs.forEach(x => x.classList.remove("hl2")));
+  },
+
+  // 10: a sequence diagram drawn one message at a time
+  seq(b, at) {
+    const X = [62, 218, 374], L = ["Client", "API", "DB"];
+    const M = [[0, 1, 70, "request"], [1, 2, 102, "query"], [2, 1, 134, "rows"], [1, 0, 166, "200 OK"]];
+    let s = '<svg class="m-svg" viewBox="0 0 436 176">';
+    X.forEach((x, i) => s += `<line x1="${x}" y1="34" x2="${x}" y2="176" stroke-dasharray="4 5" style="stroke-width:2"/>` +
+      `<rect class="o" x="${x - 54}" y="2" width="108" height="32"/><text x="${x}" y="26" text-anchor="middle">${L[i]}</text>`);
+    M.forEach(([a, c, y, l], k) => {
+      s += `<g class="hid m${k}"><line x1="${X[a]}" y1="${y}" x2="${X[a]}" y2="${y}"${k > 1 ? ' stroke-dasharray="8 6"' : ""}/>` +
+           `<polygon class="hid" points=""/><text x="${(X[a] + X[c]) / 2}" y="${y - 7}" text-anchor="middle" style="font-size:21px">${l}</text></g>`;
+    });
+    b.innerHTML = s + "</svg>";
+    M.forEach(([a, c, y], k) => {
+      const g = b.querySelector(".m" + k), ln = g.querySelector("line"), pg = g.querySelector("polygon");
+      const dir = Math.sign(X[c] - X[a]), end = X[c] - dir * 3, t0 = 700 + k * 170;
+      at(t0, () => g.classList.remove("hid"));
+      for (let st = 1; st <= 3; st++) at(t0 + st * 45, () => ln.setAttribute("x2", X[a] + (end - X[a]) * st / 3));
+      at(t0 + 135, () => { pg.setAttribute("points", `${end},${y} ${end - dir * 13},${y - 7} ${end - dir * 13},${y + 7}`); pg.classList.remove("hid"); });
+    });
+  },
+
+  // 11: an audit line scans a mock UI and flags the AI tells
+  audit(b, at, d, card) {
+    b.innerHTML = `<div class="mk"><i class="mk-nav"></i><div class="mk-hero"><i></i><i></i></div>` +
+      `<div class="mk-cards"><i></i><i><b></b></i><i></i></div></div><i class="mk-scan hid"></i>` +
+      `<span class="chip-inv chip-inv--paper mk-flag hid" style="top:50px">✕ Gray On Color</span>` +
+      `<span class="chip-inv chip-inv--paper mk-flag hid" style="top:128px">✕ Nested Cards</span>`;
+    const scan = b.querySelector(".mk-scan"), flags = b.querySelectorAll(".mk-flag");
+    const bar = card.querySelector(".motif .win__bar");
+    for (let k = 0; k <= 12; k++) {
+      const y = 8 + k * 14;
+      at(660 + k * 60, () => {
+        scan.classList.remove("hid"); scan.style.top = y + "px";
+        if (y > 70) flags[0].classList.remove("hid");
+        if (y > 140) flags[1].classList.remove("hid");
+      });
+    }
+    at(1440, () => { scan.classList.add("hid"); bar.textContent = "Audit.Scan · 61 Rules"; });
+  },
+};
+
+/* ==========================================================================
+   CARD MARKUP
+   shell() renders once (textures keep running); layer() re-renders per play.
+   ========================================================================== */
+function shell(d, i) {
+  const ink = d.dark ? "#FEFEFE" : "#1E1E1E";
+  const dither = { pixel: 5, seed: 11 + i * 13, color: ink,
+    blobs: [{ x: i % 2 ? .98 : .02, y: .97, r: .34 }, { x: i % 2 ? .02 : .98, y: +(.3 + (i % 4) * .1).toFixed(2), r: .2 }] };
+  const life = { cell: 5, fps: 10, seed: i + 2, color: ink, gliders: 14 };
+  return `
+  <div class="ig card${d.dark ? " world-ink" : ""}" id="card-${pad(i + 1)}" data-i="${i}" data-fmt="reel"
+       style="--h:1920px; --bg:${d.bg}; --knock:${d.bg}">
+    <div class="glyph-corners" style="position:absolute; top:24px; left:0; right:0"></div>
+    <div class="top-meta t-micro"><span>Top 11 · Claude + Codex Skill Repos</span><span>Ranked By GitHub Stars</span></div>
+    <div class="frame dots${d.dark ? " dots--paper" : ""}">
+      <canvas class="dither" data-ros="dither" data-opts='${JSON.stringify(dither)}'></canvas>
+      <canvas class="life" data-ros="life" data-opts='${JSON.stringify(life)}'></canvas>
+      <div class="layer"></div>
+    </div>
+    <div class="foot"><div class="b64" data-ros="b64" data-msg="${d.msg}" data-len="190"></div></div>
+  </div>`;
+}
+
+function layer(d, i) {
+  const rel = i ? `Vs. No.01 · ${Math.round(d.stars / MAX * 100)}%` : "The Top Repo";
+  return `
+    <span class="chip-inv kn rank" data-at="0">No.${pad(i + 1)}</span>
+    <div class="prog" data-at="0">${Array.from({ length: 11 }, (_, k) => `<i${k <= i ? ' class="on"' : ""}></i>`).join("")}</div>
+    <div class="crop name" data-at="60"><div class="name-in"><div class="t-display nm" style="font-size:${d.fs || 150}px">${d.name}</div></div></div>
+    <div class="handle" data-at="140"><span class="chip-inv kn no-case hd"></span></div>
+    <div class="stars" data-at="240">
+      <span class="t-micro pan st-top">★ GitHub Stars</span><br>
+      <span class="pan st-n">0</span>
+      <div class="seg-bar st-bar" style="--v:0"></div>
+      <div class="st-foot t-micro"><span class="pan" data-at="1050">*${d.stars.toLocaleString("en-US")} Stars · ${ASOF}</span><span class="pan" data-at="1050">${rel}</span></div>
+    </div>
+    <div class="rule-col pitch" data-at="400"><span class="t-micro">What It Is</span><p>${d.pitch}</p></div>
+    <div class="win helps" data-at="540"><div class="win__bar">Helps.With</div>
+      <div class="win__body">${d.helps.map((h, k) => `<span class="chip" data-at="${600 + k * 80}">${h}</span>`).join("")}</div></div>
+    <div class="win motif" data-at="640"><div class="win__bar">${d.win}</div><div class="win__body m-body"></div></div>`;
+}
+
+/* ==========================================================================
+   PLAYBACK
+   ========================================================================== */
+function play(el, still) {
+  const i = +el.dataset.i, d = CARDS[i];
+  (el.__t || []).forEach(clearTimeout); el.__t = [];
+  const L = el.querySelector(".layer");
+  L.innerHTML = layer(d, i);
+  const q = [], at = (t, fn) => q.push([t, fn]);
+
+  L.querySelectorAll("[data-at]").forEach(n => at(+n.dataset.at, () => n.classList.add("in")));
+
+  const hd = L.querySelector(".hd"), txt = "▶ " + d.gh;          // handle types on (pixel type may)
+  for (let c = 2; c < txt.length; c += 2) { const s = txt.slice(0, c); at(140 + c * 9, () => hd.textContent = s); }
+  at(140 + txt.length * 9, () => hd.textContent = txt);
+
+  const n = L.querySelector(".st-n"), bar = L.querySelector(".st-bar");   // stepped count-up
+  for (let k = 0; k <= 12; k++) {
+    const v = Math.round(d.stars * k / 12);
+    at(240 + k * 60, () => { n.textContent = fmt(v); bar.style.setProperty("--v", v / MAX); });
+  }
+
+  MOTIFS[d.m](L.querySelector(".m-body"), at, d, el);
+
+  if (still) { q.sort((a, b) => a[0] - b[0]).forEach(([, f]) => f()); return; }
+  q.forEach(([t, f]) => el.__t.push(setTimeout(f, t)));
+}
+
+// Shrink each name until it fits its crop frame (max 2 lines). Runs once fonts are in.
+function fitName(el) {
+  const d = CARDS[+el.dataset.i], box = el.querySelector(".name-in"), nm = el.querySelector(".nm");
+  const cs = getComputedStyle(box);
+  const W = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const H = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  let s = 184; nm.style.fontSize = s + "px";
+  while (s > 60 && (nm.scrollHeight > H + 2 || nm.offsetWidth > W + 1 || nm.scrollWidth > W + 1)) { s -= 4; nm.style.fontSize = s + "px"; }
+  d.fs = s;
+}
+
+/* ---------- build ---------- */
+const gallery = document.getElementById("gallery");
+gallery.innerHTML = CARDS.map((d, i) => `
+  <div class="item" data-i="${i}">
+    <div class="item-meta"><span class="chip-inv">${pad(i + 1)} · ${d.name}</span>
+      <button class="btn" data-replay>Replay</button><a class="btn" href="?card=${pad(i + 1)}">1:1</a></div>
+    <div class="cell">${shell(d, i)}</div>
+  </div>`).join("");
+const cards = [...document.querySelectorAll(".card")];
+const items = [...document.querySelectorAll(".item")];
+
+const qs = new URLSearchParams(location.search);
+const still = qs.has("still");
+const present = qs.has("present") || qs.has("card");
+let cur = qs.has("card") ? Math.max(0, Math.min(CARDS.length - 1, parseInt(qs.get("card"), 10) - 1 || 0)) : 0;
+let auto = null;
+
+function fitScreen() {
+  const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+  document.body.style.setProperty("--ps", s);
+}
+function go(i) {
+  cur = (i + CARDS.length) % CARDS.length;
+  items.forEach((it, k) => it.classList.toggle("active", k === cur));
+  play(cards[cur], still);
+}
+function toggleAuto() {
+  if (auto) { clearInterval(auto); auto = null; return; }
+  auto = setInterval(() => { if (cur === CARDS.length - 1) { clearInterval(auto); auto = null; } else go(cur + 1); }, 2000);
+}
+
+cards.forEach(c => play(c, true));   // lay out once so names can be measured
+
+const fontsIn = Promise.race([
+  Promise.all([
+    document.fonts.load('600 150px "Inter Tight"'), document.fonts.load('400 40px "VT323"'),
+    document.fonts.load('400 24px "JetBrains Mono"'), document.fonts.load('400 48px "Inter Tight"'),
+  ]),
+  new Promise(r => setTimeout(r, 2500)),
+]);
+
+fontsIn.then(() => {
+  cards.forEach(fitName);
+  if (present) {
+    document.body.classList.add("present");
+    fitScreen(); addEventListener("resize", fitScreen);
+    go(cur);
+    if (qs.has("auto")) toggleAuto();
+    addEventListener("keydown", e => {
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); go(cur + 1); }
+      else if (e.key === "ArrowLeft") go(cur - 1);
+      else if (e.key === "r" || e.key === "R") go(cur);
+      else if (e.key === "a" || e.key === "A") toggleAuto();
+      else if (e.key === "Escape") location.search = "";
+    });
+    addEventListener("click", () => go(cur + 1));
+  } else {
+    cards.forEach(c => play(c, still));
+    items.forEach(it => {
+      const c = it.querySelector(".card");
+      it.querySelector(".cell").addEventListener("click", () => play(c));
+      it.querySelector("[data-replay]").addEventListener("click", () => play(c));
+    });
+    document.getElementById("replay-all").addEventListener("click", () => cards.forEach(c => play(c)));
+  }
+});
+</script>
+</body>
+</html>
