@@ -1,0 +1,2274 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Paid SaaS vs. open source: a founder’s decision guide</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			.tip-cite {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 14px;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each item ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.tip-cite,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A founder’s decision guide</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Thirty tools you’re about to pay for, and the six where open source actually wins.
+							</h1>
+							<p class="lead">
+								Start with the name brand’s free tier. If your usage fits under it, use the paid tool and skip
+								self-hosting, because your time costs more than a free plan. Open source wins on day one in only two
+								situations, and this guide names both, tool by tool, with the usage or the bill that should trigger a
+								switch.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown · September 2026</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								Most of the self-hosting advice you’ll read is written by people who enjoy self-hosting. That’s a
+								hobby, and it’s a good one, but it isn’t a strategy for a company with three people and no revenue. The
+								actual question is much narrower than “paid or free.” It’s whether the free tier of the tool everyone
+								already uses covers what you’re doing this quarter. Usually it does, and the correct move is to take it
+								and get back to work.
+							</p>
+							<p class="body-text">
+								So this is organised as thirty decisions rather than thirty product reviews. Each entry has the name
+								brand’s free tier and its first paid tier, the open source alternatives worth knowing, and the dividing
+								line: when to stay paid, and the specific number that should make you reconsider. Where I have an
+								opinion from actually running this stuff at early-stage companies, it’s marked as mine, and where my
+								opinion disagrees with the general advice, the dividing line follows my opinion.
+							</p>
+							<p class="body-text">
+								Prices came from web searches in September 2026 and they move constantly, so confirm on the vendor’s
+								page before you commit. <strong>Self-host</strong> throughout means you run it yourself, typically on a
+								$5 to $20 a month VPS, which is the part of the cost that gets quoted, and an evening plus a permanent
+								low-grade obligation, which is the part that doesn’t.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The rule everything else follows from</p>
+								<p>
+									Open source usually wins from day one in exactly two cases. Either the name brand’s free tier is too
+									small to run a business on, or the open source tool is a desktop app with no server to maintain.
+								</p>
+								<p>
+									Everything else is a threshold. You stay on the free tier until a specific number breaks it, then you
+									either pay or you move, and the number is knowable in advance. That’s what the dividing line in each
+									entry is for: not a preference, a trigger.
+								</p>
+							</div>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">2</p>
+									<p class="stat-label">The only situations where open source is the right day-one call. Everything else is a threshold you cross later.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">6 of 30</p>
+									<p class="stat-label">Categories where I’d skip the name brand entirely and start on the alternative.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">$5–20</p>
+									<p class="stat-label">The monthly VPS bill behind every “free” self-hosted tool. It’s never the expensive part.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">10</p>
+									<p class="stat-label">Typeform responses per month on the free plan. That’s the shape of a free tier that can’t run a business.</p>
+								</div>
+							</div>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										The rule. <span>How to read each entry, and the three shapes a free tier takes before it fails
+										you.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										Build &amp; ship. <span>Purchases, backend, hosting, error tracking, uptime, push. Six entries, and
+										five of them say stay paid.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Get found &amp; make content. <span>SEO, social scheduling, AI video, AI voice, screen
+										recording.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										Sell &amp; convert. <span>Scheduling, forms, e-signatures, invoicing, bookkeeping.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										Grow &amp; retain. <span>Analytics, email, CRM, support, feedback boards, short links.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">
+										Run the company. <span>Automation, project management, docs, chat, passwords, design, research,
+										dictation.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">07</span>
+									<p class="what">
+										The cheat sheet. <span>One row per category, the open source pick, and the trigger to switch.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · The rule</p>
+								<h2>Free tiers fail in three predictable shapes. Learn to spot yours.</h2>
+								<p class="section-sub">
+									Two minutes before the list, because once you can name the shape of the limit you’re about to hit, you
+									can usually see the switch coming a quarter out instead of on the morning it breaks.
+								</p>
+							</div>
+
+							<p class="body-text">
+								A free tier is a sales instrument. It’s sized so that a hobbyist never pays and a business always does,
+								and the interesting engineering is in exactly where that line sits. When one bites, it’s almost always in
+								one of three ways, and each one has a different right answer.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 22%">The shape</th>
+											<th style="width: 40%">What it looks like in practice</th>
+											<th>What to do about it</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>The seat wall</strong></td>
+											<td>Free for one person. Slack, New Relic, Sentry, Figma, Asana. The product works fine; you just can’t add anyone.</td>
+											<td>Share one login for as long as it’s honest and low-risk. Buy seats after revenue, not before.</td>
+										</tr>
+										<tr>
+											<td><strong>The volume cliff</strong></td>
+											<td>Free until 1,000 users, 10,000 subscribers, 100 tasks, 25 tracked users. Then a step change in price.</td>
+											<td>Know the number now. Put it in a calendar reminder. The switch is cheap if you see it coming.</td>
+										</tr>
+										<tr>
+											<td><strong>The useless floor</strong></td>
+											<td>Typeform’s 10 responses a month. Canny’s 25 tracked users. Loom’s 5-minute cap. Free, but not usable for anything real.</td>
+											<td>Don’t start here at all. This is the case where open source or a different free tool wins on day one.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<p class="body-text" style="margin-top: 20px">
+								The third row is the one worth internalising. A free tier that can’t hold a real waitlist, a real feedback
+								board, or a real product demo isn’t a starting point, it’s a trial. Starting there costs you a migration
+								later for no benefit now.
+							</p>
+
+							<div class="callout callout-risk">
+								<p class="callout-label">What self-hosting actually costs</p>
+								<p>
+									Not the VPS. The VPS is $5 to $20. The cost is that you now own an uptime problem, a backup problem,
+									an upgrade path, and in the case of email, a deliverability reputation that takes months to build and
+									one bad week to destroy. None of that is hard. All of it is time, and time is the resource you have
+									least of.
+								</p>
+								<p>
+									Which is why the desktop-app exception matters so much. Cap and OpenWhispr are open source tools with
+									no server, no backups and no upgrade path you have to think about. They’re free in the way people
+									imagine open source is free, and almost nothing else on this list is.
+								</p>
+							</div>
+
+							<div class="pull">
+								<p>
+									The question is never what self-hosting costs. It’s whether the free tier fits. If it fits, take it
+									and go build something.
+								</p>
+							</div>
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · Build &amp; ship</p>
+								<h2>The infrastructure layer, where saving money is usually the expensive choice.</h2>
+								<p class="section-sub">
+									Six entries, and five of them say stay paid. This is the section where self-hosting looks cheapest on
+									a spreadsheet and costs the most in practice, because the failure mode isn’t a bill, it’s an outage
+									on a Saturday.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">RevenueCat, for in-app purchases and subscriptions.</h3>
+								<p class="tip-cite">Build &amp; ship · Stay paid at every stage</p>
+								<p class="body-text">
+									Free until $2,500 in monthly tracked revenue, then 1% of that revenue, and it drops back to free in any
+									month you fall below the line. (<a href="https://www.revenuecat.com/pricing/">pricing</a>)
+								</p>
+								<p class="body-text">
+									There’s no open source alternative mature enough to recommend, and honestly there doesn’t need to be.
+									In-app purchase handling is a pile of platform-specific receipt validation, renewal edge cases and
+									store policy changes that you would be maintaining forever in exchange for nothing a customer can see.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use RevenueCat at every stage. At $2,500 a month in revenue you pay $25, which is less than an hour
+										of the time you’d spend building receipt validation yourself, and considerably less than the first
+										renewal bug you’d ship.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Everything, until $2,500/month in tracked revenue.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">1% of tracked revenue. $25/month at the threshold.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">None. Don’t build this yourself.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">Supabase or Firebase, for backend, database and auth.</h3>
+								<p class="tip-cite">Build &amp; ship · Stay hosted, always</p>
+								<p class="body-text">
+									Supabase’s free tier gives you 2 projects, a 500 MB database, 1 GB of file storage, 5 GB of egress and
+									50,000 monthly active users, with free projects pausing after 7 days of inactivity. Pro is $25 a month.
+									(<a href="https://www.jetadmin.io/blog/supabase-pricing-2026-guide-to-plans-limits-and-real-world-costs/">source</a>)
+									Firebase’s free Spark plan is the other common starting point.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/supabase/supabase">Supabase</a>, the same product, self-hosted.</li>
+									<li><a href="https://github.com/pocketbase/pocketbase">PocketBase</a>, a single-file backend, very light.</li>
+									<li><a href="https://github.com/appwrite/appwrite">Appwrite</a>, a Firebase-style backend with native mobile SDKs.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>Use hosted Supabase at every stage, and don’t self-host your database. There is no version of this where you come out ahead.</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Don’t screw around with the database. Just use Supabase. If you can’t afford Supabase’s free tier,
+										something has gone wrong. If you have to upgrade to the $25 a month paid tier and you don’t have
+										users paying you at least $25 a month, you’ve got an expensive hobby. Don’t self-host, don’t get
+										clever. And skip Firebase. I really don’t like it.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">2 projects, 500 MB DB, 1 GB storage, 50,000 MAU. Pauses after 7 idle days.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Pro, $25/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">PocketBase, if you must. But the answer is hosted Supabase.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Vercel, for web hosting and deploys.</h3>
+								<p class="tip-cite">Build &amp; ship · Stay paid, reassess at scale</p>
+								<p class="body-text">
+									Hobby is free but non-commercial only, so any commercial app needs Pro at $20 per user per month. Spend
+									limits are opt-in, which means they’re off until you turn them on, so turn one on.
+									(<a href="https://benchlm.ai/vercel/pricing">source</a>)
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/coollabsio/coolify">Coolify</a>, a self-hosted Vercel or Heroku on your own VPS.</li>
+									<li><a href="https://github.com/Dokploy/dokploy">Dokploy</a>, a lighter alternative to Coolify.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>Use Vercel until your traffic makes it expensive, then reassess. Set a spend limit the day you sign up.</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										There’s no great reason not to just use Vercel’s free tier. Once you have enough traffic that Vercel
+										starts getting expensive, reassess whether it’s still the right play. By then you’ll be a bigger
+										company in a better position to make that call anyway.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Hobby, non-commercial use only.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Pro, $20/user/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Coolify.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">Sentry or New Relic, for crash and error tracking.</h3>
+								<p class="tip-cite">Build &amp; ship · Free tier, shared account</p>
+								<p class="body-text">
+									Sentry’s free Developer plan allows 5,000 errors a month and 1 user, with Team starting at $26 a month
+									for 50,000 errors. (<a href="https://last9.io/blog/sentry-pricing/">source</a>) New Relic’s free tier
+									includes 100 GB a month of data and one full user, with APM and mobile monitoring.
+									(<a href="https://newrelic.com/info/pricing">pricing</a>) Worth saying plainly: New Relic monitors
+									servers and performance, and it does not replace product analytics.
+								</p>
+								<ul class="brand">
+									<li><a href="https://glitchtip.com">GlitchTip</a>, which accepts the official Sentry SDKs unchanged, so switching is a config change rather than a migration.</li>
+									<li><a href="https://github.com/getsentry/self-hosted">Sentry self-hosted</a>, the full product, but heavy to run.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Start on New Relic’s free tier and share one account across your engineers. Look at GlitchTip only if
+										you outgrow the free tiers, and note that because it speaks Sentry’s protocol, that move is cheap
+										whenever you make it.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										I really like New Relic. For any of these tools with a single-user limit, use one shared dev account
+										across your engineers. Nobody is going to do anything scary to your New Relic account.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">New Relic: 100 GB/month, 1 full user. Sentry: 5,000 errors, 1 user.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Sentry Team, $26/month for 50,000 errors.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">GlitchTip. Drop-in for the Sentry SDKs.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">05</span>
+								<h3 class="tip-title">UptimeRobot, for uptime monitoring and a status page.</h3>
+								<p class="tip-cite">Build &amp; ship · Skip it early</p>
+								<p class="body-text">
+									A free tier covers basic checks on a handful of sites and APIs, which is more than enough for a long
+									time. The open source alternative is <a href="https://github.com/louislam/uptime-kuma">Uptime Kuma</a>,
+									which is genuinely pleasant and about as light as self-hosted software gets.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Skip uptime monitoring early on. Add UptimeRobot’s free tier or Uptime Kuma once downtime would
+										actually cost you customers, which is later than you think when you have forty of them and they’re
+										all in one time zone.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>You probably don’t need an uptime monitor at the early stage. I wouldn’t worry about it.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Basic checks on a handful of sites and APIs.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Not worth reaching at this stage.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Uptime Kuma.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">06</span>
+								<h3 class="tip-title">OneSignal, for push notifications.</h3>
+								<p class="tip-cite">Build &amp; ship · Free under 1,000 MAU, then look at Firebase</p>
+								<p class="body-text">
+									This one has a date on it. Starting October 1, 2026, the free plan stops sending mobile push and in-app
+									messages above 1,000 monthly active users, and new accounts hit that from September 1. Growth costs $19
+									a month plus $0.012 per MAU, which is roughly $139 a month at 10,000 MAU. Web push and email stay free.
+									(<a href="https://www.pushwoosh.com/blog/onesignal-free-plan-changes/">source</a>)
+								</p>
+								<p class="body-text">
+									The thing to know is that Firebase Cloud Messaging, the delivery layer underneath a lot of this, is
+									free. The open source alternative is <a href="https://github.com/novuhq/novu">Novu</a>, which handles
+									push, email, SMS and in-app messaging from one API.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Under 1,000 MAU, OneSignal free works. If you send a lot of push notifications, look at Firebase
+										Cloud Messaging before you reach for a self-hosted alternative.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Firebase has pretty reasonable push options. If you’re sending a lot of push notifications, be sure
+										to look at it. One of the free open source alternatives might not be your best option here.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Mobile push up to 1,000 MAU from Oct 1, 2026. Web push and email stay free.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Growth, $19/month + $0.012/MAU. About $139/month at 10,000 MAU.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Firebase Cloud Messaging first. Novu if you need one API for everything.</p>
+									</div>
+								</div>
+							</div>
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Get found &amp; make content</p>
+								<h2>Where subscriptions quietly become your largest line item.</h2>
+								<p class="section-sub">
+									The tools in this section are priced for marketing departments, which is why two of the five
+									recommendations here are to start on the alternative and never open the account.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">07</span>
+								<h3 class="tip-title">Semrush or Ahrefs, for SEO.</h3>
+								<p class="tip-cite">Get found · Open source from day one</p>
+								<p class="body-text">
+									Semrush Pro is $139.95 a month, or $117.33 billed annually.
+									(<a href="https://www.answeriq.com/semrush-pricing">source</a>) Ahrefs Starter is $29 a month and Lite
+									is $129. (<a href="https://www.hackceleration.com/labs/compare/semrush-vs-ahref">source</a>) Google
+									Search Console is free and already covers your own site’s rankings, which is most of what you need
+									early.
+								</p>
+								<p class="body-text">
+									The alternative is <a href="https://github.com/every-app/open-seo">OpenSEO</a>. You bring your own
+									DataForSEO API key and pay per query, and it connects to Claude Code through MCP, which matters more
+									than it sounds: research you can run from where you already work gets run, and research behind a
+									separate login mostly doesn’t.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use OpenSEO plus Search Console from day one. At low research volume, pay-per-query costs a few
+										dollars a month against $100+ for a subscription. Pay for Semrush or Ahrefs only if SEO becomes a
+										full-time channel and you specifically want their backlink index.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Google Search Console, for your own site.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Ahrefs Starter $29/month. Semrush Pro $139.95/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">OpenSEO, pay-per-query via DataForSEO.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">08</span>
+								<h3 class="tip-title">Buffer, for social media scheduling.</h3>
+								<p class="tip-cite">Get found · Free tier, switch at five channels</p>
+								<p class="body-text">
+									The free plan covers 3 channels with 10 queued posts per channel. Essentials is $6 per channel per
+									month, or $5 billed annually, and the per-channel pricing is the whole story here: the bill scales with
+									the exact thing you want to do more of.
+									(<a href="https://napoleoncat.com/blog/buffer-pricing/">source</a>)
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/gitroomhq/postiz-app">Postiz</a>, multi-platform scheduling with a public API that agents can post through.</li>
+									<li><a href="https://github.com/inovector/mixpost">Mixpost</a>, a simpler self-hosted scheduler.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use Buffer free for 3 channels and a light posting cadence. Switch to Postiz past about 5 channels,
+										where Buffer runs $30+ a month, or earlier if you want agents posting through an API.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">3 channels, 10 queued posts each.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Essentials, $6 per channel per month ($5 annual).</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Postiz.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">09</span>
+								<h3 class="tip-title">Higgsfield, for AI video and image generation.</h3>
+								<p class="tip-cite">Get found · Avoid paying if you can</p>
+								<p class="body-text">
+									Credit-based plans run from about $19 a month on annual billing for 270 credits, up to $99 a month for
+									3,000. The free plan includes no credits at all.
+									(<a href="https://creatify.ai/blog/higgsfield-pricing-(2026)-plans-and-what-you-ll-actually-pay">source</a>)
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/Anil-matcha/Open-Higgsfield-AI">Open Higgsfield AI</a> is the alternative,
+									and it’s important to be clear about what it saves you. You still pay per generation through a Muapi API
+									key. What goes away is the subscription, not the compute.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Open source fits bursty use: a few videos some months and none in others. If you generate video every
+										week at a steady rate, the subscription is simpler and usually the better deal. The real question is
+										whether you need this category at all.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Higgsfield is super expensive from everything I’ve looked at. If you can get away with not using it,
+										or at least not paying for it, you probably should.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">No credits. Effectively nothing.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">~$19/month annual for 270 credits.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Open Higgsfield AI. Saves the subscription, not the compute.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">10</span>
+								<h3 class="tip-title">ElevenLabs, for AI voice.</h3>
+								<p class="tip-cite">Get found · Pay, unless you have a GPU and volume</p>
+								<p class="body-text">
+									The free tier gives 10,000 credits a month, roughly 10 minutes of speech, with no commercial rights,
+									which rules it out for anything you’d put in a product or an ad. Starter adds commercial use and instant
+									voice cloning for about $5 to $6 a month. Creator is $22 a month and includes 100,000 credits plus
+									professional voice cloning.
+									(<a href="https://bigvu.tv/blog/elevenlabs-pricing-2026-plans-credits-commercial-rights-api-costs/">source</a>)
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/debpalash/VoiceStudio">VoiceStudio</a> runs locally and covers cloning,
+									dubbing and transcription. It’s AGPL-3.0, and each voice model carries its own license, which is worth
+									reading before you put a cloned voice in front of customers.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Pay for Starter or Creator while you need under a couple of hours of audio a month. Switch to
+										VoiceStudio if you have a good GPU and real volume: audiobooks, daily dubbing, or voice built into
+										your product.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>Only think about VoiceStudio if you’ve actually got a decent computer. If you don’t, it’s going to be really rough.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">10,000 credits/month (~10 min). No commercial rights.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Starter ~$5–6/month. Creator $22/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">VoiceStudio, AGPL-3.0, local GPU required.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">11</span>
+								<h3 class="tip-title">Loom, for screen recording.</h3>
+								<p class="tip-cite">Get found · Open source from day one</p>
+								<p class="body-text">
+									The free Starter plan allows 25 videos per person, a 5-minute cap per recording, and 720p. Business is
+									$18 per user per month. (<a href="https://www.layerpath.com/compare/loom-cost">source</a>) The 5-minute
+									cap is the part that matters: it cuts off most product demos and almost every walkthrough.
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/CapSoftware/Cap">Cap</a> is a desktop app for Mac and Windows that can also
+									be self-hosted if you want your own links. This is the desktop-app exception in its purest form: no
+									server, no backups, nothing to maintain.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>Use Cap from day one. There is no server to run and no cap to hit.</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Loom is expensive for what it is. If you only send people very quick recordings, it’s fine. But if
+										you have to walk someone through a complicated workflow, you’ll hit the limits fast, and paying could
+										cost a lot more than you’re willing to spend. Early on, you could also use one shared Loom account.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">25 videos per person, 5-minute cap, 720p.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Business, $18/user/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Cap. Desktop app, Mac and Windows.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · Sell &amp; convert</p>
+								<h2>The five tools between a conversation and money in the bank.</h2>
+								<p class="section-sub">
+									One thing to hold onto through this section: these are the tools your customers actually see. That
+									changes the calculation in at least one place, and it’s the place founders most often optimise for
+									price.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">12</span>
+								<h3 class="tip-title">Calendly, for scheduling and booking.</h3>
+								<p class="tip-cite">Sell &amp; convert · Free tier, or Cal.com hosted free</p>
+								<p class="body-text">
+									The free plan allows 1 active event type and 1 connected calendar, with Calendly branding on it.
+									Standard is $10 per seat per month billed annually.
+									(<a href="https://schedulingkit.com/pricing-guides/calendly-pricing">source</a>)
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/calcom/cal.com">Cal.com</a> is the open source alternative, and the useful
+									detail is that its own hosted version has a free plan for individuals. So the first move isn’t
+									self-hosting, it’s using somebody else’s free tier that happens to be more generous.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										If one meeting type is enough, Calendly free works. If you need a few (intro call, demo, support),
+										use Cal.com’s hosted free plan instead of paying $10 a month. Self-host Cal.com only when you want
+										booking embedded inside your own product under your own brand.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">1 event type, 1 calendar, Calendly branding.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Standard, $10/seat/month annual.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Cal.com. Use their hosted free plan first.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">13</span>
+								<h3 class="tip-title">Typeform, for forms and surveys.</h3>
+								<p class="tip-cite">Sell &amp; convert · Open source from day one</p>
+								<p class="body-text">
+									The free plan is capped at 10 responses a month. Basic is about $28 a month on annual billing for 100
+									responses, and once you hit the cap the form stops collecting.
+									(<a href="https://www.koji.so/blog/typeform-pricing-2026">source</a>) A waitlist form that silently
+									stops accepting people is a uniquely bad way to find out about a pricing tier.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/formbricks/formbricks">Formbricks</a>, surveys, forms and in-app feedback, with a hosted option.</li>
+									<li><a href="https://github.com/OpnForm/OpnForm">OpnForm</a>, a simple form builder.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Skip Typeform’s free tier entirely. Ten responses won’t carry a real waitlist or a real survey. Use
+										Google Forms, Tally, or an open source tool from day one.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>You can get away with a pretty large Google Form. That’s another free option here.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">10 responses per month, then collection stops.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Basic, ~$28/month annual for 100 responses.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Formbricks, or just Google Forms or Tally.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">14</span>
+								<h3 class="tip-title">DocuSign, for e-signatures.</h3>
+								<p class="tip-cite">Sell &amp; convert · Switch past five documents a month</p>
+								<p class="body-text">
+									Personal is $11 a month for 5 envelopes a month. Standard is $30 per user per month with 100 envelopes
+									per user per year. (<a href="https://automationatlas.io/answers/docusign-pricing-explained-2026/">source</a>)
+									Envelope counting is the thing to watch; it’s the volume cliff in a different costume.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/documenso/documenso">Documenso</a>, an e-signature platform with an API.</li>
+									<li><a href="https://github.com/docusealco/docuseal">DocuSeal</a>, form-fill and signing with an embeddable signer.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										If you sign a few contracts a year, any free or low tier works. Move to open source when you need
+										signing inside your own app, where per-envelope API pricing adds up fast, or once you’re sending more
+										than 5 documents a month.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Contracts are one place where it’s worth having signing look polished. There’s real perception at
+										stake in what your customers see when they sign, so keep that in mind before picking the cheapest
+										option.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Nothing meaningful.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Personal, $11/month for 5 envelopes. Standard $30/user/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Documenso. DocuSeal if you need an embeddable signer.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">15</span>
+								<h3 class="tip-title">Stripe or FreshBooks, for invoicing.</h3>
+								<p class="tip-cite">Sell &amp; convert · Stay paid</p>
+								<p class="body-text">
+									If you already take payments through Stripe, Stripe Invoicing covers basic invoices with no separate
+									subscription, which makes this one of the easiest calls on the list. FreshBooks is fine too if you
+									prefer a dedicated tool.
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/invoiceninja/invoiceninja">Invoice Ninja</a> handles invoices, quotes,
+									recurring billing and client portals, and it’s a capable piece of software. It’s just solving a problem
+									you probably don’t have.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>Use Stripe, or FreshBooks if you prefer. Treat the open source option as a last resort.</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Almost every early-stage company I’ve worked at has used something like Stripe. FreshBooks would be
+										fine too. I’m not convinced the open source version is going to be great.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Stripe Invoicing, included if you already take payments.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Standard Stripe processing fees. No separate subscription.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Invoice Ninja, as a last resort.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">16</span>
+								<h3 class="tip-title">QuickBooks, for bookkeeping and accounting.</h3>
+								<p class="tip-cite">Sell &amp; convert · Avoid from the start</p>
+								<p class="body-text">
+									Simple Start is $38 a month. Essentials rose to $85 a month in August 2026.
+									(<a href="https://www.dancingnumbers.com/how-much-is-quickbooks-online-per-month/">source</a>) That’s a
+									price curve pointed in one direction, on a tool that gets harder to leave every month you use it.
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/akaunting/akaunting">Akaunting</a> is the open source alternative, but this
+									is the one category where the technical decision isn’t yours alone to make.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Avoid QuickBooks. Before choosing anything else, confirm which tools your accountant will actually
+										accept at tax time, because a bookkeeping tool your accountant won’t work with costs more than the
+										subscription you saved.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>I’d stay away from QuickBooks. It gets so expensive so quickly.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">None.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Simple Start, $38/month. Essentials, $85/month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Akaunting, if your accountant signs off.</p>
+									</div>
+								</div>
+							</div>
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Grow &amp; retain</p>
+								<h2>Six tools, and the most generous free tier on the whole list.</h2>
+								<p class="section-sub">
+									This section has the clearest example of a free tier worth building on, and two of the clearest
+									examples of one that isn’t. Same category, opposite answers, which is why per-tool beats per-principle.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">17</span>
+								<h3 class="tip-title">PostHog Cloud or Mixpanel, for product analytics.</h3>
+								<p class="tip-cite">Grow &amp; retain · Stay on the free cloud tier</p>
+								<p class="body-text">PostHog’s free tier covers, every month:</p>
+								<ul class="brand">
+									<li>1 million analytics events</li>
+									<li>5,000 session replays</li>
+									<li>1 million feature flag requests</li>
+									<li>100,000 error logs</li>
+								</ul>
+								<p class="body-text">
+									Over 90% of companies never pay.
+									(<a href="https://costbench.com/software/product-analytics/posthog/">source</a>,
+									<a href="https://posthog.com/pricing">pricing</a>) Mixpanel also has a generous free plan. This is what
+									a free tier looks like when the company genuinely wants you to grow into paying rather than trip into
+									it.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/PostHog/posthog">PostHog self-hosted</a>, the same product, and heavy to run.</li>
+									<li><a href="https://github.com/umami-software/umami">Umami</a>, lightweight web analytics. Worth being precise: that’s traffic numbers, not product analytics.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use PostHog Cloud at every early stage. Self-hosting PostHog is a genuine infrastructure job and only
+										pays off at very large volume. Use Umami if all you actually need is website traffic numbers.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Datadog is another option for logging and infrastructure monitoring. It also gets expensive quickly,
+										so be really careful about what you log, how many events you send, how much you store, and how long
+										you keep it.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">1M events, 5,000 replays, 1M flag requests, 100k error logs per month.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Usage-based past the free allowance. Over 90% never reach it.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">PostHog self-hosted at very large volume. Umami for plain traffic.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">18</span>
+								<h3 class="tip-title">Kit or Mailchimp, for email and newsletters.</h3>
+								<p class="tip-cite">Grow &amp; retain · Free tier, switch around $100/month</p>
+								<p class="body-text">
+									Kit’s free plan covers up to 10,000 subscribers but has no automations. Mailchimp’s free plan caps at
+									500. (<a href="https://www.lilachbullock.com/mailchimp-vs-convertkit/">source</a>) Kit’s paid Creator
+									plan is $39 a month, or $33 billed annually, and rises with list size.
+									(<a href="https://elitecontentmarketer.com/deals/convertkit-black-friday">source</a>)
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/knadh/listmonk">Listmonk</a>, a fast newsletter and list manager. Pair it with a sending service like Amazon SES.</li>
+									<li><a href="https://github.com/mautic/mautic">Mautic</a>, full marketing automation, and heavier to run.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use Kit free until you need automated sequences or pass 10,000 subscribers. Switch to Listmonk when
+										your Kit bill passes about $100 a month, which lands somewhere around 5,000 to 10,000 subscribers on
+										a paid plan, and only if you’re comfortable managing email deliverability yourself. That last clause
+										is doing a lot of work: deliverability is the one self-hosted problem that punishes you on a delay.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Kit: 10,000 subscribers, no automations. Mailchimp: 500.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Kit Creator, $39/month ($33 annual), rising with list size.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Listmonk, plus Amazon SES for sending.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">19</span>
+								<h3 class="tip-title">HubSpot, for CRM.</h3>
+								<p class="tip-cite">Grow &amp; retain · Stay paid, and start early</p>
+								<p class="body-text">
+									HubSpot’s free CRM covers contacts, deals and a pipeline for a small team, and many early founders get
+									by with a spreadsheet for longer than they should.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/twentyhq/twenty">Twenty</a>, a modern CRM with a clean interface and an API.</li>
+									<li><a href="https://github.com/espocrm/espocrm">EspoCRM</a>, mature and lightweight.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Start in HubSpot, or another real CRM, early, and treat it as a worthwhile spend. Consider Twenty only
+										if HubSpot’s cost is genuinely out of reach.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Starting in HubSpot or any CRM early is a really smart play. You end up managing so many leads and
+										prospects, plus enrichment and finding more leads. HubSpot isn’t exactly cheap, but it’s top of
+										funnel, and that makes it a worthwhile spend.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Contacts, deals and a pipeline for a small team.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Rises quickly as you add hubs and seats.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Twenty, only if cost is genuinely blocking.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">20</span>
+								<h3 class="tip-title">Intercom or Fin, for customer support.</h3>
+								<p class="tip-cite">Grow &amp; retain · Start with email, then weigh the AI</p>
+								<p class="body-text">
+									Essential is $29 per seat per month on annual billing, or $39 monthly, and there is no free tier. The
+									Fin AI agent adds $0.99 per resolved conversation. The company rebranded to Fin in May 2026, and
+									Salesforce has agreed to acquire it.
+									(<a href="https://automationatlas.io/answers/intercom-pricing-explained-2026/">source</a>) An impending
+									acquisition is worth noting for a tool you’d be embedding in your product.
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/chatwoot/chatwoot">Chatwoot</a> is a shared inbox for live chat, email and
+									social DMs, with a hosted option so you don’t have to self-host to try it.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Start with email support. When you genuinely need in-app chat, weigh Intercom’s built-in AI against
+										Chatwoot’s much lower cost. Per-resolution pricing is fine when a resolution is worth more than a
+										dollar to you, and it isn’t always.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										You can get away with email support for quite a while before you need in-app chat. The nice thing
+										about Intercom these days is its integrated AI, which can save you a lot of time.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">None.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Essential, $29/seat/month annual. Fin adds $0.99 per resolution.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Chatwoot, hosted or self-hosted.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">21</span>
+								<h3 class="tip-title">Canny, for feature requests and a public roadmap.</h3>
+								<p class="tip-cite">Grow &amp; retain · Open source from day one</p>
+								<p class="body-text">
+									The free plan covers 25 tracked users. Core starts at $19 a month for 100 tracked users and reaches
+									$311 a month at 1,000, because it bills per engaged user.
+									(<a href="https://produktly.com/pricing/canny">source</a>) Per-engaged-user pricing on a feedback board
+									means the bill goes up precisely when the board starts working.
+								</p>
+								<p class="body-text">The alternative is <a href="https://github.com/getfider/fider">Fider</a>, which does the job and does not count your users.</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use Fider from day one. Canny’s 25-user free tier fills within days of putting a feedback widget into
+										a live app, and then you’re migrating a board people have already voted on.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">25 tracked users.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Core, $19/month at 100 users, $311/month at 1,000.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Fider.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">22</span>
+								<h3 class="tip-title">Bitly, for short links and click tracking.</h3>
+								<p class="tip-cite">Grow &amp; retain · Start on Dub’s hosted free tier</p>
+								<p class="body-text">
+									Bitly’s free tier is small and aimed at occasional links, which is the right product for somebody
+									sharing a link at a conference and the wrong one for a company running campaigns.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/dubinc/dub">Dub</a>, short links with analytics. Its own hosted version has a free tier.</li>
+									<li><a href="https://github.com/shlinkio/shlink">Shlink</a>, a minimal self-hosted shortener.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Start on Dub’s hosted free tier. Self-host only for high link volume or fully white-labeled links on
+										your own domain.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Bitly: small, occasional use. Dub: a genuinely usable hosted free tier.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Only once you need volume or white-labeling.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Dub. Shlink if you want something minimal.</p>
+									</div>
+								</div>
+							</div>
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · Run the company</p>
+								<h2>Eight tools nobody outside the building ever sees.</h2>
+								<p class="section-sub">
+									Internal tools are where shared logins are most defensible and where seat pricing hurts most, so the
+									pattern through this section is: one account until revenue, then real seats, with two exceptions worth
+									paying for immediately.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">23</span>
+								<h3 class="tip-title">Zapier, for automation.</h3>
+								<p class="tip-cite">Run the company · Self-host if you have volume and no revenue</p>
+								<p class="body-text">
+									The free plan gives 100 tasks a month, limited to two-step Zaps. Professional starts at $29.99 a month
+									for 750 tasks. (<a href="https://wf.lindy.ai/blog/zapier-pricing">source</a>) The detail that catches
+									people out: each action step in a run counts as a task, so a 5-step Zap uses 5 tasks every single time
+									it fires. A hundred tasks is twenty runs.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/n8n-io/n8n">n8n</a>, the most popular option. Its license is “fair-code,” so it’s free to self-host for your own use but isn’t truly open source.</li>
+									<li><a href="https://github.com/activepieces/activepieces">Activepieces</a>, MIT-licensed, with no task limits when self-hosted.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Zapier free only covers very light, two-step use. For multi-step automations or real volume, either
+										pay for Zapier or self-host n8n, and the second option is the right one before you have revenue.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										100 tasks a month is actually not that much. If you’re really building automations that rely on Zaps
+										or need more than one step, you probably either need to pay for Zapier or host something yourself. n8n
+										is probably your next best option. I’ve heard less about Activepieces. If I had lots of tasks to run
+										and no revenue yet, I’d self-host n8n.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">100 tasks/month, two-step Zaps only.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Professional, $29.99/month for 750 tasks.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">n8n (fair-code). Activepieces if you want MIT.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">24</span>
+								<h3 class="tip-title">Asana, Monday or Linear, for project management.</h3>
+								<p class="tip-cite">Run the company · Shared free login, seats after revenue</p>
+								<p class="body-text">
+									Asana’s free plan covers core tasks, lists, boards and a calendar, with Starter at $10.99 per seat per
+									month. Monday’s free plan allows only 2 seats and 3 boards, and its paid plans require at least 3 seats.
+									(<a href="https://cut-the-saas.com/guides/asana-vs-monday">source</a>) Linear’s free plan is another
+									strong option for product teams.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/makeplane/plane">Plane</a>, a modern alternative to Jira and Linear.</li>
+									<li><a href="https://github.com/opf/openproject">OpenProject</a>, full-featured with Gantt charts and time tracking, but heavier.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use Asana or Linear free, and share one login if it’s pure task management. Add individual seats after
+										you reach revenue. Self-hosting starts to pay off around 10 or more people.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										For pure task management, you can get away with Asana on a shared license. Use tags to assign people,
+										so not everyone needs their own login. Individual seats can come after you have revenue. Linear is
+										another good free option. Stay away from Jira until you’re bigger, unless you already have experience
+										with it.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Asana: tasks, lists, boards, calendar. Monday: 2 seats, 3 boards.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Asana Starter, $10.99/seat/month. Monday requires 3 seats minimum.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Plane, at roughly 10+ people.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">25</span>
+								<h3 class="tip-title">Notion, for docs and the company wiki.</h3>
+								<p class="tip-cite">Run the company · Free while it’s just you</p>
+								<p class="body-text">
+									Notion’s free plan covers an individual comfortably. The costs start when you add team members, which is
+									the classic seat wall.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/AppFlowy-IO/AppFlowy">AppFlowy</a>, Notion-style docs with native mobile apps.</li>
+									<li><a href="https://github.com/toeverything/AFFiNE">AFFiNE</a>, docs combined with a whiteboard.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use Notion free while it’s just you. Switch when you’re paying for several seats, or when you need
+										your data offline and private.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">One person, comfortably.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Per member, once you add a team.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">AppFlowy.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">26</span>
+								<h3 class="tip-title">Slack, for team chat.</h3>
+								<p class="tip-cite">Run the company · Pay for Pro, earlier than feels comfortable</p>
+								<p class="body-text">
+									The free plan keeps 90 days of message history and allows 10 integrations. Pro is $7.25 per user per
+									month billed annually. (<a href="https://automationatlas.io/answers/slack-pricing-explained-2026/">source</a>)
+									Ninety days is the limit that quietly deletes the record of why you built things the way you did.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/mattermost/mattermost">Mattermost</a>, the closest match to Slack.</li>
+									<li><a href="https://github.com/zulip/zulip">Zulip</a>, threaded chat that works well for async teams.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Once you have a team and a little revenue, pay for Slack Pro to keep your message history. Stay on
+										free only if you genuinely don’t need old messages, which is a bet you make once and can’t unmake.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>
+										Keeping old Slack messages is more valuable than you think. Early decisions are good to look back on so
+										you can figure out why you made them. So many times I’ve wished we’d kept the messages from our early
+										Slack days. If you’ve got a team and a little revenue, Slack is a good thing to invest in, even if you
+										have to pay.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">90 days of history, 10 integrations.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Pro, $7.25/user/month annual.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Mattermost. Rarely the right call here.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">27</span>
+								<h3 class="tip-title">1Password or Bitwarden, for passwords.</h3>
+								<p class="tip-cite">Run the company · Pay at every stage</p>
+								<p class="body-text">
+									Both offer hosted team plans for a few dollars per user per month, which is close to the cheapest
+									insurance you will ever buy.
+								</p>
+								<ul class="brand">
+									<li><a href="https://github.com/dani-garcia/vaultwarden">Vaultwarden</a>, a lightweight server that works with the official Bitwarden apps.</li>
+									<li><a href="https://github.com/bitwarden/server">Bitwarden server</a>, the official self-hosted version.</li>
+								</ul>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Pay for a hosted plan at every early stage. A password vault is the single worst thing to lose to a
+										failed backup, and you will not discover the backup was failing until the day you need it. Self-host
+										only if you already run solid infrastructure with tested restores.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Limited personal plans on both.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">A few dollars per user per month, hosted.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Vaultwarden, only with tested backups.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">28</span>
+								<h3 class="tip-title">Figma, for design.</h3>
+								<p class="tip-cite">Run the company · Free tier, for a long time</p>
+								<p class="body-text">
+									The free Starter plan allows 2 editors and 3 design files.
+									(<a href="https://www.banani.co/blog/figma-pricing-and-credits">source</a>) A Professional Full seat is
+									$16 a month on annual billing.
+									(<a href="https://www.temperstack.com/plans/figma/">source</a>)
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/penpot/penpot">Penpot</a> is browser-based and free, with a hosted version,
+									so trying it costs you nothing but an afternoon.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										If you’re one designer on a couple of projects, Figma free works. Switch to Penpot when you need more
+										than 3 files or you’d be paying for several editor seats.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>You can probably get away with Figma free for a long time.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">Starter, 2 editors, 3 design files.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Professional Full seat, $16/month annual.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">Penpot, hosted or self-hosted.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">29</span>
+								<h3 class="tip-title">NotebookLM or Claude Projects, for chatting with your documents.</h3>
+								<p class="tip-cite">Run the company · Use what you already pay for</p>
+								<p class="body-text">
+									NotebookLM and Claude Projects both cover personal document Q&amp;A at no extra cost, or inside a
+									subscription you already have. That makes this a category where the paid tool is effectively free.
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/Tencent/WeKnora">WeKnora</a> is Tencent’s platform for building knowledge
+									bases you can search and ask questions of. It requires Docker and a bit of setup.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										Use NotebookLM or Claude Projects for your own research. WeKnora only makes sense for a shared team
+										knowledge base over hundreds of documents, or a support bot built on your own docs.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">NotebookLM, free. Claude Projects, inside an existing subscription.</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">No separate charge for personal use.</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">WeKnora, for a team knowledge base.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">30</span>
+								<h3 class="tip-title">Wispr Flow, for voice dictation.</h3>
+								<p class="tip-cite">Run the company · Open source from day one, above 15 minutes a week</p>
+								<p class="body-text">
+									The free tier allows 2,000 words a week on Mac or Windows, which is about 15 minutes of talking. Pro is
+									$15 a month, or $12 billed annually.
+									(<a href="https://www.laxis.com/blog/wispr-flow/">source</a>)
+								</p>
+								<p class="body-text">
+									<a href="https://github.com/OpenWhispr/openwhispr">OpenWhispr</a> is a desktop app that runs local
+									Whisper models or uses your own API key. Second desktop-app exception on the list, same logic as Cap.
+								</p>
+								<div class="callout">
+									<p class="callout-label">The dividing line</p>
+									<p>
+										If you dictate more than 15 minutes a week, use OpenWhispr from day one. It’s a desktop install with
+										no server to run.
+									</p>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Dave’s take</p>
+									<p>OpenWhispr is probably a good cheap investment. Or you can just use ChatGPT’s voice mode.</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Free tier</p>
+										<p class="spec-v">2,000 words/week (~15 minutes of talking).</p>
+									</div>
+									<div>
+										<p class="spec-k">First paid tier</p>
+										<p class="spec-v">Pro, $15/month ($12 annual).</p>
+									</div>
+									<div>
+										<p class="spec-k">Open source pick</p>
+										<p class="spec-v">OpenWhispr, or ChatGPT voice mode.</p>
+									</div>
+								</div>
+							</div>
+							<!-- ══════════ PART SEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part seven · The cheat sheet</p>
+								<h2>All thirty, one row each, with the trigger to switch.</h2>
+								<p class="section-sub">
+									The column that matters is the last one. Everything else you can look up; the trigger is the thing worth
+									knowing before you need it.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 18%">Category</th>
+											<th style="width: 20%">Name brand</th>
+											<th style="width: 24%">Open source pick</th>
+											<th>Switch when</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td><strong>In-app purchases</strong></td><td>RevenueCat</td><td>None</td><td>Never early. 1% of revenue past $2.5k/month.</td></tr>
+										<tr><td><strong>Backend</strong></td><td>Supabase Cloud</td><td>None; stay hosted</td><td>Don’t. Never self-host the database.</td></tr>
+										<tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Coolify</td><td>Traffic makes Vercel expensive. Reassess then.</td></tr>
+										<tr><td><strong>Error tracking</strong></td><td>New Relic / Sentry</td><td>GlitchTip</td><td>You outgrow a shared free account.</td></tr>
+										<tr><td><strong>Uptime</strong></td><td>UptimeRobot</td><td>Uptime Kuma</td><td>Skip early. Add when downtime costs customers.</td></tr>
+										<tr><td><strong>Push notifications</strong></td><td>OneSignal</td><td>Firebase Cloud Messaging (free), or Novu</td><td>Above 1,000 mobile MAU. Try Firebase first.</td></tr>
+										<tr><td><strong>SEO</strong></td><td>Semrush / Ahrefs</td><td>OpenSEO</td><td>Day one.</td></tr>
+										<tr><td><strong>Social scheduling</strong></td><td>Buffer</td><td>Postiz</td><td>More than about 5 channels.</td></tr>
+										<tr><td><strong>AI video</strong></td><td>Higgsfield</td><td>Open Higgsfield</td><td>Avoid paying for Higgsfield if you can.</td></tr>
+										<tr><td><strong>AI voice</strong></td><td>ElevenLabs</td><td>VoiceStudio</td><td>High volume and a decent computer.</td></tr>
+										<tr><td><strong>Screen recording</strong></td><td>Loom</td><td>Cap</td><td>Day one. Recordings longer than quick clips.</td></tr>
+										<tr><td><strong>Scheduling</strong></td><td>Calendly</td><td>Cal.com</td><td>You need more than 1 event type.</td></tr>
+										<tr><td><strong>Forms</strong></td><td>Typeform</td><td>Google Forms or Formbricks</td><td>Day one.</td></tr>
+										<tr><td><strong>E-signatures</strong></td><td>DocuSign</td><td>Documenso</td><td>More than 5 docs/month. Weigh polish for customers.</td></tr>
+										<tr><td><strong>Invoicing</strong></td><td>Stripe / FreshBooks</td><td>Invoice Ninja</td><td>Rarely. Stick with Stripe.</td></tr>
+										<tr><td><strong>Bookkeeping</strong></td><td>QuickBooks</td><td>Akaunting</td><td>Avoid QuickBooks from the start.</td></tr>
+										<tr><td><strong>Product analytics</strong></td><td>PostHog Cloud</td><td>PostHog self-hosted</td><td>Very large volume only.</td></tr>
+										<tr><td><strong>Email</strong></td><td>Kit</td><td>Listmonk</td><td>Kit bill passes about $100/month.</td></tr>
+										<tr><td><strong>CRM</strong></td><td>HubSpot</td><td>Twenty</td><td>Only if HubSpot’s cost is out of reach.</td></tr>
+										<tr><td><strong>Support</strong></td><td>Email, then Intercom / Fin</td><td>Chatwoot</td><td>You need chat. Weigh Intercom’s AI against cost.</td></tr>
+										<tr><td><strong>Feedback board</strong></td><td>Canny</td><td>Fider</td><td>Day one.</td></tr>
+										<tr><td><strong>Short links</strong></td><td>Bitly</td><td>Dub</td><td>Day one, on Dub’s hosted free tier.</td></tr>
+										<tr><td><strong>Automation</strong></td><td>Zapier</td><td>n8n</td><td>Multi-step flows, or 100+ tasks/month.</td></tr>
+										<tr><td><strong>Project management</strong></td><td>Asana / Linear</td><td>Plane</td><td>About 10+ people.</td></tr>
+										<tr><td><strong>Docs &amp; wiki</strong></td><td>Notion</td><td>AppFlowy</td><td>Multiple paid seats.</td></tr>
+										<tr><td><strong>Team chat</strong></td><td>Slack</td><td>Mattermost</td><td>Rarely. Pay for Pro to keep history.</td></tr>
+										<tr><td><strong>Passwords</strong></td><td>1Password / Bitwarden</td><td>Vaultwarden</td><td>Only with solid infrastructure and tested backups.</td></tr>
+										<tr><td><strong>Design</strong></td><td>Figma</td><td>Penpot</td><td>You outgrow the free plan.</td></tr>
+										<tr><td><strong>Chat with docs</strong></td><td>NotebookLM</td><td>WeKnora</td><td>A shared team knowledge base.</td></tr>
+										<tr><td><strong>Dictation</strong></td><td>Wispr Flow</td><td>OpenWhispr or ChatGPT voice</td><td>More than 15 minutes/week.</td></tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								Read down that last column and the pattern is hard to miss. Six “day one” entries, and every one of them is
+								a free tier too small to run a business on or a desktop app with no server. Everything else is a number:
+								1,000 MAU, five channels, five documents a month, $100 a month, ten people, fifteen minutes a week. None of
+								those are hard to watch for. The failure mode isn’t choosing wrong, it’s not knowing the number existed
+								until the month it bit.
+							</p>
+							<p class="body-text">
+								The other thing worth saying out loud: nothing on this list is a decision you make once. The prices in here
+								moved in the last twelve months, some of them substantially, and OneSignal’s free tier changes shape three
+								days after this was written. Put an hour in the calendar twice a year to re-read your own bill. That hour
+								is worth more than any individual choice above it.
+							</p>
+
+							<div class="pull">
+								<p>
+									You’re not choosing between paid and free. You’re choosing which of your limited hours you’d like to
+									spend on infrastructure that no customer will ever see.
+								</p>
+							</div>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you’re staring at a bill and can’t tell whether it’s a problem.</h2>
+								<p class="section-sub">
+									The useful conversation is rarely about the tool. It’s about which limit you’re actually hitting, and
+									whether the hours you’d spend moving are worth more than the line item.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Send me the tool you’re about to pay for, the number you’re about to cross, and roughly how many people are
+								in the company. I’ll tell you whether I’d pay it, whether I’d move, and what I’d do instead. No access to
+								anything needed.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=Paid%20vs%20Open%20Source">hi@davecto.com</a> with the
+									subject line <strong>“Paid vs Open Source.”</strong>
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to build software without fooling themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing. Every price, free-tier limit and threshold in this guide was gathered from web searches
+								in September 2026, and each one is linked to the page it came from so you can check it rather than trust me.
+								SaaS pricing changes constantly, often without announcement, and at least one figure here has a known expiry:
+								OneSignal’s free mobile push tier changes on October 1, 2026. Treat every number as a starting point for your
+								own five-minute check on the vendor’s own pricing page, not as a fact. I have not audited any of these tools,
+								run any of them at scale on your behalf, or benchmarked the open source alternatives against the paid ones.
+								Where I’ve said something is heavy to run, expensive to leave, or not worth it, that’s a judgment from
+								building at early-stage companies, not a measurement. The items marked <strong>Dave’s take</strong> are
+								opinions and are labelled as such, and where one of them disagrees with the general advice, the dividing line
+								follows the take. Licensing is worth checking yourself before you ship anything: n8n is “fair-code” rather
+								than open source, VoiceStudio is AGPL-3.0 with per-model licenses on top, and the practical implications of
+								both depend on what you’re building. I have no relationship with, and no financial interest in, any company
+								mentioned here.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+	</body>
+</html>
