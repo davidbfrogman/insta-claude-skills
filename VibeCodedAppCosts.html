@@ -1,0 +1,2158 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Thirty ways to cut the bill on an app you built with AI</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* ============================================================
+			   Dave Brown · brand tokens (see brand/STYLE-GUIDE.md)
+			   Paper #f7f5f0 · Ink #181614 · Muted #6b655c
+			   Rule #e4dfd5 · Teal #0f766e · Print teal #1e4a46
+			   ============================================================ */
+			:root {
+				--paper: #f7f5f0;
+				--ink: #181614;
+				--body: #2e2b28; /* ink at ~90%, body copy */
+				--muted: #6b655c;
+				--quiet: #f1ede6; /* the one permitted quiet fill */
+				--rule: #e4dfd5;
+				--accent: #0f766e;
+				--accent-print: #1e4a46;
+				--serif: Fraunces, Georgia, 'Times New Roman', serif;
+				--sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+			}
+
+			body {
+				margin: 0;
+				background: var(--paper);
+				-webkit-font-smoothing: antialiased;
+			}
+			.doc {
+				box-sizing: border-box;
+				max-width: 8.5in;
+				margin: 0 auto;
+				background: inherit;
+				padding: 56px clamp(24px, 5vw, 0.75in) 96px;
+			}
+			.doc-frame {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.doc-frame td {
+				padding: 0;
+			}
+			.running-hdr,
+			.running-ftr,
+			.hdr-space,
+			.ftr-space {
+				display: none;
+			}
+			h1,
+			h2,
+			h3 {
+				text-wrap: balance;
+			}
+			p,
+			li {
+				text-wrap: pretty;
+			}
+
+			/* ── Type ── */
+			.body-text {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 12px;
+			}
+			.body-text strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.lead {
+				font-family: var(--sans);
+				font-size: 17px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 18px 0 0;
+			}
+			.meta {
+				font-family: var(--sans);
+				font-size: 11px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				margin: 0;
+			}
+
+			/* ── The eyebrow: the brand's signature detail ── */
+			.eyebrow {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				margin: 0 0 10px;
+			}
+			.eyebrow-quiet {
+				color: var(--muted);
+			}
+			.kicker {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.rule-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 10px;
+			}
+			.rule-label::before {
+				content: '';
+				display: block;
+				height: 1px;
+				width: 32px;
+				background: var(--muted);
+			}
+
+			/* ── Section headers: hairline rules, not boxes ── */
+			.section-hdr {
+				margin: 46px 0 26px;
+				padding-top: 22px;
+				border-top: 1px solid var(--rule);
+			}
+			.section-hdr h2 {
+				font-family: var(--serif);
+				font-size: 27px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.section-hdr .section-sub {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 8px 0 0;
+				max-width: 42em;
+			}
+
+			/* ── Entries ── */
+			.tip {
+				margin-bottom: 30px;
+			}
+			.tip-title {
+				font-family: var(--serif);
+				font-size: 19.5px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.015em;
+				margin: 0 0 10px;
+				line-height: 1.32;
+			}
+			.tip-num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				display: block;
+				margin: 0 0 6px;
+			}
+			.tip-cite {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 14px;
+			}
+
+			/* ── Callout: one accent hairline, no fill ── */
+			.callout {
+				border-left: 2px solid var(--accent);
+				padding: 2px 0 2px 20px;
+				margin: 16px 0 18px;
+			}
+			.callout-label {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--accent);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 6px;
+			}
+			.callout p:not([class]) {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.62;
+				margin: 0 0 8px;
+			}
+			.callout p:last-child {
+				margin-bottom: 0;
+			}
+			/* The risk variant: same shape, muted rule, so accent stays
+			   reserved for things the reader is meant to act on. */
+			.callout-risk {
+				border-left-color: var(--muted);
+			}
+			.callout-risk .callout-label {
+				color: var(--muted);
+			}
+
+			/* ── Spec strip under each item ── */
+			.spec {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 30px;
+				border-top: 1px solid var(--rule);
+				padding: 14px 0 2px;
+				margin: 16px 0 0;
+			}
+			.spec > div {
+				flex: 1 1 150px;
+				min-width: 140px;
+			}
+			.spec-k {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 5px;
+			}
+			.spec-v {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Copy block: the one thing meant to be lifted verbatim ── */
+			.prompt {
+				border: 1px solid var(--rule);
+				border-left: 2px solid var(--accent);
+				background: var(--quiet);
+				padding: 20px 24px 22px;
+				margin: 18px 0 14px;
+			}
+			.prompt-label {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				margin: 0 0 16px;
+			}
+			.prompt-label .spacer {
+				display: block;
+				flex: 1 1 auto;
+				height: 1px;
+				background: var(--rule);
+			}
+			.copy-btn {
+				font-family: var(--sans);
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				background: transparent;
+				border: 1px solid var(--rule);
+				padding: 5px 11px;
+				cursor: pointer;
+				flex: 0 0 auto;
+			}
+			.copy-btn:hover {
+				border-color: var(--accent);
+			}
+			.prompt-body {
+				font-family: var(--mono);
+				font-size: 12.5px;
+				color: var(--ink);
+				line-height: 1.7;
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+			.prompt-body .fill {
+				color: var(--accent);
+			}
+			.prompt-note {
+				font-family: var(--sans);
+				font-size: 13.5px;
+				color: var(--muted);
+				line-height: 1.6;
+				margin: 0;
+			}
+
+			/* ── Pull quote: serif, accent rule, never italic ── */
+			.pull {
+				border-left: 2px solid var(--accent);
+				padding: 4px 0 4px 22px;
+				margin: 26px 0;
+			}
+			.pull p {
+				font-family: var(--serif);
+				font-size: 21px;
+				font-weight: 400;
+				color: var(--ink);
+				line-height: 1.42;
+				letter-spacing: -0.015em;
+				margin: 0;
+			}
+
+			/* ── Bordered strip (figures) ── */
+			.strip {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 24px 0 26px;
+				margin: 26px 0 30px;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 24px 26px;
+			}
+			.stat {
+				flex: 1 1 120px;
+				min-width: 108px;
+			}
+			.stat-figure {
+				font-family: var(--serif);
+				font-size: 28px;
+				font-weight: 400;
+				color: var(--ink);
+				letter-spacing: -0.02em;
+				line-height: 1;
+				margin: 0 0 8px;
+			}
+			.stat-label {
+				font-family: var(--sans);
+				font-size: 12.5px;
+				color: var(--muted);
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* ── Contents ── */
+			.contents {
+				border-top: 1px solid var(--rule);
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0 8px;
+				margin: 30px 0 36px;
+			}
+			.contents-item {
+				display: flex;
+				gap: 18px;
+				align-items: baseline;
+				margin: 0 0 14px;
+			}
+			.contents-item .num {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				letter-spacing: 0.15em;
+				flex: 0 0 auto;
+				width: 22px;
+			}
+			.contents-item .what {
+				font-family: var(--sans);
+				font-size: 14px;
+				color: var(--body);
+				line-height: 1.5;
+				margin: 0;
+			}
+			.contents-item .what span {
+				color: var(--muted);
+			}
+
+			/* ── Lists ── */
+			ul.brand,
+			ol.brand {
+				font-family: var(--sans);
+				font-size: 15px;
+				color: var(--body);
+				line-height: 1.68;
+				margin: 0 0 14px;
+				padding-left: 20px;
+			}
+			ul.brand li,
+			ol.brand li {
+				margin-bottom: 8px;
+			}
+			ul.brand li::marker,
+			ol.brand li::marker {
+				color: var(--muted);
+			}
+			ul.brand strong,
+			ol.brand strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			/* ── Tables: rules, no fills ── */
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 16px 0 8px;
+				font-family: var(--sans);
+				font-size: 13.5px;
+			}
+			.data-table th {
+				font-family: var(--sans);
+				font-size: 10.5px;
+				font-weight: 500;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				text-align: left;
+				padding: 0 16px 8px 0;
+				border-bottom: 1px solid var(--ink);
+			}
+			.data-table td {
+				padding: 11px 16px 11px 0;
+				border-bottom: 1px solid var(--rule);
+				color: var(--body);
+				vertical-align: top;
+				line-height: 1.55;
+			}
+			.data-table td:last-child,
+			.data-table th:last-child {
+				padding-right: 0;
+			}
+			.data-table td strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+			.table-scroll {
+				overflow-x: auto;
+			}
+
+			code {
+				font-family: var(--mono);
+				font-size: 0.92em;
+				color: var(--ink);
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: underline;
+				text-underline-offset: 4px;
+				text-decoration-color: rgba(15, 118, 110, 0.4);
+			}
+			a:hover {
+				text-decoration-color: var(--accent);
+			}
+			hr.hair {
+				border: 0;
+				border-top: 1px solid var(--rule);
+				margin: 44px 0;
+			}
+			::selection {
+				background: var(--accent);
+				color: var(--paper);
+			}
+
+			@page {
+				size: letter;
+				margin: 0;
+			}
+			@media print {
+				html {
+					-webkit-print-color-adjust: exact;
+					print-color-adjust: exact;
+				}
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				.doc {
+					max-width: none !important;
+					margin: 0 !important;
+					padding: 0 0.75in !important;
+					box-shadow: none !important;
+					border: none !important;
+				}
+				.hdr-space,
+				.ftr-space {
+					display: table-cell;
+					height: 0.75in !important;
+				}
+				.running-ftr {
+					display: flex !important;
+					justify-content: space-between;
+					align-items: baseline;
+					position: fixed !important;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					margin: 0 !important;
+					padding: 0 0.75in 0.35in !important;
+					font-family: Inter, sans-serif;
+					font-size: 10px;
+					font-weight: 500;
+					letter-spacing: 0.15em;
+					text-transform: uppercase;
+					color: #6b655c;
+				}
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					break-after: avoid;
+				}
+				figure,
+				pre,
+				blockquote,
+				img,
+				svg,
+				tr,
+				.callout,
+				.prompt,
+				.pull,
+				.strip,
+				.spec,
+				.contents {
+					break-inside: avoid;
+				}
+				.section-hdr {
+					break-inside: avoid;
+					break-after: avoid;
+				}
+				.tip-num,
+				.tip-cite,
+				.kicker,
+				.rule-label,
+				.eyebrow,
+				.prompt-label {
+					break-after: avoid;
+				}
+				p,
+				li {
+					orphans: 3;
+					widows: 3;
+				}
+				.screen-only,
+				.copy-btn {
+					display: none !important;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="doc">
+			<div class="running-ftr">
+				<span>davecto</span>
+				<span>instagram.com/davecto</span>
+			</div>
+			<table class="doc-frame" role="presentation">
+				<thead>
+					<tr>
+						<td class="hdr-space"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<!-- ── Masthead ── -->
+							<p class="eyebrow">A cost-cutting guide for vibe coders</p>
+							<h1
+								style="
+									font-family: var(--serif);
+									font-size: 42px;
+									font-weight: 400;
+									color: var(--ink);
+									line-height: 1.06;
+									letter-spacing: -0.025em;
+									margin: 0;
+								"
+							>
+								Thirty ways to cut the bill on an app you built with AI.
+							</h1>
+							<p class="lead">
+								Most vibe-coded apps don’t have a traffic problem. They have a defaults problem: the biggest model, the
+								biggest server, a staging copy nobody opens, and a page that asks the database for news every second.
+								This guide goes through all thirty fixes in the order I’d do them, with the price behind each one.
+							</p>
+							<p class="meta" style="margin-top: 22px">by Dave Brown · October 2026</p>
+							<div style="width: 56px; height: 2px; background: var(--accent-print); margin: 24px 0 34px"></div>
+
+							<p class="body-text">
+								When you ask an AI coding tool for “a backend,” it builds one that works. Working is all it was asked
+								for. It reaches for the services it has seen most often and sizes them for a company that already has
+								customers. Nothing about the output is wrong. It just costs more than an app with forty users needs to
+								cost.
+							</p>
+							<p class="body-text">
+								The good news is that the expensive parts follow a pattern, and it’s the same in nearly every app.
+								Services you never touch. Environments that run all night. An AI model three sizes bigger than the job
+								needs. Code that does the same work a thousand times when once would do. Each of those has a fix, and
+								most of the fixes take an afternoon.
+							</p>
+							<p class="body-text">
+								The thirty fixes are grouped into six parts. Each one says what to do, roughly how long it takes, what
+								it saves, and what to watch out for. Prices came from web searches and vendor pages in October 2026.
+								They change often, so check the vendor’s page before you commit to anything.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">The rule everything else follows from</p>
+								<p>
+									Cap the downside first, then follow the money. Set a spend cap today, before you optimise anything,
+									because one bad month costs more than every saving in this guide put together. Then open the bill
+									and start with the biggest line, not the easiest one.
+								</p>
+								<p>
+									For most vibe-coded apps the biggest line is the AI model. For the rest it’s usually a database or a
+									server that’s far bigger than it needs to be. Either way, you’ll know within ten minutes of reading
+									the invoice.
+								</p>
+							</div>
+
+							<div class="strip">
+								<div class="stat">
+									<p class="stat-figure">4×</p>
+									<p class="stat-label">What Claude Opus 5.5 costs per token compared with Haiku 4.5. Plenty of tasks don’t need the difference.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">50%</p>
+									<p class="stat-label">The Batch API discount for AI work nobody is waiting on. It stacks with prompt caching.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">~70%</p>
+									<p class="stat-label">What you save on staging by running it 50 hours a week instead of 168.</p>
+								</div>
+								<div class="stat">
+									<p class="stat-figure">$0</p>
+									<p class="stat-label">Egress on Cloudflare R2. On most other storage, serving files is the expensive part.</p>
+								</div>
+							</div>
+
+							<!-- ── Contents ── -->
+							<div class="contents">
+								<p class="rule-label" style="margin-bottom: 18px">What’s in here</p>
+								<div class="contents-item">
+									<span class="num">01</span>
+									<p class="what">
+										Where to start. <span>The order to work in, and how to tell which part of this guide your bill
+										needs most.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">02</span>
+									<p class="what">
+										Right-size what you have. <span>The bill audit, smaller tiers, sleeping environments, spend caps,
+										old snapshots. Fixes 01–05.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">03</span>
+									<p class="what">
+										Pick cheaper hosting models. <span>Free tiers, CDNs, scale-to-zero, one VPS, one Postgres, no
+										Kubernetes. Fixes 06–12.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">04</span>
+									<p class="what">
+										Cut AI and API costs. <span>Model choice, caching, output caps, batching, rate limits, with a worked
+										example. Fixes 13–19.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">05</span>
+									<p class="what">
+										Reduce bandwidth and storage. <span>CDNs, images, egress-free storage, lifecycle rules, compression.
+										Fixes 20–24.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">06</span>
+									<p class="what">
+										Fix the code AI wrote. <span>N+1 queries, polling, unbounded queries, noisy logs, runaway jobs.
+										Fixes 25–29, plus a prompt that finds them for you.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">07</span>
+									<p class="what">
+										Get free money. <span>Startup credits from AWS, Google, Microsoft and Anthropic. Fix 30.</span>
+									</p>
+								</div>
+								<div class="contents-item">
+									<span class="num">08</span>
+									<p class="what">
+										The cheat sheet. <span>All thirty, one row each, with the time each one takes.</span>
+									</p>
+								</div>
+							</div>
+
+							<!-- ══════════ PART ONE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part one · Where to start</p>
+								<h2>Do the five-minute safety step first, then follow the money.</h2>
+								<p class="section-sub">
+									Thirty fixes is too many to do at once, and most of them won’t matter for your app. Here’s how to
+									find the three or four that will.
+								</p>
+							</div>
+
+							<p class="body-text">
+								Do fix 04, spend caps, before anything else, today, on every service that bills you. Then do fix 01:
+								read the bill. Whatever the biggest line turns out to be tells you where to go next.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 30%">If the biggest line is</th>
+											<th style="width: 36%">It usually means</th>
+											<th>Start with</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>An AI model provider</strong></td>
+											<td>The biggest model on every call, with no caching and no output cap.</td>
+											<td>Part four, fixes 13, 15 and 16, then 18.</td>
+										</tr>
+										<tr>
+											<td><strong>A database</strong></td>
+											<td>An oversized instance, or queries that do far more work than they need to.</td>
+											<td>Fixes 02 and 11, then part six.</td>
+										</tr>
+										<tr>
+											<td><strong>Compute or servers</strong></td>
+											<td>Always-on machines for traffic that comes and goes, or environments nobody is using.</td>
+											<td>Fixes 03, 07 and 08.</td>
+										</tr>
+										<tr>
+											<td><strong>Bandwidth or egress</strong></td>
+											<td>Large files served straight from origin storage, with no CDN in between.</td>
+											<td>Part five, fixes 20 to 22.</td>
+										</tr>
+										<tr>
+											<td><strong>Many small lines</strong></td>
+											<td>Too many separate managed services, each just over its free tier.</td>
+											<td>Fixes 01, 09 and 10.</td>
+										</tr>
+										<tr>
+											<td><strong>Logging or monitoring</strong></td>
+											<td>Debug logs that were left on in production.</td>
+											<td>Fix 28.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="pull">
+								<p>
+									The cheapest dollar is the one a bug never gets to spend. Cap the downside before you optimise
+									anything.
+								</p>
+							</div>
+
+							<!-- ══════════ PART TWO ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part two · Right-size what you have</p>
+								<h2>Most of what you’re paying for, you didn’t ask for.</h2>
+								<p class="section-sub">
+									Five fixes that change nothing about how the app works. You’re only getting rid of things that run
+									without doing any useful work.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">01</span>
+								<h3 class="tip-title">Read your bill line by line.</h3>
+								<p class="tip-cite">Right-size · Do this first</p>
+								<p class="body-text">
+									Open the billing page on every service you pay for and look at what’s actually there. AI coding
+									tools build generously. Ask for “a backend” and you can end up with a database, a Redis cache, a
+									staging copy of everything, a couple of storage buckets and a queue, and each of them bills you
+									whether the app uses it or not.
+								</p>
+								<p class="body-text">
+									For every line, you should be able to answer three questions: what is it, which part of the app
+									uses it, and what breaks if I turn it off. If you can’t answer all three, that line is a candidate
+									for deletion.
+								</p>
+								<div class="callout">
+									<p class="callout-label">How to do it</p>
+									<p>
+										Make a spreadsheet with one row per service, its cost last month and the month before, and the
+										answers to those three questions. Sort by cost. The top three rows are almost always most of the
+										bill, and that’s where your next hour should go.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">About an hour.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Whatever you find that you didn’t know was running.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Deleting something that holds data. Export or snapshot it first.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">02</span>
+								<h3 class="tip-title">Drop your server and database to the smallest tier that copes.</h3>
+								<p class="tip-cite">Right-size · Usually safe</p>
+								<p class="body-text">
+									Managed providers often suggest a production-sized instance by default, and AI tools tend to accept
+									whatever is suggested. Most first apps spend nearly all day close to idle. Open the metrics for the
+									last thirty days. If CPU rarely goes above about 20% and memory has room to spare, move down one
+									size.
+								</p>
+								<p class="body-text">
+									Wait a week and check again. If nothing got slower, go down another size. Doing it one step at a
+									time means you find the floor without having to guess.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Twenty minutes, then a week of watching.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Often half of that line or more, since each size down roughly halves the price.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Memory, not CPU. That’s usually what runs out first on a small instance.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">03</span>
+								<h3 class="tip-title">Put dev and staging to sleep when nobody’s working.</h3>
+								<p class="tip-cite">Right-size · Easy to automate</p>
+								<p class="body-text">
+									A week has 168 hours. If you work on the app 50 of them, a staging environment that’s only up during
+									those hours costs about 30% of one that runs all the time. Every non-production copy of your app is
+									a candidate: staging servers, dev databases, preview workers.
+								</p>
+								<p class="body-text">
+									Most clouds let you stop instances on a schedule, and a two-line cron job will do it where they
+									don’t. Better still, put non-production environments on platforms that scale to zero on their own
+									(fix 08) or on preview deployments that disappear once the branch is merged. And ask honestly
+									whether you need a staging environment yet. With no users there’s nothing to stage for, so you can
+									test in production.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour to automate.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">About 70% of every non-production environment.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Scheduled jobs that run in staging and that you forgot about.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">04</span>
+								<h3 class="tip-title">Set billing alerts and hard spend caps on everything.</h3>
+								<p class="tip-cite">Right-size · Do this today</p>
+								<p class="body-text">
+									An alert tells you something is happening. A cap stops it. You want both, on every service that can
+									bill you by usage. Set alerts at 50%, 90% and 100% of what you expect to spend, and send them to an
+									inbox you actually read.
+								</p>
+								<p class="body-text">
+									Providers differ on this. AWS and Google Cloud budgets alert you by default but don’t stop anything,
+									so a real hard stop there takes extra setup. Others give you a real limit out of the box: Vercel’s
+									spend management can pause a project, and Anthropic’s console lets you set a spend limit for each
+									workspace. Wherever a real cap exists, turn it on.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">Why this is first</p>
+									<p>
+										The bills that hurt aren’t the slow creep. They’re a retry loop that runs all weekend, a function
+										that calls itself, or an AI endpoint with no login that a bot finds on a Tuesday. You only find
+										out when the invoice arrives, and by then the money is already spent. A cap turns a four-figure
+										surprise into a short outage.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Fifteen minutes per provider.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The one bad month.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Providers where “budget” means an email, not a stop.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">05</span>
+								<h3 class="tip-title">Delete old snapshots, backups, logs and orphaned volumes.</h3>
+								<p class="tip-cite">Right-size · Quiet pile-up</p>
+								<p class="body-text">
+									These are the lines that grow every month without anyone deciding they should. A disk that outlived
+									the server it was attached to. Automated snapshots that are kept forever. Log groups that never
+									expire, which is the default on AWS CloudWatch. Each one is small. Together they can add up to real
+									money.
+								</p>
+								<p class="body-text">
+									Set a retention policy and let it do the work. Keep 7 to 30 days of logs and a handful of recent
+									backups, and delete any volume that isn’t attached to anything.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Thirty minutes.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Small per item, and it grows every month you leave it.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Keep at least one recent backup, and test that you can restore it.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART THREE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part three · Pick cheaper hosting models</p>
+								<h2>Pay for running time only when someone’s actually using it.</h2>
+								<p class="section-sub">
+									An app with a few hundred users is idle most of the time. These seven fixes stop you paying for that
+									idle time, and the last one keeps you from adding complexity that costs money to run.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">06</span>
+								<h3 class="tip-title">Use free tiers aggressively, and read their terms.</h3>
+								<p class="tip-cite">Hosting · The whole line, until you outgrow it</p>
+								<p class="body-text">
+									Vercel, Netlify, Cloudflare, Supabase, Neon and Firebase all have free tiers big enough to run a real
+									early-stage app. Vercel’s Hobby plan includes 100 GB of transfer and a million function invocations a
+									month. (<a href="https://vercel.com/pricing">pricing</a>) Supabase’s free tier gives you two projects
+									and a 500 MB database. (<a href="https://supabase.com/pricing">pricing</a>) Neon gives you 100
+									compute-hours and half a gigabyte of storage per project, on up to 100 projects.
+									(<a href="https://neon.com/pricing">pricing</a>)
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The trap</p>
+									<p>
+										Read the terms as well as the limits. Vercel’s Hobby plan is for personal, non-commercial use, so
+										once you charge money you’re meant to move to Pro at $20 per user per month. Supabase pauses free
+										projects after a week with no activity. And check what happens when you go over a limit, because
+										some services cut you off and others start billing you automatically.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Varies. Cheapest when you choose at the start.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The entire line, until you cross the limit.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Commercial-use clauses, pausing, and overage behaviour.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">07</span>
+								<h3 class="tip-title">Host static frontends on a CDN, not a running server.</h3>
+								<p class="tip-cite">Hosting · Often the whole frontend bill</p>
+								<p class="body-text">
+									If your frontend builds to a folder of HTML, JavaScript and CSS (a Vite or Create React App project,
+									or a static Astro site), it doesn’t need a server. It’s just files. Cloudflare Pages and Netlify
+									serve those files from data centres close to your users, and you pay nothing or close to nothing,
+									with no machine running in between.
+								</p>
+								<p class="body-text">
+									AI tools often put the frontend in a Node container out of habit, next to the API. Split it out. The
+									API can stay where it is.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An afternoon.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The frontend server, usually all of it.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Server-side rendering. If your framework renders pages on the server, the app isn’t fully static.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">08</span>
+								<h3 class="tip-title">Use scale-to-zero platforms, so idle costs nothing.</h3>
+								<p class="tip-cite">Hosting · Best for spiky, low traffic</p>
+								<p class="body-text">
+									Google Cloud Run, AWS Lambda and Fly.io machines can shut down completely when no requests are coming
+									in and start again on the next one. You pay for the seconds you actually serve traffic. For an API
+									that gets a few thousand requests a day, that usually comes in under the price of the smallest
+									always-on server, and Cloud Run and Lambda both include a monthly free allowance on top.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">A day, if the app is already in a container.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Every hour the app sits idle.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Cold starts on the first request, and steady high traffic, where an always-on server becomes cheaper.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">09</span>
+								<h3 class="tip-title">Consider one cheap VPS instead of many managed services.</h3>
+								<p class="tip-cite">Hosting · Five to ten times cheaper at small scale</p>
+								<p class="body-text">
+									A Hetzner server with 2 vCPUs and 4 GB of RAM costs single-digit euros a month
+									(<a href="https://www.hetzner.com/cloud">pricing</a>), and DigitalOcean’s smallest droplets cost about
+									the same. One of those can run your API, your background workers, a cache and a cron scheduler,
+									all together. The same setup on managed services can easily come to five to ten times as much,
+									mostly because each service charges its own minimum.
+								</p>
+								<p class="body-text">
+									Tools like Coolify, Kamal or plain Docker Compose make deploying to one box feel close to a managed
+									platform.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">What you’re signing up for</p>
+									<p>
+										You now own security updates, backups and uptime. None of that is hard, but all of it takes time.
+										Keep the database on a managed service even if everything else moves to the VPS. That’s the one
+										place where saving a few dollars isn’t worth the risk.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">A day to set up, plus a little ongoing upkeep.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The per-service minimums that add up across a managed stack.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Unpatched servers and untested backups.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">10</span>
+								<h3 class="tip-title">Consolidate. One Postgres can do the work of four services.</h3>
+								<p class="tip-cite">Hosting · Fewer bills, fewer limits</p>
+								<p class="body-text">
+									Early on, Postgres can be your queue (with a library like pg-boss), your cache, your full-text
+									search, your document store (JSON columns), your pub/sub (<code>LISTEN</code>/<code>NOTIFY</code>)
+									and your vector database (pgvector). Every separate service you drop is one less bill, one less free
+									tier to outgrow and one less thing to keep running.
+								</p>
+								<p class="body-text">
+									You’ll eventually outgrow some of this, and that’s fine. Moving the queue to a dedicated service
+									when you have the traffic to justify it is easy. Paying for four services from day one, before
+									there’s any traffic, is just paying.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">A few hours per service you fold in.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The minimum charge of each service you remove.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Don’t migrate something that works and already costs nothing.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">11</span>
+								<h3 class="tip-title">Use serverless Postgres that pauses when nobody’s querying it.</h3>
+								<p class="tip-cite">Hosting · Ideal for dev, staging and side projects</p>
+								<p class="body-text">
+									Neon shuts the database’s compute down after five minutes without queries and starts it again on the
+									next one, so an idle database costs only its storage. (<a href="https://neon.com/pricing">pricing</a>)
+									It also makes a cheap branch of your database for each preview environment.
+								</p>
+								<p class="body-text">
+									Supabase works differently. Free projects pause after seven days without activity, and you have to
+									restore them by hand, while paid Supabase compute runs around the clock. That makes Supabase a great
+									free tier for prototypes, but it doesn’t scale to zero the way Neon does.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour for a new project. A migration for an existing one.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Compute on every database that’s idle most of the day.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">A short wake-up delay on the first query after an idle period.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">12</span>
+								<h3 class="tip-title">Avoid Kubernetes until you actually need it.</h3>
+								<p class="tip-cite">Hosting · A cost you’d add, not cut</p>
+								<p class="body-text">
+									On AWS, the EKS control plane alone costs $0.10 an hour, about $73 a month, before a single
+									container runs. (<a href="https://aws.amazon.com/eks/pricing/">pricing</a>) Then come the minimum
+									node counts, load balancers and monitoring, plus the hours you spend learning all of it. AI tools
+									will cheerfully write Kubernetes manifests for an app with twelve users. Say no.
+								</p>
+								<p class="body-text">
+									You need Kubernetes when you have many services, a team, and someone who wants to own the cluster.
+									Until all three are true, a platform from fix 08 or one VPS from fix 09 will be cheaper and simpler.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">None. Just don’t.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">$73/month in control-plane fees on EKS, plus nodes and the hours you’d spend.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">AI-generated infra code that adds it “to be production-ready.”</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART FOUR ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part four · Cut AI and API costs</p>
+								<h2>The line that grows with every user is the one to fix first.</h2>
+								<p class="section-sub">
+									For many vibe-coded apps this is the biggest line on the bill, because every click can trigger a
+									model call, and the code that makes the call probably defaults to the biggest model with no limits.
+								</p>
+							</div>
+
+							<p class="body-text">
+								The prices below are Anthropic’s current API rates per million tokens. (<a
+									href="https://platform.claude.com/docs/en/about-claude/pricing"
+									>pricing</a
+								>) Other providers have the same structure: input is cheap, output costs about five times as much, and
+								the gap between the smallest and largest models is large.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 28%">Model</th>
+											<th style="width: 18%">Input</th>
+											<th style="width: 18%">Output</th>
+											<th>Cached input read</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td><strong>Claude Haiku 4.5</strong></td><td>$1</td><td>$5</td><td>$0.10</td></tr>
+										<tr><td><strong>Claude Sonnet 5.5</strong></td><td>$2</td><td>$10</td><td>$0.20</td></tr>
+										<tr><td><strong>Claude Opus 5.5</strong></td><td>$4</td><td>$20</td><td>$0.20</td></tr>
+										<tr><td><strong>Claude Fable 5.1</strong></td><td>$10</td><td>$50</td><td>$0.25</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<p class="body-text" style="margin-top: 14px">
+								Batch requests are half price on every model, cached reads included.
+							</p>
+
+							<div class="tip" style="margin-top: 30px">
+								<span class="tip-num">13</span>
+								<h3 class="tip-title">Use the smallest model that does the job.</h3>
+								<p class="tip-cite">AI costs · Usually the biggest single saving</p>
+								<p class="body-text">
+									Sorting a support ticket, pulling a date out of an email, tagging a photo, checking whether a
+									comment is spam: these are small jobs, and Haiku handles them for a quarter of what Opus costs.
+									Sonnet covers most writing, chat and coding. Save the largest models for the work that actually
+									needs them.
+								</p>
+								<p class="body-text">
+									Don’t guess, test. Take 20 to 50 real inputs from your app, run them through the smaller model, and
+									read the outputs next to the ones you have now. If you can’t tell which is which, switch. On the
+									newest models, also try turning the <code>effort</code> setting down before you change models. A
+									capable model on low effort often beats a smaller model, and it uses fewer tokens than the same
+									model on high.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An afternoon of side-by-side testing.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Up to 75% per call, going from Opus 5.5 to Haiku 4.5.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">A quality drop you only notice weeks later. Keep the test set and re-run it.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">14</span>
+								<h3 class="tip-title">Cache AI responses for prompts you’ve already answered.</h3>
+								<p class="tip-cite">AI costs · Free after the first call</p>
+								<p class="body-text">
+									If ten users ask your app to summarise the same article, you only need to pay for the first summary.
+									Store each response in your database, keyed by a hash of the model, the prompt and the inputs, and
+									check there before you call the model. Product descriptions, FAQ answers and summaries of shared
+									documents all repeat more than you’d expect.
+								</p>
+								<p class="body-text">
+									Caching prompts that are similar rather than identical (by comparing embeddings) saves more, but it
+									can also give a user the wrong answer. Start with exact matches. They’re safe, and they’re often a
+									bigger share of traffic than people assume.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">A couple of hours.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Every repeated call, in full.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Caching anything personal across users. Include the user in the key when it matters.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">15</span>
+								<h3 class="tip-title">Turn on prompt caching for long, repeated system prompts.</h3>
+								<p class="tip-cite">AI costs · Pays off from the second request</p>
+								<p class="body-text">
+									If every call sends the same long system prompt, the same tool definitions or the same reference
+									document, prompt caching lets the provider reuse that part instead of charging full price every time.
+									On most Claude models, cached reads cost a tenth of the normal input price. On Opus 5.5 they cost a
+									twentieth. Writing to the cache costs 1.25 times normal for a five-minute cache, so it pays for itself
+									from the second request.
+								</p>
+								<div class="callout">
+									<p class="callout-label">Two things that quietly break it</p>
+									<p>
+										The cached part has to be byte-for-byte identical every time, so a timestamp or a user’s name near
+										the top of the system prompt ruins it. Put everything that changes at the end. And there’s a
+										minimum size: 512 tokens on the newest models, but 4,096 on Haiku 4.5, so a short prompt won’t
+										cache there at all. Check <code>cache_read_input_tokens</code> in the response. If it’s always
+										zero, caching isn’t working.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour, mostly reordering the prompt.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Up to 90% (95% on Opus 5.5) of the repeated part of every input.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Dynamic content at the top of the prompt.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">16</span>
+								<h3 class="tip-title">Trim your prompts and cap the output length.</h3>
+								<p class="tip-cite">AI costs · You pay per token both ways</p>
+								<p class="body-text">
+									AI-written prompts tend to grow. Instructions pile up, examples get added and never removed, and
+									whole documents get pasted in when a single section would do. Read your system prompt the way a
+									stranger would and cut anything that doesn’t change the output.
+								</p>
+								<p class="body-text">
+									Output is where the money goes, at five times the input price. If your interface shows two
+									sentences, ask for two sentences and set <code>max_tokens</code> to match. The instruction is what
+									keeps answers short. The cap is a backstop for when the model ignores it. Don’t set the cap so low
+									that answers get cut off halfway, because a truncated answer you have to retry costs more than a
+									complete one.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour per prompt.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Often a third to a half of output spend.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Truncated answers. Check how often responses hit the cap.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">17</span>
+								<h3 class="tip-title">Send work nobody is waiting on through a batch API.</h3>
+								<p class="tip-cite">AI costs · Half price, no quality trade-off</p>
+								<p class="body-text">
+									Anthropic’s Message Batches API and OpenAI’s Batch API both charge half price in exchange for
+									results arriving within 24 hours, which in practice is usually much sooner. The discount stacks with
+									prompt caching. Nightly digests, tagging a backlog, re-summarising old records and running evals are
+									all work nobody watches happen, so there’s no reason to pay full price for it.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Half a day per job you move.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">50% of everything you move.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Results arrive in any order. Match them up by ID, not by position.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">18</span>
+								<h3 class="tip-title">Rate-limit every user, so one person can’t run up your bill.</h3>
+								<p class="tip-cite">AI costs · Protection, not optimisation</p>
+								<p class="body-text">
+									Without a limit, one user with a script, or one user who simply loves your app, can make thousands of
+									model calls a day at your expense. Put a per-user limit on every route that calls a model, per minute
+									and per day. Give free users a smaller allowance than paying ones, and record spend per user so you
+									can see who’s costing what.
+								</p>
+								<div class="callout callout-risk">
+									<p class="callout-label">The endpoint to check tonight</p>
+									<p>
+										Any API route that calls a model without checking who’s logged in is a free, public proxy to your
+										credit card. AI-generated code ships these all the time, usually as a “quick test” route that
+										never got removed. Search for every model call and confirm there’s an auth check in front of it.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Two hours.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The worst case, which is unbounded.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Limits keyed on IP address only. They’re easy to get around.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">19</span>
+								<h3 class="tip-title">Cache third-party API results instead of calling every time.</h3>
+								<p class="tip-cite">AI costs · Same idea, other APIs</p>
+								<p class="body-text">
+									Maps, geocoding, weather, company lookups and currency rates usually return the same answer to the
+									same question for minutes, hours or forever. Store the result with an expiry that suits the data:
+									fifteen minutes for weather, a day for exchange rates, and much longer for an address you’ve already
+									geocoded.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour per API.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Most of those calls, on anything people look up repeatedly.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Terms of service. Some providers, Google Maps among them, limit how long you may store results.</p>
+									</div>
+								</div>
+							</div>
+
+							<p class="rule-label" style="margin-top: 38px">What it adds up to</p>
+							<p class="body-text">
+								Here’s one AI feature with each fix applied in turn: a chat assistant with a 3,000-token system prompt,
+								about 400 tokens of user input and 600 tokens of output, called 5,000 times a day, or 150,000 times a
+								month.
+							</p>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 50%">Change</th>
+											<th style="width: 22%">Per month</th>
+											<th>Running saving</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td><strong>As generated:</strong> Opus 5.5, no caching, no cap</td><td>$3,840</td><td>–</td></tr>
+										<tr><td><strong>Fix 13:</strong> switch to Sonnet 5.5</td><td>$1,920</td><td>50%</td></tr>
+										<tr><td><strong>Fix 15:</strong> cache the system prompt</td><td>$1,110</td><td>71%</td></tr>
+										<tr><td><strong>Fix 16:</strong> ask for shorter answers, capped at 300 tokens</td><td>$660</td><td>83%</td></tr>
+										<tr><td><strong>Fix 14:</strong> serve 20% of questions from a response cache</td><td>$528</td><td>86%</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<p class="body-text" style="margin-top: 14px; font-size: 13.5px; color: var(--muted)">
+								Assumes nearly every request lands within five minutes of another, so the system prompt is almost always
+								read from cache, and ignores the small cost of writing to the cache. Your numbers will differ. The
+								order in which the savings show up usually won’t.
+							</p>
+
+							<div class="callout">
+								<p class="callout-label">Why the cheapest model isn’t automatically the answer</p>
+								<p>
+									Haiku 4.5 on the same feature, with the same output cap, comes to about $735 a month. That’s more
+									than Sonnet 5.5 with caching, because this 3,000-token prompt is under Haiku’s 4,096-token caching
+									minimum, so Haiku pays full price for it on every call. The fixes interact. Run the numbers on your
+									own prompt before you assume smaller means cheaper.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-top: 22px">
+								To find all of this in your own code, paste the prompt below into Claude Code, Cursor, or whatever
+								tool built the app. It only reports. It won’t change anything until you tell it to.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p1">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p1">Find every place this app calls an AI model or a paid third-party API.
+
+For each one, give me a table with:
+- file and line
+- provider and model
+- what the call is for
+- roughly how many input tokens it sends, including the system prompt
+- the max output tokens setting, or "none"
+- whether prompt caching is turned on
+- whether the response is stored and reused anywhere
+- whether there is a login check and a per-user rate limit in front of it
+
+Then, without changing any code, recommend:
+1. Calls that could use a smaller model because the task is simple
+   (classification, extraction, tagging, short rewrites, yes/no checks).
+2. Calls that send the same long prompt every time and should use
+   prompt caching. Flag anything dynamic near the top of the prompt.
+3. Calls with no output cap, and a sensible cap for each.
+4. Calls nobody waits on that could go through a batch API.
+5. Calls repeated with the same input that should be cached.
+6. Any route that calls a model with no login check. List these first.
+
+Rank everything by how much money it is likely to save, biggest first.
+Ask me before you change anything.</pre>
+							</div>
+
+							<!-- ══════════ PART FIVE ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part five · Reduce bandwidth and storage</p>
+								<h2>Every byte you serve twice is a byte you pay for twice.</h2>
+								<p class="section-sub">
+									Bandwidth is the cost people don’t see coming, because it grows with success. These five fixes are
+									cheap to do now and expensive to put off.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">20</span>
+								<h3 class="tip-title">Put a CDN in front of everything.</h3>
+								<p class="tip-cite">Bandwidth · Cloudflare’s free plan is enough</p>
+								<p class="body-text">
+									A CDN keeps copies of your files at the edge, so repeat requests never reach your server or your
+									storage bucket and never count against their egress. Cloudflare’s free plan handles this for most
+									small apps. Point your domain at it and you’re most of the way there.
+								</p>
+								<p class="body-text">
+									The rest is cache headers. Give static assets with hashed filenames a long
+									<code>Cache-Control</code> lifetime, so the CDN and the browser both keep them, and every visit after
+									the first costs you nothing.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Most egress on static files.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Caching pages that contain one user’s data. Cache files, not personal responses.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">21</span>
+								<h3 class="tip-title">Compress and resize images, and serve WebP or AVIF.</h3>
+								<p class="tip-cite">Bandwidth · Usually the heaviest thing on the page</p>
+								<p class="body-text">
+									A phone photo is 3 to 5 MB. If you display it 400 pixels wide, nearly all of that download is wasted.
+									Resize images when they’re uploaded, keep two or three sizes, and serve WebP or AVIF with a
+									<code>srcset</code> so each device downloads the size it needs. Modern formats are usually a quarter
+									to a half smaller than JPEG at the same quality.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An afternoon.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Often most of the bytes on image-heavy pages.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Paid image services that bill per transformation. Resize once at upload, not on every request.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">22</span>
+								<h3 class="tip-title">Move files to object storage with no egress fees.</h3>
+								<p class="tip-cite">Bandwidth · The fee that grows with success</p>
+								<p class="body-text">
+									On most storage the expensive part isn’t keeping the file. It’s serving it. Cloudflare R2 charges
+									$0.015 per GB per month for storage and nothing for egress, at any volume, with 10 GB free.
+									(<a href="https://developers.cloudflare.com/r2/pricing/">pricing</a>) Backblaze B2 is cheap to store
+									on and includes a generous free egress allowance. Both work with the S3 API, so for most apps moving
+									over means changing the endpoint and the keys.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Half a day, plus copying existing files.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">All egress on stored files.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Operation charges. R2 bills writes at $4.50 per million, which matters if you write many small files.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">23</span>
+								<h3 class="tip-title">Set lifecycle rules to move or delete old files automatically.</h3>
+								<p class="tip-cite">Storage · Set once, saves forever</p>
+								<p class="body-text">
+									Temporary uploads, generated exports, old versions and abandoned drafts pile up in storage forever
+									unless something deletes them. A lifecycle rule handles it: delete temp files after a day, delete
+									exports after a week, and move anything older than 90 days to a cheaper tier. R2’s Infrequent Access
+									tier costs $0.01 per GB per month instead of $0.015.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Thirty minutes.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Storage that would otherwise only grow.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Infrequent-access tiers charge to read files back and have minimum storage durations.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">24</span>
+								<h3 class="tip-title">Turn on gzip or Brotli compression for every response.</h3>
+								<p class="tip-cite">Bandwidth · Five minutes to check</p>
+								<p class="body-text">
+									HTML, JavaScript, CSS and JSON usually compress by two-thirds or more. Most CDNs and hosting platforms
+									compress automatically, but API responses from your own server often aren’t compressed, and a JSON
+									list endpoint is exactly where it adds up. Check with one command:
+								</p>
+								<div class="prompt">
+									<p class="prompt-label">
+										<span>Run this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p2">Copy</button>
+									</p>
+									<pre class="prompt-body" id="p2">curl -sI -H 'Accept-Encoding: br, gzip' <span class="fill">https://yourapp.com/api/items</span> | grep -i content-encoding</pre>
+								</div>
+								<p class="prompt-note">If that prints nothing, the response isn’t compressed.</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Five minutes to check, an hour to fix.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Two-thirds or more of text bandwidth.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Compressing twice, at the app and at the CDN. Pick one.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART SIX ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part six · Fix the code AI wrote</p>
+								<h2>AI writes code that works. It doesn’t write code that’s cheap to run.</h2>
+								<p class="section-sub">
+									These five patterns are fine with ten users and expensive with ten thousand. The prompt at the end
+									of this section will find them in your codebase for you.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">25</span>
+								<h3 class="tip-title">Find the N+1 queries and the missing indexes.</h3>
+								<p class="tip-cite">Code · The most common database cost</p>
+								<p class="body-text">
+									An N+1 query is a list page that loads 50 orders, then runs one more query per order to fetch its
+									customer. That’s 51 trips to the database where one join would do. AI-generated code is full of them,
+									because they’re the most direct way to write it, and they’re invisible until the list gets long.
+								</p>
+								<p class="body-text">
+									Missing indexes are the other half. A query that filters on <code>user_id</code> with no index on that
+									column reads the whole table. With a thousand rows nobody notices. With a million, the database gets
+									slow and you end up paying for a bigger one. Most managed Postgres dashboards list your slowest
+									queries, so start there, and run <code>EXPLAIN</code> on each one to see whether it’s scanning the
+									whole table.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour per slow page.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">The database upgrade you were about to buy.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Indexing everything. Each index slows writes and takes up storage.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">26</span>
+								<h3 class="tip-title">Stop polling. Use webhooks or realtime subscriptions.</h3>
+								<p class="tip-cite">Code · Costs money even while users are idle</p>
+								<p class="body-text">
+									A page that checks for updates every second makes 86,400 requests a day for each open tab. A hundred
+									users who leave the tab open overnight add up to 8.6 million requests, and nearly every answer is
+									“nothing new.” On a platform that bills per invocation, you pay for every one.
+								</p>
+								<p class="body-text">
+									Use a webhook when an outside service is the one with news (Stripe, for example, can tell you when a
+									payment clears). Use a realtime subscription, through Supabase Realtime, Firebase listeners or
+									server-sent events, when your own data changes. If you really have to poll, poll slowly, back off
+									when nothing changes, and stop when the tab is hidden.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Half a day per polling loop.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Almost all of those requests.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Polling hidden inside a <code>useEffect</code> with a <code>setInterval</code>.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">27</span>
+								<h3 class="tip-title">Paginate queries instead of loading entire tables.</h3>
+								<p class="tip-cite">Code · Cheap now, essential later</p>
+								<p class="body-text">
+									<code>SELECT * FROM posts</code> to render the first twenty posts works on day one. Later it loads
+									every row and every column, sends all of it over the network, and keeps it in memory, just to show
+									a screenful. Add a <code>LIMIT</code>, use cursor-based pagination for anything that scrolls, and
+									select only the columns the page actually uses.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour per list.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Database load, memory and bandwidth, in proportion to table size.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Large <code>OFFSET</code> values, which get slow. Cursors scale better.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">28</span>
+								<h3 class="tip-title">Turn down the logging.</h3>
+								<p class="tip-cite">Code · Billed by the gigabyte</p>
+								<p class="body-text">
+									Logging and monitoring services usually charge by the volume they take in. AI-generated code logs
+									freely: inside loops, on every request, and sometimes whole request bodies, which is a privacy
+									problem as well as a cost. Set production to <code>warn</code> or <code>info</code>, remove debug
+									logs from hot paths, sample high-volume events instead of recording every one, and set a retention
+									period.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">An hour.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Often most of the logging bill.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Removing the logs you’ll need at 2 a.m. Keep errors and slow requests.</p>
+									</div>
+								</div>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">29</span>
+								<h3 class="tip-title">Kill runaway cron jobs and background workers.</h3>
+								<p class="tip-cite">Code · The schedule nobody revisited</p>
+								<p class="body-text">
+									A job that runs every minute when hourly would do costs sixty times as much. A worker that loops
+									forever, checking a queue that’s usually empty, keeps a machine awake that could otherwise scale to
+									zero. List every scheduled job and every always-on worker, and for each one ask what would break if
+									it ran a tenth as often. Usually the answer is nothing.
+								</p>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Thirty minutes to list them.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Invocations, and the idle machines those jobs keep awake.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">The same job scheduled in two places, in code and in the platform’s dashboard.</p>
+									</div>
+								</div>
+							</div>
+
+							<p class="body-text" style="margin-top: 8px">
+								Fixes 25 to 29 are easy to find with the same tool that wrote the code. This prompt asks for a report
+								only, so nothing changes until you choose what to fix.
+							</p>
+
+							<div class="prompt">
+								<p class="prompt-label">
+									<span>Copy this</span><span class="spacer"></span><button class="copy-btn" type="button" data-copy="p3">Copy</button>
+								</p>
+								<pre class="prompt-body" id="p3">Audit this codebase for patterns that make hosting cost more than it
+needs to. Look for:
+
+1. N+1 queries: a database query inside a loop, or a list page that
+   runs one extra query per row.
+2. Missing indexes: columns used in WHERE, JOIN or ORDER BY on tables
+   that will grow, with no index on them.
+3. Polling: setInterval, useEffect or cron loops that check for changes
+   every few seconds.
+4. Unbounded queries: SELECTs with no LIMIT or pagination, or code that
+   loads a whole table into memory.
+5. Noisy logging: logs inside loops or on every request at debug/info
+   level in production, and anything that logs full request bodies.
+6. Scheduled jobs and background workers that run more often than the
+   data actually changes.
+
+For each finding give me: the file and line, what it does, what it
+costs (more database load, more function invocations, more log volume),
+and the fix. Group findings by severity, worst first.
+
+Don't change any code until I've picked which ones to fix.</pre>
+							</div>
+
+							<!-- ══════════ PART SEVEN ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part seven · Get free money</p>
+								<h2>Someone will pay your bill for a year if you ask.</h2>
+								<p class="section-sub">
+									One fix, and it’s the only one in this guide that takes nothing but an application form.
+								</p>
+							</div>
+
+							<div class="tip">
+								<span class="tip-num">30</span>
+								<h3 class="tip-title">Apply for startup credits.</h3>
+								<p class="tip-cite">Free money · Apply to all of them</p>
+								<p class="body-text">
+									Every major cloud and several AI providers give credits to startups, because a startup that builds
+									on their platform tends to stay there. The amounts depend on whether you have funding and who
+									refers you, but even the self-serve tiers are worth the twenty minutes the form takes.
+								</p>
+								<div class="table-scroll">
+									<table class="data-table">
+										<thead>
+											<tr>
+												<th style="width: 26%">Program</th>
+												<th style="width: 40%">What’s on offer</th>
+												<th>Who qualifies</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong><a href="https://aws.amazon.com/startups/credits">AWS Activate</a></strong></td>
+												<td>$1,000 self-serve. Up to $100,000 through a partner VC, accelerator or incubator.</td>
+												<td>Any founder for the self-serve tier.</td>
+											</tr>
+											<tr>
+												<td><strong><a href="https://cloud.google.com/startup">Google for Startups</a></strong></td>
+												<td>Up to $200,000 over two years, and up to $350,000 for AI-first startups.</td>
+												<td>Larger tiers need funding. Smaller ones exist for earlier companies.</td>
+											</tr>
+											<tr>
+												<td><strong><a href="https://www.microsoft.com/en-us/startups">Microsoft for Startups</a></strong></td>
+												<td>Up to $150,000 in Azure credits, released in stages as you hit milestones.</td>
+												<td>No funding needed to start.</td>
+											</tr>
+											<tr>
+												<td><strong><a href="https://claude.com/programs/startups">Anthropic</a></strong></td>
+												<td>Claude API credits, from a few thousand dollars on a direct application to much more through partner VCs.</td>
+												<td>Incorporated startups.</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="callout callout-risk">
+									<p class="callout-label">Credits expire, and they hide the real bill</p>
+									<p>
+										Most credits run out after one or two years. Build as if you’re paying full price, and keep the
+										spend caps from fix 04 in place, so that when the credits end it isn’t a surprise. And don’t
+										choose a cloud for its credits alone. Moving off it later can cost more than the credits were
+										worth.
+									</p>
+								</div>
+								<div class="spec">
+									<div>
+										<p class="spec-k">Time</p>
+										<p class="spec-v">Twenty minutes per application.</p>
+									</div>
+									<div>
+										<p class="spec-k">Saves</p>
+										<p class="spec-v">Months to years of the bill.</p>
+									</div>
+									<div>
+										<p class="spec-k">Watch for</p>
+										<p class="spec-v">Expiry dates, and credits that only cover some services.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- ══════════ PART EIGHT ══════════ -->
+							<div class="section-hdr">
+								<p class="eyebrow">Part eight · The cheat sheet</p>
+								<h2>All thirty, one row each.</h2>
+								<p class="section-sub">
+									Bold rows are the ones to do this week. Everything else can wait until the bill tells you it
+									matters.
+								</p>
+							</div>
+
+							<div class="table-scroll">
+								<table class="data-table">
+									<thead>
+										<tr>
+											<th style="width: 6%">#</th>
+											<th style="width: 44%">Fix</th>
+											<th style="width: 20%">Time</th>
+											<th>Do it when</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr><td><strong>01</strong></td><td><strong>Read the bill line by line</strong></td><td>1 hour</td><td>This week.</td></tr>
+										<tr><td>02</td><td>Drop to the smallest tier</td><td>20 min</td><td>CPU sits under ~20%.</td></tr>
+										<tr><td>03</td><td>Sleep dev and staging</td><td>1 hour</td><td>You have non-production environments.</td></tr>
+										<tr><td><strong>04</strong></td><td><strong>Billing alerts and hard caps</strong></td><td>15 min each</td><td>Today.</td></tr>
+										<tr><td>05</td><td>Delete snapshots, logs, orphaned volumes</td><td>30 min</td><td>Once, then set retention.</td></tr>
+										<tr><td>06</td><td>Use free tiers</td><td>Varies</td><td>Starting out. Read the terms.</td></tr>
+										<tr><td>07</td><td>Static frontend on a CDN</td><td>An afternoon</td><td>The frontend runs on a server.</td></tr>
+										<tr><td>08</td><td>Scale-to-zero hosting</td><td>A day</td><td>Traffic is spiky or low.</td></tr>
+										<tr><td>09</td><td>One cheap VPS</td><td>A day</td><td>Many small managed-service bills.</td></tr>
+										<tr><td>10</td><td>Consolidate onto Postgres</td><td>Hours each</td><td>Separate queue, cache or search with little load.</td></tr>
+										<tr><td>11</td><td>Serverless Postgres</td><td>1 hour+</td><td>Databases that sit idle most of the day.</td></tr>
+										<tr><td>12</td><td>Skip Kubernetes</td><td>None</td><td>Always, for now.</td></tr>
+										<tr><td><strong>13</strong></td><td><strong>Smallest model that does the job</strong></td><td>An afternoon</td><td>AI is a top-three line.</td></tr>
+										<tr><td>14</td><td>Cache AI responses</td><td>2 hours</td><td>Users ask the same things.</td></tr>
+										<tr><td><strong>15</strong></td><td><strong>Prompt caching</strong></td><td>1 hour</td><td>Long system prompt on every call.</td></tr>
+										<tr><td>16</td><td>Trim prompts, cap output</td><td>1 hour each</td><td>Any AI call with no cap.</td></tr>
+										<tr><td>17</td><td>Batch API for non-urgent work</td><td>Half a day</td><td>Nightly or background AI jobs.</td></tr>
+										<tr><td><strong>18</strong></td><td><strong>Per-user rate limits</strong></td><td>2 hours</td><td>Before launch.</td></tr>
+										<tr><td>19</td><td>Cache third-party API results</td><td>1 hour each</td><td>Maps, weather or lookups on every request.</td></tr>
+										<tr><td>20</td><td>CDN in front of everything</td><td>1 hour</td><td>Now. It’s free.</td></tr>
+										<tr><td>21</td><td>Resize images, serve WebP/AVIF</td><td>An afternoon</td><td>Users upload images.</td></tr>
+										<tr><td>22</td><td>Egress-free storage</td><td>Half a day</td><td>Egress shows up on the bill.</td></tr>
+										<tr><td>23</td><td>Lifecycle rules</td><td>30 min</td><td>Storage grows every month.</td></tr>
+										<tr><td>24</td><td>gzip / Brotli</td><td>5 min to check</td><td>Now.</td></tr>
+										<tr><td>25</td><td>N+1 queries and indexes</td><td>1 hour per page</td><td>A list page is slow.</td></tr>
+										<tr><td>26</td><td>Replace polling</td><td>Half a day</td><td>Anything checks every few seconds.</td></tr>
+										<tr><td>27</td><td>Paginate</td><td>1 hour per list</td><td>Any table that will grow.</td></tr>
+										<tr><td>28</td><td>Turn down logging</td><td>1 hour</td><td>Logging is on the bill at all.</td></tr>
+										<tr><td>29</td><td>Kill runaway jobs</td><td>30 min</td><td>You have crons or workers.</td></tr>
+										<tr><td><strong>30</strong></td><td><strong>Startup credits</strong></td><td>20 min each</td><td>This week.</td></tr>
+									</tbody>
+								</table>
+							</div>
+
+							<hr class="hair" />
+
+							<p class="body-text">
+								Read down the time column and most entries are an hour or less. Read down the last column and most of
+								them say “when the bill tells you to.” That’s the point. You don’t need to do thirty things. You need
+								to read one invoice, find the line that’s out of proportion, and fix that one first. Then do it again
+								next month.
+							</p>
+							<p class="body-text">
+								It’s also worth saying that a small bill is fine. Paying $25 a month for a database you never have to
+								think about is a good deal. The aim isn’t zero. The aim is that every dollar on the bill pays for
+								something a user actually touches, and that a bug can’t spend money you don’t have.
+							</p>
+
+							<div class="pull">
+								<p>
+									Your app doesn’t have to be cheap. It has to cost money only when someone is using it.
+								</p>
+							</div>
+
+							<!-- ── Soft pitch ── -->
+							<div class="section-hdr">
+								<p class="eyebrow eyebrow-quiet">One more thing</p>
+								<h2>If you’re looking at a bill and can’t tell what’s driving it.</h2>
+								<p class="section-sub">
+									It’s usually one line, and it’s usually obvious once someone who’s read a lot of these bills takes a
+									look.
+								</p>
+							</div>
+
+							<p class="body-text" style="margin-bottom: 22px">
+								Send me last month’s bill with the line items, what the app does, and roughly how many people use it.
+								I’ll tell you which line I’d go after first and what I’d do about it. I don’t need access to anything.
+							</p>
+
+							<div style="border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 0">
+								<p class="kicker">Get in touch</p>
+								<p class="body-text" style="margin-bottom: 0">
+									Email <a href="mailto:hi@davecto.com?subject=App%20Bill">hi@davecto.com</a> with the subject line
+									<strong>“App Bill.”</strong>
+								</p>
+							</div>
+
+							<div style="text-align: center; padding: 44px 0 0">
+								<p
+									style="
+										font-family: var(--serif);
+										font-size: 21px;
+										font-weight: 400;
+										color: var(--ink);
+										line-height: 1.35;
+										letter-spacing: -0.015em;
+										margin: 0 auto 10px;
+										max-width: 26em;
+									"
+								>
+									More guides like this one, for people trying to build software without fooling themselves.
+								</p>
+								<p
+									style="
+										font-family: var(--sans);
+										font-size: 14px;
+										color: var(--muted);
+										line-height: 1.6;
+										margin: 0 0 16px;
+									"
+								>
+									Weekly, plain-language breakdowns on Instagram.
+								</p>
+								<a
+									href="https://www.instagram.com/davecto"
+									style="
+										font-family: var(--sans);
+										font-size: 15px;
+										font-weight: 500;
+										color: var(--accent);
+										letter-spacing: 0.05em;
+										text-decoration: none;
+										border-bottom: 1px solid var(--accent);
+										padding-bottom: 3px;
+									"
+									>@davecto</a
+								>
+							</div>
+
+							<p
+								style="
+									font-family: var(--sans);
+									font-size: 11.5px;
+									color: var(--muted);
+									line-height: 1.6;
+									margin: 52px 0 0;
+									padding-top: 18px;
+									border-top: 1px solid var(--rule);
+								"
+							>
+								A note on sourcing. Prices, free-tier limits and credit amounts in this guide come from vendor pricing
+								pages and web searches in October 2026, linked where possible so you can check them rather than take my
+								word for it. Cloud pricing changes often and without notice: Hetzner, for one, renamed and repriced its
+								entry plans during 2026. The startup credit amounts in particular come partly from third-party summaries
+								and depend on eligibility, so treat them as ranges and confirm on each program’s own page. The AI model
+								prices are Anthropic’s published API rates. The worked example in part four is illustrative arithmetic,
+								not a measurement of any real app, and it leaves out cache-write costs. Savings described as “often” or
+								“usually” are judgments, not benchmarks. I have no relationship with, and no financial interest in, any
+								company mentioned here.
+							</p>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="ftr-space"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</main>
+		<script>
+			document.querySelectorAll('.copy-btn').forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					var src = document.getElementById(btn.dataset.copy);
+					navigator.clipboard.writeText(src.innerText).then(
+						function () {
+							btn.textContent = 'Copied';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 1600);
+						},
+						function () {
+							btn.textContent = 'Select manually';
+							setTimeout(function () {
+								btn.textContent = 'Copy';
+							}, 2000);
+						}
+					);
+				});
+			});
+		</script>
+	</body>
+</html>
