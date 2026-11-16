@@ -2,3 +2,9 @@
 
 # HubSpot config file
 hubspot.config.yml
+
+# Lynzi ISO gallery: private images + generated files stay local
+LynziISO/ISOs/
+LynziISO/ISO2/
+LynziISO/.thumbs/
+LynziISO/manifest.js
